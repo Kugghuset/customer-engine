@@ -1,0 +1,72 @@
+{
+  "version": "v4",
+  "repo": "borisyankov/DefinitelyTyped",
+  "ref": "master",
+  "path": "typings",
+  "bundle": "typings/tsd.d.ts",
+  "installed": {
+    "bluebird/bluebird.d.ts": {
+      "commit": "32756f4de7b31268c25fa84f3bfc54090db2b052"
+    },
+    "express/express.d.ts": {
+      "commit": "32756f4de7b31268c25fa84f3bfc54090db2b052"
+    },
+    "serve-static/serve-static.d.ts": {
+      "commit": "32756f4de7b31268c25fa84f3bfc54090db2b052"
+    },
+    "mime/mime.d.ts": {
+      "commit": "32756f4de7b31268c25fa84f3bfc54090db2b052"
+    },
+    "angularjs/angular.d.ts": {
+      "commit": "fc341765ebbb04b7109981a25dced01f488f4d94"
+    },
+    "node/node.d.ts": {
+      "commit": "32756f4de7b31268c25fa84f3bfc54090db2b052"
+    },
+    "jquery/jquery.d.ts": {
+      "commit": "fc341765ebbb04b7109981a25dced01f488f4d94"
+    },
+    "lodash/lodash.d.ts": {
+      "commit": "32756f4de7b31268c25fa84f3bfc54090db2b052"
+    },
+    "morgan/morgan.d.ts": {
+      "commit": "32756f4de7b31268c25fa84f3bfc54090db2b052"
+    },
+    "winston/winston.d.ts": {
+      "commit": "32756f4de7b31268c25fa84f3bfc54090db2b052"
+    },
+    "body-parser/body-parser.d.ts": {
+      "commit": "32756f4de7b31268c25fa84f3bfc54090db2b052"
+    },
+    "orchestrator/orchestrator.d.ts": {
+      "commit": "32756f4de7b31268c25fa84f3bfc54090db2b052"
+    },
+    "gulp/gulp.d.ts": {
+      "commit": "32756f4de7b31268c25fa84f3bfc54090db2b052"
+    },
+    "q/Q.d.ts": {
+      "commit": "32756f4de7b31268c25fa84f3bfc54090db2b052"
+    },
+    "shelljs/shelljs.d.ts": {
+      "commit": "32756f4de7b31268c25fa84f3bfc54090db2b052"
+    },
+    "chokidar/chokidar.d.ts": {
+      "commit": "fc341765ebbb04b7109981a25dced01f488f4d94"
+    },
+    "browser-sync/browser-sync.d.ts": {
+      "commit": "fc341765ebbb04b7109981a25dced01f488f4d94"
+    },
+    "express-jwt/express-jwt.d.ts": {
+      "commit": "32756f4de7b31268c25fa84f3bfc54090db2b052"
+    },
+    "express-unless/express-unless.d.ts": {
+      "commit": "32756f4de7b31268c25fa84f3bfc54090db2b052"
+    },
+    "jsonwebtoken/jsonwebtoken.d.ts": {
+      "commit": "32756f4de7b31268c25fa84f3bfc54090db2b052"
+    },
+    "chalk/chalk.d.ts": {
+      "commit": "32756f4de7b31268c25fa84f3bfc54090db2b052"
+    }
+  }
+}

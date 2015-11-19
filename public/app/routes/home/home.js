@@ -1,0 +1,33 @@
+(function () {
+'use strict'
+
+angular.module('customerEngineApp')
+.config(['$stateProvider', function ($stateProvider) {
+  $stateProvider.state('main.home', {
+    url: '/hem',
+    templateUrl: 'app/routes/home/home.html',
+    controller: 'HomeCtrl'
+  });
+}])
+.controller('HomeCtrl', ['$scope', 'Auth', function ($scope, Auth) {
+  
+  $scope.user = {};
+  
+  /**
+    * @param {Object} _user
+    */
+  $scope.login = function (_user) {
+    
+    console.log(_user);
+    
+    Auth.login(_user)
+    .then(function (user) {
+      $scope.user = user;
+    })
+    ['catch'](function (err) {
+      console.log(err);
+    });
+  }
+}]);
+
+})();

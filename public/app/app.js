@@ -4,8 +4,8 @@
 angular.module('customerEngineApp', [
   'ui.router',
   'ngCookies',
-  'angular-google-analytics',
-  'ngTagsInput'
+  'ui.bootstrap',
+  'angular-google-analytics'
 ])
 .config(['$stateProvider', '$urlRouterProvider', '$httpProvider','AnalyticsProvider', function ($stateProvider, $urlRouterProvider, $httpProvider, AnalyticsProvider) {
   

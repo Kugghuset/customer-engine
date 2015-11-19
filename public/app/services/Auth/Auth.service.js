@@ -74,6 +74,14 @@ angular.module('customerEngineApp')
         reject(response.data);
       });
       });
+    },
+    /**
+     * Sets _user to empty
+     * and removes the token from cookies.
+     */
+    logout: function () {
+      _user = {};
+      $cookies.remove('token');
     }
   }
 }]);

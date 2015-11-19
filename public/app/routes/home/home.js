@@ -9,24 +9,28 @@ angular.module('customerEngineApp')
     controller: 'HomeCtrl'
   });
 }])
-.controller('HomeCtrl', ['$scope', 'Auth', function ($scope, Auth) {
+.controller('HomeCtrl', ['$scope', 'Auth', 'Customer', function ($scope, Auth, Customer) {
   
   $scope.user = {};
   $scope.auth = Auth;
   
-  /**
-    * @param {Object} _user
-    */
-  $scope.login = function (_user) {
-    Auth.login(_user)
-    .then(function (user) {
-      console.log(user);
-      $scope.user = user;
-    })
-    ['catch'](function (err) {
-      console.log(err);
-    });
+  $scope.getCustomer = function (val) {
+    // Get customer based on org. number or name
+    return Customer.getFuzzy(val);
   }
+  
+  /**
+   * @param {Object} (Customer)
+   * @return {String}
+   */
+  $scope.matched = function (customer) {
+    return _.chain(customer)
+      .filter(function (v, key) { return key != 'customerId' })
+      .map(function (value) { return value; })
+      .value()
+      .join(', ');
+  }
+  
 }]);
 
 })();

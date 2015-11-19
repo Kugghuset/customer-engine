@@ -11,6 +11,16 @@ angular.module('customerEngineApp')
 .controller('MainCtrl', ['$scope', 'Auth', function ($scope, Auth) {
   $scope.auth = Auth;
   
+  $scope.login = function (_user) {
+    Auth.login(_user)
+    .then(function (user) {
+      _user = {};
+    })
+    ['catch'](function (err) {
+      console.log(err);
+    });
+  }
+  
 }]);
 
 })();

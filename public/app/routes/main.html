@@ -1,9 +1,22 @@
-<div class="container">
+<div class="container-fluid">
   <header>
     <h1>Customer Engine</h1>
-    <div ng-show="auth.getCurrentUser().email">
-      <span>Inloggad som </span>
+    <div class="center-block">
+      <!-- Login -->
+      <form ng-submit="login(tempUser)" class="form-inline" ng-hide="auth.getCurrentUser().email">
+        <div class="input-group ">
+          <span class="input-group-addon" id="basic-addon1">@</span>
+          <input type="text" class="form-control" placeholder="Email address" ng-model="tempUser.email" aria-describedby="basic-addon1">
+        </div>
+        <button class="btn btn-primary">Logga in</button>
+      </form>
+    </div>
+    
+    <!-- Logout -->
+    <div class="grid pull-right" ng-show="auth.getCurrentUser().email">
+      <span>Logged in as </span>
       <span>{{ auth.getCurrentUser().name || auth.getCurrentUser().email }}</span>
+      <button ng-click="auth.logout()" class="btn btn-danger">Log out</button>
     </div>
   </header>
   <div ui-view></div>

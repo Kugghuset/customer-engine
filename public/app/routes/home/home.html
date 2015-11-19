@@ -1,10 +1,18 @@
+<section class="row" ng-show="auth.getCurrentUser().email">
 
-<form ng-submit=""></form>
+  <!-- Typeahead -->
+  <pre>Model: {{asyncSelected | json}}</pre>
+  <input
+    type="text"
+    ng-model="asyncSelected"
+    placeholder="Customer name or org. number"
+    uib-typeahead="customer as matched(customer, $viewValue) for customer in getCustomer($viewValue)"
+    typeahead-loading="loadingLocations"
+    typeahead-no-results="noResults"
+    class="form-control">
+  <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+  <div ng-show="noResults">
+    <i class="glyphicon glyphicon-remove"></i> No Results Found
+  </div>
 
-<!-- Login form -->
-
-<form ng-hide="auth.getCurrentUser().email" ng-submit="login(loginUser)" class="form">
-  <input type="email" class="form-control" ng-model="loginUser.email" placeholder="Epostadress">
-  <button class="btn btn-default">Logga in</button>
-</form>
-
+</section>

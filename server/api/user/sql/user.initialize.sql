@@ -1,5 +1,5 @@
 /*
-Initializes the User customer if it's not created already.
+Initializes the User if it's not created already.
 */
 
 IF (OBJECT_ID('User', 'U') IS NULL)

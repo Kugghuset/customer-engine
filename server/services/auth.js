@@ -45,7 +45,7 @@ exports.bearsToken = function (req, res, next) {
     try {
       return validateJwt(req, res, next);
     } catch (error) {
-      console.log('LOL OKEJ');
+      
     }
   }).use(function (req, res, next) {
     // Find user

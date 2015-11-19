@@ -16,7 +16,7 @@ function intialize() {
  */
 exports.findById = function (id) {
   return new Promise(function (resolve, reject) {
-    return sql.execute({
+    sql.execute({
       query: sql.fromFile('./sql/user.findById.sql'),
       params: {
         id: {
@@ -25,6 +25,10 @@ exports.findById = function (id) {
         }
       }
     })
+    .then(function (users) {
+      resolve(users[0]);
+    })
+    .catch(reject);
   });
 }
 

@@ -39,20 +39,10 @@ angular.module('customerEngineApp')
           })
           ['catch'](function (err) { });
         } else {
-          _user = {};F
+          _user = {};
           resolve(false);
         }
       });
-    },
-    /**
-     * Use isLoggedInAsync instead.
-     * Returns true or false for whether there is a token,
-     * which probably means there is a user.
-     * 
-     * @return {Boolean}
-     */
-    isLoggedIn: function () {
-      return !!$cookies.get('token');
     },
     /**
      * Gets the local user.
@@ -70,14 +60,19 @@ angular.module('customerEngineApp')
      * @param {Object} user (User)
      * @return {Promise} -> {Object} (User)
      */
-    login: function (_user) {
+    login: function (__user) {
       return $q(function (resolve, reject) {
-        $http.put('/api/users', _user)
-        .success(function (user) {
-          _user = user;
-          resolve(user);
-        })
-        ['catch'](reject);
+        $http({
+          method: 'PUT',
+          url: '/api/users',
+          data: __user
+        }).then(function successCallback(response) {
+          
+          _user = response.data;
+          resolve(response.data);
+      }, function errorCallback(response) {
+        reject(response.data);
+      });
       });
     }
   }

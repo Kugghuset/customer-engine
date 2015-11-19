@@ -62,7 +62,7 @@ exports.login = function (req, res) {
  * ROUTE: GET '/api/users/me'
  */
 exports.me = function (req, res) {
-  User.findById(req.user.id)
+  User.findById(req.user.userId)
   .then(function (user) {
     res.status(200).json(user);
   })

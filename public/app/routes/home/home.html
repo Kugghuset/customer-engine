@@ -1,7 +1,10 @@
 
 <form ng-submit=""></form>
 
-<form ng-submit="login(loginUser)" class="form">
+<!-- Login form -->
+
+<form ng-hide="auth.getCurrentUser().email" ng-submit="login(loginUser)" class="form">
   <input type="email" class="form-control" ng-model="loginUser.email" placeholder="Epostadress">
   <button class="btn btn-default">Logga in</button>
 </form>
+

@@ -30,7 +30,8 @@ angular.module('customerEngineApp', [
     // Add authorization token to headers
     request: function (config) {
       config.headers = config.headers || {};
-      config.headers.Authorization = 'Bearer ' + ($cookies.get('token') ? $cookies.get('token') : '');
+      
+      config.headers.Authorization = 'Bearer ' + $cookies.get('token') || '';
       return config;
     },
     // Intercepts 401s and redirects to home
@@ -44,14 +45,15 @@ angular.module('customerEngineApp', [
     }
   }
 }])
-.run(['$rootScope', 'Auth', function ($rootScope, Auth) {
+.run(['$rootScope', '$location', 'Auth', function ($rootScope, $location, Auth) {
   var inRequest = false;
   
-  // Auth.isLoggedInAsync()
-  // .then(function (res) {
-  //   console.log(res);
-    
-  // });
+  Auth.isLoggedInAsync()
+  .then(function (isLoggedIn) {
+    if (!isLoggedIn) {
+      $location.path('/hem');
+    }
+  });
   
   $rootScope.$on('$stateChangeSuccess', function (event, net, params) {
    

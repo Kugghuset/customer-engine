@@ -8,8 +8,8 @@ angular.module('customerEngineApp')
     controller: 'MainCtrl'
   });
 }])
-.controller('MainCtrl', ['$scope', function ($scope) {
-  console.log('lol');
+.controller('MainCtrl', ['$scope', 'Auth', function ($scope, Auth) {
+  $scope.auth = Auth;
   
 }]);
 

@@ -12,16 +12,15 @@ angular.module('customerEngineApp')
 .controller('HomeCtrl', ['$scope', 'Auth', function ($scope, Auth) {
   
   $scope.user = {};
+  $scope.auth = Auth;
   
   /**
     * @param {Object} _user
     */
   $scope.login = function (_user) {
-    
-    console.log(_user);
-    
     Auth.login(_user)
     .then(function (user) {
+      console.log(user);
       $scope.user = user;
     })
     ['catch'](function (err) {

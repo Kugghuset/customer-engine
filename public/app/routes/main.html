@@ -1,4 +1,10 @@
 <div class="container">
-  <h1>Customer Engine</h1>
+  <header>
+    <h1>Customer Engine</h1>
+    <div ng-show="auth.getCurrentUser().email">
+      <span>Inloggad som </span>
+      <span>{{ auth.getCurrentUser().name || auth.getCurrentUser().email }}</span>
+    </div>
+  </header>
   <div ui-view></div>
 </div>

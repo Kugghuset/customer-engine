@@ -15,20 +15,22 @@ exports.isAuthenticated = function (req, res, next) {
   return compose().use(function (req, res, next) {
     // Allow access_token to be passed through query parameters as well
     if (req.query && req.query.hasOwnProperty('acces_token')) {
-      req.headers.authorization = 'Bearer ' + req.query.access_token
+      req.headers.Authorization = 'Bearer ' + req.query.access_token
     }
     
     return validateJwt(req, res, next);
   }).use(function (req, res, next) {
     // Find user
-    return User.findById(req.user.id)
+    User.findById(req.user.userId)
     .then(function (user) {
       // No user means request is unauthorized
       if (!user) { return res.status(401).send('Unauthorized'); }
       req.user = user;
       next();
     })
-    .catch(next);
+    .catch(function (err) {
+      next(err);
+    });
   });
 };
 
@@ -49,7 +51,7 @@ exports.bearsToken = function (req, res, next) {
     }
   }).use(function (req, res, next) {
     // Find user
-    return User.findById(req.user.id)
+    return User.findById(req.user.userId)
     .then(function (user) {
       req.user = user;
       next();
@@ -72,11 +74,11 @@ exports.decodeToken = function (req) {
 /**
  * Returns a jwt token signed by the app secret
  * 
- * @param {String} id
+ * @param {Object} options
  * @return {Object} jwt token
  */
-exports.signToken = function (id) {
-  return jwt.sign({ id: id }, config.secrets.session);
+exports.signToken = function (options) {
+  return jwt.sign(options, config.secrets.session, { expiresIn: 60 * 60 * 24 * 365 });
 };
 
 /**
@@ -88,7 +90,7 @@ exports.setTokenCookie = function (req, res) {
     return res.status(404).json({mesasge: 'Something went wrong, please try again.'});
   }
   
-  var token = this.signToken(req.user.id);
+  var token = this.signToken({ userId: req.user.userId});
   
-  res.cookie('token', JSON.stringify(token));
+  res.cookie('token', token);
 }

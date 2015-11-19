@@ -6,7 +6,10 @@ var gulp = require('gulp');
 var shell = require('shelljs');
 var spawn = require('child_process').spawn;
 var exec = require('child_process').exec;
+var gexec = require('gulp-exec');
 var livereload = require('gulp-livereload');
+var chalk = require('chalk');
+
 var node;
 
 // The server task
@@ -29,6 +32,19 @@ gulp.task('server', function () {
 gulp.task('reload', function () {
   livereload.reload();
 });
+
+// Runs --assume-unchagned on userConfig.js 
+gulp.task('assume-unchanged', function () {
+  if (shell.which('git')) {
+    console.log(
+      'Running ' +
+      chalk.inverse('git update-index --assume-unchanged userConfig.js')
+    );
+    shell.exit('git update-index --assume-unchanged userConfig.js', function (code) { });
+  } else {
+    gulp.log('Git does not seems to be a command.');
+  }
+})
 
 // Watches the server and public folders and does stuff
 gulp.task('watch', function () {

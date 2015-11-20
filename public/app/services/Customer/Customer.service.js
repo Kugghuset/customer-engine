@@ -10,7 +10,6 @@ angular.module('customerEngineApp')
      * @return {Promise} -> {Array} (Customer)
      */
     getFuzzy: function (query) {
-      console.log(query);
       return $q(function (resolve, reject) {
         $http.put('api/customers/fuzzy', { query: query })
         .success(resolve)

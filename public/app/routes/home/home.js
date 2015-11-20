@@ -15,7 +15,8 @@ angular.module('customerEngineApp')
   $scope.auth = Auth;
   
   $scope.ticket = {
-    ticketDate: new Date()
+    ticketDate: new Date(),
+    user: Auth.getCurrentUser()
   }
   
   $scope.getCustomer = function (val) {
@@ -39,14 +40,14 @@ angular.module('customerEngineApp')
   $scope.countries = Country.getNames();
   
   $scope.categories = [
-    { name: 'Acquiring' },
-    { name: 'ECommerce' },
-    { name: 'Invoice' },
-    { name: 'Conact information' },
-    { name: 'Terminations' },
-    { name: 'Terminal' },
-    { name: 'Orders' },
-    { name: 'BAX' }
+    { categoryId: 1, name: 'Acquiring' },
+    { categoryId: 2, name: 'ECommerce' },
+    { categoryId: 3, name: 'Invoice' },
+    { categoryId: 4, name: 'Conact information' },
+    { categoryId: 5, name: 'Terminations' },
+    { categoryId: 6, name: 'Terminal' },
+    { categoryId: 7, name: 'Orders' },
+    { categoryId: 8, name: 'BAX' }
   ];
   
   $scope.datepickerOptions = {
@@ -54,12 +55,12 @@ angular.module('customerEngineApp')
   };
   
   $scope.submit = function (ticket) {
-    console.log(ticket);
     
     Notification('Ticket submitted');
     
     $scope.ticket = {
-      ticketDate: new Date()
+      ticketDate: new Date(),
+      user: Auth.getCurrentUser()
     }
   }
   

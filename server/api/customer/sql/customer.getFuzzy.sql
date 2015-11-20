@@ -2,8 +2,7 @@
 Gets organisations by a fuzzy search
 */
 
-SELECT [customerId], [orgNr], [orgName], [customerName]
+SELECT [customerId], [orgNr], [orgName]
 FROM [dbo].[Customer]
 WHERE [orgNr] LIKE '%' + @query + '%'
-   OR [orgName] LIKE '%' + @query + '%'
-   OR [customerName] LIKE '%' + @query + '%';
+   OR [orgName] LIKE '%' + @query + '%';

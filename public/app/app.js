@@ -5,9 +5,11 @@ angular.module('customerEngineApp', [
   'ui.router',
   'ngCookies',
   'ui.bootstrap',
-  'angular-google-analytics'
+  'ui-notification',
+  'angular-google-analytics',
+  'ngIntlTelInput'
 ])
-.config(['$stateProvider', '$urlRouterProvider', '$httpProvider','AnalyticsProvider', function ($stateProvider, $urlRouterProvider, $httpProvider, AnalyticsProvider) {
+.config(['$stateProvider', '$urlRouterProvider', '$httpProvider','AnalyticsProvider', 'ngIntlTelInputProvider', function ($stateProvider, $urlRouterProvider, $httpProvider, AnalyticsProvider, ngIntlTelInputProvider) {
   
   $urlRouterProvider
   .otherwise('/hem');
@@ -24,6 +26,12 @@ angular.module('customerEngineApp', [
       name: 'customer-engine'
     }
   ]);
+  
+  ngIntlTelInputProvider.set({
+    defaultCountry: 'se',
+    allowExtensions: true,
+    dropdownContainer: 'body'
+  });
 }])
 .factory('authInterceptor', ['$q', '$cookies', '$location', function ($q, $cookies, $location) {
   return {

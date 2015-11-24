@@ -9,8 +9,19 @@ angular.module('customerEngineApp')
      * @return {Promise} -> {Objecet} (Ticket)
      */
     create: function (ticket) {
-      return new Promise(function (resolve, reject) {
+      return $q(function (resolve, reject) {
         $http.post('/api/tickets/', ticket)
+        .success(resolve)
+        .error(reject);
+      });
+    },
+    /**
+     * @param {String|Number} ticketId
+     * @returm {Promise} -> {Object} (Ticket)
+     */
+    getById: function (ticketId) {
+      return $q(function (resolve, reject) {
+        $http.get('/api/tickets/' + ticketId)
         .success(resolve)
         .error(reject);
       });

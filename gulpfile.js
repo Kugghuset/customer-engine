@@ -48,7 +48,7 @@ gulp.task('assume-unchanged', function () {
 
 // Watches the server and public folders and does stuff
 gulp.task('watch', function () {
-  gulp.watch('./server/**', ['server']);
+  gulp.watch('./server/**', ['server', 'reload']);
   gulp.watch(['./public/app/**', './public/index.html'], ['reload']);
 });
 

@@ -4,10 +4,7 @@ var _ = require('lodash');
 var Promise = require('bluebird');
 var sql = require('seriate');
 
-var category = require('../category/category.db');
-var subCategory = require('../subCategory/subCategory.db');
-var descriptor = require('../descriptor/descriptor.db');
-var categoryBlob = require('../categoryBlob/categoryBlob.db');
+var util = require('../../utils/utils');
 
 function initialize() {
   return sql.execute({
@@ -34,8 +31,6 @@ exports.create = function (ticket, user) {
   ticket.category = ticket.category || {};
   ticket.subCategory = ticket.subCategory || {};
   ticket.descriptor = ticket.descriptor || {};
-  
-  console.log(ticket);
   
   return sql.execute({
     query: sql.fromFile('./sql/ticket.create.sql'),
@@ -93,6 +88,26 @@ exports.create = function (ticket, user) {
         val: ticket.descriptor.descriptorId
       }
     }
+  });
+}
+
+exports.findById = function (ticketId) {
+  return new Promise(function (resolve, reject) {
+    sql.execute({
+      query: sql.fromFile('./sql/ticket.findAndJoin.sql'),
+      params: {
+        ticketId: {
+          type: sql.BIGINT,
+          val: ticketId
+        }
+      }
+    })
+    .then(function (tickets) {
+      resolve(_.first(util.objectify(tickets)));
+    })
+    .catch(function (err) {
+      reject(err);
+    })
   });
 }
 

@@ -29,6 +29,7 @@
     "body-parser": "^1.14.1",
     "chalk": "^1.1.1",
     "composable-middleware": "^0.3.0",
+    "dataobject-parser": "^1.0.6",
     "express": "^4.13.3",
     "express-jwt": "^3.3.0",
     "jsonwebtoken": "^5.4.1",

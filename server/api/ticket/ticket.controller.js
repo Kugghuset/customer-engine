@@ -22,6 +22,19 @@ exports.create = function (req, res) {
   })
 }
 
+/**
+ * ROUTE: GET '/api/tickets/:id'
+ */
+exports.findById = function (req, res) {
+  Ticket.findById(req.params.id)
+  .then(function (ticket) {
+    res.status(200).json(ticket);
+  })
+  .catch(function (err) {
+    handleError(res, err);
+  });
+}
+
 function handleError(res, err) {
   console.log(chalk.red(err));
   res.status(500).send('Internal Error');

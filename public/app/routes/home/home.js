@@ -25,19 +25,22 @@ angular.module('customerEngineApp')
   }
   
   /**
-   * @param {Object} (Customer)
+   * @param {Object} item
+   * @param {String} itemName
    * @return {String}
    */
-  $scope.matched = function (customer) {
-    return _.chain(customer)
-      .filter(function (v, key) { return key != 'customerId' })
+  $scope.matched = function (item, itemName) {
+    if (_.isUndefined(itemName)) { itemName = ''; }
+    
+    return _.chain(item)
+      .filter(function (v, key) { return key != itemName + 'Id' })
       .map(function (value) { return value; })
       .filter() // Remove empty posts
       .value()
       .join(', ');
   }
   
-  $scope.countries = Country.getNames();
+  $scope.countries = Country.getShortAndNames();
   
   $scope.categories = [
     { categoryId: 1, name: 'Acquiring' },

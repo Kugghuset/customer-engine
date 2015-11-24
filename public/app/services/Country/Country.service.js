@@ -10,6 +10,9 @@
         getNames: function () {
           return _.map(this.getFull(), function (item) { return item.name });
         },
+        getShortAndNames: function () {
+          return _.map(this.getFull(), function (item) { return { name: item.name, short: item.altSpellings[0] } })
+        },
         getFull: function () {
           return [
             {

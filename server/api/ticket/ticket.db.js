@@ -55,7 +55,7 @@ exports.create = function (ticket, user) {
         },
         country: {
           type: sql.VARCHAR(256),
-          val: ticket.country
+          val: _.isObject(ticket.country) ? ticket.country.short : ticket.country
         },
         summary: {
           type: sql.VARCHAR,

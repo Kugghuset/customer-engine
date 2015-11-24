@@ -99,7 +99,7 @@ angular.module('customerEngineApp')
     11: [ // subcategoryId: 11
       { descriptorId: 2, name: 'Implementation', subcategoryId: 11 },
       { descriptorId: 3, name: 'Test', subcategoryId: 11 },
-      { descriptorId: 4, name: 'webmanager', subcategoryId: 11 },
+      { descriptorId: 4, name: 'Webmanager', subcategoryId: 11 },
       { descriptorId: 5, name: 'Set-up', subcategoryId: 11 }
     ],
     17: [ // subcategoryId: 17
@@ -125,10 +125,6 @@ angular.module('customerEngineApp')
     ]
   }
   
-  $scope.datepickerOptions = {
-    // add something?
-  };
-  
   // Submits a ticket to the system.
   $scope.submit = function (_ticket) {
     
@@ -146,10 +142,34 @@ angular.module('customerEngineApp')
     });
   };
   
+  $scope.hideSubcategory = function (ticket) {
+    return _.some([
+      !ticket.category,
+      ticket.category && !$scope.subcategories[ticket.category.categoryId],
+      ticket.category && ticket.subcategory && ticket.category.categoryId != ticket.subcategory.categoryId,
+    ]);
+  }
+  
+  $scope.hideDescriptor = function (ticket) {
+    return _.some([
+      !ticket.subcategory,
+      ticket.subcategory && !$scope.descriptors[ticket.subcategory.subcategoryId],
+      ticket.subcategory && ticket.descriptor && ticket.subcategory.subcategoryId != ticket.descriptor.subcategoryId
+    ]);
+  }
+  
   // Watches for changes in user :)
   $scope.$watch('auth.getCurrentUser()', function (user) {
     $scope.user = user;
-  })
+  });
+  
+  $scope.$watch('ticket', function (ticket) {
+    if (!ticket) { return; }
+    
+    if ($scope.hideSubcategory(ticket)) { ticket.subcategory = undefined; }
+    if ($scope.hideDescriptor(ticket)) { ticket.descriptor = undefined; }
+    
+  }, true);
 }]);
 
 })();

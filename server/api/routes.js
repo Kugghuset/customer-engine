@@ -24,4 +24,5 @@ module.exports = function (app) {
   app.use('/api/users', require('./user/index'));
   app.use('/api/customers', require('./customer/index'));
   app.use('/api/tickets', require('./ticket/index'));
+  app.use('/api/categories', require('./category/index'));
 };

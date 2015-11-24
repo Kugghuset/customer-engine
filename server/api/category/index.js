@@ -1,8 +1,11 @@
 'use strict'
 
 var express = require('express');
-var controller = require('./category.db');
+var Category = require('./category.db');
+var controller = require('./category.controller');
 
 var router = express.Router();
+
+router.get('/combined', controller.getCombined);
 
 module.exports = router;

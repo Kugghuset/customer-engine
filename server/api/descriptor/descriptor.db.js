@@ -16,7 +16,11 @@ function popInitialize() {
   });
 }
 
+exports.getAll = function () {
+  return sql.execute({
+    query: sql.fromFile('./sql/descriptor.getAll.sql')
+  });
+};
+
 // initialize();
 popInitialize();
-
-module.exports = {}

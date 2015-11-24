@@ -16,7 +16,11 @@ function popInitialize() {
   });
 }
 
+exports.getAll = function () {
+  return sql.execute({
+    query: sql.fromFile('./sql/subcategory.getAll.sql')
+  });
+};
+
 // initialize();
 popInitialize();
-
-module.exports = {}

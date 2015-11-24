@@ -9,7 +9,7 @@ angular.module('customerEngineApp')
     controller: 'HomeCtrl'
   });
 }])
-.controller('HomeCtrl', ['$scope', 'Auth', 'Customer', 'Country', 'Notification', function ($scope, Auth, Customer, Country, Notification) {
+.controller('HomeCtrl', ['$scope', 'Auth', 'Customer', 'Country', 'Notification', 'Ticket', function ($scope, Auth, Customer, Country, Notification, Ticket) {
   
   $scope.user = {};
   $scope.auth = Auth;
@@ -54,14 +54,22 @@ angular.module('customerEngineApp')
     // add something?
   };
   
-  $scope.submit = function (ticket) {
+  $scope.submit = function (_ticket) {
     
-    Notification('Ticket submitted');
-    
-    $scope.ticket = {
-      ticketDate: new Date(),
-      user: Auth.getCurrentUser()
-    }
+    Ticket.create(_.assign({}, _ticket, { user: Auth.getCurrentUser() }))
+    .then(function (ticket) {
+      console.log(ticket);
+      
+      Notification('Ticket submitted');
+      
+      $scope.ticket = {
+        ticketDate: new Date(),
+        user: Auth.getCurrentUser()
+      }
+    })
+    ['catch'](function (err) {
+      console.log(err);
+    });
   }
   
 }]);

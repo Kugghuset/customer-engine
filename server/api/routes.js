@@ -17,4 +17,5 @@ module.exports = function (app) {
   // Insert modules/routes here
   app.use('/api/users', require('./user/index'));
   app.use('/api/customers', require('./customer/index'));
+  app.use('/api/tickets', require('./ticket/index'));
 };

@@ -10,6 +10,13 @@ function initialize() {
   });
 }
 
-initialize();
+function popInitialize() {
+  return sql.execute({
+    query: sql.fromFile('./sql/pop.descriptor.initialize.sql')
+  });
+}
+
+// initialize();
+popInitialize();
 
 module.exports = {}

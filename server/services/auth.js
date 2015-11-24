@@ -34,7 +34,7 @@ exports.isAuthenticated = function (req, res, next) {
   });
 };
 
-/**'
+/**
  * Middleware:
  * Attaches the user to *req* if the token is valid.
  */

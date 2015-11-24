@@ -67,12 +67,11 @@ angular.module('customerEngineApp')
           url: '/api/users',
           data: __user
         }).then(function successCallback(response) {
-          
           _user = response.data;
           resolve(response.data);
-      }, function errorCallback(response) {
-        reject(response.data);
-      });
+        }, function errorCallback(response) {
+          reject(response.data);
+        });
       });
     },
     /**

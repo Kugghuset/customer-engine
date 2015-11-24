@@ -62,22 +62,28 @@ exports.findByEmail = function (email) {
  * @param {Object} user
  * @return {Promise} -> {Object} (User)
  */
-exports.create = function (user) {
-  // Ensure user is an object
-  if (!_.isObject(user)) { user = {}; }
-  
-  return sql.execute({
-    query: sql.fromFile('./sql/user.insert.sql'),
-    params: {
-      email: {
-        type: sql.VARCHAR(256),
-        val: user.email
-      },
-      name: {
-        type: sql.VARCHAR(256),
-        val: user.name
+exports.create = function (_user) {
+  return new Promise(function (resolve, reject) {
+      // Ensure _user is an object
+    if (!_.isObject(_user)) { _user = {}; }
+    
+    return sql.execute({
+      query: sql.fromFile('./sql/user.insert.sql'),
+      params: {
+        email: {
+          type: sql.VARCHAR(256),
+          val: _user.email
+        },
+        name: {
+          type: sql.VARCHAR(256),
+          val: _user.name
+        }
       }
-    }
+    })
+    .then(function (user) {
+      resolve(user[0] || user);
+    })
+    .catch(reject);
   });
 }
 

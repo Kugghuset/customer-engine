@@ -1,12 +1,12 @@
 /*
-Creates the SubCategoryBlob table
+Creates the SubcategoryBlob table
 */
 
-IF (OBJECT_ID('SubCategory', 'U') IS NULL)
+IF (OBJECT_ID('Subcategory', 'U') IS NULL)
 BEGIN
-  CREATE TABLE [dbo].[SubCategory] (
-    [subCategoryId] bigint IDENTITY(1, 1) PRIMARY KEY NOT NULL,
-    [subCategoryName] varchar(256) NULL,
+  CREATE TABLE [dbo].[Subcategory] (
+    [subcategoryId] bigint IDENTITY(1, 1) PRIMARY KEY NOT NULL,
+    [subcategoryName] varchar(256) NULL,
     [categoryId] bigint NULL -- parent
   )
 END

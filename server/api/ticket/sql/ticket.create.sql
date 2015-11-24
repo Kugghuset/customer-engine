@@ -32,12 +32,12 @@ VALUES (
 INSERT INTO [dbo].[CategoryBlob] (
   [ticketId],
   [categoryId],
-  [subCategoryId],
+  [subcategoryId],
   [descriptorId]
 )
 SELECT MAX([dbo].[Ticket].[ticketId]) AS [ticketId],
   @categoryId AS [categoryId],
-  @subCategoryId AS [subCategoryId],
+  @subcategoryId AS [subcategoryId],
   @descriptorId AS [descriptorId]
 FROM [dbo].[Ticket]
 

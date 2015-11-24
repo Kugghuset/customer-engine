@@ -86,20 +86,50 @@
     
     <label for="" class="control-label col-md-2">Category</label>
     
-    <div class="col-md-8">
+    <div class="col-md-2">
       <div class="btn-group" uib-dropdown uib-keyboard-nav>
         <button id="simple-btn-keyboard-nav" type="button" class="btn btn-default" uib-dropdown-toggle>
             {{ ticket.category.name || 'Choose category' }} <span class="caret"></span>
         </button>
         <ul class="uib-dropdown-menu" role="menu" aria-labelledby="simple-btn-keyboard-nav">
-            <li role="menuitem" ng-repeat="category in categories"><a ng-click="ticket.category = category">{{ category.name || 12313123 }}</a></li>
-            <!-- TODO: Add other option here -->
-            <!--<li class="divider"></li>
-            <li role="menuitem">
-              <form action="">
-                <input type="text" placeholder="Unlisted" class="form-control">
-              </form>
-            </li>-->
+            <!-- Links need an href for Boostrap UI to work with keyboard navigation -->
+            <li role="menuitem"><a href="" ng-click="ticket.category = undefind">Choose category</a></li>
+            <li class="divider"></li>
+            <li role="menuitem" ng-repeat="category in categories">
+              <a href="" ng-click="ticket.category = category">{{ category.name || 12313123 }}</a>
+            </li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="col-md-2">
+      <div class="btn-group" uib-dropdown uib-keyboard-nav>
+        <button id="simple-btn-keyboard-nav" type="button" class="btn btn-default" uib-dropdown-toggle>
+            {{ ticket.subcategory.name || 'Choose subcategory' }} <span class="caret"></span>
+        </button>
+        <ul class="uib-dropdown-menu" role="menu" aria-labelledby="simple-btn-keyboard-nav">
+            <!-- Links need an href for Boostrap UI to work with keyboard navigation -->
+            <li role="menuitem"><a href="" ng-click="ticket.subcategory = undefind">Choose subcategory</a></li>
+            <li class="divider"></li>
+            <li role="menuitem" ng-repeat="subcategory in subcategories[ticket.category.categoryId]">
+              <a href="" ng-click="ticket.subcategory = subcategory">{{ subcategory.name || 12313123 }}</a>
+            </li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="col-md-2">
+      <div class="btn-group" uib-dropdown uib-keyboard-nav>
+        <button id="simple-btn-keyboard-nav" type="button" class="btn btn-default" uib-dropdown-toggle>
+            {{ ticket.descriptor.name || 'Choose descriptor' }} <span class="caret"></span>
+        </button>
+        <ul class="uib-dropdown-menu" role="menu" aria-labelledby="simple-btn-keyboard-nav">
+            <!-- Links need an href for Boostrap UI to work with keyboard navigation -->
+            <li role="menuitem"><a href="" ng-click="ticket.descriptor = undefind">Choose descriptor</a></li>
+            <li class="divider"></li>
+            <li role="menuitem" ng-repeat="descriptor in descriptors[ticket.subcategory.subcategoryId]">
+              <a href="" ng-click="ticket.descriptor = descriptor">{{ descriptor.name || 12313123 }}</a>
+            </li>
         </ul>
       </div>
     </div>

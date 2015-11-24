@@ -8,7 +8,7 @@ BEGIN
     [categoryBlobId] bigint IDENTITY(1, 1) PRIMARY  KEY NOT NULL,
     [ticketId] bigint NOT NULL,
     [categoryId] bigint NULL,
-    [subCategoryId] bigint NULL,
+    [subcategoryId] bigint NULL,
     [descriptorId] bigint NULL
   )
 END

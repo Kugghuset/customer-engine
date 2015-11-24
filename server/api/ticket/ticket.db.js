@@ -28,7 +28,7 @@ exports.create = function (ticket, user) {
     ticket.customer = ticket.customer || {};
     ticket.user = ticket.user || user || {};
     ticket.category = ticket.category || {};
-    ticket.subCategory = ticket.subCategory || {};
+    ticket.subcategory = ticket.subcategory || {};
     ticket.descriptor = ticket.descriptor || {};
     
     return sql.execute({
@@ -81,9 +81,9 @@ exports.create = function (ticket, user) {
           type: sql.BIGINT,
           val: ticket.category.categoryId
         },
-        subCategoryId: {
+        subcategoryId: {
           type: sql.BIGINT,
-          val:  ticket.subCategory.subCategoryId
+          val:  ticket.subcategory.subcategoryId
         },
         descriptorId: {
           type: sql.BIGINT,

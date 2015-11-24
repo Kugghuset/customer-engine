@@ -15,8 +15,8 @@ SELECT
   [A].[ticketDate],
   [B].[categoryId] AS [category.categoryId],
   [C].[categoryName] AS [category.name],
-  [B].[subCategoryId] AS [subCategory.subCategoryId],
-  [D].[subCategoryName] AS [subCategory.name],
+  [B].[subcategoryId] AS [subcategory.subcategoryId],
+  [D].[subcategoryName] AS [subcategory.name],
   [B].[descriptorId] AS [descriptor.descriptorId],
   [E].[descriptorName] AS [descriptor.name]
 FROM [dbo].[Ticket] AS [A]
@@ -29,9 +29,9 @@ ON [A].[ticketId] = [B].[ticketId]
 LEFT JOIN [dbo].[Category] AS [C]
 ON [B].[categoryId] = [C].[categoryId]
 
--- Joins the subCategory
-LEFT JOIN [dbo].[SubCategory] AS [D]
-ON [B].[subCategoryId] = [D].[subCategoryId]
+-- Joins the subcategory
+LEFT JOIN [dbo].[Subcategory] AS [D]
+ON [B].[subcategoryId] = [D].[subcategoryId]
 
 -- Joins the descriptors
 LEFT JOIN [dbo].[Descriptor] AS [E]

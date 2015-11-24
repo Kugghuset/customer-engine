@@ -5,6 +5,12 @@ var path = require('path');
 
 var root = path.resolve();
 
+// Init category stuff
+require('./category/index')
+require('./categoryBlob/index')
+require('./subcategory/index')
+require('./descriptor/index')
+
 /**
  * Purely the routing module.
  * Inserts routes like:

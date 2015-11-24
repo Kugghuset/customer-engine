@@ -6,7 +6,7 @@ var sql = require('seriate');
 
 function initialize() {
   return sql.execute({
-    query: sql.fromFile('./sql/subCategory.initialize.sql')
+    query: sql.fromFile('./sql/subcategory.initialize.sql')
   });
 }
 

@@ -3,12 +3,12 @@
     <h1>Customer Engine</h1>
     <div class="center-block">
       <!-- Login -->
-      <form ng-submit="login(tempUser)" class="form-inline" ng-hide="auth.getCurrentUser().email">
-        <div class="input-group ">
+      <form name="loginForm" ng-submit="login(tempUser)" class="form-inline" ng-hide="auth.getCurrentUser().email">
+        <div class="input-group">
           <span class="input-group-addon" id="basic-addon1">@</span>
-          <input type="text" class="form-control" placeholder="Email address" ng-model="tempUser.email" aria-describedby="basic-addon1">
+          <input type="email" name="email" class="form-control" placeholder="Email address" ng-model="tempUser.email" aria-describedby="basic-addon1" requried>
         </div>
-        <button class="btn btn-primary">Logga in</button>
+        <button ng-disabled="!(loginForm.email.$valid && tempUser.email.length > 0)" class="btn btn-primary">Logga in</button>
       </form>
     </div>
     

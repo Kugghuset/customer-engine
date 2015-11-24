@@ -8,7 +8,7 @@ angular.module('customerEngineApp')
     controller: 'MainCtrl'
   });
 }])
-.controller('MainCtrl', ['$scope', 'Auth', function ($scope, Auth) {
+.controller('MainCtrl', ['$scope', 'Auth', 'Notification', function ($scope, Auth, Notification) {
   $scope.auth = Auth;
   
   $scope.login = function (_user) {
@@ -17,6 +17,7 @@ angular.module('customerEngineApp')
       _user = {};
     })
     ['catch'](function (err) {
+      Notification.error('Something went wrong...')
       console.log(err);
     });
   }

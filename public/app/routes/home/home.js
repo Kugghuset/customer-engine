@@ -43,7 +43,7 @@ angular.module('customerEngineApp')
     { categoryId: 1, name: 'Acquiring' },
     { categoryId: 2, name: 'ECommerce' },
     { categoryId: 3, name: 'Invoice' },
-    { categoryId: 4, name: 'Conact information' },
+    { categoryId: 4, name: 'Contact information' },
     { categoryId: 5, name: 'Terminations' },
     { categoryId: 6, name: 'Terminal' },
     { categoryId: 7, name: 'Orders' },
@@ -54,6 +54,7 @@ angular.module('customerEngineApp')
     // add something?
   };
   
+  // Submits a ticket to the system.
   $scope.submit = function (_ticket) {
     
     Ticket.create(_.assign({}, _ticket, { user: Auth.getCurrentUser() }))
@@ -69,6 +70,11 @@ angular.module('customerEngineApp')
       console.log(err);
     });
   };
+  
+  // Watches for changes in user :)
+  $scope.$watch('auth.getCurrentUser()', function (user) {
+    $scope.user = user;
+  })
 }]);
 
 })();

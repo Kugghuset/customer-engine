@@ -41,18 +41,13 @@ SELECT MAX([dbo].[Ticket].[ticketId]) AS [ticketId],
   @descriptorId AS [descriptorId]
 FROM [dbo].[Ticket]
 
-
-SELECT TOP 1 [name],
-  [email],
-  [tel],
-  [summary],
-  [transferred],
-  [successful],
-  [customerId],
-  [userId]
-FROM [dbo].[Ticket]
-ORDER BY [ticketId] DESC
-
 COMMIT TRAN
 
--- Select the newly created ticket.
+-- Select the newly created ticket done in other file.
+-- The files are combined using javascript
+DECLARE @ticketId BIGINT
+
+SET @ticketId = (
+  SELECT MAX([ticketId])
+  FROM [dbo].[Ticket]
+)

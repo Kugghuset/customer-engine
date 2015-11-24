@@ -29,8 +29,8 @@ angular.module('customerEngineApp', [
   
   ngIntlTelInputProvider.set({
     defaultCountry: 'se',
-    allowExtensions: true,
-    dropdownContainer: 'body'
+    preferredCountries: [ 'se', 'us', 'gb' ],
+    dropdownContainer: true
   });
 }])
 .factory('authInterceptor', ['$q', '$cookies', '$location', function ($q, $cookies, $location) {

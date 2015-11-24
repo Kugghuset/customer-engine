@@ -1,0 +1,4 @@
+.country-list {
+  /* Bootstrap input will cover this otherwise */
+  z-index: 9 !important; /* I hate !important but it's needed' */
+}

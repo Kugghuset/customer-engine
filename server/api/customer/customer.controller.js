@@ -3,6 +3,7 @@
 var chalk = require('chalk');
 
 var Customer = require('./customer.db');
+var utils = require('../../utils/utils');
 
 /**
  * ROUTE: PUT '/api/customers/fuzzy'
@@ -13,12 +14,6 @@ exports.fuzzyQuery = function (req, res) {
     res.status(200).json(customers);
   })
   .catch(function (err) {
-    handleError(res, err);
+    utils.handleError(res, err);
   });
 }
-
-
-function handleError(res, err) {
-  console.log(chalk.red(err));
-  res.status(500).send('Internal Error');
-};

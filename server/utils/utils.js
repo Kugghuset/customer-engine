@@ -36,6 +36,13 @@ function objectify(sqlArray) {
   return isObj ? _.first(arr) : arr;
 }
 
+function handleError(res, err) {
+  console.log(chalk.red(err));
+  
+  res.status(500).send('Internal Error');
+}
+
 module.exports = {
-  objectify: objectify
+  objectify: objectify,
+  handleError: handleError
 };

@@ -5,6 +5,7 @@ var Promise = require('bluebird');
 var chalk = require('chalk');
 
 var Ticket = require('./ticket.db');
+var utils = require('../../utils/utils');
 
 /**
  * ROUTE: POST '/api/tickets'
@@ -15,7 +16,7 @@ exports.create = function (req, res) {
     res.status(200).json(ticket);
   })
   .catch(function (err) {
-    handleError(res, err);
+    utils.handleError(res, err);
   })
 }
 
@@ -28,11 +29,6 @@ exports.findById = function (req, res) {
     res.status(200).json(ticket);
   })
   .catch(function (err) {
-    handleError(res, err);
+    utils.handleError(res, err);
   });
 }
-
-function handleError(res, err) {
-  console.log(chalk.red(err));
-  res.status(500).send('Internal Error');
-};

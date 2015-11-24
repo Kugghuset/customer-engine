@@ -6,6 +6,7 @@ var chalk = require('chalk');
 
 var auth = require('../../services/auth');
 var User = require('./user.db');
+var utils = require('../../utils/utils');
 
 /**
  * ROUTE: GET 'api/users/:id'
@@ -16,7 +17,7 @@ exports.show = function (req, res) {
     res.status(200).json(user);
   })
   .reject(function (err) {
-    handleError(res, err);
+    utils.handleError(res, err);
   })
 };
 
@@ -27,7 +28,7 @@ exports.show = function (req, res) {
  */
 exports.login = function (req, res) {
   // No user, so we can't login.
-  if (!req.body) { return handleError(res, new Error('No user provided')); }
+  if (!req.body) { return utils.handleError(res, new Error('No user provided')); }
   
   User.findByEmail(req.body.email)
   .then(function (user) {
@@ -50,7 +51,7 @@ exports.login = function (req, res) {
         return res.status(200).json(user);
       })
       .catch(function (err) {
-        handleError(res, err);
+        utils.handleError(res, err);
       });
     }
   });
@@ -67,11 +68,6 @@ exports.me = function (req, res) {
     res.status(200).json(user);
   })
   .catch(function (err) {
-    handleError(res, err);
+    utils.handleError(res, err);
   });
-};
-
-function handleError(res, err) {
-  console.log(chalk.red(err));
-  res.status(500).send('Internal Error');
 };

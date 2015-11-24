@@ -30,6 +30,7 @@ exports.create = function (ticket, user) {
     ticket.category = ticket.category || {};
     ticket.subcategory = ticket.subcategory || {};
     ticket.descriptor = ticket.descriptor || {};
+    ticket.country = _.isObject(ticket.country) ? ticket.country.short : ticket.country
     
     return sql.execute({
       query: [
@@ -55,7 +56,7 @@ exports.create = function (ticket, user) {
         },
         country: {
           type: sql.VARCHAR(256),
-          val: _.isObject(ticket.country) ? ticket.country.short : ticket.country
+          val: ticket.country
         },
         summary: {
           type: sql.VARCHAR,

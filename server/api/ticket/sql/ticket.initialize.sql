@@ -10,6 +10,7 @@ BEGIN
     [email] varchar(256) NULL,
     [tel] varchar(256) NULL,
     [summary] varchar(max) NULL,
+    [country] varchar(256) NULL,
     [transferred] bit NULL,
     [successful] bit NULL,
     [customerId] bigint NOT NULL,

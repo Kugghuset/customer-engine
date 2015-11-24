@@ -13,6 +13,7 @@ INSERT INTO [dbo].[Ticket] (
   [summary],
   [transferred],
   [successful],
+  [country],
   [customerId],
   [userId],
   [ticketDate]
@@ -24,6 +25,7 @@ VALUES (
   @summary,
   @transferred,
   @successful,
+  @country,
   @customerId,
   @userId,
   @ticketDate

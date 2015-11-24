@@ -58,8 +58,6 @@ angular.module('customerEngineApp')
     
     Ticket.create(_.assign({}, _ticket, { user: Auth.getCurrentUser() }))
     .then(function (ticket) {
-      console.log(ticket);
-      
       Notification('Ticket submitted');
       
       $scope.ticket = {
@@ -70,15 +68,7 @@ angular.module('customerEngineApp')
     ['catch'](function (err) {
       console.log(err);
     });
-  }
-  
-  Ticket.getById(1)
-  .then(function (res) {
-    console.log(res);
-  })['catch'](function (err) {
-    console.log(err);
-  })
-  
+  };
 }]);
 
 })();

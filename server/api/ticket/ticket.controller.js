@@ -12,9 +12,6 @@ var Ticket = require('./ticket.db');
 exports.create = function (req, res) {
   Ticket.create(req.body, req.user)
   .then(function (ticket) {
-    
-    console.log(ticket || 'Done at least!!');
-    
     res.status(200).json(ticket);
   })
   .catch(function (err) {

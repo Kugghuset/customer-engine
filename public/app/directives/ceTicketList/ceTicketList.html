@@ -1,0 +1,5 @@
+<h3 ng-show="tickets.length">Related tickets</h3>
+
+<div ng-repeat="ticket in tickets | orderBy:'ticketDate'">
+  <ce-ticket-preview ticket="ticket"></ce-ticket-preview>
+</div>

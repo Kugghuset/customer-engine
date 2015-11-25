@@ -121,5 +121,25 @@ exports.findById = function (ticketId) {
   });
 }
 
+exports.findByCustomerId = function (customerId) {
+  return new Promise(function (resolve, reject) {
+    sql.execute({
+      query: sql.fromFile('./sql/ticket.findByCustomerId.sql'),
+      params: {
+        customerId: {
+          type: sql.BIGINT,
+          val: customerId
+        }
+      }
+    })
+    .then(function (tickets) {
+      resolve(util.objectify(tickets));
+    })
+    .catch(function (err) {
+      reject(err);
+    });
+  });
+}
+
 // Initialize the table
 initialize();

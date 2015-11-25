@@ -86,7 +86,7 @@
     
     <label for="" class="control-label col-md-2">Category</label>
     
-    <div class="col-md-2">
+    <div class="col-md-8">
       <div class="btn-group" uib-dropdown uib-keyboard-nav>
         <button id="simple-btn-keyboard-nav" type="button" class="btn btn-default" uib-dropdown-toggle>
             {{ ticket.category.categoryName || 'Choose category' }} <span class="caret"></span>
@@ -100,10 +100,8 @@
             </li>
         </ul>
       </div>
-    </div>
     
-    <div ng-hide="hideSubcategory(ticket)" class="col-md-2">
-      <div class="btn-group" uib-dropdown uib-keyboard-nav>
+      <div ng-hide="hideSubcategory(ticket)" class="btn-group" uib-dropdown uib-keyboard-nav>
         <button id="simple-btn-keyboard-nav" type="button" class="btn btn-default" uib-dropdown-toggle>
             {{ ticket.subcategory.subcategoryName || 'Choose subcategory' }} <span class="caret"></span>
         </button>
@@ -116,10 +114,8 @@
             </li>
         </ul>
       </div>
-    </div>
     
-    <div ng-hide="hideDescriptor(ticket)" class="col-md-2">
-      <div class="btn-group" uib-dropdown uib-keyboard-nav>
+      <div ng-hide="hideDescriptor(ticket)" class="btn-group" uib-dropdown uib-keyboard-nav>
         <button id="simple-btn-keyboard-nav" type="button" class="btn btn-default" uib-dropdown-toggle>
             {{ ticket.descriptor.descriptorName || 'Choose descriptor' }} <span class="caret"></span>
         </button>
@@ -133,7 +129,6 @@
         </ul>
       </div>
     </div>
-    
   </div>
   
   <br>

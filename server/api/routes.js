@@ -2,6 +2,7 @@
 
 var express = require('express');
 var path = require('path');
+var morgan = require('morgan');
 
 var root = path.resolve();
 
@@ -16,9 +17,12 @@ require('./descriptor/index')
  * Inserts routes like:
  * app.use('/name', require('./name'));
  */
-module.exports = function (app) {
+module.exports = function (app, logger) {
   // Front end app
   app.use(express.static(root + '/public'));
+  
+  // Logging for API routes
+  app.use(morgan('combined', { stream: logger.stream }));
   
   // Insert modules/routes here
   app.use('/api/users', require('./user/index'));

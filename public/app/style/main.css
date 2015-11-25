@@ -2,9 +2,6 @@
   /* Bootstrap input will cover this otherwise */
   z-index: 9 !important; /* I hate !important but it's needed' */
 }
-
-@media (max-width: 768px) {
-  .intl-tel-input {
-    width: 100%;
-  }
+.intl-tel-input {
+  width: 100%;
 }

@@ -19,9 +19,7 @@
         typeahead-no-results="noResults"
         class="form-control">
       <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
-      <div ng-show="noResults">
-        <i class="glyphicon glyphicon-remove"></i> No Results Found
-      </div>
+      <span ng-show="noResults && ticket.customer"><i class="glyphicon glyphicon-remove"></i> No Results Found</span>
       
     </div>
   
@@ -34,7 +32,7 @@
     
     <label class="control-label col-md-2" for="">Contact person</label>
     
-    <div class="col-md-8">
+    <div class="col-md-3 col-sm-4">
       <input
       type="text"
       ng-model="ticket.name"
@@ -42,16 +40,7 @@
       placeholder="Name">
     </div>
     
-  </div>
-  
-  <br>
-  
-  <div class="row form-horizontal">
-    <!-- Contact email -->
-    
-    <label class="control-label col-md-2" for="">Email address</label>
-    
-    <div class="col-md-8">
+    <div class="col-md-3 col-sm-4">
       <input
       type="email"
       ng-model="ticket.email"
@@ -59,16 +48,7 @@
       placeholder="Email address">
     </div>
     
-  </div>
-  
-  <br>
-  
-  <div class="row form-horizontal">
-    <!-- Contact tel -->
-    
-    <label class="control-label col-md-2" for="">Phone number</label>
-    
-    <div class="col-md-8">
+    <div class="col-md-2 col-sm-4">
       <input
       type="text"
       ng-model="ticket.tel"
@@ -82,7 +62,7 @@
   <br>
   
   <div class="row form-horizontal">
-    <!-- Category -->
+    <!-- Categories -->
     
     <label for="" class="control-label col-md-2">Category</label>
     
@@ -271,8 +251,15 @@
   
   <hr>
   
-  <pre>{{ ticket | json }}</pre>
+  <h2>Ticket overview</h2>
+    
+  <section class="row">
+    
+    
+    
+  </section>
   
+  <pre>{{ ticket | json }}</pre>
   
   </div>
 

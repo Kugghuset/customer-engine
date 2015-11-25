@@ -27,8 +27,8 @@ BEGIN
   (
     FIELDTERMINATOR = ',',
     ROWTERMINATOR = '\n',
-    DATAFILETYPE = 'widechar',
-    CODEPAGE = 'RAW'
+    DATAFILETYPE = 'widechar', -- This part is super important for åäö
+    CODEPAGE = 'RAW' -- Supposedly this one too
   )
   
   -- Trim leading and trailing whitespace as it's unwanted

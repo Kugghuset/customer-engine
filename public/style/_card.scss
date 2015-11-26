@@ -1,0 +1,12 @@
+.card {
+  display: inline-block;
+  max-width: 100%;
+  width: 375px;
+  box-sizing: border-box;
+  padding: 5px 15px;
+  background-color: $color-higlight-blue-light;
+  box-shadow: 2px 5px 15px rgba(0,0,0,0.2);
+  &:hover {
+    box-shadow: 2px 10px 15px rgba(0,0,0,0.2);
+  }
+}

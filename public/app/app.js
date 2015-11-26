@@ -12,7 +12,7 @@ angular.module('customerEngineApp', [
 .config(['$stateProvider', '$urlRouterProvider', '$httpProvider','AnalyticsProvider', 'ngIntlTelInputProvider', function ($stateProvider, $urlRouterProvider, $httpProvider, AnalyticsProvider, ngIntlTelInputProvider) {
   
   $urlRouterProvider
-  .otherwise('/hem');
+  .otherwise('/home');
   
   // Adds authInterceptor to http requests
   $httpProvider.interceptors.push('authInterceptor')
@@ -27,6 +27,7 @@ angular.module('customerEngineApp', [
     }
   ]);
   
+  // Settings for international phone numbers
   ngIntlTelInputProvider.set({
     defaultCountry: 'se',
     preferredCountries: [ 'se', 'no', 'fi', 'de' ],

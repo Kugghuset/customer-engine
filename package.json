@@ -43,6 +43,8 @@
     "gulp": "^3.9.0",
     "gulp-exec": "^2.1.2",
     "gulp-livereload": "^3.8.1",
+    "gulp-sass": "^2.1.0",
+    "node-sass": "^3.4.2",
     "shelljs": "^0.5.3"
   }
 }

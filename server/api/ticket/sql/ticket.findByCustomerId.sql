@@ -52,3 +52,4 @@ LEFT JOIN [dbo].[User] AS [U]
 ON [A].[userId] = [U].[userId]
 
 WHERE [A].[customerId] = @customerId
+ORDER BY [A].[ticketDate] DESC

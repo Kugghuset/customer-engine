@@ -7,6 +7,7 @@ SELECT
   [A].[name],
   [A].[email],
   [A].[tel],
+  [A].[altTel],
   [A].[summary],
   [A].[transferred],
   [A].[successful],

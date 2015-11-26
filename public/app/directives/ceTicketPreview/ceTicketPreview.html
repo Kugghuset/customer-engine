@@ -23,7 +23,7 @@
       </div>
     </div>
 
-    <div class="row" ng-show="ticket.name || ticket.email || ticket.tel">
+    <div class="row" ng-show="ticket.name || ticket.email || ticket.tel || ticket.altTel">
       <h4 class="col-md-2">Contact</h4>
       <div class="col-md-10">
         <div class="panel panel-default">
@@ -39,6 +39,10 @@
             <div class="row" ng-show="ticket.tel">
               <label class="control-label col-md-3">Phone number: </label>
               <span class="col-md-7">{{ ticket.tel }}</span>
+            </div>
+            <div class="row" ng-show="ticket.altTel">
+              <label class="control-label col-md-3">Alt. phone number: </label>
+              <span class="col-md-7">{{ ticket.altTel }}</span>
             </div>
           </div>
         </div>

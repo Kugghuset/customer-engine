@@ -19,6 +19,8 @@ angular.module('customerEngineApp')
     user: Auth.getCurrentUser()
   }
   
+  $scope.relatedTickets = [];
+  
   $scope.getCustomer = function (val) {
     // Get customer based on org. number or name
     return Customer.getFuzzy(val);
@@ -99,6 +101,22 @@ angular.module('customerEngineApp')
     if ($scope.hideDescriptor(ticket)) { ticket.descriptor = undefined; }
     
   }, true);
+  
+  $scope.$watch('ticket.customer.customerId', function (customerId) {
+    if (_.isUndefined(customerId)) {
+      $scope.relatedTickets = [];
+    } else {
+      Ticket.getByCustomerId(customerId)
+      .then(function (tickets) {
+        $scope.relatedTickets = tickets;
+      })
+      ['catch'](function (err) {
+        console.log(err);
+      });
+    }
+    
+  });
+  
 }]);
 
 })();

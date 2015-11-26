@@ -1,7 +1,8 @@
 /*
-Finds a ticket by its ticketId and joins it.
+Finds tickets by its customerId and joins it.
 */
-SELECT
+
+SELECT TOP 12
   [A].[ticketId],
   [A].[name],
   [A].[email],
@@ -43,5 +44,4 @@ ON [B].[descriptorId] = [E].[descriptorId]
 LEFT JOIN [dbo].[Customer] AS [F]
 ON [A].[customerId] = [F].[customerId]
 
--- Gets only the matching ticket
-WHERE [A].[ticketId]=@ticketId
+WHERE [A].[customerId] = @customerId

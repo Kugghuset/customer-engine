@@ -32,3 +32,16 @@ exports.findById = function (req, res) {
     utils.handleError(res, err);
   });
 }
+
+/**
+ * ROUTE: GET '/api/tickets/customer/:id'
+ */
+exports.findByCustomerId = function (req, res) {
+  Ticket.findByCustomerId(req.params.id)
+  .then(function (tickets) {
+    res.status(200).json(tickets);
+  })
+  .catch(function (err) {
+    utils.handleError(res, err);
+  })
+}

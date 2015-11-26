@@ -25,6 +25,13 @@ angular.module('customerEngineApp')
         .success(resolve)
         .error(reject);
       });
+    },
+    getByCustomerId: function (customerId) {
+      return $q(function (resolve, reject) {
+        $http.get('api/tickets/customer/' + customerId)
+        .success(resolve)
+        .error(reject);
+      });
     }
   }
   

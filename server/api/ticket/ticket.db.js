@@ -54,6 +54,10 @@ exports.create = function (ticket, user) {
           type: sql.VARCHAR(256),
           val: ticket.tel
         },
+        altTel: {
+          type: sql.VARCHAR(256),
+          val: ticket.altTel
+        },
         country: {
           type: sql.VARCHAR(256),
           val: ticket.country

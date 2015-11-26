@@ -29,7 +29,7 @@ angular.module('customerEngineApp', [
   
   ngIntlTelInputProvider.set({
     defaultCountry: 'se',
-    preferredCountries: [ 'se', 'us', 'gb' ],
+    preferredCountries: [ 'se', 'no', 'fi', 'de' ],
     dropdownContainer: true
   });
 }])

@@ -61,7 +61,6 @@ angular.module('customerEngineApp')
     Ticket.create(_.assign({}, _ticket, { user: Auth.getCurrentUser() }))
     .then(function (ticket) {
       Notification('Ticket submitted');
-      console.log(ticket);
       
       $scope.ticket = {
         ticketDate: new Date(),

@@ -10,6 +10,7 @@ SELECT
   [A].[summary],
   [A].[transferred],
   [A].[successful],
+  [A].[country] AS [country.short],
   [A].[customerId],
   [F].[customerNumber] AS [customer.customerNumber],
   [F].[orgName] AS [customer.orgName],

@@ -1,6 +1,7 @@
 /*
 Finds a ticket by its ticketId and joins it.
 */
+
 SELECT
   [A].[ticketId],
   [A].[name],
@@ -14,6 +15,8 @@ SELECT
   [F].[orgName] AS [customer.orgName],
   [F].[orgNr] AS [customer.orgNr],
   [A].[userId],
+  [U].[email] AS [user.email],
+  [U].[name] AS [user.name],
   [A].[ticketDate],
   [B].[categoryId] AS [category.categoryId],
   [C].[categoryName] AS [category.categoryName],
@@ -42,6 +45,10 @@ ON [B].[descriptorId] = [E].[descriptorId]
 -- Joins the customerId
 LEFT JOIN [dbo].[Customer] AS [F]
 ON [A].[customerId] = [F].[customerId]
+
+-- Joins the userId
+LEFT JOIN [dbo].[User] AS [U]
+ON [A].[userId] = [U].[userId]
 
 -- Gets only the matching ticket
 WHERE [A].[ticketId]=@ticketId

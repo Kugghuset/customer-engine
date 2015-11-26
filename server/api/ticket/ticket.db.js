@@ -133,6 +133,7 @@ exports.findByCustomerId = function (customerId) {
       }
     })
     .then(function (tickets) {
+      console.log(util.objectify(tickets));
       resolve(util.objectify(tickets));
     })
     .catch(function (err) {

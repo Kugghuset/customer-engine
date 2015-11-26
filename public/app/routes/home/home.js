@@ -92,6 +92,7 @@ angular.module('customerEngineApp')
   // Watches for changes in user :)
   $scope.$watch('auth.getCurrentUser()', function (user) {
     $scope.user = user;
+    $scope.ticket.user = user;
   });
   
   $scope.$watch('ticket', function (ticket) {

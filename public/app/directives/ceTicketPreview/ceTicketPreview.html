@@ -97,7 +97,7 @@
             <div class="row" ng-show="ticket.summary">
               <label class="control-label col-md-3">Summary: </label>
               <span class="col-md-7">
-                  <p ng-repeat="line in ticket.summary | split:'\n'">
+                  <p ng-repeat="line in ticket.summary | split:'\n' track by $index">
                     {{ line }}
                   </p>
                 </span>

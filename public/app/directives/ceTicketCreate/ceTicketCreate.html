@@ -1,0 +1,227 @@
+<div class="row form-horizontal">
+  <!-- Customer -->
+
+  <label class="control-label col-md-2" for="">Customer</label>
+
+  <div class="col-md-10">
+
+    <input type="text" ng-model="ticket.customer" placeholder="Search for customer" uib-typeahead="customer as matched(customer, 'customer') for customer in getCustomer($viewValue)"
+    typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control">
+    <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+    <span ng-show="noResults && ticket.customer"><i class="glyphicon glyphicon-remove"></i> No Results Found</span>
+
+  </div>
+
+</div>
+
+<br>
+
+<div class="row form-horizontal">
+  <!-- Contact person -->
+
+  <label class="control-label col-md-2" for="">Contact person</label>
+
+  <div class="col-md-10">
+    <input type="text" ng-model="ticket.name" class="form-control" placeholder="Name">
+  </div>
+
+</div>
+
+<br>
+
+<div class="row form-horizontal">
+  <!-- Contact tel and altTel -->
+
+  <label class="control-label col-md-2" for="">Phone number(s)</label>
+
+  <div class="col-md-5">
+    <input type="text" ng-model="ticket.tel" ng-intl-tel-input class="form-control" placeholder="Phone number">
+  </div>
+
+  <div class="col-md-5">
+    <input type="text" ng-model="ticket.altTel" ng-intl-tel-input class="form-control" placeholder="Alt. phone number">
+  </div>
+
+
+</div>
+
+<br>
+
+<div class="row form-horizontal">
+  <!-- Contact email -->
+
+  <label class="control-label col-md-2" for="">Contact email</label>
+
+
+  <div class="col-md-10">
+    <input type="email" ng-model="ticket.email" class="form-control" placeholder="Email address">
+  </div>
+
+</div>
+
+<br>
+
+<div class="row form-horizontal">
+  <!-- Country -->
+
+  <label class="control-label col-md-2">Country</label>
+
+  <div class="col-md-10">
+
+    <input type="text" ng-model="ticket.country" uib-typeahead="country as matched(country, country) for country in countries | filter:$viewValue | limitTo:12"
+    class="form-control" placeholder="Type country name">
+
+  </div>
+
+</div>
+
+<br>
+
+<div class="row form-horizontal">
+  <!-- Categories -->
+
+  <label for="" class="control-label col-md-2">Category</label>
+
+  <div class="col-md-10">
+    <div class="btn-group" uib-dropdown uib-keyboard-nav>
+      <button id="simple-btn-keyboard-nav" type="button" class="btn btn-default" uib-dropdown-toggle>
+        {{ ticket.category.categoryName || 'Choose category' }} <span class="caret"></span>
+      </button>
+      <ul class="uib-dropdown-menu" role="menu" aria-labelledby="simple-btn-keyboard-nav">
+        <!-- Links need an href for Boostrap UI to work with keyboard navigation -->
+        <li role="menuitem"><a href="" ng-click="ticket.category = undefind">Choose category</a></li>
+        <li class="divider"></li>
+        <li role="menuitem" ng-repeat="category in categories">
+          <a href="" ng-click="ticket.category = category">{{ category.categoryName || 'value' }}</a>
+        </li>
+      </ul>
+    </div>
+
+    <div ng-hide="hideSubcategory(ticket)" class="btn-group" uib-dropdown uib-keyboard-nav>
+      <button id="simple-btn-keyboard-nav" type="button" class="btn btn-default" uib-dropdown-toggle>
+        {{ ticket.subcategory.subcategoryName || 'Choose subcategory' }} <span class="caret"></span>
+      </button>
+      <ul class="uib-dropdown-menu" role="menu" aria-labelledby="simple-btn-keyboard-nav">
+        <!-- Links need an href for Boostrap UI to work with keyboard navigation -->
+        <li role="menuitem"><a href="" ng-click="ticket.subcategory = undefind">Choose subcategory</a></li>
+        <li class="divider"></li>
+        <li role="menuitem" ng-repeat="subcategory in subcategories[ticket.category.categoryId]">
+          <a href="" ng-click="ticket.subcategory = subcategory">{{ subcategory.subcategoryName || 'value' }}</a>
+        </li>
+      </ul>
+    </div>
+
+    <div ng-hide="hideDescriptor(ticket)" class="btn-group" uib-dropdown uib-keyboard-nav>
+      <button id="simple-btn-keyboard-nav" type="button" class="btn btn-default" uib-dropdown-toggle>
+        {{ ticket.descriptor.descriptorName || 'Choose descriptor' }} <span class="caret"></span>
+      </button>
+      <ul class="uib-dropdown-menu" role="menu" aria-labelledby="simple-btn-keyboard-nav">
+        <!-- Links need an href for Boostrap UI to work with keyboard navigation -->
+        <li role="menuitem"><a href="" ng-click="ticket.descriptor = undefind">Choose descriptor</a></li>
+        <li class="divider"></li>
+        <li role="menuitem" ng-repeat="descriptor in descriptors[ticket.subcategory.subcategoryId]">
+          <a href="" ng-click="ticket.descriptor = descriptor">{{ descriptor.descriptorName || 'value' }}</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<br>
+
+<div class="row form-horizontal">
+  <!-- Date -->
+
+  <label class="control-label col-md-2" for="">Ticket date</label>
+
+  <div class="col-md-10">
+
+    <p class="input-group">
+      <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="ticket.ticketDate" is-open="datePickerOpen"
+      min-date="minDate" max-date="maxDate" datepicker-options="datepickerOptions" date-disabled="disabled(date, mode)" close-text="Close"
+      placeholder="YYYY-MM-DD">
+      <span class="input-group-btn">
+              <button
+                type="button"
+                class="btn btn-default"
+                ng-click="datePickerOpen = !datePickerOpen">
+              <i class="glyphicon glyphicon-calendar"></i></button>
+            </span>
+    </p>
+
+  </div>
+
+</div>
+
+<br>
+
+<div class="row form-horizontal">
+  <!-- Time -->
+
+  <label class="control-label col-md-2" for="">Ticket time</label>
+
+  <div class="col-md-10">
+
+    <uib-timepicker ng-model="ticket.ticketDate" ng-change="changed()" hour-step="1" minute-step="10" show-meridian="false" arrowkeys="false"></uib-timepicker>
+
+  </div>
+
+</div>
+
+<br>
+
+<div class="row form-horizontal">
+  <!-- Summary -->
+
+  <label class="control-label col-md-2">Ticket summary</label>
+
+  <div class="col-md-10">
+    <textarea cols="30" rows="3" placeholder="Short description" class="form-control" ng-model="ticket.summary"></textarea>
+  </div>
+
+</div>
+
+<br>
+
+<div class="row form-horizontal">
+  <!-- Transferred -->
+
+  <label class="control-label col-md-2">&nbsp;</label>
+
+  <div class="col-md-10 checkbox">
+    <label>
+      <input type="checkbox" ng-model="ticket.transferred"> Ticket was transferred
+    </label>
+  </div>
+
+</div>
+
+<br>
+
+<div class="row form-horizontal">
+  <!-- Success -->
+
+  <label class="control-label col-md-2">&nbsp;</label>
+
+  <div class="col-md-10 checkbox">
+    <label>
+      <input type="checkbox" ng-model="ticket.successful"> Ticket was successful
+    </label>
+  </div>
+
+</div>
+
+<br>
+
+<div class="row">
+  <!-- Save button -->
+
+  <label class="control-label col-md-2">&nbsp;</label>
+
+  <div class="col-md-2">
+    <button ng-click="submit(ticket)" class="btn btn-success">Submit ticket</button>
+  </div>
+
+</div>
+
+<hr class="hidden-lg hidden-md">

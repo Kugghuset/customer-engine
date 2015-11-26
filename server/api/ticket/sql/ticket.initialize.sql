@@ -9,6 +9,7 @@ BEGIN
     [name] varchar(256) NULL,
     [email] varchar(256) NULL,
     [tel] varchar(256) NULL,
+    [altTel] varchar(256) NULL,
     [summary] varchar(max) NULL,
     [country] varchar(256) NULL,
     [transferred] bit NULL,
@@ -19,3 +20,12 @@ BEGIN
     [dateCreated] datetime2 DEFAULT GETUTCDATE() NULL
   )
 END
+ELSE
+  -- Add altTel column if it doesn't exist
+  IF NOT EXISTS(SELECT * FROM sys.columns
+                WHERE Name = N'altTel'
+                AND Object_ID = Object_ID(N'Ticket'))
+  BEGIN
+      ALTER TABLE [dbo].[Ticket]
+      ADD [altTel] varchar(256) NULL
+  END

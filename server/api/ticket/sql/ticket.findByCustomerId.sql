@@ -11,6 +11,7 @@ SELECT TOP 12
   [A].[summary],
   [A].[transferred],
   [A].[successful],
+  [A].[status],
   [A].[country] AS [country.short],
   [A].[customerId],
   [F].[customerNumber] AS [customer.customerNumber],

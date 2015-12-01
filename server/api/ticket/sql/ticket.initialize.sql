@@ -14,6 +14,7 @@ BEGIN
     [country] varchar(256) NULL,
     [transferred] bit NULL,
     [successful] bit NULL,
+    [status] varchar(256) NULL,
     [customerId] bigint NOT NULL,
     [userId] bigint NULL,
     [ticketDate] datetime2 DEFAULT GETUTCDATE() NULL,
@@ -28,4 +29,13 @@ ELSE
   BEGIN
       ALTER TABLE [dbo].[Ticket]
       ADD [altTel] varchar(256) NULL
+  END
+  
+  -- Add status column if it doesn't exist
+  IF NOT EXISTS(SELECT * FROM sys.columns
+                WHERE Name = N'status'
+                AND Object_ID = Object_ID(N'Ticket'))
+  BEGIN
+      ALTER TABLE [dbo].[Ticket]
+      ADD [status] varchar(256) NULL
   END

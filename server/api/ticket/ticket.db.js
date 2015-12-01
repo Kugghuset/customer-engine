@@ -74,6 +74,10 @@ exports.create = function (ticket, user) {
           type: sql.BIT,
           val: ticket.successful
         },
+        status: {
+          type: sql.VARCHAR(256),
+          val: ticket.status
+        },
         customerId: {
           type: sql.BIGINT,
           val: ticket.customer.customerId

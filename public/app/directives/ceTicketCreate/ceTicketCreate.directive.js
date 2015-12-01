@@ -14,13 +14,21 @@ angular.module('customerEngineApp')
       
       scope.countries = Country.getShortAndNames();
       
+      scope.statuses = [
+        'Open',
+        'Closed',
+        'Pending',
+        'Work in progress'
+      ];
+      
       /**
        * Resets the ticket to only include user and ticketDate.
        */
       function resetTicket() {
-        scope.ticket = {
+          scope.ticket = {
           ticketDate: new Date(),
-          user: scope.user
+          user: scope.user,
+          status: 'Open'
         };
       }
       

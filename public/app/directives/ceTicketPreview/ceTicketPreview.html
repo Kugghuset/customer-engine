@@ -1,7 +1,16 @@
 <div class="panel panel-default">
   <div class="panel-heading">
-    <h4 class="">Ticket overview</h4>
-    <span>{{ ticket.ticketDate | date: 'yyyy-MM-dd, HH:mm' }}</span>
+    <div class="row">
+      <div class="col-xs-6">
+        <h4 class="">Ticket overview</h4>
+        <span>{{ ticket.ticketDate | date: 'yyyy-MM-dd, HH:mm' }}</span>
+      </div>
+      <div class="col-xs-6">
+        <div class="pull-right">
+          {{ ticket.status || 'Status unknown' }}
+        </div>
+      </div>
+    </div>
   </div>
   <div class="panel-body">
 

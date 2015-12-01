@@ -15,6 +15,7 @@ BEGIN
     [transferred] bit NULL,
     [successful] bit NULL,
     [status] varchar(256) NULL,
+    [departmentId] bigint NULL,
     [customerId] bigint NOT NULL,
     [userId] bigint NULL,
     [ticketDate] datetime2 DEFAULT GETUTCDATE() NULL,
@@ -38,4 +39,13 @@ ELSE
   BEGIN
       ALTER TABLE [dbo].[Ticket]
       ADD [status] varchar(256) NULL
+  END
+  
+  -- Add departmentId column if it doesn't exist
+  IF NOT EXISTS(SELECT * FROM sys.columns
+                WHERE Name = N'departmentId'
+                AND Object_ID = Object_ID(N'Ticket'))
+  BEGIN
+      ALTER TABLE [dbo].[Ticket]
+      ADD [departmentId] bigint NULL
   END

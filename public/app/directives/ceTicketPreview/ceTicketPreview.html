@@ -126,6 +126,7 @@
               <span class="col-md-7">
                   <i ng-show="ticket.transferred" class="glyphicon glyphicon-ok"></i>
                   <i ng-hide="ticket.transferred" class="glyphicon glyphicon-remove"></i>
+                  <span ng-show="ticket.department.departmentName && ticket.transferred"> ({{ ticket.department.departmentName }})</span>
                 </span>
             </div>
             <div class="row">

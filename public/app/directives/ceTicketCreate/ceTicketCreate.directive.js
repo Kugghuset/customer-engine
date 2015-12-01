@@ -1,7 +1,7 @@
 (function () {
 
 angular.module('customerEngineApp')
-.directive('ceTicketCreate', ['Customer', 'Ticket', 'Country', 'Category', 'Notification', function (Customer, Ticket, Country, Category, Notification) {
+.directive('ceTicketCreate', ['Customer', 'Ticket', 'Country', 'Category', 'Notification', 'Department', function (Customer, Ticket, Country, Category, Notification, Department) {
   return {
     templateUrl: 'app/directives/ceTicketCreate/ceTicketCreate.html',
     restrict: 'EA',
@@ -85,6 +85,21 @@ angular.module('customerEngineApp')
         ['catch'](function (err) {
           Notification.error('Something went wrong with fetching the categories, please refresh the page.')
         });
+      }
+      
+      /**
+       * Gets all departments and attaches them to scope.
+       */
+      function getDepartments() {
+        Department.getAll()
+        .then(function (departments) {
+          console.log(departments);
+          scope.departments = departments;
+        })
+        ['catch'](function (err) {
+          console.log(err);
+          Notification.error('Something went wrong with fetching the departments, please refresh the page.')
+        })
       }
       
       /**
@@ -178,6 +193,7 @@ angular.module('customerEngineApp')
       });
       
       getCategories();
+      getDepartments();
     }
   };
 }]);

@@ -30,6 +30,7 @@ exports.create = function (ticket, user) {
     ticket.category = ticket.category || {};
     ticket.subcategory = ticket.subcategory || {};
     ticket.descriptor = ticket.descriptor || {};
+    ticket.department = ticket.department || {};
     ticket.country = _.isObject(ticket.country) ? ticket.country.short : ticket.country
     
     return sql.execute({
@@ -97,6 +98,10 @@ exports.create = function (ticket, user) {
         descriptorId: {
           type: sql.BIGINT,
           val: ticket.descriptor.descriptorId
+        },
+        departmentId: {
+          type: sql.BIGINT,
+          val: ticket.department.departmentId
         }
       }
     })

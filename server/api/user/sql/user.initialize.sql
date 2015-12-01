@@ -7,6 +7,7 @@ BEGIN
   CREATE TABLE [dbo].[User] (
     [userId] bigint IDENTITY(1, 1) PRIMARY KEY NOT NULL,
     [email] varchar(256) UNIQUE NOT NULL,
+    [password] varchar(256) NULL,
     [name] varchar(256) NULL,
     [dateCreated] datetime2 DEFAULT GETUTCDATE() NULL,
     [dateChanged] datetime2 DEFAULT GETUTCDATE() NULL

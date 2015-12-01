@@ -29,8 +29,9 @@ exports.show = function (req, res) {
 exports.login = function (req, res) {
   // No user, so we can't login.
   if (!req.body) { return utils.handleError(res, new Error('No user provided')); }
-  
-  User.findByEmail(req.body.email)
+
+  //Authenticate user with submitted email and password
+  User.auth(req.body.email, req.body.password)
   .then(function (user) {
     if (user) {
       

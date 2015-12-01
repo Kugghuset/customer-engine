@@ -2,6 +2,6 @@
 Finds all users matching the @email (which should be only one).
 */
 
-SELECT [userId], [email], [name]
+SELECT [userId], [email], [password], [name]
 FROM [dbo].[User]
 WHERE [email] = @email

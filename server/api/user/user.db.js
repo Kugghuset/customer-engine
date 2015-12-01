@@ -3,6 +3,7 @@
 var _ = require('lodash');
 var sql = require('seriate');
 var Promise = require('bluebird');
+var bcrypt = require('bcrypt');
 
 function intialize() {
   return sql.execute({
@@ -74,6 +75,10 @@ exports.create = function (_user) {
           type: sql.VARCHAR(256),
           val: _user.email
         },
+        password: {
+          type: sql.VARCHAR(256),
+          val: bcrypt.hashSync(_user.password, bcrypt.genSaltSync(10)) //Hash user submitted password
+        },
         name: {
           type: sql.VARCHAR(256),
           val: _user.name
@@ -86,6 +91,30 @@ exports.create = function (_user) {
     .catch(reject);
   });
 }
+
+exports.auth = function(email, password) {
+  return new Promise(function (resolve, reject) {
+    sql.execute({
+        query: sql.fromFile('./sql/user.findByEmail.sql'),
+        params: {
+          email: {
+            type: sql.VARCHAR(256),
+            val: email
+          }
+        }
+      })
+      .then(function (users) {
+        if (users && bcrypt.compareSync(password, users[0]['password'])) {
+          resolve(users[0]);
+        } else {
+          reject(new Error('Email or username was incorrect'));
+        }
+      })
+      .catch(reject);
+  });
+}
+
+
 
 // Initialize the table
 intialize();

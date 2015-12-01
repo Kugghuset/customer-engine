@@ -8,10 +8,12 @@ BEGIN TRAN
 
 INSERT INTO [dbo].[User] (
   [email],
+  [password],
   [name]
 )
 VALUES (
   @email,
+  @password,
   @name
 )
 

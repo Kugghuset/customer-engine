@@ -41,6 +41,10 @@ angular.module('customerEngineApp')
     }
   });
   
+  if ($scope.user && $scope.user.userId) {
+      getTickets($scope.user.userId);
+    }
+  
 }]);
 
 })();

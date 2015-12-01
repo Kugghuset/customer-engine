@@ -4,7 +4,9 @@
     
     <h1>Hi, {{ user.name || 'operator' }}!</h1>
     
-    <ce-dash-pane user="auth.getCurrentUser()" tickets="tickets"></ce-dash-pane>
+    <ce-pane>
+      <ce-dash-pane user="auth.getCurrentUser()" tickets="tickets"></ce-dash-pane>
+    </ce-pane>
     
   </div>
 

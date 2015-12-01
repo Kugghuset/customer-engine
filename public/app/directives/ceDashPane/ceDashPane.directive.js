@@ -16,11 +16,13 @@ angular.module('customerEngineApp')
       scope.aggregated = {};
       
       function aggregateStatuses(tickets) {
-        return _.chain(tickets)
+        return _.assign(
+          _.chain(tickets)
           .groupBy('status')
           .map(function (v, k) { return [ _.camelCase(k === 'Work in progress' ? 'wip' : k), v.length ] })
           .zipObject()
-          .value();
+          .value()
+        , { total: tickets.length });
       }
       
       /**

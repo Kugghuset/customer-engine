@@ -93,13 +93,12 @@ angular.module('customerEngineApp')
       function getDepartments() {
         Department.getAll()
         .then(function (departments) {
-          console.log(departments);
           scope.departments = departments;
         })
         ['catch'](function (err) {
           console.log(err);
           Notification.error('Something went wrong with fetching the departments, please refresh the page.')
-        })
+        });
       }
       
       /**
@@ -173,7 +172,19 @@ angular.module('customerEngineApp')
           if (scope.hideDescriptor(ticket)) { ticket.descriptor = undefined; }
         }
         
+        Ticket.autoSave(ticket)
+        .then(function (t) {
+          // Attach ticketId if not present
+          if (t && t.ticketId && !ticket.ticketId) {
+            scope.ticket.ticketId = t.ticketId
+          }
+        })
+        ['catch'](function (err) {
+          Notification.error('Auto save failed.')
+        });
       }, true);
+      
+      
       
       /**
        * Watches for changes in ticket.customer.ustomerId
@@ -194,6 +205,7 @@ angular.module('customerEngineApp')
       
       getCategories();
       getDepartments();
+      
     }
   };
 }]);

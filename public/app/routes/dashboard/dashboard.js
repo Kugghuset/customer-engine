@@ -21,6 +21,10 @@ angular.module('customerEngineApp')
     $scope.user = user;
   })
   
+  Ticket.getAllLocal().then(function (keys) {
+    console.log(keys);
+  })
+  
 }]);
 
 })();

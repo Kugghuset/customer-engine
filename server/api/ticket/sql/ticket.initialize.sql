@@ -16,8 +16,9 @@ BEGIN
     [successful] bit NULL,
     [status] varchar(256) NULL,
     [departmentId] bigint NULL,
-    [customerId] bigint NOT NULL,
+    [customerId] bigint NULL,
     [userId] bigint NULL,
+    [isSubmitted] bit NULL,
     [ticketDate] datetime2 DEFAULT GETUTCDATE() NULL,
     [dateCreated] datetime2 DEFAULT GETUTCDATE() NULL
   )
@@ -48,4 +49,20 @@ ELSE
   BEGIN
       ALTER TABLE [dbo].[Ticket]
       ADD [departmentId] bigint NULL
+  END
+  
+  -- Modify customerId to be NULLable if non nullable
+  IF (SELECT COLUMNPROPERTY(OBJECT_ID('Ticket', 'U'), 'customerId', 'AllowsNull')) = 0
+  BEGIN
+      ALTER TABLE [dbo].[Ticket]
+      ALTER COLUMN [customerId] bigint NULL
+  END
+  
+  -- Adds isSubmitted if it doesn't exist
+  IF NOT EXISTS(SELECT * FROM sys.columns
+                WHERE Name = N'isSubmitted'
+                AND Object_ID = Object_ID(N'Ticket'))
+  BEGIN
+      ALTER TABLE [dbo].[Ticket]
+      ADD [isSubmitted] bit NULL
   END

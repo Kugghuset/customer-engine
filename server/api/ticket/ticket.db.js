@@ -110,10 +110,6 @@ function ticketParams(ticket, extra) {
     departmentId: {
       type: sql.BIGINT,
       val: ticket.department.departmentId
-    },
-    isSubmitted: {
-      type: sql.BIT,
-      val: ticket.isSubmitted
     }
   }, extra);
 }
@@ -259,10 +255,10 @@ exports.findByUserId = function (userId) {
   });
 }
 
-exports.findNonSubmitted = function (userId) {
+exports.findWIP = function (userId) {
   return new Promise(function (resolve, reject) {
     sql.execute({
-      query: findBy('userId', 'AND ([A].[isSubmitted] IS NULL OR [A].[isSubmitted] = 0)'),
+      query: findBy('userId', 'AND ([A].[status] = \'Work in progress\')'),
       params: {
         userId: {
           type: sql.BIGINT,

@@ -13,9 +13,6 @@ var utils = require('../../utils/utils');
 exports.create = function (req, res) {
   Ticket.create(req.body, req.user)
   .then(function (ticket) {
-    
-    console.log(ticket);
-    
     res.status(200).json(ticket);
   })
   .catch(function (err) {
@@ -81,8 +78,8 @@ exports.findByUserId = function (req, res) {
   })
 }
 
-exports.findNonSubmitted = function (req, res) {
-  Ticket.findNonSubmitted(req.params.id)
+exports.findWIP = function (req, res) {
+  Ticket.findWIP(req.params.id)
   .then(function (tickets) {
     res.status(200).json(tickets);
   })

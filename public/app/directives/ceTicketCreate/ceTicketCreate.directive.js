@@ -26,7 +26,7 @@ angular.module('customerEngineApp')
         return {
           ticketDate: new Date(),
           user: scope.user,
-          status: 'Open'
+          status: 'Work in progress'
         };
       }
       
@@ -76,7 +76,7 @@ angular.module('customerEngineApp')
        * @param {Object} _ticket (Ticket)
        */
       scope.submit = function (_ticket) {
-        Ticket.createOrUpdate(_.assign(_ticket, { isSubmitted: true }))
+        Ticket.createOrUpdate(_.assign(_ticket))
         .then(function (ticket) {
           Notification.success('Ticket submitted');
           

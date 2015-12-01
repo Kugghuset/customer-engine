@@ -13,28 +13,26 @@ angular.module('customerEngineApp')
     },
     link: function (scope, element, attrs) {
       
-      scope.aggregated;
+      scope.aggregated = {};
       
-      function getAggregated(tickets) {
-        scope.aggregated = _.chain(tickets)
+      function aggregateStatuses(tickets) {
+        return _.chain(tickets)
           .groupBy('status')
           .map(function (v, k) { return [ _.camelCase(k === 'Work in progress' ? 'wip' : k), v.length ] })
           .zipObject()
           .value();
-          
-        console.log(scope.aggregated);
       }
       
       /**
        * Watches for changes in tickets
-       * and sets scope.pendingTickets to the tickets which are yet to be submitted.
+       * and sets scope.wipTickets to the tickets which are yet to be submitted.
        */
       scope.$watch('tickets', function (tickets) {
-        scope.pendingTickets = _.filter(tickets, function (ticket) {
-          return !ticket.isSubmitted;
+        scope.wipTickets = _.filter(tickets, function (ticket) {
+          return ticket.status === 'Work in progress';
         });
         scope.tickets = tickets;
-        getAggregated(tickets);
+        scope.aggregated = aggregateStatuses(tickets);
       });
       
     }

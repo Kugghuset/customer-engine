@@ -19,8 +19,7 @@ INSERT INTO [dbo].[Ticket] (
   [customerId],
   [userId],
   [departmentId],
-  [ticketDate],
-  [isSubmitted]
+  [ticketDate]
 )
 VALUES (
   @name,
@@ -35,8 +34,7 @@ VALUES (
   @customerId,
   @userId,
   @departmentId,
-  @ticketDate,
-  @isSubmitted
+  @ticketDate
 )
 
 INSERT INTO [dbo].[CategoryBlob] (

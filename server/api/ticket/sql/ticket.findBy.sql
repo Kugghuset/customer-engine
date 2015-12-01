@@ -28,8 +28,7 @@ SELECT
   [B].[descriptorId] AS [descriptor.descriptorId],
   [E].[descriptorName] AS [descriptor.descriptorName],
   [A].[departmentId] AS [department.departmentId],
-  [G].[departmentName] AS [department.departmentName],
-  [A].[isSubmitted]
+  [G].[departmentName] AS [department.departmentName]
 FROM [dbo].[Ticket] AS [A]
 
 -- Joins the categoryBlob, which is only used for joining the different levels of categories

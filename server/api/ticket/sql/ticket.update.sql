@@ -21,8 +21,7 @@ SET
   [dbo].[Ticket].[userId] = @userId,
   [dbo].[Ticket].[departmentId] = @departmentId,
   [dbo].[Ticket].[ticketDate] = @ticketDate,
-  [dbo].[Ticket].[dateUpdated] = GETUTCDATE(),
-  [dbo].[Ticket].[isSubmitted] = @isSubmitted
+  [dbo].[Ticket].[dateUpdated] = GETUTCDATE()
   
 
 WHERE [ticketId] = @ticketId

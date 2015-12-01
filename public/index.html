@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="bower_components/normalize-css/normalize.css">
   <link rel="stylesheet" href="bower_components/angular-ui-notification/dist/angular-ui-notification.min.css">
   <link rel="stylesheet" href="bower_components/intl-tel-input/build/css/intlTelInput.css">
-  <link rel="stylesheet" href="app/style/main.css">
+  <link rel="stylesheet" href="css/global.css">
   
   <script src="bower_components/jquery/dist/jquery.js"></script>
   <script src="bower_components/angular/angular.js"></script>
@@ -24,20 +24,28 @@
   <script src="bower_components/ng-intl-tel-input/ng-intl-tel-input.module.js"></script>
   <script src="bower_components/ng-intl-tel-input/ng-intl-tel-input.provider.js"></script>
   <script src="bower_components/ng-intl-tel-input/ng-intl-tel-input.directive.js"></script>
+  <script src="bower_components/localforage/dist/localforage.min.js"></script>
+  <script src="bower_components/angular-localforage/dist/angular-localForage.min.js"></script>
   
   <!-- Angular app and components -->
   <script src="app/app.js"></script>
   <script src="app/routes/main.js"></script>
   <script src="app/routes/home/home.js"></script>
+  <script src="app/routes/dashboard/dashboard.js"></script>
+  <script src="app/routes/create_ticket/create_ticket.js"></script>
   
   <script src="app/services/Auth/Auth.service.js"></script>
   <script src="app/services/Customer/Customer.service.js"></script>
   <script src="app/services/Country/Country.service.js"></script>
   <script src="app/services/Ticket/Ticket.service.js"></script>
   <script src="app/services/Category/Category.service.js"></script>
+  <script src="app/services/Department/Department.service.js"></script>
+  
   <script src="app/directives/ceTicketCreate/ceTicketCreate.directive.js"></script>
   <script src="app/directives/ceTicketPreview/ceTicketPreview.directive.js"></script>
   <script src="app/directives/ceTicketList/ceTicketList.directive.js"></script>
+  <script src="app/directives/ceDashTask/ceDashTask.directive.js"></script>
+  
   <script src="app/filters/split.filter.js"></script>
 </head>
 <body >

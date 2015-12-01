@@ -11,6 +11,7 @@ SELECT TOP 12
   [A].[summary],
   [A].[transferred],
   [A].[successful],
+  [A].[status],
   [A].[country] AS [country.short],
   [A].[customerId],
   [F].[customerNumber] AS [customer.customerNumber],
@@ -25,7 +26,9 @@ SELECT TOP 12
   [B].[subcategoryId] AS [subcategory.subcategoryId],
   [D].[subcategoryName] AS [subcategory.subcategoryName],
   [B].[descriptorId] AS [descriptor.descriptorId],
-  [E].[descriptorName] AS [descriptor.descriptorName]
+  [E].[descriptorName] AS [descriptor.descriptorName],
+  [A].[departmentId] AS [department.departmentId],
+  [G].[departmentName] AS [department.departmentName]
 FROM [dbo].[Ticket] AS [A]
 
 -- Joins the categoryBlob, which is only used for joining the different levels of categories
@@ -51,6 +54,10 @@ ON [A].[customerId] = [F].[customerId]
 -- Joins the userId
 LEFT JOIN [dbo].[User] AS [U]
 ON [A].[userId] = [U].[userId]
+
+-- Joins the departmentId
+LEFT JOIN [dbo].[Department] AS [G]
+ON [A].[departmentId] = [G].[departmentId]
 
 WHERE [A].[customerId] = @customerId
 ORDER BY [A].[ticketDate] DESC

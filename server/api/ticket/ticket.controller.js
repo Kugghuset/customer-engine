@@ -13,6 +13,28 @@ var utils = require('../../utils/utils');
 exports.create = function (req, res) {
   Ticket.create(req.body, req.user)
   .then(function (ticket) {
+    
+    console.log(ticket);
+    
+    res.status(200).json(ticket);
+  })
+  .catch(function (err) {
+    utils.handleError(res, err);
+  })
+}
+
+/**
+ * ROUTE: PUT '/api/tickets/'
+ */
+exports.createOrUpdate = function (req, res) {
+  
+  if (!req.body) {
+    // return early because there's no available ticket.
+    return utils.handleError(res, new Error('No ticket provided.'));
+  }
+  
+  Ticket.createOrUpdate(req.body)
+  .then(function (ticket) {
     res.status(200).json(ticket);
   })
   .catch(function (err) {

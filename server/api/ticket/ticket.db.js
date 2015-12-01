@@ -13,6 +13,99 @@ function initialize() {
 }
 
 /**
+ * Ensures all properties atleast exists
+ * to ensure no undefined exceptions are thrown.
+ * 
+ * @param {Object} ticket
+ * @return {Object} (Ticket)
+ */
+function ensureHasProps(ticket) {
+    // Ensure properties which are objects are defined
+    ticket.customer = ticket.customer || {};
+    ticket.user = ticket.user || user || {};
+    ticket.category = ticket.category || {};
+    ticket.subcategory = ticket.subcategory || {};
+    ticket.descriptor = ticket.descriptor || {};
+    ticket.department = ticket.department || {};
+    ticket.country = _.isObject(ticket.country) ? ticket.country.short : ticket.country
+    
+    return ticket;
+}
+
+/**
+ * @param {Object} ticket
+ * @reruturn {Object} params object for seriate
+ */
+function ticketParams(ticket, extra) {
+  return _.assign({
+    ticketDate: {
+      type: sql.DATETIME2,
+      val: ticket.ticketDate
+    },
+    name:  {
+      type: sql.VARCHAR(256),
+      val: ticket.name
+    },
+    email: {
+      type: sql.VARCHAR(256),
+      val: ticket.email
+    },
+    tel: {
+      type: sql.VARCHAR(256),
+      val: ticket.tel
+    },
+    altTel: {
+      type: sql.VARCHAR(256),
+      val: ticket.altTel
+    },
+    country: {
+      type: sql.VARCHAR(256),
+      val: ticket.country
+    },
+    summary: {
+      type: sql.VARCHAR,
+      val: ticket.summary
+    },
+    transferred: {
+      type: sql.BIT,
+      val: ticket.transferred
+    },
+    successful: {
+      type: sql.BIT,
+      val: ticket.successful
+    },
+    status: {
+      type: sql.VARCHAR(256),
+      val: ticket.status
+    },
+    customerId: {
+      type: sql.BIGINT,
+      val: ticket.customer.customerId
+    },
+    userId: {
+      type: sql.BIGINT,
+      val: ticket.user.userId
+    },
+    categoryId: {
+      type: sql.BIGINT,
+      val: ticket.category.categoryId
+    },
+    subcategoryId: {
+      type: sql.BIGINT,
+      val:  ticket.subcategory.subcategoryId
+    },
+    descriptorId: {
+      type: sql.BIGINT,
+      val: ticket.descriptor.descriptorId
+    },
+    departmentId: {
+      type: sql.BIGINT,
+      val: ticket.department.departmentId
+    }
+  }, extra);
+}
+
+/**
  * @param {Object} ticket
  * @param {Object} user - optional
  * @return {Promise} -> {Object} (Ticket)
@@ -24,77 +117,15 @@ exports.create = function (ticket, user) {
       return  reject(new Error('No ticket provided.'))
     }
     
-    // Ensure properties which are objects are defined
-    ticket.customer = ticket.customer || {};
-    ticket.user = ticket.user || user || {};
-    ticket.category = ticket.category || {};
-    ticket.subcategory = ticket.subcategory || {};
-    ticket.descriptor = ticket.descriptor || {};
-    ticket.country = _.isObject(ticket.country) ? ticket.country.short : ticket.country
+    // Ensure there are properties
+    ticket = ensureHasProps(ticket);
     
     return sql.execute({
       query: [
         sql.fromFile('./sql/ticket.create.sql'),
         sql.fromFile('./sql/ticket.findAndJoin.sql')
         ].join(' '),
-      params: {
-        ticketDate: {
-          type: sql.DATETIME2,
-          val: ticket.ticketDate
-        },
-        name:  {
-          type: sql.VARCHAR(256),
-          val: ticket.name
-        },
-        email: {
-          type: sql.VARCHAR(256),
-          val: ticket.email
-        },
-        tel: {
-          type: sql.VARCHAR(256),
-          val: ticket.tel
-        },
-        altTel: {
-          type: sql.VARCHAR(256),
-          val: ticket.altTel
-        },
-        country: {
-          type: sql.VARCHAR(256),
-          val: ticket.country
-        },
-        summary: {
-          type: sql.VARCHAR,
-          val: ticket.summary
-        },
-        transferred: {
-          type: sql.BIT,
-          val: ticket.transferred
-        },
-        successful: {
-          type: sql.BIT,
-          val: ticket.successful
-        },
-        customerId: {
-          type: sql.BIGINT,
-          val: ticket.customer.customerId
-        },
-        userId: {
-          type: sql.BIGINT,
-          val: ticket.user.userId
-        },
-        categoryId: {
-          type: sql.BIGINT,
-          val: ticket.category.categoryId
-        },
-        subcategoryId: {
-          type: sql.BIGINT,
-          val:  ticket.subcategory.subcategoryId
-        },
-        descriptorId: {
-          type: sql.BIGINT,
-          val: ticket.descriptor.descriptorId
-        }
-      }
+      params: ticketParams(ticket)
     })
     .then(function (ticket) {
       resolve(_.first(util.objectify(ticket)));
@@ -103,6 +134,56 @@ exports.create = function (ticket, user) {
       reject(err);
     });
   });
+}
+
+/**
+ * Updates the ticket in the db.
+ * 
+ * @param {Object} ticket
+ * @return {Promise} -> {Object} (Ticket)
+ */
+exports.update = function (ticket) {
+  return new Promise(function (resolve, reject) {
+    if (!ticket) { return reject(new Error('No provided ticket')); }
+    
+    // Ensure there are properties
+    ticket = ensureHasProps(ticket);
+    
+    sql.execute({
+      query: [
+        sql.fromFile('./sql/ticket.update.sql'),
+        sql.fromFile('./sql/ticket.findAndJoin.sql')
+      ].join(' '),
+      params: ticketParams(ticket, {
+        ticketId: {
+          type: sql.BIGINT,
+          val: ticket.ticketId
+        }
+      })
+    })
+    .then(function (ticket) {
+      resolve(_.first(util.objectify(ticket)));
+    })
+    .catch(function (err) {
+      reject(err);
+    });
+  });
+}
+
+exports.createOrUpdate = function (ticket) {
+  return new Promise(function (resolve, reject) {
+    if (!ticket) { return reject(new Error('No provided ticket')); }
+    
+    if (ticket.ticketId) {
+      this.update(ticket)
+      .then(resolve)
+      .catch(reject);
+    } else {
+      this.create(ticket)
+      .then(resolve)
+      .catch(reject);
+    }
+  }.bind(this));
 }
 
 exports.findById = function (ticketId) {

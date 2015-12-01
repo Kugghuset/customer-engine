@@ -1,7 +1,7 @@
 (function () {
 
 angular.module('customerEngineApp')
-.directive('ceTicketCreate', ['Customer', 'Ticket', 'Country', 'Category', 'Notification', function (Customer, Ticket, Country, Category, Notification) {
+.directive('ceTicketCreate', ['Customer', 'Ticket', 'Country', 'Category', 'Notification', 'Department', function (Customer, Ticket, Country, Category, Notification, Department) {
   return {
     templateUrl: 'app/directives/ceTicketCreate/ceTicketCreate.html',
     restrict: 'EA',
@@ -14,13 +14,21 @@ angular.module('customerEngineApp')
       
       scope.countries = Country.getShortAndNames();
       
+      scope.statuses = [
+        'Open',
+        'Closed',
+        'Pending',
+        'Work in progress'
+      ];
+      
       /**
        * Resets the ticket to only include user and ticketDate.
        */
       function resetTicket() {
-        scope.ticket = {
+          scope.ticket = {
           ticketDate: new Date(),
-          user: scope.user
+          user: scope.user,
+          status: 'Open'
         };
       }
       
@@ -76,6 +84,20 @@ angular.module('customerEngineApp')
         })
         ['catch'](function (err) {
           Notification.error('Something went wrong with fetching the categories, please refresh the page.')
+        });
+      }
+      
+      /**
+       * Gets all departments and attaches them to scope.
+       */
+      function getDepartments() {
+        Department.getAll()
+        .then(function (departments) {
+          scope.departments = departments;
+        })
+        ['catch'](function (err) {
+          console.log(err);
+          Notification.error('Something went wrong with fetching the departments, please refresh the page.')
         });
       }
       
@@ -150,7 +172,19 @@ angular.module('customerEngineApp')
           if (scope.hideDescriptor(ticket)) { ticket.descriptor = undefined; }
         }
         
+        Ticket.autoSave(ticket)
+        .then(function (t) {
+          // Attach ticketId if not present
+          if (t && t.ticketId && !ticket.ticketId) {
+            scope.ticket.ticketId = t.ticketId
+          }
+        })
+        ['catch'](function (err) {
+          Notification.error('Auto save failed.')
+        });
       }, true);
+      
+      
       
       /**
        * Watches for changes in ticket.customer.ustomerId
@@ -170,6 +204,8 @@ angular.module('customerEngineApp')
       });
       
       getCategories();
+      getDepartments();
+      
     }
   };
 }]);

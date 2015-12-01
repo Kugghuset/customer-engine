@@ -1,7 +1,19 @@
+@import 'variables';
+@import 'card';
+
+@import '../app/app';
+
 .country-list {
   /* Bootstrap input will cover this otherwise */
   z-index: 9 !important; /* I hate !important but it's needed' */
 }
 .intl-tel-input {
   width: 100%;
+}
+
+
+.page-container {
+  max-width: 100%;
+  width: 1200px;
+  margin: 0 auto;
 }

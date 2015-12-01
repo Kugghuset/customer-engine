@@ -9,6 +9,8 @@ var exec = require('child_process').exec;
 var gexec = require('gulp-exec');
 var livereload = require('gulp-livereload');
 var chalk = require('chalk');
+var sass = require('gulp-sass');
+var Promise = require('bluebird');
 
 var node;
 
@@ -44,16 +46,29 @@ gulp.task('assume-unchanged', function () {
   } else {
     gulp.log('Git does not seems to be a command.');
   }
-})
+});
+
+// Runs compiles the sass
+gulp.task('sass', function () {
+  gulp.src('./public/style/global.scss')
+    .pipe(sass.sync().on('error', sass.logError))
+    .pipe(gulp.dest('./public/css'))
+    .on('unpipe', function (src) {
+      livereload.changed('./public/css/global.css');
+    })
+    
+    
+});
 
 // Watches the server and public folders and does stuff
 gulp.task('watch', function () {
   gulp.watch('./server/**', ['server']);
   gulp.watch(['./public/app/**', './public/index.html'], ['reload']);
+  gulp.watch(['./public/style/*.scss', './public/app/**/*.scss'], ['sass']);
 });
 
 livereload.listen()
-gulp.task('default', ['server', 'watch']);
+gulp.task('default', ['sass', 'server', 'watch']);
 
 process.on('exit', function () {
   if (node) { node.kill(); }

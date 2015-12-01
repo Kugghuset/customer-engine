@@ -184,6 +184,29 @@
 <br>
 
 <div class="row form-horizontal">
+  <!-- Status -->
+  
+  <label class="control-label col-md-2">Status</label>
+  
+  <div class="col-md-10">
+    <div class="btn-group" uib-dropdown uib-keyboard-nav>
+      <button id="simple-btn-keyboard-nav" type="button" class="btn btn-default" uib-dropdown-toggle>
+        {{ ticket.status }} <span class="caret"></span>
+      </button>
+      <ul class="uib-dropdown-menu" role="menu" aria-labelledby="simple-btn-keyboard-nav">
+        <!-- Links need an href for Boostrap UI to work with keyboard navigation -->
+        <li role="menuitem" ng-repeat="status in statuses">
+          <a href="" ng-click="ticket.status = status">{{ status }}</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  
+</div>
+
+<br>
+
+<div class="row form-horizontal">
   <!-- Transferred -->
 
   <label class="control-label col-md-2">&nbsp;</label>
@@ -192,6 +215,19 @@
     <label>
       <input type="checkbox" ng-model="ticket.transferred"> Ticket was transferred
     </label>
+    
+    <div class="btn-group" uib-dropdown uib-keyboard-nav ng-show="ticket.transferred">
+      <button id="simple-btn-keyboard-nav" type="button" class="btn btn-default" uib-dropdown-toggle>
+        {{ ticket.department.departmentName || 'Choose department' }} <span class="caret"></span>
+      </button>
+      <ul class="uib-dropdown-menu" role="menu" aria-labelledby="simple-btn-keyboard-nav">
+        <!-- Links need an href for Boostrap UI to work with keyboard navigation -->
+        <li role="menuitem" ng-repeat="department in departments">
+          <a href="" ng-click="ticket.department = department">{{ department.departmentName }}</a>
+        </li>
+      </ul>
+    </div>
+    
   </div>
 
 </div>

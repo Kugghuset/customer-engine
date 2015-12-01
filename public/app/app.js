@@ -7,12 +7,13 @@ angular.module('customerEngineApp', [
   'ui.bootstrap',
   'ui-notification',
   'angular-google-analytics',
-  'ngIntlTelInput'
+  'ngIntlTelInput',
+  'LocalForageModule'
 ])
-.config(['$stateProvider', '$urlRouterProvider', '$httpProvider','AnalyticsProvider', 'ngIntlTelInputProvider', function ($stateProvider, $urlRouterProvider, $httpProvider, AnalyticsProvider, ngIntlTelInputProvider) {
+.config(['$stateProvider', '$urlRouterProvider', '$httpProvider','AnalyticsProvider', 'ngIntlTelInputProvider', '$localForageProvider', function ($stateProvider, $urlRouterProvider, $httpProvider, AnalyticsProvider, ngIntlTelInputProvider, $localForageProvider) {
   
   $urlRouterProvider
-  .otherwise('/hem');
+  .otherwise('/home');
   
   // Adds authInterceptor to http requests
   $httpProvider.interceptors.push('authInterceptor')
@@ -27,11 +28,18 @@ angular.module('customerEngineApp', [
     }
   ]);
   
+  // Settings for international phone numbers
   ngIntlTelInputProvider.set({
     defaultCountry: 'se',
     preferredCountries: [ 'se', 'no', 'fi', 'de' ],
     dropdownContainer: true
   });
+  
+  // Set default config for $localForageProvider
+  $localForageProvider.config({
+    name: 'customerEngineApp',
+    storeName: 'tickets'
+  })
 }])
 .factory('authInterceptor', ['$q', '$cookies', '$location', function ($q, $cookies, $location) {
   return {

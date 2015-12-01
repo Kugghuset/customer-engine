@@ -39,6 +39,22 @@ exports.createOrUpdate = function (req, res) {
   })
 }
 
+exports.updateStatus = function (req, res) {
+  
+  if (!req.body) {
+    // Return early because there's no available ticket.
+    return utils.handleError(res, new Error('No ticket provided.'));
+  }
+  
+  Ticket.updateStatus(req.body)
+  .then(function () {
+    res.status(200).send('OK');
+  })
+  .catch(function (err) {
+    utils.handleError(res, err);
+  })
+}
+
 /**
  * ROUTE: GET '/api/tickets/:id'
  */

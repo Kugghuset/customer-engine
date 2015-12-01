@@ -9,7 +9,8 @@ angular.module('customerEngineApp')
     scope: {
       user: '=',
       tickets: '=',
-      isLoading: '='
+      isLoading: '=',
+      isReadonly: '='
     },
     link: function (scope, element, attrs) {
       
@@ -35,7 +36,7 @@ angular.module('customerEngineApp')
         });
         scope.tickets = tickets;
         scope.aggregated = aggregateStatuses(tickets);
-      });
+      }, true);
       
     }
   };

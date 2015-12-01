@@ -195,6 +195,27 @@ exports.createOrUpdate = function (ticket, user) {
   }.bind(this));
 }
 
+exports.updateStatus = function (ticket) {
+  return new Promise(function (resolve, reject) {
+    if (!ticket || !ticket.ticketId) { return reject(new Error('No provided ticket')); }
+    
+    sql.execute({
+      query: sql.fromFile('./sql/ticket.updateStatus.sql'),
+      params: {
+        ticketId: {
+          type: sql.BIGINT,
+          val: ticket.ticketId,
+        },
+        status: {
+          type: sql.VARCHAR(256),
+          val: ticket.status,
+        }
+      }
+    })
+    
+  });
+}
+
 exports.findById = function (ticketId) {
   return new Promise(function (resolve, reject) {
     sql.execute({

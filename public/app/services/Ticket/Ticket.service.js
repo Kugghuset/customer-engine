@@ -140,11 +140,19 @@ angular.module('customerEngineApp')
       });
     },
     
+    updateStatus: function (ticket) {
+      return $q(function (resolve, reject) {
+        $http.put('/api/tickets/status/', ticket)
+        .success(resolve)
+        .error(reject);
+      });
+    },
+    
     getNonSubmitted: function (userId) {
       return $q(function (resolve, reject) {
         $http.get('/api/tickets/pending/user/' + userId)
         .success(resolve)
-        ['catch'](reject);
+        .error(reject);
       });
     },
     

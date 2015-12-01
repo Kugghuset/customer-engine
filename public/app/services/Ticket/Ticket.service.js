@@ -35,7 +35,7 @@ angular.module('customerEngineApp')
    */
   function getLocal(ticket) {
     var key;
-    if (_.isString(ticket)) { key = ticket; }
+    if (_.isString(ticket) && /ticketId/.test(ticket)) { key = ticket; }
     else if (_.isObject(ticket)) { key = 'ticketId' +  ticket.ticketId; }
     else { key = 'ticketId' +  ticket; }
     
@@ -97,9 +97,10 @@ angular.module('customerEngineApp')
         .error(reject);
       });
     },
+    
     getByCustomerId: function (customerId) {
       return $q(function (resolve, reject) {
-        $http.get('api/tickets/customer/' + customerId)
+        $http.get('/api/tickets/customer/' + customerId)
         .success(resolve)
         .error(reject);
       });
@@ -138,6 +139,31 @@ angular.module('customerEngineApp')
         }, 2000);
       });
     },
+    
+    updateStatus: function (ticket) {
+      return $q(function (resolve, reject) {
+        $http.put('/api/tickets/status/', ticket)
+        .success(resolve)
+        .error(reject);
+      });
+    },
+    
+    getNonSubmitted: function (userId) {
+      return $q(function (resolve, reject) {
+        $http.get('/api/tickets/pending/user/' + userId)
+        .success(resolve)
+        .error(reject);
+      });
+    },
+    
+    getByUserId: function (userId) {
+      return $q(function (resolve, reject) {
+        $http.get('/api/tickets/user/' + userId)
+        .success(resolve)
+        ['catch'](reject);
+      });
+    },
+    
     /**
     * @return {Promise} -> {Array} (Ticket)
     */
@@ -148,6 +174,12 @@ angular.module('customerEngineApp')
         .then(resolve)
         ['catch'](reject);
       });
+    },
+    
+    getLocal: getLocal,
+    
+    removeAllLocal: function () {
+      $localForage.clear();
     }
     
   }

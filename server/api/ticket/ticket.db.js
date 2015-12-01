@@ -19,7 +19,7 @@ function initialize() {
  * @param {Object} ticket
  * @return {Object} (Ticket)
  */
-function ensureHasProps(ticket) {
+function ensureHasProps(ticket, user) {
     // Ensure properties which are objects are defined
     ticket.customer = ticket.customer || {};
     ticket.user = ticket.user || user || {};
@@ -30,6 +30,15 @@ function ensureHasProps(ticket) {
     ticket.country = _.isObject(ticket.country) ? ticket.country.short : ticket.country
     
     return ticket;
+}
+
+
+function findBy(paramName, other) {
+  if (!other) { other = ''; }
+  return sql.fromFile('./sql/ticket.findBy.sql')
+  .replace(util.literalRegExp('{ where_clause }', 'gi'), '[{paramName}] = @{paramName}')
+  .replace(util.literalRegExp('{paramName}', 'gi'), paramName)
+  .replace(util.literalRegExp('{ other }', 'gi'), other);
 }
 
 /**
@@ -118,12 +127,12 @@ exports.create = function (ticket, user) {
     }
     
     // Ensure there are properties
-    ticket = ensureHasProps(ticket);
+    ticket = ensureHasProps(ticket, user);
     
     return sql.execute({
       query: [
         sql.fromFile('./sql/ticket.create.sql'),
-        sql.fromFile('./sql/ticket.findAndJoin.sql')
+        findBy('ticketId')
         ].join(' '),
       params: ticketParams(ticket)
     })
@@ -142,17 +151,17 @@ exports.create = function (ticket, user) {
  * @param {Object} ticket
  * @return {Promise} -> {Object} (Ticket)
  */
-exports.update = function (ticket) {
+exports.update = function (ticket, user) {
   return new Promise(function (resolve, reject) {
     if (!ticket) { return reject(new Error('No provided ticket')); }
     
     // Ensure there are properties
-    ticket = ensureHasProps(ticket);
+    ticket = ensureHasProps(ticket, user);
     
     sql.execute({
       query: [
         sql.fromFile('./sql/ticket.update.sql'),
-        sql.fromFile('./sql/ticket.findAndJoin.sql')
+        findBy('ticketId')
       ].join(' '),
       params: ticketParams(ticket, {
         ticketId: {
@@ -170,26 +179,47 @@ exports.update = function (ticket) {
   });
 }
 
-exports.createOrUpdate = function (ticket) {
+exports.createOrUpdate = function (ticket, user) {
   return new Promise(function (resolve, reject) {
     if (!ticket) { return reject(new Error('No provided ticket')); }
     
     if (ticket.ticketId) {
-      this.update(ticket)
+      this.update(ticket, user)
       .then(resolve)
       .catch(reject);
     } else {
-      this.create(ticket)
+      this.create(ticket, user)
       .then(resolve)
       .catch(reject);
     }
   }.bind(this));
 }
 
+exports.updateStatus = function (ticket) {
+  return new Promise(function (resolve, reject) {
+    if (!ticket || !ticket.ticketId) { return reject(new Error('No provided ticket')); }
+    
+    sql.execute({
+      query: sql.fromFile('./sql/ticket.updateStatus.sql'),
+      params: {
+        ticketId: {
+          type: sql.BIGINT,
+          val: ticket.ticketId,
+        },
+        status: {
+          type: sql.VARCHAR(256),
+          val: ticket.status,
+        }
+      }
+    })
+    
+  });
+}
+
 exports.findById = function (ticketId) {
   return new Promise(function (resolve, reject) {
     sql.execute({
-      query: sql.fromFile('./sql/ticket.findAndJoin.sql'),
+      query: findBy('ticketId'),
       params: {
         ticketId: {
           type: sql.BIGINT,
@@ -209,11 +239,51 @@ exports.findById = function (ticketId) {
 exports.findByCustomerId = function (customerId) {
   return new Promise(function (resolve, reject) {
     sql.execute({
-      query: sql.fromFile('./sql/ticket.findByCustomerId.sql'),
+      query: findBy('customerId'),
       params: {
         customerId: {
           type: sql.BIGINT,
           val: customerId
+        }
+      }
+    })
+    .then(function (tickets) {
+      resolve(util.objectify(tickets));
+    })
+    .catch(function (err) {
+      reject(err);
+    });
+  });
+}
+
+exports.findByUserId = function (userId) {
+  return new Promise(function (resolve, reject) {
+    sql.execute({
+      query: findBy('userId'),
+      params: {
+        userId: {
+          type: sql.BIGINT,
+          val: userId
+        }
+      }
+    })
+    .then(function (tickets) {
+      resolve(util.objectify(tickets));
+    })
+    .catch(function (err) {
+      reject(err);
+    });
+  });
+}
+
+exports.findWIP = function (userId) {
+  return new Promise(function (resolve, reject) {
+    sql.execute({
+      query: findBy('userId', 'AND ([A].[status] = \'Work in progress\')'),
+      params: {
+        userId: {
+          type: sql.BIGINT,
+          val: userId
         }
       }
     })

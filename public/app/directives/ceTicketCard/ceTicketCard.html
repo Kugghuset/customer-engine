@@ -1,0 +1,23 @@
+<section class="ticket-card">
+  
+  <header>
+    <h2>{{ ticket.customer.orgName || 'Ticket ID: ' + ticket.ticketId }}</h2>
+    <ce-status-select status="ticket.status" is-readonly="isReadonly"></ce-status-select>
+  </header>
+  
+  <div>
+    <span ng-repeat="category in plainCategory(ticket)">{{ category }}</span>
+  </div>
+  
+  <div>
+    <h3>Contact</h3>
+    <div>{{ ticket.name }}</div>
+    <div>{{ ticket.email }}</div>
+    <div>{{ ticket.tel }}</div>
+  </div>
+  
+  <div class="ticket-card-footer">
+    {{ ticket.ticketDate | date: 'yyyy-MM-dd, HH:mm' }}
+  </div>
+  
+</section>

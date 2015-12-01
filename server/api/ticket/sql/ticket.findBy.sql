@@ -1,5 +1,5 @@
 /*
-Finds a ticket by its ticketId and joins it.
+Finds tickets by somethign and joins it. The something is determined by a where_clause set in JavaScript
 */
 
 SELECT
@@ -13,11 +13,11 @@ SELECT
   [A].[successful],
   [A].[status],
   [A].[country] AS [country.short],
-  [A].[customerId],
+  [A].[customerId] AS [customer.customerId],
   [F].[customerNumber] AS [customer.customerNumber],
   [F].[orgName] AS [customer.orgName],
   [F].[orgNr] AS [customer.orgNr],
-  [A].[userId],
+  [A].[userId] AS [user.userId],
   [U].[email] AS [user.email],
   [U].[name] AS [user.name],
   [A].[ticketDate],
@@ -59,5 +59,5 @@ ON [A].[userId] = [U].[userId]
 LEFT JOIN [dbo].[Department] AS [G]
 ON [A].[departmentId] = [G].[departmentId]
 
--- Gets only the matching ticket
-WHERE [A].[ticketId]=@ticketId
+WHERE [A].{ where_clause } { other }
+ORDER BY [A].[ticketDate] DESC

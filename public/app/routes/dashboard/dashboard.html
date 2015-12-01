@@ -4,9 +4,15 @@
     
     <h1>Hi, {{ user.name || 'operator' }}!</h1>
     
-    <ce-dash-task name="New ticket" task-route="main.create_ticket"></ce-dash-task>
+    <ce-pane>
+      <ce-dash-pane user="auth.getCurrentUser()" tickets="tickets" is-readonly="isReadonly"></ce-dash-pane>
+    </ce-pane>
     
-    <ce-dash-task name="New ticket" task-route="main.create_ticket"></ce-dash-task>
+    <ce-card-area>
+      
+      <ce-ticket-card ticket="ticket" ng-repeat="ticket in tickets"></ce-ticket-card>
+      
+    </ce-card-area>
     
   </div>
 

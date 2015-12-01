@@ -1,14 +1,15 @@
 (function () {
 
 angular.module('customerEngineApp')
-.directive('ceTicketCreate', ['Customer', 'Ticket', 'Country', 'Category', 'Notification', 'Department', function (Customer, Ticket, Country, Category, Notification, Department) {
+.directive('ceTicketCreate', ['$location', '$state', 'Customer', 'Ticket', 'Country', 'Category', 'Notification', 'Department', function ($location, $state, Customer, Ticket, Country, Category, Notification, Department) {
   return {
     templateUrl: 'app/directives/ceTicketCreate/ceTicketCreate.html',
     restrict: 'EA',
     scope: {
       ticket: '=',
       relatedTickets: '=',
-      user: '='
+      user: '=',
+      ticketId: '='
     },
     link: function (scope, element, attrs) {
       
@@ -21,29 +22,67 @@ angular.module('customerEngineApp')
         'Work in progress'
       ];
       
-      /**
-       * Resets the ticket to only include user and ticketDate.
-       */
-      function resetTicket() {
-          scope.ticket = {
+      function emptyTicket() {
+        return {
           ticketDate: new Date(),
           user: scope.user,
-          status: 'Open'
+          status: 'Work in progress'
         };
       }
       
       /**
-       * Submits the ticket to db.
+       * @param {Object} obj
+       * @return {Object}
+       */
+      function cleanEmpty(obj) {
+        _.forEach(_.keys(obj), function (key) {
+          if (_.isNull(obj[key]) || _.isUndefined(obj[key])){
+            delete obj[key];
+          } else if (_.isObject(obj[key])) {
+            if (!_.chain(obj[key]).map().filter().value().length) {
+              delete obj[key];
+            } else {
+              return cleanEmpty(obj[key])
+            }
+          }
+        })
+        
+        return obj;
+      }
+      
+      /**
+       * Resets the ticket to only include user and ticketDate.
+       */
+      function resetTicket() {
+        
+        if (scope.ticketId) {
+          // Get ticket from local tickets
+          Ticket.getById(scope.ticketId)
+          .then(function (ticket) {
+            scope.ticket = cleanEmpty(ticket);
+          })
+          ['catch'](function (err) {
+            scope.ticket = emptyTicket();
+          });
+        } else {
+          // Set up new ticket
+          scope.ticket = emptyTicket();
+        }
+      }
+      
+      /**
+       * Submits the ticket to db and sets scope.ticketId to undefined.
        * 
        * @param {Object} _ticket (Ticket)
        */
       scope.submit = function (_ticket) {
-        Ticket.create(_ticket)
+        Ticket.createOrUpdate(_.assign(_ticket))
         .then(function (ticket) {
           Notification.success('Ticket submitted');
           
+          scope.ticketId = undefined;
           resetTicket();
-          console.log(ticket);
+          $state.go('main.dashboard');
         })
         ['catch'](function (err) {
           
@@ -62,7 +101,7 @@ angular.module('customerEngineApp')
       scope.matched = function (item, itemName, options) {
         if (!options) { options =  {}; }
         if (_.isUndefined(itemName)) { itemName = ''; }
-    
+        
         return _.chain(item)
           .filter(function (v, key) { return (key != itemName + 'Id') || !!~_.indexOf(options.skip, key); })
           .map(function (value) { return value; })
@@ -166,7 +205,7 @@ angular.module('customerEngineApp')
        */
       scope.$watch('ticket', function (ticket) {
         if (!ticket) {
-          resetTicket();
+          return resetTicket();
         } else {
           if (scope.hideSubcategory(ticket)) { ticket.subcategory = undefined; }
           if (scope.hideDescriptor(ticket)) { ticket.descriptor = undefined; }

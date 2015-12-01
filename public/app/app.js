@@ -13,7 +13,7 @@ angular.module('customerEngineApp', [
 .config(['$stateProvider', '$urlRouterProvider', '$httpProvider','AnalyticsProvider', 'ngIntlTelInputProvider', '$localForageProvider', function ($stateProvider, $urlRouterProvider, $httpProvider, AnalyticsProvider, ngIntlTelInputProvider, $localForageProvider) {
   
   $urlRouterProvider
-  .otherwise('/home');
+  .otherwise('/dashboard');
   
   // Adds authInterceptor to http requests
   $httpProvider.interceptors.push('authInterceptor')

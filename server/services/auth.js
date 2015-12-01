@@ -90,7 +90,7 @@ exports.setTokenCookie = function (req, res) {
     return res.status(404).json({mesasge: 'Something went wrong, please try again.'});
   }
   
-  var token = this.signToken({ userId: req.user.userId});
+  var token = this.signToken({ userId: req.user.userId });
   
   res.cookie('token', token);
 }

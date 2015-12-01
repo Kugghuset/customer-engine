@@ -1,1 +1,17 @@
 <h2>CREATE TICKET ROUTE</h2>
+
+<section class="container-fluid" ng-show="auth.getCurrentUser().email">
+  
+  <br>
+  
+  <div class="row">
+    
+    <div class="col-md-6">
+      
+      <ce-ticket-create  user="auth.getCurrentUser()" ticket="ticket" related-tickets="relatedTickets" ticket-id="currentTicketId"></ce-ticket-create>
+      
+    </div>
+    
+  </div>
+  
+</section>

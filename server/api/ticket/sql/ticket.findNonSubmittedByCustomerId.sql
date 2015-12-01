@@ -1,8 +1,8 @@
 /*
-Finds tickets by its customerId and joins it.
+Finds a ticket by its ticketId and joins it.
 */
 
-SELECT TOP 12
+SELECT
   [A].[ticketId],
   [A].[name],
   [A].[email],
@@ -60,5 +60,6 @@ ON [A].[userId] = [U].[userId]
 LEFT JOIN [dbo].[Department] AS [G]
 ON [A].[departmentId] = [G].[departmentId]
 
-WHERE [A].[customerId] = @customerId
-ORDER BY [A].[ticketDate] DESC
+-- Gets only the matching ticket
+WHERE [A].[userId]=@userId
+  AND ([A].[isSubmitted] IS NULL OR [A].[isSubmitted] = 0)

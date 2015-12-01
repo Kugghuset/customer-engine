@@ -33,7 +33,7 @@ exports.createOrUpdate = function (req, res) {
     return utils.handleError(res, new Error('No ticket provided.'));
   }
   
-  Ticket.createOrUpdate(req.body)
+  Ticket.createOrUpdate(req.body, req.user)
   .then(function (ticket) {
     res.status(200).json(ticket);
   })
@@ -60,6 +60,16 @@ exports.findById = function (req, res) {
  */
 exports.findByCustomerId = function (req, res) {
   Ticket.findByCustomerId(req.params.id)
+  .then(function (tickets) {
+    res.status(200).json(tickets);
+  })
+  .catch(function (err) {
+    utils.handleError(res, err);
+  })
+}
+
+exports.findNonSubmitted = function (req, res) {
+  Ticket.findNonSubmitted(req.params.id)
   .then(function (tickets) {
     res.status(200).json(tickets);
   })

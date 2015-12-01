@@ -19,7 +19,7 @@ function initialize() {
  * @param {Object} ticket
  * @return {Object} (Ticket)
  */
-function ensureHasProps(ticket) {
+function ensureHasProps(ticket, user) {
     // Ensure properties which are objects are defined
     ticket.customer = ticket.customer || {};
     ticket.user = ticket.user || user || {};
@@ -101,6 +101,10 @@ function ticketParams(ticket, extra) {
     departmentId: {
       type: sql.BIGINT,
       val: ticket.department.departmentId
+    },
+    isSubmitted: {
+      type: sql.BIT,
+      val: ticket.isSubmitted
     }
   }, extra);
 }
@@ -118,7 +122,7 @@ exports.create = function (ticket, user) {
     }
     
     // Ensure there are properties
-    ticket = ensureHasProps(ticket);
+    ticket = ensureHasProps(ticket, user);
     
     return sql.execute({
       query: [
@@ -142,12 +146,12 @@ exports.create = function (ticket, user) {
  * @param {Object} ticket
  * @return {Promise} -> {Object} (Ticket)
  */
-exports.update = function (ticket) {
+exports.update = function (ticket, user) {
   return new Promise(function (resolve, reject) {
     if (!ticket) { return reject(new Error('No provided ticket')); }
     
     // Ensure there are properties
-    ticket = ensureHasProps(ticket);
+    ticket = ensureHasProps(ticket, user);
     
     sql.execute({
       query: [
@@ -170,16 +174,16 @@ exports.update = function (ticket) {
   });
 }
 
-exports.createOrUpdate = function (ticket) {
+exports.createOrUpdate = function (ticket, user) {
   return new Promise(function (resolve, reject) {
     if (!ticket) { return reject(new Error('No provided ticket')); }
     
     if (ticket.ticketId) {
-      this.update(ticket)
+      this.update(ticket, user)
       .then(resolve)
       .catch(reject);
     } else {
-      this.create(ticket)
+      this.create(ticket, user)
       .then(resolve)
       .catch(reject);
     }
@@ -214,6 +218,26 @@ exports.findByCustomerId = function (customerId) {
         customerId: {
           type: sql.BIGINT,
           val: customerId
+        }
+      }
+    })
+    .then(function (tickets) {
+      resolve(util.objectify(tickets));
+    })
+    .catch(function (err) {
+      reject(err);
+    });
+  });
+}
+
+exports.findNonSubmitted = function (userId) {
+  return new Promise(function (resolve, reject) {
+    sql.execute({
+      query: sql.fromFile('./sql/ticket.findNonSubmittedByCustomerId.sql'),
+      params: {
+        userId: {
+          type: sql.BIGINT,
+          val: userId
         }
       }
     })

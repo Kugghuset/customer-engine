@@ -20,7 +20,10 @@ SET
   [dbo].[Ticket].[customerId] = @customerId,
   [dbo].[Ticket].[userId] = @userId,
   [dbo].[Ticket].[departmentId] = @departmentId,
-  [dbo].[Ticket].[ticketDate] = @ticketDate
+  [dbo].[Ticket].[ticketDate] = @ticketDate,
+  [dbo].[Ticket].[dateUpdated] = GETUTCDATE(),
+  [dbo].[Ticket].[isSubmitted] = @isSubmitted
+  
 
 WHERE [ticketId] = @ticketId
 

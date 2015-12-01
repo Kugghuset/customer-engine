@@ -20,7 +20,8 @@ BEGIN
     [userId] bigint NULL,
     [isSubmitted] bit NULL,
     [ticketDate] datetime2 DEFAULT GETUTCDATE() NULL,
-    [dateCreated] datetime2 DEFAULT GETUTCDATE() NULL
+    [dateCreated] datetime2 DEFAULT GETUTCDATE() NULL,
+    [dateUpdated] datetime2 DEFAULT GETUTCDATE() NULL
   )
 END
 ELSE
@@ -65,4 +66,13 @@ ELSE
   BEGIN
       ALTER TABLE [dbo].[Ticket]
       ADD [isSubmitted] bit NULL
+  END
+  
+  -- Adds dateUpdated if it doesn't exist
+  IF NOT EXISTS(SELECT * FROM sys.columns
+                WHERE Name = N'dateUpdated'
+                AND Object_ID = Object_ID(N'Ticket'))
+  BEGIN
+      ALTER TABLE [dbo].[Ticket]
+      ADD [dateUpdated] datetime2 DEFAULT GETUTCDATE() NULL
   END

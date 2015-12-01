@@ -4,9 +4,7 @@
     
     <h1>Hi, {{ user.name || 'operator' }}!</h1>
     
-    <ce-dash-task name="New ticket" task-route="main.create_ticket"></ce-dash-task>
-    
-    <ce-dash-task name="New ticket" task-route="main.create_ticket"></ce-dash-task>
+    <ce-dash-pane user="auth.getCurrentUser()"></ce-dash-pane>
     
   </div>
 

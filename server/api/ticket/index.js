@@ -11,5 +11,6 @@ router.post('/', auth.isAuthenticated(), controller.create);
 router.put('/', auth.isAuthenticated(), controller.createOrUpdate);
 router.get('/:id', auth.isAuthenticated(), controller.findById);
 router.get('/customer/:id', auth.isAuthenticated(), controller.findByCustomerId);
+router.get('/pending/customer/:id', auth.isAuthenticated(), controller.findNonSubmitted);
 
 module.exports = router;

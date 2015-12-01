@@ -13,11 +13,11 @@ SELECT
   [A].[successful],
   [A].[status],
   [A].[country] AS [country.short],
-  [A].[customerId],
+  [A].[customerId] AS [customer.customerId],
   [F].[customerNumber] AS [customer.customerNumber],
   [F].[orgName] AS [customer.orgName],
   [F].[orgNr] AS [customer.orgNr],
-  [A].[userId],
+  [A].[userId] AS [user.userId],
   [U].[email] AS [user.email],
   [U].[name] AS [user.name],
   [A].[ticketDate],
@@ -28,7 +28,8 @@ SELECT
   [B].[descriptorId] AS [descriptor.descriptorId],
   [E].[descriptorName] AS [descriptor.descriptorName],
   [A].[departmentId] AS [department.departmentId],
-  [G].[departmentName] AS [department.departmentName]
+  [G].[departmentName] AS [department.departmentName],
+  [A].[isSubmitted]
 FROM [dbo].[Ticket] AS [A]
 
 -- Joins the categoryBlob, which is only used for joining the different levels of categories

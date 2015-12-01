@@ -3,13 +3,13 @@
 
 angular.module('customerEngineApp')
 .config(['$stateProvider', function ($stateProvider) {
-  $stateProvider.state('main.dashbaord', {
+  $stateProvider.state('main.dashboard', {
     url: '/dashboard',
     templateUrl: 'app/routes/dashboard/dashboard.html',
     controller: 'DashboardCtrl'
   });
 }])
-.controller('DashboardCtrl', ['$scope', 'Auth', 'Ticket', function ($scope, Auth, Ticket) {
+.controller('DashboardCtrl', ['$scope', 'Auth', function ($scope, Auth) {
   
   $scope.auth = Auth;
   $scope.user = Auth.getCurrentUser();
@@ -19,11 +19,7 @@ angular.module('customerEngineApp')
    */
   $scope.$watch('auth.getCurrentUser()', function (user) {
     $scope.user = user;
-  })
-  
-  Ticket.getAllLocal().then(function (keys) {
-    console.log(keys);
-  })
+  });
   
 }]);
 

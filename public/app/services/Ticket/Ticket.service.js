@@ -142,7 +142,15 @@ angular.module('customerEngineApp')
     
     getNonSubmitted: function (userId) {
       return $q(function (resolve, reject) {
-        $http.get('/api/tickets/pending/customer/' + userId)
+        $http.get('/api/tickets/pending/user/' + userId)
+        .success(resolve)
+        ['catch'](reject);
+      });
+    },
+    
+    getByUserId: function (userId) {
+      return $q(function (resolve, reject) {
+        $http.get('/api/tickets/user/' + userId)
         .success(resolve)
         ['catch'](reject);
       });

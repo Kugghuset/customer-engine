@@ -68,6 +68,19 @@ exports.findByCustomerId = function (req, res) {
   })
 }
 
+/**
+ * ROUTE: GET '/api/tickets/user/:id'
+ */
+exports.findByUserId = function (req, res) {
+  Ticket.findByUserId(req.params.id)
+  .then(function (tickets) {
+    res.status(200).json(tickets);
+  })
+  .catch(function (err) {
+    utils.handleError(res, err);
+  })
+}
+
 exports.findNonSubmitted = function (req, res) {
   Ticket.findNonSubmitted(req.params.id)
   .then(function (tickets) {

@@ -32,6 +32,15 @@ function ensureHasProps(ticket, user) {
     return ticket;
 }
 
+
+function findBy(paramName, other) {
+  if (!other) { other = ''; }
+  return sql.fromFile('./sql/ticket.findBy.sql')
+  .replace(util.literalRegExp('{ where_clause }', 'gi'), '[{paramName}] = @{paramName}')
+  .replace(util.literalRegExp('{paramName}', 'gi'), paramName)
+  .replace(util.literalRegExp('{ other }', 'gi'), other);
+}
+
 /**
  * @param {Object} ticket
  * @reruturn {Object} params object for seriate
@@ -127,7 +136,7 @@ exports.create = function (ticket, user) {
     return sql.execute({
       query: [
         sql.fromFile('./sql/ticket.create.sql'),
-        sql.fromFile('./sql/ticket.findAndJoin.sql')
+        findBy('ticketId')
         ].join(' '),
       params: ticketParams(ticket)
     })
@@ -156,7 +165,7 @@ exports.update = function (ticket, user) {
     sql.execute({
       query: [
         sql.fromFile('./sql/ticket.update.sql'),
-        sql.fromFile('./sql/ticket.findAndJoin.sql')
+        findBy('ticketId')
       ].join(' '),
       params: ticketParams(ticket, {
         ticketId: {
@@ -193,7 +202,7 @@ exports.createOrUpdate = function (ticket, user) {
 exports.findById = function (ticketId) {
   return new Promise(function (resolve, reject) {
     sql.execute({
-      query: sql.fromFile('./sql/ticket.findAndJoin.sql'),
+      query: findBy('ticketId'),
       params: {
         ticketId: {
           type: sql.BIGINT,
@@ -213,7 +222,7 @@ exports.findById = function (ticketId) {
 exports.findByCustomerId = function (customerId) {
   return new Promise(function (resolve, reject) {
     sql.execute({
-      query: sql.fromFile('./sql/ticket.findByCustomerId.sql'),
+      query: findBy('customerId'),
       params: {
         customerId: {
           type: sql.BIGINT,
@@ -230,10 +239,30 @@ exports.findByCustomerId = function (customerId) {
   });
 }
 
+exports.findByUserId = function (userId) {
+  return new Promise(function (resolve, reject) {
+    sql.execute({
+      query: findBy('userId'),
+      params: {
+        userId: {
+          type: sql.BIGINT,
+          val: userId
+        }
+      }
+    })
+    .then(function (tickets) {
+      resolve(util.objectify(tickets));
+    })
+    .catch(function (err) {
+      reject(err);
+    });
+  });
+}
+
 exports.findNonSubmitted = function (userId) {
   return new Promise(function (resolve, reject) {
     sql.execute({
-      query: sql.fromFile('./sql/ticket.findNonSubmittedByCustomerId.sql'),
+      query: findBy('userId', 'AND ([A].[isSubmitted] IS NULL OR [A].[isSubmitted] = 0)'),
       params: {
         userId: {
           type: sql.BIGINT,

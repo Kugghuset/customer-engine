@@ -7,36 +7,23 @@ angular.module('customerEngineApp')
     templateUrl: 'app/directives/ceDashPane/ceDashPane.html',
     restrict: 'EA',
     scope: {
-      user: '='
+      user: '=',
+      tickets: '=',
+      isLoading: '='
     },
     link: function (scope, element, attrs) {
-      // Add logic? nah
       
       /**
-       * Gets all stored pending tickets and filters out
-       * any tickets which are not owned by the user.
-       * @param {String} userId
+       * Watches for changes in tickets
+       * and sets scope.pendingTickets to the tickets which are yet to be submitted.
        */
-      function getNonSubmitted(userId) {
-        Ticket.getNonSubmitted(userId)
-        .then(function (tickets) {
-          scope.pendingTickets = tickets;
-        })
-        ['catch'](function (err) {
-          console.log(err);
+      scope.$watch('tickets', function (tickets) {
+        scope.pendingTickets = _.filter(tickets, function (ticket) {
+          return !ticket.isSubmitted;
         });
-      }
-      
-      scope.$watch('user', function (user) {
-        if (user && user.userId) {
-          getNonSubmitted(user.userId);
-        }
+        scope.tickets = tickets;
       });
       
-      // Get the 
-      if (scope.user && scope.user.userId) {
-        getNonSubmitted(scope.user.userId);
-      } 
     }
   };
 }]);

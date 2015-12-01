@@ -1,8 +1,8 @@
 /*
-Finds tickets by its customerId and joins it.
+Finds tickets by somethign and joins it. The something is determined by a where_clause set in JavaScript
 */
 
-SELECT TOP 12
+SELECT
   [A].[ticketId],
   [A].[name],
   [A].[email],
@@ -60,5 +60,5 @@ ON [A].[userId] = [U].[userId]
 LEFT JOIN [dbo].[Department] AS [G]
 ON [A].[departmentId] = [G].[departmentId]
 
-WHERE [A].[customerId] = @customerId
+WHERE [A].{ where_clause } { other }
 ORDER BY [A].[ticketDate] DESC

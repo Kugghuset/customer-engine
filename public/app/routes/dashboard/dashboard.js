@@ -9,16 +9,36 @@ angular.module('customerEngineApp')
     controller: 'DashboardCtrl'
   });
 }])
-.controller('DashboardCtrl', ['$scope', 'Auth', function ($scope, Auth) {
+.controller('DashboardCtrl', ['$scope', 'Auth', 'Ticket', function ($scope, Auth, Ticket) {
   
-  $scope.auth = Auth;
   $scope.user = Auth.getCurrentUser();
+  
+  $scope.tickets = [];
+  $scope.isLoading = false;
+  
+  
+  function getTickets(userId, loading) {
+    $scope.isLoading = loading;
+    Ticket.getByUserId(userId)
+    .then(function (tickets) {
+      $scope.tickets = tickets;
+      $scope.isLoading = false;
+    })
+    ['catch'](function (err) {
+      // Oh no!
+      $scope.isLoading = false;
+    })
+  }
   
   /**
    * Watches for changes in the user and sets the value of the scoped user.
    */
   $scope.$watch('auth.getCurrentUser()', function (user) {
     $scope.user = user;
+    
+    if (user && user.userId) {
+      getTickets(user.userId);
+    }
   });
   
 }]);

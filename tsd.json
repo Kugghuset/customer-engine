@@ -6,49 +6,49 @@
   "bundle": "typings/tsd.d.ts",
   "installed": {
     "bluebird/bluebird.d.ts": {
-      "commit": "36c6ce86fb64bafb28ec95dc78c6b98228b45c8d"
+      "commit": "4910a7c52a1cf335877ea3b0917eb65117a66637"
     },
     "express/express.d.ts": {
-      "commit": "36c6ce86fb64bafb28ec95dc78c6b98228b45c8d"
+      "commit": "4910a7c52a1cf335877ea3b0917eb65117a66637"
     },
     "serve-static/serve-static.d.ts": {
-      "commit": "36c6ce86fb64bafb28ec95dc78c6b98228b45c8d"
+      "commit": "4910a7c52a1cf335877ea3b0917eb65117a66637"
     },
     "mime/mime.d.ts": {
-      "commit": "36c6ce86fb64bafb28ec95dc78c6b98228b45c8d"
+      "commit": "4910a7c52a1cf335877ea3b0917eb65117a66637"
     },
     "angularjs/angular.d.ts": {
       "commit": "e850b6ac0d59fee86dd7cb6a1be2caf6400bde14"
     },
     "node/node.d.ts": {
-      "commit": "36c6ce86fb64bafb28ec95dc78c6b98228b45c8d"
+      "commit": "4910a7c52a1cf335877ea3b0917eb65117a66637"
     },
     "jquery/jquery.d.ts": {
       "commit": "e850b6ac0d59fee86dd7cb6a1be2caf6400bde14"
     },
     "lodash/lodash.d.ts": {
-      "commit": "36c6ce86fb64bafb28ec95dc78c6b98228b45c8d"
+      "commit": "4910a7c52a1cf335877ea3b0917eb65117a66637"
     },
     "morgan/morgan.d.ts": {
-      "commit": "36c6ce86fb64bafb28ec95dc78c6b98228b45c8d"
+      "commit": "4910a7c52a1cf335877ea3b0917eb65117a66637"
     },
     "winston/winston.d.ts": {
-      "commit": "36c6ce86fb64bafb28ec95dc78c6b98228b45c8d"
+      "commit": "4910a7c52a1cf335877ea3b0917eb65117a66637"
     },
     "body-parser/body-parser.d.ts": {
-      "commit": "36c6ce86fb64bafb28ec95dc78c6b98228b45c8d"
+      "commit": "4910a7c52a1cf335877ea3b0917eb65117a66637"
     },
     "orchestrator/orchestrator.d.ts": {
-      "commit": "36c6ce86fb64bafb28ec95dc78c6b98228b45c8d"
+      "commit": "4910a7c52a1cf335877ea3b0917eb65117a66637"
     },
     "gulp/gulp.d.ts": {
-      "commit": "36c6ce86fb64bafb28ec95dc78c6b98228b45c8d"
+      "commit": "4910a7c52a1cf335877ea3b0917eb65117a66637"
     },
     "q/Q.d.ts": {
-      "commit": "36c6ce86fb64bafb28ec95dc78c6b98228b45c8d"
+      "commit": "4910a7c52a1cf335877ea3b0917eb65117a66637"
     },
     "shelljs/shelljs.d.ts": {
-      "commit": "36c6ce86fb64bafb28ec95dc78c6b98228b45c8d"
+      "commit": "4910a7c52a1cf335877ea3b0917eb65117a66637"
     },
     "chokidar/chokidar.d.ts": {
       "commit": "fc341765ebbb04b7109981a25dced01f488f4d94"
@@ -57,16 +57,16 @@
       "commit": "fc341765ebbb04b7109981a25dced01f488f4d94"
     },
     "express-jwt/express-jwt.d.ts": {
-      "commit": "36c6ce86fb64bafb28ec95dc78c6b98228b45c8d"
+      "commit": "4910a7c52a1cf335877ea3b0917eb65117a66637"
     },
     "express-unless/express-unless.d.ts": {
-      "commit": "36c6ce86fb64bafb28ec95dc78c6b98228b45c8d"
+      "commit": "4910a7c52a1cf335877ea3b0917eb65117a66637"
     },
     "jsonwebtoken/jsonwebtoken.d.ts": {
-      "commit": "36c6ce86fb64bafb28ec95dc78c6b98228b45c8d"
+      "commit": "4910a7c52a1cf335877ea3b0917eb65117a66637"
     },
     "chalk/chalk.d.ts": {
-      "commit": "36c6ce86fb64bafb28ec95dc78c6b98228b45c8d"
+      "commit": "4910a7c52a1cf335877ea3b0917eb65117a66637"
     },
     "localForage/localForage.d.ts": {
       "commit": "e850b6ac0d59fee86dd7cb6a1be2caf6400bde14"
@@ -76,6 +76,15 @@
     },
     "angular-localForage/angular-localForage.d.ts": {
       "commit": "e850b6ac0d59fee86dd7cb6a1be2caf6400bde14"
+    },
+    "bcrypt/bcrypt.d.ts": {
+      "commit": "4910a7c52a1cf335877ea3b0917eb65117a66637"
+    },
+    "gulp-sass/gulp-sass.d.ts": {
+      "commit": "4910a7c52a1cf335877ea3b0917eb65117a66637"
+    },
+    "node-sass/node-sass.d.ts": {
+      "commit": "4910a7c52a1cf335877ea3b0917eb65117a66637"
     }
   }
 }

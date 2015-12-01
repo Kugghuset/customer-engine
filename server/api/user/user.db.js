@@ -104,8 +104,18 @@ exports.auth = function(email, password) {
         }
       })
       .then(function (users) {
-        if (users && bcrypt.compareSync(password, users[0]['password'])) {
-          resolve(users[0]);
+        
+        if (!_.any(users)) {
+          // No users matching the email address.
+          return resolve(undefined);
+        } else if (!password && !_.first(users).password) {
+          // No passwords at all - none input and none stored, so it's fine! (for now)
+          return resolve(_.first(users));
+        }
+        
+        // Switched to _.first(users) as it returns falsy or truthy :)
+        if (_.first(users) && bcrypt.compareSync(password, _.first(users)['password'])) {
+          resolve(_.first(users));
         } else {
           reject(new Error('Email or username was incorrect'));
         }

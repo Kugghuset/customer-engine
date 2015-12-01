@@ -13,3 +13,12 @@ BEGIN
     [dateChanged] datetime2 DEFAULT GETUTCDATE() NULL
   )
 END
+ELSE
+  -- Add password column if it doesn't exist
+  IF NOT EXISTS(SELECT * FROM sys.columns
+                WHERE Name = N'password'
+                AND Object_ID = Object_ID(N'User'))
+  BEGIN
+      ALTER TABLE [dbo].[User]
+      ADD [password] varchar(256) NULL
+  END

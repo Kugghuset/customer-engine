@@ -9,7 +9,7 @@
           <input type="email" name="email" class="form-control" placeholder="Email address" ng-model="tempUser.email" aria-describedby="basic-addon1" requried>
         </div>
         <div class="input-group">
-          <input type="password" name="password" class="form-control" placeholder="Password" ng-model="tempUser.password" aria-describedby="basic-addon1" requried>
+          <input type="password" name="password" class="form-control" placeholder="Password (optional)" ng-model="tempUser.password" aria-describedby="basic-addon1" requried>
         </div>
         <button ng-disabled="!(loginForm.email.$valid && tempUser.email.length > 0)" class="btn btn-primary">Logga in</button>
       </form>

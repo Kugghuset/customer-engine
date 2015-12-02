@@ -1,22 +1,30 @@
-<section class="ticket-card">
+<section class="card">
   
   <header>
-    <h2>{{ ticket.customer.orgName || 'Ticket ID: ' + ticket.ticketId }}</h2>
+    <h2>
+      <a href="" ui-sref="main.create_ticket({ticketId: ticket.ticketId})">
+        {{ ticket.customer.orgName || 'Ticket ID: ' + ticket.ticketId }}
+      </a>
+    </h2>
     <ce-status-select status="ticket.status" is-readonly="isReadonly"></ce-status-select>
   </header>
   
-  <div>
+  <div class="card-categories">
     <span ng-repeat="category in plainCategory(ticket)">{{ category }}</span>
   </div>
   
-  <div>
+  <br>
+  
+  <div class="card-contact">
     <h3>Contact</h3>
-    <div>{{ ticket.name }}</div>
-    <div>{{ ticket.email }}</div>
-    <div>{{ ticket.tel }}</div>
+    <div>{{ ticket.name || 'Name missing' }}</div>
+    <div ng-show="ticket.email">{{ ticket.email }}</div>
+    <div ng-show="ticket.tel">{{ ticket.tel }}</div>
   </div>
   
-  <div class="ticket-card-footer">
+  <br>
+  
+  <div class="card-footer">
     {{ ticket.ticketDate | date: 'yyyy-MM-dd, HH:mm' }}
   </div>
   

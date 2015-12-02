@@ -55,10 +55,17 @@
       width: 100%;
       border: 2px solid $white;
       border-collapse: collapse;
+      outline: none;
       
-      &:hover, &:active, &:focus {
+      &:hover {
         color: $white;
         background-color: $purple;
+        outline: none;
+      }
+      &:active, &:focus {
+        color: $white;
+        background-color: $purple-dark;
+        outline: none;
       }
     }
   }
@@ -83,6 +90,7 @@
 .pane-button-big {
   @extend .pane-button;
   padding: $size-m;
+  font-size: $font-size-xl;
 }
 
 .pane-table {
@@ -119,16 +127,17 @@
       }
     }
     tr:not(:last-child) {
+      cursor: pointer;
+      &:hover {
+        background-color: $purple;
+      }
+      &:active, &:focus {
+        background-color: $purple-light;
+      }
       td {
+        cursor: pointer;
         border: 2px solid $white;
       }
     }
   }
-  
-  tfooter {
-    td {
-      border: thin none;
-    }
-  }
-  
 }

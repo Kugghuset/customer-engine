@@ -7,6 +7,9 @@ angular.module('customerEngineApp')
     templateUrl: 'app/directives/cePane/cePane.html',
     restrict : 'E',
     transclude: true,
+    scope: {
+      color: '@'
+    },
     link: function (scope, element, attrs) {
       
     }

@@ -44,6 +44,11 @@ angular.module('customerEngineApp')
         }
       });
     },
+    
+    isLoggedIn: function () {
+      return !!$cookies.get('token')
+    },
+    
     /**
      * Gets the local user.
      * 

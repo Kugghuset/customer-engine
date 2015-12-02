@@ -1,0 +1,15 @@
+<section class="pane-content">
+  
+  <form name="loginForm" ng-submit="login(loginForm, tempUser)">
+    
+    <input class="pane-input block" type="email" name="email" placeholder="Email" ng-model="tempUser.email">
+    
+    <input class="pane-input block" type="password" name="password" placeholder="Password" ng-model="tempUser.password">
+    
+    <!--<span>Sign up</span>-->
+    
+    <button type="submit" class="pane-button-small" ng-disabled="!formValid(loginForm, tempUser)">Log in</button>
+    
+  </form>
+  
+</section>

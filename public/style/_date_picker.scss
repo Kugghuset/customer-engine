@@ -28,6 +28,13 @@
   @include hover-shadow;
   color: $white;
   @include thick-border;
+  
+  &::before {
+    content: 'Time';
+    font-weight: bolder;
+    position: absolute;
+    left: -50px;
+  }
 }
 .rd-time-option {
   background-color: $purple;

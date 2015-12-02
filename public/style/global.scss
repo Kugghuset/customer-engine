@@ -37,17 +37,53 @@ input[type=search],
 input[type=time],
 input[type=url],
 textarea {
-    @include border-shadow;
-    @include input-placeholder {
-      color: $white;
-    }
-    min-width: calc(70% - 5px);
-    background-color: transparent;
-    padding: $size-s;
-    font-size: $font-size-m;
-    margin: $size-xs 0;
+  @include border-shadow;
+  @include input-placeholder {
+    color: $white;
   }
-  
+  min-width: calc(70% - 5px);
+  background-color: transparent;
+  padding: $size-s;
+  font-size: $font-size-m;
+  margin: $size-xs 0;
+}
+
+input[type="checkbox"] {
+    display:none;
+}
+.radio label, .checkbox label {
+  padding-left: 0;
+}
+
+label {
+  input[type="checkbox"] ~ i {
+    @include border-shadow;
+    display: inline-block;
+    background-color: transparent;
+    top: -1px;
+    position: relative;
+    padding: 4px;
+    margin-right: 13px;
+  }
+  input[type="checkbox"]:checked ~ i::after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: -7px;
+    left: 1px;
+    width: 9px;
+    height: 16px;
+    border: solid $black;
+    border-width: 0 5px 5px 0;
+    box-shadow: 2px 2px 1px rgba($color: $white, $alpha: 0.1);
+    transform: rotate(45deg);
+  }
+}
+
+.offset-left {
+  // Used for checkboxes in creat select
+  margin-left: -30px;
+}
 
 .red {
   background-color: $red;

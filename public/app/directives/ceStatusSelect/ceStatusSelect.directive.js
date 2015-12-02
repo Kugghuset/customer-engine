@@ -6,7 +6,8 @@ angular.module('customerEngineApp')
     templateUrl: 'app/directives/ceStatusSelect/ceStatusSelect.html',
     restrict: 'EA',
     scope: {
-      status: '='
+      status: '=',
+      isReadonly: '='
     },
     link: function (scope, element, attrs) {
       

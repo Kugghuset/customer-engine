@@ -29,6 +29,25 @@ body {
   display: block;
 }
 
+input[type=text],
+input[type=email],
+input[type=password],
+input[type=search],
+input[type=time],
+input[type=url],
+textarea {
+    @include border-shadow;
+    @include input-placeholder {
+      color: $white;
+    }
+    min-width: calc(70% - 5px);
+    background-color: transparent;
+    padding: $size-s;
+    font-size: $font-size-m;
+    margin: $size-xs 0;
+  }
+  
+
 .red {
   background-color: $red;
 }

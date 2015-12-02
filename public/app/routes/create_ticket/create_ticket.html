@@ -8,7 +8,10 @@
     
     <div class="col-md-6">
       
-      <ce-ticket-create  user="auth.getCurrentUser()" ticket="ticket" related-tickets="relatedTickets" ticket-id="currentTicketId"></ce-ticket-create>
+      <ce-pane>
+        <ce-ticket-create user="auth.getCurrentUser()" ticket="ticket" related-tickets="relatedTickets" ticket-id="currentTicketId"></ce-ticket-create>
+      </ce-pane>
+      
       
     </div>
     

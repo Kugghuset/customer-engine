@@ -8,21 +8,21 @@
     <input type="email" ng-model="user.email" placeholder="Email">
   </div>
   <div class="pane-row">
-    <label>Operator ID: </label>
-    <span>{{ user.userId }}</span>
+    <label>ID</label>
+    <span>OPERATOR {{ user.userId }}</span>
   </div>
 </section>
 <section class="pane-section">
   
-  <a class="pane-button" href="" ui-sref="main.create_ticket">Create new ticket</a>
+  <a class="pane-button-big" href="" ui-sref="main.create_ticket">Create new ticket</a>
   
   <br>
   
   <div uib-dropdown uib-keyboard-nav ng-show="wipTickets.length">
-    <button id="simple-btn-keyboard-nav" type="button" class="btn" uib-dropdown-toggle>
+    <button id="simple-btn-keyboard-nav" type="button" class="pane-button" uib-dropdown-toggle>
       {{ 'Work in progress' }} <span class="caret"></span>
     </button>
-    <ul class="uib-dropdown-menu" role="menu" aria-labelledby="simple-btn-keyboard-nav">
+    <ul class="uib-dropdown-menu pane-dropdown" role="menu" aria-labelledby="simple-btn-keyboard-nav">
       <!-- Links need an href for Boostrap UI to work with keyboard navigation -->
       <li role="menuitem" ng-repeat="ticket in wipTickets">
         <a href="" ui-sref="main.create_ticket({ticketId: ticket.ticketId})">{{ ticket.customer.orgName || ticket.customer.orgNr || ticket.ticketId }}, {{ ticket.ticketDate | date:'yyyy-MM-dd' }}</a>
@@ -36,28 +36,26 @@
   <table class="pane-table">
     <tbody>
       <tr>
-        <td class="td-left">Open</td>
-        <td class="td-right green">{{ aggregated.open || 0 }}</td>
+        <td class="left">Open</td>
+        <td class="center green">{{ aggregated.open || 0 }}</td>
       </tr>
       <tr>
-        <td class="td-left">Closed</td>
-        <td class="td-right red">{{ aggregated.closed || 0 }}</td>
+        <td class="left">Closed</td>
+        <td class="center red">{{ aggregated.closed || 0 }}</td>
       </tr>
       <tr>
-        <td class="td-left">Work in progress</td>
-        <td class="td-right purple">{{ aggregated.wip || 0 }}</td>
+        <td class="left">Work in progress</td>
+        <td class="center purple">{{ aggregated.wip || 0 }}</td>
       </tr>
       <tr>
-        <td class="td-left">Pending</td>
-        <td class="td-right beige">{{ aggregated.pending || 0 }}</td>
+        <td class="left">Pending</td>
+        <td class="center beige">{{ aggregated.pending || 0 }}</td>
+      </tr>
+      <tr>
+        <td class="left">Total</td>
+        <td class="center">{{ aggregated.total || 0 }}</td>
       </tr>
     </tbody>
-    <tfooter>
-      <tr>
-        <td class="td-left">Total</td>
-        <td class="td-right">{{ aggregated.total || 0 }}</td>
-      </tr>
-    </tfooter>
     
     
   </table>

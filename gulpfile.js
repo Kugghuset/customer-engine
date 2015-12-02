@@ -64,7 +64,7 @@ gulp.task('sass', function () {
 gulp.task('watch', function () {
   gulp.watch('./server/**', ['server']);
   gulp.watch(['./public/app/**', './public/index.html'], ['reload']);
-  gulp.watch(['./public/style/*.scss', './public/app/**/*.scss'], ['sass']);
+  gulp.watch(['./public/style/**/*.scss', './public/app/**/*.scss'], ['sass']);
 });
 
 livereload.listen()

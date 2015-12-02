@@ -2,8 +2,6 @@
 
   <div class="container-fluid" ng-show="user">
     
-    <h1>Hi, {{ user.name || 'operator' }}!</h1>
-    
     <ce-pane>
       <ce-dash-pane user="auth.getCurrentUser()" tickets="tickets" is-readonly="isReadonly"></ce-dash-pane>
     </ce-pane>

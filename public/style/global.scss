@@ -1,5 +1,7 @@
 @import 'variables';
+@import 'mixins/mixins';
 @import 'card';
+@import 'pane';
 
 @import '../app/app';
 
@@ -11,9 +13,12 @@
   width: 100%;
 }
 
-
 .page-container {
   max-width: 100%;
   width: 1200px;
   margin: 0 auto;
+}
+
+.block {
+  display: block;
 }

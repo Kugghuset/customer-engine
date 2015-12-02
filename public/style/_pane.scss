@@ -1,0 +1,134 @@
+.pane {
+  background-color: $purple-dark;
+  color: $white;
+  padding: $size-xl;
+  
+  &.gray {
+    background-color: $gray;
+    input {
+      box-shadow: none;
+      outline: none;
+    }
+  }
+  clear: both;
+  
+  label {
+    font-size: $font-size-l;
+    text-transform: uppercase;
+    font-weight: bolder;
+    min-width: 30%;
+  }
+  input {
+    @include border-shadow;
+    @include input-placeholder {
+      color: $white;
+    }
+    min-width: calc(70% - 5px);
+    background-color: transparent;
+    padding: $size-s;
+    font-size: $font-size-m;
+    margin: $size-xs 0;
+  }
+  
+  span {
+    display: inline-block;
+    padding: #{$size-s} + 3px;
+    font-size: $font-size-m;
+  }
+}
+
+.pane-section {
+  padding: $size-m 0;
+}
+
+.pane-dropdown {
+  padding: 0;
+  border-radius: 0;
+  background-color: $purple-light;
+  & > li {
+    
+    & > a {
+      color: $white;
+      display: block;
+      padding: $size-xs;
+      text-align: center;
+      width: 100%;
+      border: 2px solid $white;
+      border-collapse: collapse;
+      
+      &:hover, &:active, &:focus {
+        color: $white;
+        background-color: $purple;
+      }
+    }
+  }
+}
+
+.pane-button {
+  @include border-shadow;
+  display: block;
+  background-color: $purple;
+  text-transform: uppercase;
+  text-align: center;
+  color: $white;
+  font-weight: bold;
+  padding: $size-xs;
+  &:hover, &:active, &:focus {
+    color: $white;
+    font-weight: bolder;
+    text-decoration: none;
+  }
+}
+
+.pane-button-big {
+  @extend .pane-button;
+  padding: $size-m;
+}
+
+.pane-table {
+  width: 100%;
+  font-size: $font-size-m;
+  text-transform: uppercase;
+  tbody {
+    tr {
+      td {
+        border-collapse: collapse;
+        padding: $size-xs;
+        
+        &.left {
+          text-align: left;
+        }
+        &.right {
+          text-align: right;
+        }
+        &.center {
+          text-align: center;
+        }
+        &.red {
+          background-color: $red;
+        }
+        &.purple {
+          background-color: $purple;
+        }
+        &.beige {
+          background-color: $beige;
+        }
+        &.green {
+          background-color: $green;
+        }
+      }
+    }
+    tr:not(:last-child) {
+      td {
+        border: 2px solid $white;
+      }
+    }
+  }
+  
+  tfooter {
+    td {
+      border: thin none;
+    }
+  }
+  
+}

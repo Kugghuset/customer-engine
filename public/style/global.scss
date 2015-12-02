@@ -30,6 +30,21 @@ body {
   display: block;
 }
 
+.fill-label {
+  width: 170px;
+}
+
+.fill-by-label {
+  width: calc(100% - 180px);
+  .dropdown {
+    width: 100%;
+    .pane-button {
+      width: 100%;
+      margin-top: 8px;
+    }
+  }
+}
+
 input[type=text],
 input[type=email],
 input[type=password],
@@ -41,7 +56,7 @@ textarea {
   @include input-placeholder {
     color: $white;
   }
-  min-width: calc(70% - 5px);
+  width: calc(100% - 180px);
   background-color: transparent;
   padding: $size-s;
   font-size: $font-size-m;
@@ -83,6 +98,10 @@ label {
 .offset-left {
   // Used for checkboxes in creat select
   margin-left: -30px;
+}
+.offset-top {
+  margin-top: 8px;
+  display: block;
 }
 
 .red {

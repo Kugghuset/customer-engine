@@ -12,11 +12,21 @@
   }
   clear: both;
   
-  label {
+  label:not(.checkbox-label) {
     font-size: $font-size-ml;
     text-transform: uppercase;
     font-weight: bolder;
     min-width: 30%;
+    width: 170px;
+    text-align: right;
+    padding-right: 15px;
+    vertical-align: top;
+    margin-top: 12px;
+  }
+  .checkbox-label {
+    font-size: $font-size-m;
+    font-weight: lighter;
+    padding-top: 10px;
   }
   span {
     display: inline-block;
@@ -24,7 +34,7 @@
     font-size: $font-size-m;
   }
   textarea {
-    width: 100%;
+    // width: 100%;
     resize: vertical;
   }
 }
@@ -138,6 +148,9 @@
 // -- Intl-tel-input --
 .pane {
   .intl-tel-input {
+    input.block {
+      width: 100%;
+    }
     .flag-dropdown {
       &, .selected-flag {
         @include all-states {

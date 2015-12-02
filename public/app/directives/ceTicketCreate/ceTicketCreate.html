@@ -1,7 +1,7 @@
 <div class="pane-row">
   <!-- Customer -->
 
-  <label class="" for="">Customer</label>
+  <label for="">Customer</label>
 
   <input type="text" ng-model="ticket.customer" placeholder="Search for customer" uib-typeahead="customer as matched(customer, 'customer') for customer in getCustomer($viewValue)"
   typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="pane-dropdown">
@@ -13,62 +13,62 @@
 <div class="pane-row">
   <!-- Contact person -->
 
-  <label class="" for="">Contact person</label>
+  <label for="">Contact</label>
 
-  <input type="text" ng-model="ticket.name" class="" placeholder="Name">
+  <input type="text" ng-model="ticket.name" placeholder="Name">
 
 </div>
 
 <div class="pane-row">
   <!-- Contact tel and altTel -->
 
-  <label class="" for="">Phone number(s)</label>
+  <label for="">Phone</label>
 
-  <input type="text" ng-model="ticket.tel" ng-intl-tel-input class="" placeholder="Phone number">
+  <span class="fill-by-label">
+    <input class="block" type="text" ng-model="ticket.tel" ng-intl-tel-input placeholder="Phone number">
+  </span>
+
+
+
+  <label for="">&nbsp;</label>
   
-  <br>
-  
-  <input type="text" ng-model="ticket.altTel" ng-intl-tel-input class="" placeholder="Alt. phone number">
-
-
+  <span class="fill-by-label">
+    <input class="block" type="text" ng-model="ticket.altTel" ng-intl-tel-input placeholder="Alt. phone number">
+  </span>
 </div>
-
-<br>
 
 <div class="pane-row">
   <!-- Contact email -->
 
-  <label class="" for="">Contact email</label>
+  <label for="">Email</label>
 
-  <input type="email" ng-model="ticket.email" class="" placeholder="Email address">
+  <input type="email" ng-model="ticket.email" placeholder="Email address">
 
 </div>
-
-<br>
 
 <div class="pane-row">
   <!-- Country -->
 
-  <label class="">Country</label>
+  <label>Country</label>
+  
+  <input type="text" ng-model="ticket.country" uib-typeahead="country as matched(country, country) for country in countries | filter:$viewValue | limitTo:12"
+  placeholder="Type country name">
 
-  <div class="">
+  <div>
 
-    <input type="text" ng-model="ticket.country" uib-typeahead="country as matched(country, country) for country in countries | filter:$viewValue | limitTo:12"
-    class="" placeholder="Type country name">
 
   </div>
 
 </div>
 
-<br>
 
 <div class="pane-row">
   <!-- Categories -->
 
-  <label for="" class="">Category</label>
-
-  <div class="">
-    <div class="btn-group" uib-dropdown uib-keyboard-nav>
+  <label for="">Category</label>
+  
+  <span class="fill-by-label">
+    <span uib-dropdown uib-keyboard-nav>
       <button id="simple-btn-keyboard-nav" type="button" class="pane-button" uib-dropdown-toggle>
         {{ ticket.category.categoryName || 'Choose category' }} <span class="caret"></span>
       </button>
@@ -80,9 +80,9 @@
           <a href="" ng-click="ticket.category = category">{{ category.categoryName || 'value' }}</a>
         </li>
       </ul>
-    </div>
-
-    <div ng-hide="hideSubcategory(ticket)" class="btn-group" uib-dropdown uib-keyboard-nav>
+    </span>
+    
+    <span ng-hide="hideSubcategory(ticket)" uib-dropdown uib-keyboard-nav>
       <button id="simple-btn-keyboard-nav" type="button" class="pane-button" uib-dropdown-toggle>
         {{ ticket.subcategory.subcategoryName || 'Choose subcategory' }} <span class="caret"></span>
       </button>
@@ -94,9 +94,9 @@
           <a href="" ng-click="ticket.subcategory = subcategory">{{ subcategory.subcategoryName || 'value' }}</a>
         </li>
       </ul>
-    </div>
+    </span>
 
-    <div ng-hide="hideDescriptor(ticket)" class="btn-group" uib-dropdown uib-keyboard-nav>
+    <span ng-hide="hideDescriptor(ticket)" uib-dropdown uib-keyboard-nav>
       <button id="simple-btn-keyboard-nav" type="button" class="pane-button" uib-dropdown-toggle>
         {{ ticket.descriptor.descriptorName || 'Choose descriptor' }} <span class="caret"></span>
       </button>
@@ -108,70 +108,85 @@
           <a href="" ng-click="ticket.descriptor = descriptor">{{ descriptor.descriptorName || 'value' }}</a>
         </li>
       </ul>
-    </div>
-  </div>
+    </span>
+  </span>
+
 </div>
 
-<br>
 
 <div class="pane-row">
   <!-- Date -->
 
-  <label class="" for="">Ticket date</label>
+  <label for="">Date</label>
 
   <input type="text" ce-rome rome-model="ticket.ticketDate" placeholder="YYYY-MM-DD HH:mm">
   
 </div>
 
-<br>
 
 <div class="pane-row">
   <!-- Summary -->
 
-  <label class="">Ticket summary</label>
-
-  <div class="">
-    <textarea cols="30" rows="3" placeholder="Short description" class="" ng-model="ticket.summary"></textarea>
-  </div>
+  <label>Summary</label>
+  
+  <textarea cols="30" rows="3" placeholder="Short description" ng-model="ticket.summary"></textarea>
 
 </div>
 
-<br>
 
 <div class="pane-row">
   <!-- Status -->
   
-  <label class="">Status</label>
+  <label>Status</label>
   
-  <ce-status-select status="ticket.status"></ce-status-select>
+  <span>
+    <ce-status-select class="offset-top" status="ticket.status"></ce-status-select>
+  </span>
   
-  <br>
+</div>
+
+
+<div class="pane-row">
+  <!-- Status -->
   
-  <label class="block">
-    <input type="checkbox" ng-model="ticket.transferred">
-    <i class="offset-left" ></i> Ticket was transferred
-  </label>
+  <span class="fill-label"></span>
   
-  <div class="" uib-dropdown uib-keyboard-nav ng-show="ticket.transferred">
-    <button id="simple-btn-keyboard-nav" type="button" class="pane-button" uib-dropdown-toggle>
-      {{ ticket.department.departmentName || 'Choose department' }} <span class="caret"></span>
-    </button>
-    <ul class="uib-dropdown-menu pane-dropdown" role="menu" aria-labelledby="simple-btn-keyboard-nav">
-      <!-- Links need an href for Boostrap UI to work with keyboard navigation -->
-      <li role="menuitem" ng-repeat="department in departments">
-        <a href="" ng-click="ticket.department = department">{{ department.departmentName }}</a>
-      </li>
-    </ul>
-  </div>
-  <label class="block">
-    <input type="checkbox" ng-model="ticket.successful">
-    <i class="offset-left" ></i> Ticket was successful
-  </label>
+  <span>
+    <label class="checkbox-label">
+      <input type="checkbox" ng-model="ticket.transferred">
+      <i class="offset-left" ></i> Ticket was transferred
+    </label>
+    
+    <div uib-dropdown uib-keyboard-nav ng-show="ticket.transferred">
+      <button id="simple-btn-keyboard-nav" type="button" class="pane-button" uib-dropdown-toggle>
+        {{ ticket.department.departmentName || 'Choose department' }} <span class="caret"></span>
+      </button>
+      <ul class="uib-dropdown-menu pane-dropdown" role="menu" aria-labelledby="simple-btn-keyboard-nav">
+        <li role="menuitem" ng-repeat="department in departments">
+          <a href="" ng-click="ticket.department = department">{{ department.departmentName }}</a>
+        </li>
+      </ul>
+    </div>
+    
+  </span>
   
-  <br>
+</div>
+
+<div class="pane-row">
+  <!-- Status -->
   
-  <div class="row">
-    <button ng-click="submit(ticket)" class="pane-button green pull-right">Submit ticket</button>
-  </div>
+  <span class="fill-label"></span>
   
+  <span>
+    <label class="checkbox-label">
+      <input type="checkbox" ng-model="ticket.successful">
+      <i class="offset-left" ></i> Ticket was successful
+    </label>
+  </span>
+  
+</div>
+
+
+<div class="row">
+  <button ng-click="submit(ticket)" class="pane-button green pull-right">Submit ticket</button>
 </div>

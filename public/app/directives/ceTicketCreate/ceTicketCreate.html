@@ -119,37 +119,9 @@
 
   <label class="" for="">Ticket date</label>
 
-  <div class="">
-
-    <p class="input-group">
-      <input type="text" class="" uib-datepicker-popup="{{format}}" ng-model="ticket.ticketDate" is-open="datePickerOpen"
-      min-date="minDate" max-date="maxDate" datepicker-options="datepickerOptions" date-disabled="disabled(date, mode)" close-text="Close"
-      placeholder="YYYY-MM-DD">
-      <span class="input-group-btn">
-              <button
-                type="button"
-                class="pane-button"
-                ng-click="datePickerOpen = !datePickerOpen">
-              <i class="glyphicon glyphicon-calendar"></i></button>
-            </span>
-    </p>
-
-  </div>
-
-</div>
-
-<br>
-
-<div class="pane-row">
-  <!-- Time -->
-
-  <label class="" for="">Ticket time</label>
-
-  <div class="">
-
-    <uib-timepicker ng-model="ticket.ticketDate" ng-change="changed()" hour-step="1" minute-step="10" show-meridian="false" arrowkeys="false"></uib-timepicker>
-
-  </div>
+  <input type="text" ce-rome rome-model="ticket.ticketDate">
+  
+  {{ ticket.ticketDate | date: 'yyyy-MM-dd - HH:mm' }}
 
 </div>
 

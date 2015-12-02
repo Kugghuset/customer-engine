@@ -38,6 +38,8 @@
     "jquery": "~2.1.4",
     "angular-ui-notification": "~0.0.14",
     "bootstrap": "~3.3.6",
-    "angular-localforage": "~1.2.3"
+    "angular-localforage": "~1.2.3",
+    "rome": "~2.1.22",
+    "moment": "~2.10.6"
   }
 }

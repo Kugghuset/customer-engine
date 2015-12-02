@@ -1,0 +1,41 @@
+.rd-container {
+  @include thick-border;
+  background: $purple;
+  color: $black;
+  
+  th {
+    color: $white;
+    padding: 5px;
+  }
+  
+  td {
+    border-collapse: collapse;
+    padding: 5px;
+    @include hover-shadow;
+  }
+}
+.rd-month-label {
+  color: $white;
+  font-weight: bold;
+}
+.rd-next, .rd-back {
+  color: white;
+}
+.rd-time-list {
+  @include thick-border;
+}
+.rd-time-selected {
+  @include hover-shadow;
+  color: $white;
+  @include thick-border;
+}
+.rd-time-option {
+  background-color: $purple;
+  color: $white;
+}
+.rd-time-option:nth-child(2n+1) {
+  background: $purple-dark;
+  &:hover {
+    background-color: #333;
+  }
+}

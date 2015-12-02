@@ -1,19 +1,6 @@
 <div class="container-fluid">
   <header>
     <h1>Customer Engine</h1>
-    <div class="center-block">
-      <!-- Login -->
-      <form name="loginForm" ng-submit="login(tempUser)" class="form-inline" ng-hide="auth.getCurrentUser().email">
-        <div class="input-group">
-          <span class="input-group-addon" id="basic-addon1">@</span>
-          <input type="email" name="email" class="form-control" placeholder="Email address" ng-model="tempUser.email" aria-describedby="basic-addon1" requried>
-        </div>
-        <div class="input-group">
-          <input type="password" name="password" class="form-control" placeholder="Password (optional)" ng-model="tempUser.password" aria-describedby="basic-addon1" requried>
-        </div>
-        <button ng-disabled="!(loginForm.email.$valid && tempUser.email.length > 0)" class="btn btn-primary">Logga in</button>
-      </form>
-    </div>
     
     <!-- Logout -->
     <div class="grid pull-right" ng-show="auth.getCurrentUser().email">

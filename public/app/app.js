@@ -53,7 +53,7 @@ angular.module('customerEngineApp', [
     // Intercepts 401s and redirects to home
     responseError: function (response) {
       if (response.status === 401) {
-        $location.path('/hem');
+        $location.path('/login');
         $cookies.remove('token');
       }
       
@@ -61,15 +61,31 @@ angular.module('customerEngineApp', [
     }
   }
 }])
-.run(['$rootScope', '$location', 'Auth', function ($rootScope, $location, Auth) {
+.run(['$rootScope', '$location', '$state', 'Auth', function ($rootScope, $location, $state, Auth) {
   var inRequest = false;
   
   Auth.isLoggedInAsync()
   .then(function (isLoggedIn) {
     if (!isLoggedIn) {
-      $location.path('/hem');
+      $location.path('/login');
     }
   });
+  
+  $rootScope.$on('$stateChangeStart', function (event, next, params) {
+    if (Auth.isLoggedIn()) {
+      // User is logged in
+      if (next.name === 'main.login') {
+        if (event) { event.preventDefault(); }
+        $state.transitionTo('main.dashboard');
+      }
+    } else {
+      // User not logged in
+      if (next.name !== 'main.login') {
+        if (event) { event.preventDefault(); }
+        $state.transitionTo('main.login');
+      }
+    }
+  })
   
   $rootScope.$on('$stateChangeSuccess', function (event, net, params) {
    

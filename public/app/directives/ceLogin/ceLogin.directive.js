@@ -20,8 +20,6 @@ angular.module('customerEngineApp')
        */
       scope.login = function (loginForm, _user) {
         
-        console.log(scope.formValid(loginForm, _user));
-        
         // Ensure login can be peformed.
         if (!scope.formValid(loginForm, _user)) { return; }
         

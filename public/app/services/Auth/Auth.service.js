@@ -2,8 +2,21 @@
 'use strict'
 
 angular.module('customerEngineApp')
-.factory('Auth', ['$http', '$q', '$cookies', function ($http, $q, $cookies) {
+.factory('Auth', ['$rootScope', '$http', '$q', '$cookies', '$state', function ($rootScope, $http, $q, $cookies, $state) {
   var _user;
+  
+  /**
+   * Watches the variable *_user* for changes.
+   * If *newUser* is an empty object and *oldUser* is not,
+   * the app transitions to login.
+   */
+  $rootScope.$watch(function () {
+    return _user;
+  }, function (newUser, oldUser) {
+    if (_.isEqual({}, newUser) && !_.isEqual({}, oldUser)) {
+      $state.transitionTo('main.login');
+    }
+  });
   
   /**
    * Returns a promise of the logged in user, if any.

@@ -1,11 +1,11 @@
-<div ng-show="isReadonly">{{ showShort(status) }}</div>
-<div class="btn-group" uib-dropdown uib-keyboard-nav ng-hide="isReadonly">
-  <button id="simple-btn-keyboard-nav" type="button" class="btn btn-default" uib-dropdown-toggle>
+<span class="status-select {{ getColor(status) }}" ng-show="isReadonly">{{ showShort(status) }}</span>
+<div class="" uib-dropdown uib-keyboard-nav ng-hide="isReadonly">
+  <button id="simple-btn-keyboard-nav" type="button" class="status-select {{ getColor(status) }}" uib-dropdown-toggle>
     {{ showShort(status) }} <span class="caret"></span>
   </button>
-  <ul class="uib-dropdown-menu" role="menu" aria-labelledby="simple-btn-keyboard-nav">
+  <ul class="uib-dropdown-menu status-dropdown" role="menu" aria-labelledby="simple-btn-keyboard-nav">
     <!-- Links need an href for Boostrap UI to work with keyboard navigation -->
-    <li role="menuitem" ng-repeat="_status in statuses">
+    <li role="menuitem" class="{{ getColor(_status.value) }}" ng-repeat="_status in statuses">
       <a href="" ng-click="setValue(_status)">{{ _status.alias || _status.value }}</a>
     </li>
   </ul>

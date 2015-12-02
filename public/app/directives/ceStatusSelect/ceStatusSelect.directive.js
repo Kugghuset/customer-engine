@@ -31,6 +31,29 @@ angular.module('customerEngineApp')
         // scope.$apply(function () { scope.status = _status.value });
       }
       
+      scope.getColor = function (_status) {
+        
+        if (!_status) { return; }
+        
+        switch (_status) {
+          case 'Open':
+            return 'green';
+            break;
+          case 'Closed':
+            return 'red';
+            break;
+          case 'Work in progress':
+            return 'purple';
+            break;
+          case 'Pending':
+            return 'beige';
+            break;
+        
+          default:
+            break;
+        }
+      }
+      
     }
   };
 });

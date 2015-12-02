@@ -2,8 +2,14 @@
 @import 'mixins/mixins';
 @import 'card';
 @import 'pane';
+@import 'status_select';
 
 @import '../app/app';
+
+body {
+  box-sizing: border-box;
+  line-height: 1.7;
+}
 
 .country-list {
   /* Bootstrap input will cover this otherwise */
@@ -21,4 +27,17 @@
 
 .block {
   display: block;
+}
+
+.red {
+  background-color: $red;
+}
+.purple {
+  background-color: $purple;
+}
+.beige {
+  background-color: $beige;
+}
+.green {
+  background-color: $green;
 }

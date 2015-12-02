@@ -1,5 +1,6 @@
 @import 'variables';
 @import 'mixins/mixins';
+@import 'grid';
 @import 'card';
 @import 'pane';
 @import 'status_select';
@@ -7,9 +8,13 @@
 
 @import '../app/app';
 
-body {
+*, *:after, *:before {
   box-sizing: border-box;
   line-height: 1.7;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin-top: 0;
 }
 
 .country-list {

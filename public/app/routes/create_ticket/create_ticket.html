@@ -4,15 +4,20 @@
   
   <br>
   
-  <div class="row">
+  <div class="grid">
     
-    <div class="col-md-6">
+    <div class="col-1-3">
       
       <ce-pane>
         <ce-ticket-create user="auth.getCurrentUser()" ticket="ticket" related-tickets="relatedTickets" ticket-id="currentTicketId"></ce-ticket-create>
       </ce-pane>
       
-      
+    </div>
+    
+    <div class="col-2-3">
+      <ce-card-area class="grid">
+        <ce-ticket-card class="col-1-3" ticket="ticket" ng-repeat="ticket in relatedTickets"></ce-ticket-card>
+      </ce-card-area>
     </div>
     
   </div>

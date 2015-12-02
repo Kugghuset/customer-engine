@@ -6,15 +6,16 @@
   text-decoration: none;
   color: $black;
   
+  height: 400px;
+  margin-bottom: 20px;
+  
   *, *:hover, *:active, *:focus {
     color: $black;
   }
   
   &:hover {
-    top: 5px;
-    margin: -5px;
-    margin-bottom: 5px;
-    padding: #{$size-s} + 5px;
+    transform: scale(1.05);
+    background-color: rgba($color: $gray, $alpha: 0.2);
     z-index: 1;
     box-shadow: 0 0 15px rgba($color: rgba($color: $black, $alpha: 0.1), $alpha: 0.1);
     color: $black;
@@ -23,12 +24,18 @@
   header {
     display: block;
     position: relative;
+    white-space: wrap;
     h2 {
+      margin-top: $size-s;
       display: inline-block;
-      
+      max-width: calc(100% - 120px);
       font-size: $font-size-l;
       font-weight: bolder;
       text-transform: uppercase;
+    }
+    ce-status-select {
+      float: right;
+      margin-top: $size-s;
     }
   }
 }
@@ -58,5 +65,8 @@
 }
 
 .card-footer {
+  position: absolute;
+  bottom: $size-s;
+  right: $size-s;
   text-align: right;
 }

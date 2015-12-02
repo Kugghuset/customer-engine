@@ -135,7 +135,6 @@ angular.module('customerEngineApp')
           scope.departments = departments;
         })
         ['catch'](function (err) {
-          console.log(err);
           Notification.error('Something went wrong with fetching the departments, please refresh the page.')
         });
       }

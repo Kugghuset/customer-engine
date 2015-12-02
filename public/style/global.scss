@@ -1,5 +1,6 @@
 @import 'variables';
 @import 'mixins/mixins';
+@import 'containers';
 @import 'grid';
 @import 'card';
 @import 'pane';
@@ -14,7 +15,7 @@
 }
 
 h1, h2, h3, h4, h5, h6 {
-  margin-top: 0;
+  margin-top: 0; 
 }
 
 .country-list {
@@ -23,12 +24,6 @@ h1, h2, h3, h4, h5, h6 {
 }
 .intl-tel-input {
   width: 100%;
-}
-
-.page-container {
-  max-width: 100%;
-  width: 1200px;
-  margin: 0 auto;
 }
 
 .block {

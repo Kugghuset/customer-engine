@@ -1,3 +1,8 @@
+.card-area {
+  margin-left: 10px;
+  margin-right: -20px;
+}
+
 .card {
   position: relative;
   display: block;
@@ -13,13 +18,16 @@
     color: $black;
   }
   
-  &:hover {
-    transform: scale(1.05);
-    background-color: rgba($color: $gray, $alpha: 0.2);
-    z-index: 1;
-    box-shadow: 0 0 15px rgba($color: rgba($color: $black, $alpha: 0.1), $alpha: 0.1);
-    color: $black;
+  &:not([disabled=disabled]) {
+    &:hover {
+      transform: scale(1.05);
+      background-color: rgba($color: $gray, $alpha: 0.2);
+      z-index: 1;
+      box-shadow: 0 0 15px rgba($color: rgba($color: $black, $alpha: 0.1), $alpha: 0.1);
+      color: $black;
+    }
   }
+  
   
   header {
     display: block;

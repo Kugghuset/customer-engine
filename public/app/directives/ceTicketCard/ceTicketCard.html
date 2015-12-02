@@ -1,8 +1,9 @@
-<section class="card">
+<section class="card" ng-disabled="isReadonly">
   
   <header>
     <h2>
-      <a href="" ui-sref="main.create_ticket({ticketId: ticket.ticketId})">
+      <span ng-show="isReadonly">{{ ticket.customer.orgName || 'Ticket ID: ' + ticket.ticketId }}</span>
+      <a ng-hide="isReadonly" href="" ui-sref="main.create_ticket({ticketId: ticket.ticketId})">
         {{ ticket.customer.orgName || 'Ticket ID: ' + ticket.ticketId }}
       </a>
     </h2>

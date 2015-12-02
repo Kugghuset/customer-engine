@@ -1,23 +1,8 @@
-<div class="">
-
-  <div class="container-fluid" ng-show="user">
-    
-    <div class="grid">
-      
-      <div class="col-1-3">
-        <ce-pane>
-          <ce-dash-pane user="auth.getCurrentUser()" tickets="tickets" is-readonly="isReadonly"></ce-dash-pane>
-        </ce-pane>
-      </div>
-      
-      <div class="col-2-3">
-        <ce-card-area class="grid">
-          <ce-ticket-card class="col-1-3" ticket="ticket" ng-repeat="ticket in tickets"></ce-ticket-card>
-        </ce-card-area>
-      </div>
-      
-    </div>
-    
-  </div>
-
-</div>
+<section class="grid">
+  <ce-pane class="col-1-3" child-class="vertical-fill fixed-left">
+    <ce-dash-pane user="auth.getCurrentUser()" tickets="tickets" is-readonly="isReadonly"></ce-dash-pane>
+  </ce-pane>
+  <ce-card-area class="col-2-3" child-class="vertical-fill fixed-right">
+    <ce-ticket-card class="col-1-3" ticket="ticket" ng-repeat="ticket in tickets"></ce-ticket-card>
+  </ce-card-area>
+</section>

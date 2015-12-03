@@ -34,7 +34,7 @@ angular.module('customerEngineApp')
    */
   $scope.$watch('auth.getCurrentUser()', function (user) {
     $scope.user = user;
-      
+    
     if (user && user.userId) {
       getTickets(user.userId);
     }
@@ -47,6 +47,7 @@ angular.module('customerEngineApp')
       }
   }
   
+  // Run the set up.
   setup();
   
   // To ensure setup :)

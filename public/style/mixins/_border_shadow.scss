@@ -15,6 +15,10 @@
   }
 }
 
+.shadow {
+  box-shadow: inset 0px 0px 1px 5000px rgba($color: #000000, $alpha: 0.2cm);
+}
+
 @mixin border-shadow {
   @include thick-border;
   @include hover-shadow;

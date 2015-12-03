@@ -17,10 +17,15 @@
   <br>
   
   <div class="card-contact">
-    <h3>Contact</h3>
-    <div>{{ ticket.name || 'Name missing' }}</div>
-    <div ng-show="ticket.email">{{ ticket.email }}</div>
-    <div ng-show="ticket.tel">{{ ticket.tel }}</div>
+    <div class="col-1-2 card-contact-area">
+      <h3>Contact</h3>
+      <div>{{ ticket.name || 'Name missing' }}</div>
+      <div ng-show="ticket.email">{{ ticket.email }}</div>
+      <div ng-show="ticket.tel">{{ ticket.tel }}</div>
+    </div>
+    <div class="col-1-2 card-summary" ng-show="ticket.summary">
+      <p ng-repeat="line in ticket.summary | split:'\n' track by $index">{{ line }}</p>
+    </div>
   </div>
   
   <br>

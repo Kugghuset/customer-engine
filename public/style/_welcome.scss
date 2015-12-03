@@ -21,9 +21,9 @@
 
 .welcome-pane {
   height: 500px;
-  height: calc(100vh - 40px);
-  margin: 20px 0;
-  padding: 50px 0;
+  height: calc(100vh - 166px);
+  margin-bottom: 20px;
+  padding-bottom: 50px;
   
   & > * {
     height: 100%;
@@ -65,5 +65,11 @@
   }
   @include breakpoint(break-ms) {
     font-size: 28px;
+  }
+}
+
+.logo-wrap {
+  .logo {
+    position: static;
   }
 }

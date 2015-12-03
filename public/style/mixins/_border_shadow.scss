@@ -1,0 +1,21 @@
+@mixin thick-border {
+  border: 2px solid $white;
+  box-shadow: inset 0px 0px 1px 1px rgba($color: #000000, $alpha: 0.2cm);
+  outline: 2px solid rgba($color: #000000, $alpha: 0.2cm);
+}
+
+@mixin hover-shadow {
+  &:hover {
+    // Acts like a dimmer
+    box-shadow: inset 0px 0px 1px 5000px rgba($color: #000000, $alpha: 0.1cm);
+  }
+  &:active, &:focus {
+    // Acts like a dimmer
+    box-shadow: inset 0px 0px 1px 5000px rgba($color: #000000, $alpha: 0.2cm);
+  }
+}
+
+@mixin border-shadow {
+  @include thick-border;
+  @include hover-shadow;
+}

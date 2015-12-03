@@ -103,3 +103,13 @@ exports.findWIP = function (req, res) {
     utils.handleError(res, err);
   })
 }
+
+exports.remove = function (req, res) {
+  Ticket.remove(req.params.id)
+  .then(function () {
+    res.status(201).send('No content');
+  })
+  .catch(function (err) {
+    utils.handleError(res, err);
+  })
+}

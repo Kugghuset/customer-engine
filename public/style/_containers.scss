@@ -1,0 +1,39 @@
+.vertical-fill {
+  height: calc(100vh - 40px);
+  // margin-top: 20px;
+  // margin-bottom: -20px;
+  margin: 20px;
+  padding-left: 20px;
+}
+
+.fixed-left {
+  position: fixed;
+  left: 0;
+  overflow-y: auto;
+  width: 450px;
+  &.create {
+    width: 600px;
+  }
+}
+
+.fixed-right {
+  position: fixed;
+  right: 0px;
+  overflow-y: auto;
+  width: calc(100% - 450px);
+  &.create {
+    width: calc(100% - 600px);
+  }
+}
+ 
+@include breakpoint(break-ms) {
+  .fixed-left, .fixed-right {
+    &, &.create {
+      position: static;
+      height: auto;
+      width: 100%;
+      padding: 20px;
+      margin: 0;
+    }
+  }
+}

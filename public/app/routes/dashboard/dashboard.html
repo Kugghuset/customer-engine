@@ -1,19 +1,11 @@
-<div class="page-container">
-
-  <div class="container-fluid" ng-show="user">
-    
-    <h1>Hi, {{ user.name || 'operator' }}!</h1>
-    
-    <ce-pane>
-      <ce-dash-pane user="auth.getCurrentUser()" tickets="tickets" is-readonly="isReadonly"></ce-dash-pane>
-    </ce-pane>
-    
-    <ce-card-area>
-      
-      <ce-ticket-card ticket="ticket" ng-repeat="ticket in tickets"></ce-ticket-card>
-      
-    </ce-card-area>
-    
-  </div>
-
-</div>
+<section class="grid">
+  
+  <aside class="pane vertical-fill fixed-left">
+    <ce-dash-pane user="auth.getCurrentUser()" tickets="tickets" is-readonly="isReadonly"></ce-dash-pane>
+  </aside>
+  
+  <ce-card-area child-class="vertical-fill fixed-right">
+    <h1 class="thick">My tickets</h1>
+    <ce-ticket-card class="col-card" ticket="ticket" ng-repeat="ticket in tickets"></ce-ticket-card>
+  </ce-card-area>
+</section>

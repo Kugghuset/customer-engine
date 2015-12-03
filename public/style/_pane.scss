@@ -1,0 +1,185 @@
+.pane {
+  background-color: $purple-dark;
+  color: $white;
+  padding: $size-xl / 2;
+  
+  &.gray {
+    background-color: $gray-dark;
+    input, .pane-button {
+      box-shadow: none;
+      outline: none;
+    }
+  }
+  clear: both;
+  
+  label:not(.checkbox-label) {
+    font-size: $font-size-ml;
+    text-transform: uppercase;
+    font-weight: bolder;
+    width: 150px;
+    text-align: right;
+    padding-right: 15px;
+    vertical-align: top;
+    margin-top: 12px;
+  }
+  .checkbox-label {
+    font-size: $font-size-m;
+    font-weight: lighter;
+    padding-top: 10px;
+  }
+  span {
+    display: inline-block;
+    // padding: $size-s + 3px;
+    font-size: $font-size-m;
+  }
+  textarea {
+    // width: 100%;
+    resize: vertical;
+  }
+}
+
+.pane-section {
+  padding: $size-m 0;
+}
+
+.pane-divider {
+  margin: 0;
+  @include border-shadow;
+  background-color: rgba($color: $black, $alpha: 0.4);
+  padding: 1px 0;
+  outline-width: 0;
+}
+
+.pane-dropdown, .dropdown-menu {
+  padding: 0;
+  border-radius: 0;
+  background-color: $purple-light;
+  & > li {
+    
+    &.divider {
+      @extend .pane-divider;
+    }
+    
+    & > a {
+      background-color: inherit;
+      color: $white;
+      display: block;
+      padding: $size-xs;
+      text-align: center;
+      width: 100%;
+      border: 2px solid $white;
+      border-collapse: collapse;
+      outline: none;
+      
+      &:hover {
+        color: $white;
+        background-color: $purple;
+        outline: none;
+      }
+      &:active, &:focus {
+        color: $white;
+        background-color: $purple-dark;
+        outline: none;
+      }
+    }
+  }
+}
+
+.pane-button {
+  @include border-shadow;
+  display: block;
+  background-color: $purple;
+  text-transform: uppercase;
+  text-align: center;
+  color: $white;
+  font-weight: bold;
+  padding: $size-xs;
+  &:hover, &:active, &:focus {
+    color: $white;
+    font-weight: bolder;
+    text-decoration: none;
+  }
+  
+  &[disabled=disabled] {
+    color: $black-ish;
+    background-color: $gray;
+  }
+  
+}
+
+.pane-button-big {
+  @extend .pane-button;
+  padding: $size-m;
+  font-size: $font-size-xl;
+}
+
+.pane-table {
+  width: 100%;
+  font-size: $font-size-m;
+  text-transform: uppercase;
+  tbody {
+    tr {
+      td {
+        border-collapse: collapse;
+        padding: $size-xs;
+        
+        &.left {
+          text-align: left;
+        }
+        &.right {
+          text-align: right;
+        }
+        &.center {
+          text-align: center;
+        }
+      }
+    }
+    tr:not(:last-child) {
+      cursor: pointer;
+      &:hover {
+        background-color: $purple;
+      }
+      &:active, &:focus {
+        background-color: $purple-light;
+      }
+      td {
+        cursor: pointer;
+        border: 2px solid $white;
+      }
+    }
+  }
+}
+
+// -- Intl-tel-input --
+.pane {
+  .intl-tel-input {
+    input.block {
+      width: 100%;
+    }
+    .flag-dropdown {
+      &, .selected-flag {
+        @include all-states {
+          outline: none;
+          color: $white;
+        }
+      }
+      .arrow {
+        border-top-color: $white;
+      }
+      .country-list {
+        @include thick-border;
+        li {
+          background-color: $purple;
+          @include border-shadow;
+          .dial-code {
+            float: right;
+            color: $white;
+          }
+          &.divider {
+            @extend .pane-divider;
+          }
+        }
+      }
+    }
+  }
+}

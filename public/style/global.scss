@@ -1,7 +1,23 @@
 @import 'variables';
+@import 'mixins/mixins';
+@import 'containers';
+@import 'grid';
 @import 'card';
+@import 'pane';
+@import 'status_select';
+@import 'date_picker';
+@import 'welcome';
 
 @import '../app/app';
+
+*, *:after, *:before {
+  box-sizing: border-box;
+  line-height: 1.7;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin-top: 0; 
+}
 
 .country-list {
   /* Bootstrap input will cover this otherwise */
@@ -11,9 +27,112 @@
   width: 100%;
 }
 
+.block {
+  display: block;
+}
 
-.page-container {
-  max-width: 100%;
-  width: 1200px;
-  margin: 0 auto;
+.fill {
+  width: 100% !important; // sorry
+}
+
+.fill-label {
+  width: 150px;
+}
+
+.fill-by-label {
+  width: calc(100% - 155px);
+  .dropdown {
+    width: 100%;
+    .pane-button {
+      width: 100%;
+      margin-top: 8px;
+    }
+  }
+}
+
+input[type=text],
+input[type=email],
+input[type=password],
+input[type=search],
+input[type=time],
+input[type=url],
+textarea {
+  @include border-shadow;
+  @include input-placeholder {
+    color: $white;
+  }
+  width: calc(100% - 155px);
+  background-color: transparent;
+  padding: $size-s;
+  font-size: $font-size-m;
+  margin: $size-xs 0;
+}
+
+input[type="checkbox"] {
+    display:none;
+}
+.radio label, .checkbox label {
+  padding-left: 0;
+}
+
+label {
+  input[type="checkbox"] ~ i {
+    @include border-shadow;
+    display: inline-block;
+    background-color: transparent;
+    top: -1px;
+    position: relative;
+    padding: 4px;
+    margin-right: 13px;
+  }
+  input[type="checkbox"]:checked ~ i::after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: -7px;
+    left: 1px;
+    width: 9px;
+    height: 16px;
+    border: solid $black;
+    border-width: 0 5px 5px 0;
+    box-shadow: 2px 2px 1px rgba($color: $white, $alpha: 0.1);
+    transform: rotate(45deg);
+  }
+}
+
+.thick {
+  font-size: $font-size-xl;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.offset-left {
+  // Used for checkboxes in creat select
+  margin-left: -30px;
+}
+
+.offset-right {
+  margin-right: 30px;
+}
+
+.offset-top {
+  margin-top: 8px;
+  display: block;
+}
+
+.float-container {
+  overflow: auto;
+}
+
+.red {
+  background-color: $red;
+}
+.purple {
+  background-color: $purple;
+}
+.beige {
+  background-color: $beige;
+}
+.green {
+  background-color: $green;
 }

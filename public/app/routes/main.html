@@ -1,14 +1,1 @@
-<div class="container-fluid">
-  <header>
-    <h1>Customer Engine</h1>
-    
-    <!-- Logout -->
-    <div class="grid pull-right" ng-show="auth.getCurrentUser().email">
-      <span>Logged in as </span>
-      <span>{{ auth.getCurrentUser().name || auth.getCurrentUser().email }}</span>
-      <button ng-click="auth.logout()" class="btn btn-danger">Log out</button>
-    </div>
-  </header>
-</div>
-<hr>
-<div ui-view></div>
+<div class="page-container" ui-view></div>

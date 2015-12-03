@@ -5,12 +5,13 @@ angular.module('customerEngineApp')
 .directive('cePane', function () {
   return {
     templateUrl: 'app/directives/cePane/cePane.html',
-    restrict : 'E',
+    restrict : 'EA',
     transclude: true,
     scope: {
-      color: '@'
+      color: '@',
+      childClass: '@'
     },
-    link: function (scope, element, attrs) {
+    link: function (scope, element, attrs, ctrl, transclude) {
       
     }
   }

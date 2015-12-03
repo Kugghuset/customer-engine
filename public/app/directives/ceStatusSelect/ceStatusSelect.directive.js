@@ -6,7 +6,8 @@ angular.module('customerEngineApp')
     templateUrl: 'app/directives/ceStatusSelect/ceStatusSelect.html',
     restrict: 'EA',
     scope: {
-      status: '='
+      status: '=',
+      isReadonly: '='
     },
     link: function (scope, element, attrs) {
       
@@ -29,6 +30,29 @@ angular.module('customerEngineApp')
       scope.setValue = function (_status) {
         scope.status = _status.value
         // scope.$apply(function () { scope.status = _status.value });
+      }
+      
+      scope.getColor = function (_status) {
+        
+        if (!_status) { return; }
+        
+        switch (_status) {
+          case 'Open':
+            return 'green';
+            break;
+          case 'Closed':
+            return 'red';
+            break;
+          case 'Work in progress':
+            return 'purple';
+            break;
+          case 'Pending':
+            return 'beige';
+            break;
+        
+          default:
+            break;
+        }
       }
       
     }

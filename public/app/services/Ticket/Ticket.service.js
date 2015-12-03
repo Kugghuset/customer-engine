@@ -164,6 +164,14 @@ angular.module('customerEngineApp')
       });
     },
     
+    remove: function (ticketId) {
+      return $q(function (resolve, reject) {
+        $http.delete('/api/tickets/' + ticketId)
+        .success(resolve)
+        .error(reject);
+      });
+    },
+    
     /**
     * @return {Promise} -> {Array} (Ticket)
     */

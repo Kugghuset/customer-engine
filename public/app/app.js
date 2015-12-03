@@ -8,9 +8,10 @@ angular.module('customerEngineApp', [
   'ui-notification',
   'angular-google-analytics',
   'ngIntlTelInput',
-  'LocalForageModule'
+  'LocalForageModule',
+  'ngCacheBuster'
 ])
-.config(['$stateProvider', '$urlRouterProvider', '$httpProvider','AnalyticsProvider', 'ngIntlTelInputProvider', '$localForageProvider', function ($stateProvider, $urlRouterProvider, $httpProvider, AnalyticsProvider, ngIntlTelInputProvider, $localForageProvider) {
+.config(['$stateProvider', '$urlRouterProvider', '$httpProvider','AnalyticsProvider', 'ngIntlTelInputProvider', '$localForageProvider', 'httpRequestInterceptorCacheBusterProvider', function ($stateProvider, $urlRouterProvider, $httpProvider, AnalyticsProvider, ngIntlTelInputProvider, $localForageProvider, httpRequestInterceptorCacheBusterProvider) {
   
   $urlRouterProvider
   .otherwise('/dashboard');
@@ -39,7 +40,10 @@ angular.module('customerEngineApp', [
   $localForageProvider.config({
     name: 'customerEngineApp',
     storeName: 'tickets'
-  })
+  });
+  
+  httpRequestInterceptorCacheBusterProvider.setMatchlist([/.*api.*/],true);
+  
 }])
 .factory('authInterceptor', ['$q', '$cookies', '$location', function ($q, $cookies, $location) {
   return {

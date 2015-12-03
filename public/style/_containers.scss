@@ -7,9 +7,17 @@
   padding: 20px;
 }
 
+.logo {
+  width: 450 / 2px;
+  // position: fixed;
+  // top: 0;
+  // left: 0;
+  // width: 450px / 2;
+}
+
 .fixed-left {
-  height: calc(100vh - 40px);
-  margin-top: 20px;
+  height: calc(100vh - 136px);
+  // margin-top: 20px;
   margin-left: 20px;
   position: fixed;
   left: 0;
@@ -21,7 +29,9 @@
 }
 
 .fixed-right {
-  height: calc(100vh);
+  top: 0;
+  padding-top: 136px;
+  height: calc(100vh - 40px);
   position: fixed;
   right: 20px;
   overflow-y: auto;

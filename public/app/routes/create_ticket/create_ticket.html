@@ -1,6 +1,6 @@
 <section class="grid" ng-show="auth.getCurrentUser().email">
   
-  <!-- TODO: Make cePane and ceCardArea non-isolated-scopes -->
+  <img src="assets/img/logo.png" class="logo" alt="Bambora logo">
   
   <aside class="pane vertical-fill fixed-left create">
     <ce-ticket-create user="auth.getCurrentUser()" ticket="ticket" related-tickets="relatedTickets" customer-id="customerId" ticket-id="currentTicketId"></ce-ticket-create>

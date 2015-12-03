@@ -1,0 +1,46 @@
+.welcome-text {
+  font-size: 64px;
+  text-align: center;
+  text-transform: uppercase;
+  
+  @include breakpoint(break-l) {
+    font-size: 48px;
+  }
+  @include breakpoint(break-ms) {
+    font-size: 36px;
+  }
+}
+
+.welcome {
+  position: relative;
+  width: 900px;
+  margin: 0 auto;
+  max-width: 100%;
+}
+
+.welcome-pane {
+  height: 500px;
+  height: calc(100vh - 40px);
+  margin: 20px 0;
+  padding: 50px 0;
+  
+  & > * {
+    height: 100%;
+    padding-top: 200px;
+  }
+}
+
+@include breakpoint(break-ms) {
+  .welcome {
+    margin-top: 100px;
+  }
+  .welcome-pane.col-1-2 {
+    float: none;
+    height: auto;
+      & > * {
+      height: 100%;
+      padding-top: 100px;
+      padding-bottom: 100px;
+    }
+  }
+}

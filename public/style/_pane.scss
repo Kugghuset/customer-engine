@@ -4,7 +4,7 @@
   padding: $size-xl / 2;
   
   &.gray {
-    background-color: $gray;
+    background-color: $gray-dark;
     input, .pane-button {
       box-shadow: none;
       outline: none;
@@ -99,6 +99,12 @@
     font-weight: bolder;
     text-decoration: none;
   }
+  
+  &[disabled=disabled] {
+    color: $black-ish;
+    background-color: $gray;
+  }
+  
 }
 
 .pane-button-big {

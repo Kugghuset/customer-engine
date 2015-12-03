@@ -6,6 +6,7 @@
 @import 'pane';
 @import 'status_select';
 @import 'date_picker';
+@import 'welcome';
 
 @import '../app/app';
 
@@ -28,6 +29,10 @@ h1, h2, h3, h4, h5, h6 {
 
 .block {
   display: block;
+}
+
+.fill {
+  width: 100% !important; // sorry
 }
 
 .fill-label {

@@ -1,15 +1,22 @@
 <section class="pane-section">
+  
+  <div class="float-container">
+    <button ng-click="auth.logout()" class="pane-button red pull-right">Log out</button>
+  </div>
+  
+  <br>
+  
   <div class="pane-row">
     <label>Name</label>
-    <input type="text" ng-model="user.name" placeholder="Name">
+    <input type="text" ng-model="auth.getCurrentUser().name" placeholder="Name">
   </div>
   <div class="pane-row">
     <label>Email</label>
-    <input type="email" ng-model="user.email" placeholder="Email">
+    <input type="email" ng-model="auth.getCurrentUser().email" placeholder="Email">
   </div>
   <div class="pane-row">
     <label>ID</label>
-    <span>OPERATOR {{ user.userId }}</span>
+    <span>OPERATOR {{ auth.getCurrentUser().userId }}</span>
   </div>
 </section>
 <section class="pane-section">

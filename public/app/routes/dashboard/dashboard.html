@@ -1,7 +1,9 @@
 <section class="grid">
-  <ce-pane class="col-1-3" child-class="vertical-fill fixed-left">
+  
+  <aside class="pane vertical-fill fixed-left">
     <ce-dash-pane user="auth.getCurrentUser()" tickets="tickets" is-readonly="isReadonly"></ce-dash-pane>
-  </ce-pane>
+  </aside>
+  
   <ce-card-area class="col-2-3" child-class="vertical-fill fixed-right">
     <ce-ticket-card class="col-1-3" ticket="ticket" ng-repeat="ticket in tickets"></ce-ticket-card>
   </ce-card-area>

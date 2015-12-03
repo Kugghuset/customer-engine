@@ -89,6 +89,22 @@ angular.module('customerEngineApp')
         });
       }
       
+      scope.discard = function (_ticket) {
+        
+        if (confirm('Are you sure you want to discard the ticket?\n\nThis will delete it entirely.')) {
+          if (_ticket && _ticket.ticketId) {
+            Ticket.remove(_ticket.ticketId)
+          }
+          $state.transitionTo('main.dashboard');
+        }
+        
+      }
+      
+      scope.goBack = function (_ticket) {
+        Ticket.autoSave(_ticket);
+        $state.transitionTo('main.dashboard');
+      }
+      
       /**
        * Returns a joined string of all values of *item*.
        * It skips *itemName*Id and any values in
@@ -221,8 +237,6 @@ angular.module('customerEngineApp')
           Notification.error('Auto save failed.')
         });
       }, true);
-      
-      
       
       /**
        * Watches for changes in ticket.customer.ustomerId

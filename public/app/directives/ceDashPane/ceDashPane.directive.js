@@ -2,7 +2,7 @@
 'use strict'
 
 angular.module('customerEngineApp')
-.directive('ceDashPane', ['Ticket', function (Ticket) {
+.directive('ceDashPane', ['Ticket', 'Auth', function (Ticket, Auth) {
   return {
     templateUrl: 'app/directives/ceDashPane/ceDashPane.html',
     restrict: 'EA',
@@ -14,6 +14,7 @@ angular.module('customerEngineApp')
     },
     link: function (scope, element, attrs) {
       
+      scope.auth = Auth;
       scope.aggregated = {};
       
       function aggregateStatuses(tickets) {
@@ -37,7 +38,6 @@ angular.module('customerEngineApp')
         scope.tickets = tickets;
         scope.aggregated = aggregateStatuses(tickets);
       }, true);
-      
     }
   };
 }]);

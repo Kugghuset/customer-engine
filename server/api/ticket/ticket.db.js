@@ -296,5 +296,17 @@ exports.findWIP = function (userId) {
   });
 }
 
+exports.remove = function (ticketId) {
+  return sql.execute({
+    query: sql.fromFile('./sql/ticket.remove.sql'),
+    params: {
+      ticketId: {
+        type: sql.BIGINT,
+        val: ticketId
+      }
+    }
+  });
+}
+
 // Initialize the table
 initialize();

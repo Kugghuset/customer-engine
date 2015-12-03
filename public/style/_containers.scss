@@ -1,12 +1,16 @@
 .vertical-fill {
-  height: calc(100vh - 40px);
+  // height: calc(100vh - 40px);
   // margin-top: 20px;
   // margin-bottom: -20px;
-  margin: 20px;
+  // margin: 20px;
   padding-left: 20px;
+  padding: 20px;
 }
 
 .fixed-left {
+  height: calc(100vh - 40px);
+  margin-top: 20px;
+  margin-left: 20px;
   position: fixed;
   left: 0;
   overflow-y: auto;
@@ -17,12 +21,13 @@
 }
 
 .fixed-right {
+  height: calc(100vh);
   position: fixed;
-  right: 0px;
+  right: 20px;
   overflow-y: auto;
-  width: calc(100% - 450px);
+  width: calc(100% - 470px);
   &.create {
-    width: calc(100% - 500px);
+    width: calc(100% - 520px);
   }
 }
  

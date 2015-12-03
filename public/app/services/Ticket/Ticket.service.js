@@ -93,6 +93,7 @@ angular.module('customerEngineApp')
     getById: function (ticketId) {
       return $q(function (resolve, reject) {
         $http.get('/api/tickets/' + ticketId)
+        // .success(resolve)
         .success(resolve)
         .error(reject);
       });

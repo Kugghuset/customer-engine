@@ -97,15 +97,15 @@ function ticketParams(ticket, extra) {
     },
     categoryId: {
       type: sql.BIGINT,
-      val: ticket.category.categoryId
+      val: ticket.category.categoryId || ticket.categoryId
     },
     subcategoryId: {
       type: sql.BIGINT,
-      val:  ticket.subcategory.subcategoryId
+      val:  ticket.subcategory.subcategoryId || ticket.subcategoryId
     },
     descriptorId: {
       type: sql.BIGINT,
-      val: ticket.descriptor.descriptorId
+      val: ticket.descriptor.descriptorId ||ticket.descriptorId
     },
     departmentId: {
       type: sql.BIGINT,

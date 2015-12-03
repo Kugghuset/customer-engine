@@ -12,7 +12,7 @@
   overflow-y: auto;
   width: 450px;
   &.create {
-    width: 600px;
+    width: 500px;
   }
 }
 
@@ -22,7 +22,7 @@
   overflow-y: auto;
   width: calc(100% - 450px);
   &.create {
-    width: calc(100% - 600px);
+    width: calc(100% - 500px);
   }
 }
  

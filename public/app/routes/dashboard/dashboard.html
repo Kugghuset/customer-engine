@@ -4,7 +4,8 @@
     <ce-dash-pane user="auth.getCurrentUser()" tickets="tickets" is-readonly="isReadonly"></ce-dash-pane>
   </aside>
   
-  <ce-card-area class="col-2-3" child-class="vertical-fill fixed-right">
-    <ce-ticket-card class="col-1-3" ticket="ticket" ng-repeat="ticket in tickets"></ce-ticket-card>
+  <ce-card-area child-class="vertical-fill fixed-right">
+    <h1 class="thick">My tickets</h1>
+    <ce-ticket-card class="col-card" ticket="ticket" ng-repeat="ticket in tickets"></ce-ticket-card>
   </ce-card-area>
 </section>

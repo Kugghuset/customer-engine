@@ -2,11 +2,14 @@
   
   <!-- TODO: Make cePane and ceCardArea non-isolated-scopes -->
   
-  <aside class="pane vertical-fill fixed-left">
+  <aside class="pane vertical-fill fixed-left create">
     <ce-ticket-create user="auth.getCurrentUser()" ticket="ticket" related-tickets="relatedTickets" customer-id="customerId" ticket-id="currentTicketId"></ce-ticket-create>
   </aside>
 
-  <ce-card-area class="col-2-3" child-class="vertical-fill fixed-right">
+  <ce-card-area child-class="vertical-fill fixed-right create">
+    
+    <h1 class="thick">Related tickets</h1>
+    
     <ce-ticket-card class="col-1-3" ticket="_ticket" is-readonly="true" ng-repeat="_ticket in relatedTickets"></ce-ticket-card>
   </ce-card-area>
 </section>

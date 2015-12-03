@@ -2,7 +2,8 @@ $breakpoints: (
   "break-s": "(max-width: 535px)",
   "break-ms": "(max-width: 768px)",
   "break-m": "(max-width: 900px)",
-  "break-l": "(max-width: 1100px)"
+  "break-l": "(max-width: 1100px)",
+  "break-xl": "(max-width: 1300px)",
 ) !default;
 
 @mixin breakpoint($point) {

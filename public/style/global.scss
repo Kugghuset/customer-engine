@@ -95,6 +95,12 @@ label {
   }
 }
 
+.thick {
+  font-size: $font-size-xl;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
 .offset-left {
   // Used for checkboxes in creat select
   margin-left: -30px;

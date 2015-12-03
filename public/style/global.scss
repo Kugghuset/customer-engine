@@ -124,6 +124,13 @@ label {
 .float-container {
   overflow: auto;
 }
+ht {
+  text-align: right !important;
+}
+
+.left {
+  text-align: left !important;
+}
 
 .red {
   background-color: $red;

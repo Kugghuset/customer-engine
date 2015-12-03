@@ -109,6 +109,15 @@
 .card-footer {
   position: absolute;
   bottom: $size-s;
-  right: $size-s;
-  text-align: right;
+  display: block;
+  right: 15px;
+  left: 15px;
+  .date {
+    float: right;
+    text-align: right;
+  }
+  .id {
+    float: left;
+    text-align: left;
+  }
 }

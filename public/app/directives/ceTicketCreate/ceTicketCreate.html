@@ -144,6 +144,15 @@
   
 </div>
 
+<div class="pane-row" ng-show="ticket.ticketId">
+  
+  <!--<span class="fill-label"></span>-->
+  
+  <label>Ticket</label>
+  
+  <label class="left">{{ ticket.ticketId }}</label>
+  
+</div>
 
 <div class="pane-row">
   <!-- Transferred -->
@@ -189,6 +198,6 @@
 
 <div class="float-container">
   <button ng-click="submit(ticket)" class="pane-button green pull-right offset-right">Submit ticket</button>
-  <button ng-click="discard(ticket)" class="pane-button red pull-right offset-right">Discard ticket</button>
+  <button ng-click="discard(ticket)" class="pane-button red pull-right offset-right">Delete ticket</button>
   <button ng-click="goBack(ticket)" class="pane-button purple pull-right offset-right">Back to dashboard</button>
 </div>

@@ -3,7 +3,7 @@
 var _ = require('lodash');
 var sql = require('seriate');
 var Promise = require('bluebird');
-var bcrypt = require('bcrypt');
+var bcrypt = require('bcryptjs');
 
 function intialize() {
   return sql.execute({

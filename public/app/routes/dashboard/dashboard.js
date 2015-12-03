@@ -9,13 +9,12 @@ angular.module('customerEngineApp')
     controller: 'DashboardCtrl'
   });
 }])
-.controller('DashboardCtrl', ['$scope', 'Auth', 'Ticket', function ($scope, Auth, Ticket) {
+.controller('DashboardCtrl', ['$scope', '$timeout', 'Auth', 'Ticket', function ($scope, $timeout, Auth, Ticket) {
   
-  $scope.user = Auth.getCurrentUser();
+  $scope.user;
   
   $scope.tickets = [];
   $scope.isLoading = false;
-  
   
   function getTickets(userId, loading) {
     $scope.isLoading = loading;
@@ -41,9 +40,13 @@ angular.module('customerEngineApp')
     }
   });
   
-  if ($scope.user && $scope.user.userId) {
+  // To ensure setup :)
+  $timeout(function () {
+    $scope.user = Auth.getCurrentUser();
+    if ($scope.user && $scope.user.userId) {
       getTickets($scope.user.userId);
     }
+  });
   
 }]);
 

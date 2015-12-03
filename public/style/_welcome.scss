@@ -2,6 +2,7 @@
   font-size: 64px;
   text-align: center;
   text-transform: uppercase;
+  color: $gray-dark;
   
   @include breakpoint(break-l) {
     font-size: 48px;
@@ -20,9 +21,9 @@
 
 .welcome-pane {
   height: 500px;
-  height: calc(100vh - 40px);
-  margin: 20px 0;
-  padding: 50px 0;
+  height: calc(100vh - 166px);
+  margin-bottom: 20px;
+  padding-bottom: 50px;
   
   & > * {
     height: 100%;
@@ -42,5 +43,33 @@
       padding-top: 100px;
       padding-bottom: 100px;
     }
+  }
+}
+
+.welcome-form {
+  color: $purple-dark;
+  input {
+    @include input-placeholder {
+      color: $purple !important;
+    }
+    
+  }
+}
+
+.welcome-login-text {
+  color: $purple-dark;
+  text-transform: uppercase;
+  font-size: 48px;
+  @include breakpoint(break-l) {
+    font-size: 36px;
+  }
+  @include breakpoint(break-ms) {
+    font-size: 28px;
+  }
+}
+
+.logo-wrap {
+  .logo {
+    position: static;
   }
 }

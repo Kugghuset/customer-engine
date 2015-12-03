@@ -42,7 +42,7 @@ angular.module('customerEngineApp')
             if (!_.chain(obj[key]).map().filter().value().length) {
               delete obj[key];
             } else {
-              return cleanEmpty(obj[key])
+              return obj[key] = cleanEmpty(obj[key]);
             }
           }
         })
@@ -70,12 +70,15 @@ angular.module('customerEngineApp')
         }
       }
       
+      var submitted = false;
+      
       /**
        * Submits the ticket to db and sets scope.ticketId to undefined.
        * 
        * @param {Object} _ticket (Ticket)
        */
       scope.submit = function (_ticket) {
+        submitted = true;
         Ticket.createOrUpdate(_.assign(_ticket))
         .then(function (ticket) {
           Notification.success('Ticket submitted');
@@ -156,7 +159,7 @@ angular.module('customerEngineApp')
       }
       
       /**
-       * Returns a boolean value of whether the subCategory
+       * Returns a boolean value of whether the subcategory
        * should be hidden or not.
        * 
        * @param {Object} ticket
@@ -218,7 +221,8 @@ angular.module('customerEngineApp')
       /**
        * Watches for changes in ticket
        */
-      scope.$watch('ticket', function (ticket) {
+      scope.$watch('ticket', function (ticket, oldTicket) {
+        
         if (!ticket) {
           return resetTicket();
         } else {
@@ -226,11 +230,17 @@ angular.module('customerEngineApp')
           if (scope.hideDescriptor(ticket)) { ticket.descriptor = undefined; }
         }
         
+        // Don't autosave if it's just been creatad
+        if (!oldTicket) { return; }
+        
         Ticket.autoSave(ticket)
         .then(function (t) {
+          if (!t) { return; }
+          if (t && !submitted) { Notification('Ticket autosaved'); }
           // Attach ticketId if not present
           if (t && t.ticketId && !ticket.ticketId) {
-            scope.ticket.ticketId = t.ticketId
+            scope.ticket.ticketId = t.ticketId;
+            $location.path($location.path() + t.ticketId);
           }
         })
         ['catch'](function (err) {

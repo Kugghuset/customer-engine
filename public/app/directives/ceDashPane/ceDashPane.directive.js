@@ -10,7 +10,8 @@ angular.module('customerEngineApp')
       user: '=',
       tickets: '=',
       isLoading: '=',
-      isReadonly: '='
+      isReadonly: '=',
+      filter: '='
     },
     link: function (scope, element, attrs) {
       
@@ -25,6 +26,10 @@ angular.module('customerEngineApp')
           .zipObject()
           .value()
         , { total: tickets.length });
+      }
+      
+      scope.setFilter = function (filter) {
+        scope.filter = scope.filter == filter ? '' : filter;
       }
       
       /**

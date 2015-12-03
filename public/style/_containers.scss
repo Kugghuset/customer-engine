@@ -1,28 +1,43 @@
 .vertical-fill {
-  height: calc(100vh - 40px);
+  // height: calc(100vh - 40px);
   // margin-top: 20px;
   // margin-bottom: -20px;
-  margin: 20px;
+  // margin: 20px;
   padding-left: 20px;
+  padding: 20px;
+}
+
+.logo {
+  width: 450 / 2px;
+  // position: fixed;
+  // top: 0;
+  // left: 0;
+  // width: 450px / 2;
 }
 
 .fixed-left {
+  height: calc(100vh - 136px);
+  // margin-top: 20px;
+  margin-left: 20px;
   position: fixed;
   left: 0;
   overflow-y: auto;
   width: 450px;
   &.create {
-    width: 600px;
+    width: 500px;
   }
 }
 
 .fixed-right {
+  top: 0;
+  padding-top: 136px;
+  height: calc(100vh - 40px);
   position: fixed;
-  right: 0px;
+  right: 20px;
   overflow-y: auto;
-  width: calc(100% - 450px);
+  width: calc(100% - 470px);
   &.create {
-    width: calc(100% - 600px);
+    width: calc(100% - 520px);
   }
 }
  

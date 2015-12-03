@@ -112,7 +112,8 @@ label {
 }
 
 .offset-right {
-  margin-right: 30px;
+  margin-left: 10px;
+  margin-top: 10px;
 }
 
 .offset-top {
@@ -122,6 +123,13 @@ label {
 
 .float-container {
   overflow: auto;
+}
+ht {
+  text-align: right !important;
+}
+
+.left {
+  text-align: left !important;
 }
 
 .red {

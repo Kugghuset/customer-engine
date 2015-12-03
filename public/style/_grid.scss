@@ -44,9 +44,11 @@ $pad: 20px;
 
 .col-card {
   width: 33.33%;
+  max-width: 400px;
   
   @include breakpoint(break-xl) {
     width: 50%;
+    max-width: 100%;
   }
   @include breakpoint(break-l) {
     width: 100%;

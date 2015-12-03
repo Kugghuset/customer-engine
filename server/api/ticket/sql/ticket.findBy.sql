@@ -24,9 +24,11 @@ SELECT
   [B].[categoryId] AS [category.categoryId],
   [C].[categoryName] AS [category.categoryName],
   [B].[subcategoryId] AS [subcategory.subcategoryId],
+  [D].[categoryId] AS [subcategory.categoryId],
   [D].[subcategoryName] AS [subcategory.subcategoryName],
   [B].[descriptorId] AS [descriptor.descriptorId],
   [E].[descriptorName] AS [descriptor.descriptorName],
+  [E].[subcategoryId] AS [descriptor.subcategoryId],
   [A].[departmentId] AS [department.departmentId],
   [G].[departmentName] AS [department.departmentName]
 FROM [dbo].[Ticket] AS [A]

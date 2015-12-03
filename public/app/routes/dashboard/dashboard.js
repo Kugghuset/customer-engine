@@ -40,13 +40,21 @@ angular.module('customerEngineApp')
     }
   });
   
+  function setup() {
+    $scope.user = Auth.getCurrentUser();
+      if ($scope.user && $scope.user.userId) {
+        getTickets($scope.user.userId);
+      }
+  }
+  
+  setup();
+  
   // To ensure setup :)
   $timeout(function () {
-    $scope.user = Auth.getCurrentUser();
-    if ($scope.user && $scope.user.userId) {
-      getTickets($scope.user.userId);
+    if ($scope.tickets &&  !$scope.tickets.length) {
+      setup();
     }
-  });
+  }, 2000);
   
 }]);
 

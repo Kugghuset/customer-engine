@@ -75,9 +75,9 @@
   display: table;
   border-collapse: collapse;
   background: $purple-light;
-  max-width: 100%;
+  max-width: calc(100% - 20px);
   position: absolute;
-  top: calc(50% - 50px);
+  top: calc(50% - 60px);
   span {
     @include all-states {
       color: $white;

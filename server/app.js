@@ -21,7 +21,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 require('./api/routes')(app, logger);
 
 function serve() {
-  var server = app.listen(config.port, config.ip, function () {
+  var server = app.listen(config.port, function () {
     var port = server.address().port;
     
     logger.stream.write('App listening on port ' + port);

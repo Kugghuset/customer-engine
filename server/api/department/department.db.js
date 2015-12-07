@@ -7,12 +7,26 @@ var Promise = require('bluebird');
 function initialize() {
   return sql.execute({
     query: sql.fromFile('./sql/department.initialize.sql')
+  })
+  .then(function (result) {
+    console.log('Department table all set up.');
+  })
+  .catch(function (err) {
+    console.log('Couldn\'t set up Department table.');
+    console.error(err);
   });
 }
 
 function popInitialize() {
   return sql.execute({
     query: sql.fromFile('./sql/pop.department.initialize.sql')
+  })
+  .then(function (result) {
+    console.log('Department table all set up.');
+  })
+  .catch(function (err) {
+    console.log('Couldn\'t set up Department table.');
+    console.error(err);
   });
 }
 

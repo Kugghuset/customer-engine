@@ -8,6 +8,13 @@ var bcrypt = require('bcryptjs');
 function intialize() {
   return sql.execute({
     query: sql.fromFile('./sql/user.initialize.sql')
+  })
+  .then(function (result) {
+    console.log('User table all set up.');
+  })
+  .catch(function (err) {
+    console.log('Couldn\'t set up User table.');
+    console.error(err);
   });
 }
 

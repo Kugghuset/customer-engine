@@ -11,6 +11,13 @@ var customerFilePath = path.resolve('./server/assets/customers/customers.csv');
 function intialize() {
   return sql.execute({
     query: sql.fromFile('./sql/customer.initialize.sql')
+  })
+  .then(function (result) {
+    console.log('Customer table all set up.');
+  })
+  .catch(function (err) {
+    console.log('Couldn\'t set up Customer table.');
+    console.error(err);
   });
 }
 

@@ -9,6 +9,13 @@ var util = require('../../utils/utils');
 function initialize() {
   return sql.execute({
     query: sql.fromFile('./sql/ticket.initialize.sql')
+  })
+  .then(function (result) {
+    console.log('Ticket table all set up.');
+  })
+  .catch(function (err) {
+    console.log('Couldn\'t set up Ticket table.');
+    console.error(err);
   });
 }
 

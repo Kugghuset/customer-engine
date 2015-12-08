@@ -6,20 +6,37 @@ IF (OBJECT_ID('Category', 'U') IS NULL)
 BEGIN
   CREATE TABLE [dbo].[Category] (
     [categoryId] bigint IDENTITY(1, 1) PRIMARY  KEY NOT NULL,
-    [categoryName] varchar(256) NULL
+    [categoryName] varchar(256) NULL,
+    [disabled] bit null
+  )
+END
+
+-- Ensure the correct coloumns are used by simple removing all others
+IF (NOT EXISTS(SELECT * FROM sys.columns
+              WHERE Name = N'disabled'
+              AND Object_ID = Object_ID(N'Category'))
+    OR NOT EXISTS(SELECT * FROM [dbo].[Category]
+                WHERE [categoryName] = 'Inlösen'))
+BEGIN
+  DROP TABLE [dbo].[Category]
+END
+
+IF (OBJECT_ID('Category', 'U') IS NULL)
+BEGIN
+  CREATE TABLE [dbo].[Category] (
+    [categoryId] bigint IDENTITY(1, 1) PRIMARY  KEY NOT NULL,
+    [categoryName] varchar(256) NULL,
+    [disabled] bit null
   )
   
   INSERT INTO [dbo].[Category] (
     [categoryName]
   )
   VALUES
-  ('Acquiring'),
-  ('E-Commerce'),
-  ('Invoice'),
-  ('Contact information'),
-  ('Terminations'),
-  ('Terminal'),
-  ('Orders'),
-  ('BAX'),
-  ('Unknown')
+    ('E-handel'),
+    ('Faktura'),
+    ('Inlösen'),
+    ('Information'),
+    ('Beställning'),
+    ('Terminal')
 END

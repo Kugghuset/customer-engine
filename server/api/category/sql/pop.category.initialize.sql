@@ -28,22 +28,14 @@ ELSE
                 WHERE Name = N'disabled'
                 AND Object_ID = Object_ID(N'Category'))
   BEGIN
-      ALTER TABLE [dbo].[Category]
-      ADD [disabled] bit NULL
-      
-      UPDATE [dbo].[Category]
-      SET [disabled] = 1
-      WHERE [categoryName] = ('Acquiring')
-        OR [categoryName] = ('E-Commerce')
-        OR [categoryName] = ('Invoice')
-        OR [categoryName] = ('Contact information')
-        OR [categoryName] = ('Terminations')
-        OR [categoryName] = ('Terminal')
-        OR [categoryName] = ('Orders')
-        OR [categoryName] = ('BAX')
-        OR [categoryName] = ('Unknown')
+    ALTER TABLE [dbo].[Category]
+    ADD [disabled] bit NOT NULL DEFAULT 1
+    
+    ALTER TABLE [dbo].[Category]
+    ALTER COLUMN [disabled] bit NULL
   END
   
+  -- Add new rows if they're non-existant
   IF NOT EXISTS(SELECT *
                 FROM [dbo].[Category]
                 WHERE [categoryName] = 'Inlösen')
@@ -59,9 +51,3 @@ ELSE
       ('Beställning'),
       ('Terminal') 
   END
-
-/*
-
-
-
-*/

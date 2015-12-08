@@ -18,15 +18,14 @@ angular.module('customerEngineApp')
       scope.statuses = [
         'Open',
         'Closed',
-        'Pending',
-        'Work in progress'
+        'Pending'
       ];
       
       function emptyTicket() {
         return {
           ticketDate: new Date(),
           user: scope.user,
-          status: 'Work in progress'
+          status: 'Open'
         };
       }
       

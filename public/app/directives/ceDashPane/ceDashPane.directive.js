@@ -22,7 +22,7 @@ angular.module('customerEngineApp')
         return _.assign(
           _.chain(tickets)
           .groupBy('status')
-          .map(function (v, k) { return [ _.camelCase(k === 'Work in progress' ? 'wip' : k), v.length ] })
+          .map(function (v, k) { return [ _.camelCase(k), v.length ] })
           .zipObject()
           .value()
         , { total: tickets.length });
@@ -37,10 +37,6 @@ angular.module('customerEngineApp')
        * and sets scope.wipTickets to the tickets which are yet to be submitted.
        */
       scope.$watch('tickets', function (tickets) {
-        scope.wipTickets = _.filter(tickets, function (ticket) {
-          return ticket.status === 'Work in progress';
-        });
-        scope.tickets = tickets;
         scope.aggregated = aggregateStatuses(tickets);
       }, true);
     }

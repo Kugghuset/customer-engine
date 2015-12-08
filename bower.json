@@ -41,6 +41,7 @@
     "angular-localforage": "~1.2.3",
     "rome": "~2.1.22",
     "moment": "~2.10.6",
-    "angular-cache-buster": "~0.4.3"
+    "angular-cache-buster": "~0.4.3",
+    "normalize-css": "~3.0.3"
   }
 }

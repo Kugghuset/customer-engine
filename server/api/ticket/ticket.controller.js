@@ -94,16 +94,6 @@ exports.findByUserId = function (req, res) {
   })
 }
 
-exports.findWIP = function (req, res) {
-  Ticket.findWIP(req.params.id)
-  .then(function (tickets) {
-    res.status(200).json(tickets);
-  })
-  .catch(function (err) {
-    utils.handleError(res, err);
-  })
-}
-
 exports.remove = function (req, res) {
   Ticket.remove(req.params.id)
   .then(function () {

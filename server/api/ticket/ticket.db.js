@@ -283,26 +283,6 @@ exports.findByUserId = function (userId) {
   });
 }
 
-exports.findWIP = function (userId) {
-  return new Promise(function (resolve, reject) {
-    sql.execute({
-      query: findBy('userId', 'AND ([A].[status] = \'Work in progress\')'),
-      params: {
-        userId: {
-          type: sql.BIGINT,
-          val: userId
-        }
-      }
-    })
-    .then(function (tickets) {
-      resolve(util.objectify(tickets));
-    })
-    .catch(function (err) {
-      reject(err);
-    });
-  });
-}
-
 exports.remove = function (ticketId) {
   return sql.execute({
     query: sql.fromFile('./sql/ticket.remove.sql'),

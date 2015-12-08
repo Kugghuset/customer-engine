@@ -23,19 +23,6 @@
   
   <a class="pane-button-big" href="" ui-sref="main.create_ticket">Create new ticket</a>
   
-  <br>
-  
-  <div uib-dropdown uib-keyboard-nav ng-show="wipTickets.length">
-    <button id="simple-btn-keyboard-nav" type="button" class="pane-button" uib-dropdown-toggle>
-      {{ 'Work in progress' }} <span class="caret"></span>
-    </button>
-    <ul class="uib-dropdown-menu pane-dropdown" role="menu" aria-labelledby="simple-btn-keyboard-nav">
-      <!-- Links need an href for Boostrap UI to work with keyboard navigation -->
-      <li role="menuitem" ng-repeat="ticket in wipTickets">
-        <a href="" ui-sref="main.create_ticket({ticketId: ticket.ticketId})">{{ ticket.customer.orgName || ticket.customer.orgNr || ticket.ticketId }}, {{ ticket.ticketDate | date:'yyyy-MM-dd' }}</a>
-      </li>
-    </ul>
-  </div>
   
 </section>
 <section class="pane-section">
@@ -49,10 +36,6 @@
       <tr>
         <td class="left" ng-class="{'red': filter == 'Closed' }" ng-click="setFilter('Closed')">Closed</td>
         <td class="center red">{{ aggregated.closed || 0 }}</td>
-      </tr>
-      <tr>
-        <td class="left" ng-class="{'purple': filter == 'Work in progress' }" ng-click="setFilter('Work in progress')">Work in progress</td>
-        <td class="center purple">{{ aggregated.wip || 0 }}</td>
       </tr>
       <tr>
         <td class="left" ng-class="{'beige': filter == 'Pending' }" ng-click="setFilter('Pending')">Pending</td>

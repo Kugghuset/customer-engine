@@ -25,7 +25,8 @@ angular.module('customerEngineApp')
         return {
           ticketDate: new Date(),
           user: scope.user,
-          status: 'Open'
+          status: 'Open',
+          department: scope.user.department
         };
       }
       

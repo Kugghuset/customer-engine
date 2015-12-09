@@ -9,16 +9,30 @@ BEGIN TRAN
 INSERT INTO [dbo].[User] (
   [email],
   [password],
-  [name]
+  [name],
+  [departmentId]
 )
 VALUES (
   @email,
   @password,
-  @name
+  @name,
+  @departmentId
 )
 
 COMMIT TRAN
 
-SELECT TOP 1 [userId], [email], [name]
-FROM [dbo].[User]
-ORDER BY [userId] DESC
+SELECT TOP 1
+  [U].[userId],
+  [U].[email],
+  [U].[name],
+  [D].[departmentId] AS [department.departmentId],
+  [D].[departmentName] AS [department.departmentName],
+  [D].[country] AS [department.country]
+  
+FROM [dbo].[User] AS [U]
+
+-- Join on departmentId
+LEFT JOIN [dbo].[Department] AS [D]
+ON [U].[departmentId] = [D].[departmentId]
+
+ORDER BY [U].[userId] DESC

@@ -5,6 +5,8 @@ var sql = require('seriate');
 var Promise = require('bluebird');
 var bcrypt = require('bcryptjs');
 
+var util = require('../../utils/utils');
+
 function intialize() {
   return sql.execute({
     query: sql.fromFile('./sql/user.initialize.sql')
@@ -27,14 +29,14 @@ exports.findById = function (id) {
     sql.execute({
       query: sql.fromFile('./sql/user.findById.sql'),
       params: {
-        id: {
+        userId: {
           type: sql.BIGINT,
           val: id
         }
       }
     })
     .then(function (users) {
-      resolve(users[0]);
+      resolve(util.objectify(users[0]));
     })
     .catch(reject);
   });
@@ -57,7 +59,7 @@ exports.findByEmail = function (email) {
     })
     .then(function (users) {
       if (users) {
-        resolve(users[0]);
+        resolve(util.objectify(users[0]));
       } else {
         reject(new Error('No could be found with the email ' + email));
       }
@@ -112,17 +114,19 @@ exports.auth = function(email, password) {
       })
       .then(function (users) {
         
-        if (!_.any(users)) {
+        // Get first item and create objects by dot notation
+        var first = util.objectify(_.first(users));
+        
+        if (!first) {
           // No users matching the email address.
           return resolve(undefined);
-        } else if (!password && !_.first(users).password) {
+        } else if (!password && !first.password) {
           // No passwords at all - none input and none stored, so it's fine! (for now)
-          return resolve(_.first(users));
+          return resolve(first);
         }
         
-        // Switched to _.first(users) as it returns falsy or truthy :)
-        if (_.first(users) && bcrypt.compareSync(password, _.first(users)['password'])) {
-          resolve(_.first(users));
+        if (first && bcrypt.compareSync(password, first.password)) {
+          resolve(first);
         } else {
           reject(new Error('Email or username was incorrect'));
         }
@@ -131,7 +135,44 @@ exports.auth = function(email, password) {
   });
 }
 
-
+exports.update = function (user, userId) {
+  return new Promise(function (resolve, reject) {
+    
+    // No user to update :(
+    if (!user) { return reject(new Error('No data provided')); }
+    
+    if (!userId) { userId = user.userId; }
+    
+    sql.execute({
+      query: [
+        sql.fromFile('./sql/user.update.sql'),
+        sql.fromFile('./sql/user.findById.sql')
+      ].join(' '),
+      params: {
+        email: {
+          type: sql.VARCHAR(256),
+          val: user.email
+        },
+        name: {
+          type: sql.VARCHAR(256),
+          val: user.name
+        },
+        departmentId: {
+          type: sql.BIGINT,
+          val: user.departmentId
+        },
+        userId: {
+          type: sql.BIGINT,
+          val: user.userId
+        }
+      }
+    })
+    .then(function (_users) {
+      return util.objectify(_.first(_users));
+    })
+    .catch(reject);
+  });
+}
 
 // Initialize the table
 intialize();

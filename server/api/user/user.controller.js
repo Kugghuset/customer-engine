@@ -72,3 +72,19 @@ exports.me = function (req, res) {
     utils.handleError(res, err);
   });
 };
+
+
+/**
+ * Updates the user
+ * 
+ * ROUTE: PUT '/api/users/:id'
+ */
+exports.update = function (req, res) {
+  User.update(req.body, req.params.id)
+  .then(function (user) {
+    res.status(200).json(user);
+  })
+  .catch(function (err) {
+    utils.handleError(res, err);
+  })
+}

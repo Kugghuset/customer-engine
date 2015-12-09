@@ -11,7 +11,7 @@
   text-decoration: none;
   color: $black;
   
-  height: 400px;
+  height: 450px;
   margin-bottom: 20px;
   
   *, *:hover, *:active, *:focus {
@@ -71,13 +71,18 @@
   padding: 5px;
 }
 
-.card-categories {
+.card-middle-section {
+  position: absolute;
+  max-width: calc(100% - 20px);
+  top: calc(50% - 100px);
+}
+
+.card-box {
   display: table;
   border-collapse: collapse;
-  background: $purple-light;
+  background: $gray;
   max-width: calc(100% - 20px);
-  position: absolute;
-  top: calc(50% - 60px);
+  position: relative;
   span {
     @include all-states {
       color: $white;
@@ -89,6 +94,15 @@
     padding: $size-xs / 2;
     margin: ($size-xs / 2) 0;
   }
+}
+
+.card-categories {
+  @extend .card-box;
+  background: $purple-light;
+}
+.card-product {
+  @extend .card-box;
+  background: $green;
 }
 
 .card-contact {

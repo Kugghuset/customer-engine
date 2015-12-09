@@ -10,8 +10,16 @@
     <ce-status-select status="ticket.status" is-readonly="isReadonly"></ce-status-select>
   </header>
   
-  <div class="card-categories">
-    <span ng-repeat="category in plainCategory(ticket)">{{ category }}</span>
+  <div class="card-middle-section">
+    
+    <div class="card-categories">
+      <span ng-repeat="category in plainCategory(ticket)">{{ category }}</span>
+    </div>
+    
+    <div ng-show="ticket.product.productName" class="card-product">
+      <span>{{ ticket.product.productName }}</span>
+    </div>
+    
   </div>
   
   <br>

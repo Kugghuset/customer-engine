@@ -117,6 +117,10 @@ function ticketParams(ticket, extra) {
     departmentId: {
       type: sql.BIGINT,
       val: ticket.department.departmentId
+    },
+    productId: {
+      type: sql.BIGINT,
+      val: ticket.product.productId ||ticket.productId
     }
   }, extra);
 }

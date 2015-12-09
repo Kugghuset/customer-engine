@@ -30,7 +30,10 @@ SELECT
   [E].[descriptorName] AS [descriptor.descriptorName],
   [E].[subcategoryId] AS [descriptor.subcategoryId],
   [A].[departmentId] AS [department.departmentId],
-  [G].[departmentName] AS [department.departmentName]
+  [G].[departmentName] AS [department.departmentName],
+  [H].[productId] AS [product.productId],
+  [H].[productName] AS [product.productName],
+  [H].[country] AS [product.country]
 FROM [dbo].[Ticket] AS [A]
 
 -- Joins the categoryBlob, which is only used for joining the different levels of categories
@@ -60,6 +63,10 @@ ON [A].[userId] = [U].[userId]
 -- Joins the departmentId
 LEFT JOIN [dbo].[Department] AS [G]
 ON [A].[departmentId] = [G].[departmentId]
+
+-- Joins the productId
+LEFT JOIN [dbo].[Product] AS [H]
+ON [A].[productId] = [H].[productId]
 
 WHERE [A].{ where_clause } { other }
 ORDER BY [A].[ticketDate] DESC

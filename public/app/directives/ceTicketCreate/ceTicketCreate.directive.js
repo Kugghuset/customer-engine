@@ -1,7 +1,7 @@
 (function () {
 
 angular.module('customerEngineApp')
-.directive('ceTicketCreate', ['$location', '$state', 'Customer', 'Ticket', 'Country', 'Category', 'Notification', 'Department', function ($location, $state, Customer, Ticket, Country, Category, Notification, Department) {
+.directive('ceTicketCreate', ['$location', '$state', 'Customer', 'Ticket', 'Country', 'Category', 'Notification', 'Department', 'Product', function ($location, $state, Customer, Ticket, Country, Category, Notification, Department, Product) {
   return {
     templateUrl: 'app/directives/ceTicketCreate/ceTicketCreate.html',
     restrict: 'EA',
@@ -158,6 +158,19 @@ angular.module('customerEngineApp')
       }
       
       /**
+       * Gets all products and attaches them to scope.
+       */
+      function getProducts() {
+        Product.getAll()
+        .then(function (products) {
+          scope.products = products;
+        })
+        ['catch'](function (err) {
+          Notification.error('Something went wrong with fetching the departments, please refresh the page.')
+        });
+      }
+      
+      /**
        * Returns a boolean value of whether the subcategory
        * should be hidden or not.
        * 
@@ -266,6 +279,7 @@ angular.module('customerEngineApp')
       
       getCategories();
       getDepartments();
+      getProducts();
       
     }
   };

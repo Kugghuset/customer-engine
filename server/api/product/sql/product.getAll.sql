@@ -2,5 +2,5 @@
 Gets all products
 */
 
-SELECT [productId], [productName]
+SELECT [productId], [productName], [country]
 FROM [dbo].[Product];

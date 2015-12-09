@@ -7,12 +7,12 @@ BEGIN
   CREATE TABLE [dbo].[Product] (
     [productId] bigint IDENTITY(1, 1) PRIMARY  KEY NOT NULL,
     [productName] varchar(256) NULL,
-    [productCountry] varchar(256) NULL
+    [country] varchar(256) NULL
   )
   
   INSERT INTO [dbo].[Product] (
     [productName],
-    [productCountry]
+    [country]
   )
   VALUES
     ('Acceptance', 'SE'),
@@ -26,6 +26,7 @@ BEGIN
 
 END 
 
+-- Setup dummy data.
 IF NOT EXISTS(SELECT * FROM [dbo].[Product]
               WHERE [productName] = 'Nordic Growth Capital')
   BEGIN
@@ -34,11 +35,12 @@ IF NOT EXISTS(SELECT * FROM [dbo].[Product]
     CREATE TABLE [dbo].[Product] (
     [productId] bigint IDENTITY(1, 1) PRIMARY  KEY NOT NULL,
     [productName] varchar(256) NULL,
-    [productCountry] varchar(256) NULL
+    [country] varchar(256) NULL
     )
   
     INSERT INTO [dbo].[Product] (
-      [productName]
+      [productName],
+      [country]
     )
     VALUES
       ('Acceptance', 'SE'),
@@ -50,4 +52,12 @@ IF NOT EXISTS(SELECT * FROM [dbo].[Product]
       ('Nordic Growth Capital', 'SE'),
       ('SEB Rental', 'SE')
     
+  END
+
+-- Modify productCountry to country if country doesn't exist.
+  IF NOT EXISTS(SELECT * FROM sys.columns
+                WHERE Name = N'country'
+                AND Object_ID = Object_ID(N'Product'))
+  BEGIN
+      EXEC sp_rename 'Product.productCountry', 'country', 'COLUMN'
   END

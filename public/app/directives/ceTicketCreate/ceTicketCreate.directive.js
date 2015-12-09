@@ -245,6 +245,16 @@ angular.module('customerEngineApp')
         // Don't autosave if it's just been creatad
         if (!oldTicket) { return; }
         
+        // Only allow closed tickets to be transferred
+        if (ticket.status != 'Closed') {
+          ticket.transferred = undefined;
+        }
+        
+        // Remove transferredDepartment if ticket isn't transferred
+        if (!ticket.transferred) {
+          ticket.transferredDepartment = {};
+        }
+        
         Ticket.autoSave(ticket)
         .then(function (t) {
           if (!t) { return; }

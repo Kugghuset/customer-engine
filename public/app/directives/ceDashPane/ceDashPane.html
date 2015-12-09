@@ -10,14 +10,14 @@
   
   <div class="pane-row">
     <label>Department</label>
-    <div class="right-block">{{ auth.getCurrentUser().department.departmentName || 'Not assigned' }}</div>
+    <div class="right-block width-auto">{{ auth.getCurrentUser().department.departmentName || 'Not assigned' }}</div>
   </div>
   
   <br> 
   
   <div class="float-container">
     
-    <button class="pane-button purple pull-right">Edit operator</button>
+    <button ng-click="openModal(auth.getCurrentUser())" class="pane-button purple pull-right">Edit operator</button>
     
   </div>
   
@@ -52,3 +52,5 @@
   </table>
   
 </section>
+
+<ce-modal-user open-modal="openModal"></ce-modal-user>

@@ -1,0 +1,49 @@
+<div class="pane">
+
+  <h1>Operater settings</h1>
+
+  <form action="">
+
+    <div class="pane-row">
+      <label>Name</label>
+      <input type="text" ng-model="user.name" placeholder="Name">
+    </div>
+
+    <div class="pane-row">
+      <label>Email</label>
+      <input type="text" ng-model="user.email" placeholder="Email">
+    </div>
+
+    <div class="pane-row">
+
+      <label for="">Department</label>
+
+      <span uib-dropdown uib-keyboard-nav>
+        <button id="simple-btn-keyboard-nav" type="button" class="pane-button" uib-dropdown-toggle>
+          {{ user.department.departmentName || 'Choose department' }} <span class="caret"></span>
+      </button>
+      <ul class="uib-dropdown-menu pane-dropdown" role="menu" aria-labelledby="simple-btn-keyboard-nav">
+        <li role="menuitem"><a href="" ng-click="user.department = undefind">Choose department</a></li>
+        <li class="divider"></li>
+        <li role="menuitem" ng-repeat="department in departments">
+          <a href="" ng-click="user.department = department">{{ department.departmentName }}</a>
+        </li>
+      </ul>
+      </span>
+
+    </div>
+
+    <br>
+
+    <div class="float-container">
+
+      <button ng-click="ok()" class="pane-button green pull-right offset-right">Save</button>
+
+      <button ng-click="cancel()" class="pane-button red pull-right offset-right">Cancel</button>
+
+    </div>
+
+  </form>
+
+
+</div>

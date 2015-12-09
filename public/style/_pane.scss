@@ -104,6 +104,7 @@
   color: $white;
   font-weight: bold;
   padding: $size-xs;
+  min-width: 80px;
   &:hover, &:active, &:focus {
     color: $white;
     font-weight: bolder;
@@ -196,4 +197,9 @@
 
 .logged-in-as {
   font-size: $font-size-ml;
+}
+
+.modal-dialog {
+  border-radius: 0 !important;
+  @include thick-border;
 }

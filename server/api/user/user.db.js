@@ -159,16 +159,16 @@ exports.update = function (user, userId) {
         },
         departmentId: {
           type: sql.BIGINT,
-          val: user.departmentId
+          val: user.department ? user.department.departmentId : user.departmentId
         },
         userId: {
           type: sql.BIGINT,
-          val: user.userId
+          val: userId
         }
       }
     })
     .then(function (_users) {
-      return util.objectify(_.first(_users));
+      resolve(util.objectify(_.first(_users)));
     })
     .catch(reject);
   });

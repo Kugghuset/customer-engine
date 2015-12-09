@@ -17,6 +17,13 @@ angular.module('customerEngineApp')
       
       scope.auth = Auth;
       scope.aggregated = {};
+      scope.lastTicket = {};
+      
+      function getLastUpdated(tickets) {
+        return _.last(_.map(tickets).sort(function (a, b) {
+          return new Date(a.dateUpdated) - new Date(b.dateUpdated);
+        }));
+      }
       
       function aggregateStatuses(tickets) {
         return _.assign(
@@ -37,6 +44,11 @@ angular.module('customerEngineApp')
        * and sets scope.wipTickets to the tickets which are yet to be submitted.
        */
       scope.$watch('tickets', function (tickets) {
+        
+        scope.lastTicket = getLastUpdated(tickets);
+        
+        console.log(scope.lastTicket);
+        
         scope.aggregated = aggregateStatuses(tickets);
       }, true);
     }

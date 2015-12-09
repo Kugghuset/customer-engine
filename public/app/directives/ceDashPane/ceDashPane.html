@@ -1,28 +1,30 @@
 <section class="pane-section">
   
   <div class="float-container">
+    
+    <div class="logged-in-as pull-left">Logged in as {{ auth.getCurrentUser().name || 'Operator ' +  auth.getCurrentUser().userId }}</div>
+    
     <button ng-click="auth.logout()" class="pane-button red pull-right">Log out</button>
+    
   </div>
   
-  <br>
+  <div class="pane-row">
+    <label>Department</label>
+    <div class="right-block">{{ auth.getCurrentUser().department.departmentName || 'Not assigned' }}</div>
+  </div>
   
-  <div class="pane-row">
-    <label>Name</label>
-    <input type="text" ng-model="auth.getCurrentUser().name" placeholder="Name">
+  <br> 
+  
+  <div class="float-container">
+    
+    <button class="pane-button purple pull-right">Edit operator</button>
+    
   </div>
-  <div class="pane-row">
-    <label>Email</label>
-    <input type="email" ng-model="auth.getCurrentUser().email" placeholder="Email">
-  </div>
-  <div class="pane-row">
-    <label>Operator</label>
-    <label class="left">{{ auth.getCurrentUser().userId }}</label>
-  </div>
+  
 </section>
 <section class="pane-section">
   
   <a class="pane-button-big" href="" ui-sref="main.create_ticket">Create new ticket</a>
-  
   
 </section>
 <section class="pane-section">
@@ -46,7 +48,6 @@
         <td class="center">{{ aggregated.total || 0 }}</td>
       </tr>
     </tbody>
-    
     
   </table>
   

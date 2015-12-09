@@ -38,6 +38,16 @@
   }
 }
 
+.right-block {
+  font-size: $font-size-ml;
+  display: inline-block;
+  width: 150px;
+  text-align: left;
+  padding-right: 15px;
+  vertical-align: top;
+  margin-top: 12px;
+  
+}
 .pane-section {
   padding: $size-m 0;
 }
@@ -182,4 +192,8 @@
       }
     }
   }
+}
+
+.logged-in-as {
+  font-size: $font-size-ml;
 }

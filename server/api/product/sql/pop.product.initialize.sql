@@ -59,5 +59,5 @@ IF NOT EXISTS(SELECT * FROM [dbo].[Product]
                 WHERE Name = N'country'
                 AND Object_ID = Object_ID(N'Product'))
   BEGIN
-      EXEC sp_rename 'Product.productCountry', 'country', 'COLUMN'
+    EXEC sp_rename 'Product.productCountry', 'country', 'COLUMN'
   END

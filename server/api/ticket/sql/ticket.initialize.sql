@@ -16,6 +16,7 @@ BEGIN
     [status] varchar(256) NULL,
     [isReseller] bit NULL,
     [departmentId] bigint NULL,
+    [productId] bigint NULL,
     [customerId] bigint NULL,
     [userId] bigint NULL,
     [ticketDate] datetime2 DEFAULT GETUTCDATE() NULL,
@@ -84,3 +85,13 @@ ELSE
       ALTER TABLE [dbo].[Ticket]
       DROP COLUMN [successful]
   END
+  
+  -- Add productId column if it doesn't exist
+  IF NOT EXISTS(SELECT * FROM sys.columns
+                WHERE Name = N'productId'
+                AND Object_ID = Object_ID(N'Ticket'))
+  BEGIN
+      ALTER TABLE [dbo].[Ticket]
+      ADD [productId] bigint NULL
+  END
+  

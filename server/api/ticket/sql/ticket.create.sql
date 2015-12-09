@@ -19,6 +19,7 @@ INSERT INTO [dbo].[Ticket] (
   [customerId],
   [userId],
   [departmentId],
+  [productId],
   [ticketDate]
 )
 VALUES (
@@ -34,6 +35,7 @@ VALUES (
   @customerId,
   @userId,
   @departmentId,
+  @productId,
   @ticketDate
 )
 

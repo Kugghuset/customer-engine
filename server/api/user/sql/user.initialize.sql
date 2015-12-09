@@ -22,3 +22,12 @@ ELSE
       ALTER TABLE [dbo].[User]
       ADD [password] varchar(256) NULL
   END
+  
+  -- Add departmentId column if it doesn't exist
+  IF NOT EXISTS(SELECT * FROM sys.columns
+                WHERE Name = N'departmentId'
+                AND Object_ID = Object_ID(N'User'))
+  BEGIN
+      ALTER TABLE [dbo].[User]
+      ADD [departmentId] bigint NULL
+  END

@@ -72,6 +72,14 @@ angular.module('customerEngineApp')
     },
     
     /**
+     * @param {Object} user (User)
+     */
+    setCurrentUser: function (user) {
+      _user = user;
+      return _user;
+    },
+    
+    /**
      * Logs in the user.
      * If the user doesn't exist, it will create a new one.
      * 
@@ -99,6 +107,20 @@ angular.module('customerEngineApp')
     logout: function () {
       _user = {};
       $cookies.remove('token');
+    },
+    
+    /**
+     * Updates the user.
+     * 
+     * @param {Object} _user (User)
+     * @return {Promise} -> {Object} (User)
+     */
+    update: function (_user) {
+      return $q(function (resolve, reject) {
+        $http.put('/api/users/' + _user.userId, _user)
+        .success(resolve)
+        .error(reject);
+      });
     }
   }
 }]);

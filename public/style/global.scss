@@ -108,6 +108,10 @@ label {
   text-transform: uppercase;
 }
 
+.font-size-ms {
+  font-size: $font-size-ms !important;
+}
+
 .offset-left {
   // Used for checkboxes in creat select
   margin-left: -30px;
@@ -132,6 +136,10 @@ ht {
 
 .left {
   text-align: left !important;
+}
+
+.width-auto {
+  width: auto !important;
 }
 
 .red {

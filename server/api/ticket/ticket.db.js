@@ -34,6 +34,7 @@ function ensureHasProps(ticket, user) {
     ticket.subcategory = ticket.subcategory || {};
     ticket.descriptor = ticket.descriptor || {};
     ticket.department = ticket.department || {};
+    ticket.transferredDepartment = ticket.transferredDepartment || {};
     ticket.country = _.isObject(ticket.country) ? ticket.country.short : ticket.country;
     ticket.product = ticket.product || {};
     

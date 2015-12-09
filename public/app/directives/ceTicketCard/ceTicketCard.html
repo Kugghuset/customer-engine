@@ -23,6 +23,7 @@
       <div ng-show="ticket.email">{{ ticket.email }}</div>
       <div ng-show="ticket.tel">{{ ticket.tel }}</div>
       <div ng-show="ticket.isReseller"><i class="glyphicon glyphicon-ok"></i> Reseller</div>
+      <div ng-show="ticket.transferred"><i class="glyphicon glyphicon-arrow-right"></i> Transferred ({{ ticket.department.departmentName }})</div>
     </div>
     <div class="col-1-2 card-summary" ng-show="ticket.summary">
       <p ng-repeat="line in ticket.summary | split:'\n' track by $index">{{ line }}</p>

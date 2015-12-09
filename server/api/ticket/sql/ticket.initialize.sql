@@ -13,8 +13,8 @@ BEGIN
     [summary] varchar(max) NULL,
     [country] varchar(256) NULL,
     [transferred] bit NULL,
-    [successful] bit NULL,
     [status] varchar(256) NULL,
+    [isReseller] bit NULL,
     [departmentId] bigint NULL,
     [customerId] bigint NULL,
     [userId] bigint NULL,
@@ -65,4 +65,22 @@ ELSE
   BEGIN
       ALTER TABLE [dbo].[Ticket]
       ADD [dateUpdated] datetime2 DEFAULT GETUTCDATE() NULL
+  END
+    
+  -- Adds isReseller if it doesn't exist
+  IF NOT EXISTS(SELECT * FROM sys.columns
+                WHERE Name = N'isReseller'
+                AND Object_ID = Object_ID(N'Ticket'))
+  BEGIN
+      ALTER TABLE [dbo].[Ticket]
+      ADD [isReseller] bit NULL
+  END
+    
+  -- Removes successful if it exists
+  IF EXISTS(SELECT * FROM sys.columns
+                WHERE Name = N'successful'
+                AND Object_ID = Object_ID(N'Ticket'))
+  BEGIN
+      ALTER TABLE [dbo].[Ticket]
+      DROP COLUMN [successful]
   END

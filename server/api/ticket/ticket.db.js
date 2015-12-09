@@ -86,13 +86,13 @@ function ticketParams(ticket, extra) {
       type: sql.BIT,
       val: ticket.transferred
     },
-    successful: {
-      type: sql.BIT,
-      val: ticket.successful
-    },
     status: {
       type: sql.VARCHAR(256),
       val: ticket.status
+    },
+    isReseller: {
+      type: sql.BIT,
+      val: ticket.isReseller
     },
     customerId: {
       type: sql.BIGINT,

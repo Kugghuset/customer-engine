@@ -10,7 +10,6 @@ SELECT
   [A].[altTel],
   [A].[summary],
   [A].[transferred],
-  [A].[successful],
   [A].[status],
   [A].[isReseller],
   [A].[country] AS [country.short],

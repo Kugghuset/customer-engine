@@ -14,7 +14,6 @@ SET
   [dbo].[Ticket].[altTel] = @altTel,
   [dbo].[Ticket].[summary] = @summary,
   [dbo].[Ticket].[transferred] = @transferred,
-  [dbo].[Ticket].[successful] = @successful,
   [dbo].[Ticket].[status] = @status,
   [dbo].[Ticket].[isReseller] = @isReseller,
   [dbo].[Ticket].[country] = @country,

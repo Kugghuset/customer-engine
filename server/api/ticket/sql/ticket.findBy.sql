@@ -12,6 +12,7 @@ SELECT
   [A].[transferred],
   [A].[successful],
   [A].[status],
+  [A].[isReseller],
   [A].[country] AS [country.short],
   [A].[customerId] AS [customer.customerId],
   [F].[customerNumber] AS [customer.customerNumber],

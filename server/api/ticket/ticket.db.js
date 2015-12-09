@@ -94,6 +94,10 @@ function ticketParams(ticket, extra) {
       type: sql.VARCHAR(256),
       val: ticket.status
     },
+    isReseller: {
+      type: sql.BIT,
+      val: ticket.isReseller
+    },
     customerId: {
       type: sql.BIGINT,
       val: ticket.customer.customerId

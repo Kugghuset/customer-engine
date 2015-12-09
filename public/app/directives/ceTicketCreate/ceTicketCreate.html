@@ -38,8 +38,6 @@
     <input class="block" type="text" ng-model="ticket.tel" ng-intl-tel-input placeholder="Phone number">
   </span>
 
-
-
   <label for="">&nbsp;</label>
   
   <span class="fill-by-label">
@@ -53,6 +51,20 @@
   <label for="">Email</label>
 
   <input type="email" ng-model="ticket.email" placeholder="Email address">
+
+</div>
+
+<div class="pane-row">
+  <!-- Reseller -->
+
+  <span class="fill-label"></span>
+
+  <span>
+    <label class="checkbox-label">
+      <input type="checkbox" ng-model="ticket.isReseller">
+      <i class="offset-left" ></i> Contact is reseller
+    </label>
+  </span>
 
 </div>
 
@@ -176,20 +188,6 @@
       </ul>
     </div>
     
-  </span>
-
-</div>
-
-<div class="pane-row">
-  <!-- Successful -->
-
-  <span class="fill-label"></span>
-
-  <span>
-    <label class="checkbox-label">
-      <input type="checkbox" ng-model="ticket.successful">
-      <i class="offset-left" ></i> Ticket was successful
-    </label>
   </span>
 
 </div>

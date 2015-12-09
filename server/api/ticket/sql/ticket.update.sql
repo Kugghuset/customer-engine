@@ -16,6 +16,7 @@ SET
   [dbo].[Ticket].[transferred] = @transferred,
   [dbo].[Ticket].[successful] = @successful,
   [dbo].[Ticket].[status] = @status,
+  [dbo].[Ticket].[isReseller] = @isReseller,
   [dbo].[Ticket].[country] = @country,
   [dbo].[Ticket].[customerId] = @customerId,
   [dbo].[Ticket].[userId] = @userId,

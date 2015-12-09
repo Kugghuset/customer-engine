@@ -16,6 +16,7 @@ BEGIN
     [status] varchar(256) NULL,
     [isReseller] bit NULL,
     [departmentId] bigint NULL,
+    [transferredDepartmentId] bigint NULL,
     [productId] bigint NULL,
     [customerId] bigint NULL,
     [userId] bigint NULL,
@@ -94,4 +95,19 @@ ELSE
       ALTER TABLE [dbo].[Ticket]
       ADD [productId] bigint NULL
   END
+  
+  -- Change departmentId to transferredDepartmentId if transferredDepartmentId doesn't exist
+  IF NOT EXISTS(SELECT * FROM sys.columns
+                WHERE Name = N'transferredDepartmentId'
+                AND Object_ID = Object_ID(N'Ticket'))
+  BEGIN
+      -- Rename departmentId to transferredDepartmentId
+      EXEC sp_rename 'Ticket.departmentId', 'transferredDepartmentId', 'COLUMN'
+      
+      -- Add transferredDepartmentId
+      ALTER TABLE [dbo].[Ticket]
+      ADD [departmentId] bigint NULL
+      
+  END
+  
   

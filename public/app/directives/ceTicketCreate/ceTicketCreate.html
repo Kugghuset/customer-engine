@@ -7,6 +7,24 @@
   
 </div>
 
+<div class="pane-row">
+  
+  <label for="">Department</label>
+  
+  <span uib-dropdown uib-keyboard-nav>
+      <button id="simple-btn-keyboard-nav" type="button" class="pane-button" uib-dropdown-toggle>
+        {{ ticket.department.departmentName || 'Choose department' }} <span class="caret"></span>
+      </button>
+      <ul class="uib-dropdown-menu pane-dropdown" role="menu" aria-labelledby="simple-btn-keyboard-nav">
+        <li role="menuitem"><a href="" ng-click="ticket.department = undefind">Choose department</a></li>
+        <li class="divider"></li>
+        <li role="menuitem" ng-repeat="department in departments">
+          <a href="" ng-click="ticket.department = department">{{ department.departmentName }}</a>
+        </li>
+      </ul>
+    </span>
+  
+</div>
 
 <div class="pane-row">
   <!-- Customer -->
@@ -91,7 +109,7 @@
   <span class="fill-by-label">
     <span uib-dropdown uib-keyboard-nav>
       <button id="simple-btn-keyboard-nav" type="button" class="pane-button" uib-dropdown-toggle>
-        {{ ticket.category.categoryName || 'Choose category' }} <span class="caret"></span>
+        {{ ticket.category.categoryName || '1st Level Category' }} <span class="caret"></span>
       </button>
       <ul class="uib-dropdown-menu pane-dropdown" role="menu" aria-labelledby="simple-btn-keyboard-nav">
         <!-- Links need an href for Boostrap UI to work with keyboard navigation -->
@@ -105,7 +123,7 @@
     
     <span ng-hide="hideSubcategory(ticket)" uib-dropdown uib-keyboard-nav>
       <button id="simple-btn-keyboard-nav" type="button" class="pane-button" uib-dropdown-toggle>
-        {{ ticket.subcategory.subcategoryName || 'Choose subcategory' }} <span class="caret"></span>
+        {{ ticket.subcategory.subcategoryName || '2nd Level Category' }} <span class="caret"></span>
       </button>
       <ul class="uib-dropdown-menu pane-dropdown" role="menu" aria-labelledby="simple-btn-keyboard-nav">
         <!-- Links need an href for Boostrap UI to work with keyboard navigation -->
@@ -119,7 +137,7 @@
 
     <span ng-hide="hideDescriptor(ticket)" uib-dropdown uib-keyboard-nav>
       <button id="simple-btn-keyboard-nav" type="button" class="pane-button" uib-dropdown-toggle>
-        {{ ticket.descriptor.descriptorName || 'Choose descriptor' }} <span class="caret"></span>
+        {{ ticket.descriptor.descriptorName || '3rd Level Category' }} <span class="caret"></span>
       </button>
       <ul class="uib-dropdown-menu pane-dropdown" role="menu" aria-labelledby="simple-btn-keyboard-nav">
         <!-- Links need an href for Boostrap UI to work with keyboard navigation -->
@@ -190,7 +208,7 @@
   
 </div>
 
-<div class="pane-row">
+<div class="pane-row" ng-show="ticket.status == 'Closed'">
   <!-- Transferred -->
   
   <span class="fill-label"></span>
@@ -203,20 +221,21 @@
     
     <div uib-dropdown uib-keyboard-nav ng-show="ticket.transferred">
       <button id="simple-btn-keyboard-nav" type="button" class="pane-button" uib-dropdown-toggle>
-        {{ ticket.department.departmentName || 'Choose department' }} <span class="caret"></span>
+        {{ ticket.transferredDepartment.departmentName || 'Choose department' }} <span class="caret"></span>
       </button>
       <ul class="uib-dropdown-menu pane-dropdown" role="menu" aria-labelledby="simple-btn-keyboard-nav">
         <li role="menuitem" ng-repeat="department in departments">
-          <a href="" ng-click="ticket.department = department">{{ department.departmentName }}</a>
+          <a href="" ng-click="ticket.transferredDepartment = department">{{ department.departmentName }}</a>
         </li>
       </ul>
     </div>
     
   </span>
+  
+  <br>
 
 </div>
 
-<br>
 
 <div class="float-container">
   <button ng-click="submit(ticket)" class="pane-button green pull-right offset-right">Submit ticket</button>

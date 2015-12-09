@@ -31,6 +31,8 @@ SELECT
   [E].[subcategoryId] AS [descriptor.subcategoryId],
   [G].[departmentId] AS [department.departmentId],
   [G].[departmentName] AS [department.departmentName],
+  [H].[departmentId] AS [transferredDepartment.departmentId],
+  [H].[departmentName] AS [transferredDepartment.departmentName],
   [A].[productId] AS [product.productId],
   [P].[productName] AS [product.productName],
   [P].[country] AS [product.country]
@@ -63,6 +65,10 @@ ON [A].[userId] = [U].[userId]
 -- Joins the departmentId
 LEFT JOIN [dbo].[Department] AS [G]
 ON [A].[departmentId] = [G].[departmentId]
+
+-- Joins the departmentId
+LEFT JOIN [dbo].[Department] AS [H]
+ON [A].[transferredDepartmentId] = [H].[departmentId]
 
 -- Joins the productId
 LEFT JOIN [dbo].[Product] AS [P]

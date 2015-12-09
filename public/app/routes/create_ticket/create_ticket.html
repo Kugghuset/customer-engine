@@ -10,6 +10,6 @@
     
     <h1 class="thick">Related tickets</h1>
     
-    <ce-ticket-card class="col-card" ticket="_ticket" is-readonly="true" ng-repeat="_ticket in relatedTickets"></ce-ticket-card>
+    <ce-ticket-card class="col-card" ticket="_ticket" ng-hide="ticket.ticketId === _ticket.ticketId" is-readonly="true" ng-repeat="_ticket in relatedTickets"></ce-ticket-card>
   </ce-card-area>
 </section>

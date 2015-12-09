@@ -128,7 +128,7 @@ angular.module('customerEngineApp')
         lastUpdate.dateTime = new Date();
         setTimeout(function () {
           // Return if there's been an update the last two seconds.
-          if (new Date() - lastUpdate.dateTime < 2000) { return resolve(undefined); }
+          if (new Date() - lastUpdate.dateTime < 5000) { return resolve(undefined); }
           
           // Save to db.
           createOrUpdate(ticket)
@@ -137,7 +137,7 @@ angular.module('customerEngineApp')
             resolve(_ticket);
           })
           ['catch'](reject);
-        }, 2000);
+        }, 5000);
       });
     },
     

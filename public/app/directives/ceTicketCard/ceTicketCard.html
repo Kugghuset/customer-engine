@@ -26,6 +26,7 @@
       <div ng-show="ticket.transferred"><i class="glyphicon glyphicon-arrow-right"></i> Transferred ({{ ticket.department.departmentName }})</div>
     </div>
     <div class="col-1-2 card-summary" ng-show="ticket.summary">
+      <h3>Summary</h3>
       <p ng-repeat="line in ticket.summary | split:'\n' track by $index">{{ line }}</p>
     </div>
   </div>

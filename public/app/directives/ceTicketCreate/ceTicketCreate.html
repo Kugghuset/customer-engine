@@ -36,6 +36,16 @@
   <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
   <span ng-show="noResults && ticket.customer"><i class="glyphicon glyphicon-remove"></i> No Results Found</span>
 
+
+  <br>
+  
+  <div class="float-container">
+    
+    <button ng-click="openModal()" class="pane-button pull-right">Create customer</button>
+    
+  </div>
+  
+
 </div>
 
 <div class="pane-row">
@@ -241,3 +251,5 @@
   <button ng-click="discard(ticket)" class="pane-button red pull-right offset-right">Delete ticket</button>
   <button ng-click="goBack(ticket)" class="pane-button purple pull-right offset-right">Back to dashboard</button>
 </div>
+
+<ce-modal-customer open-modal="openModal" customer="ticket.customer"></ce-modal-customer>

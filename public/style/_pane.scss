@@ -111,9 +111,12 @@
     text-decoration: none;
   }
   
-  &[disabled=disabled] {
-    color: $black-ish;
-    background-color: $gray;
+  @include all-states {
+    &[disabled=disabled] {
+      color: $black-ish;
+      background-color: $gray;
+      box-shadow: thin none;
+    }
   }
   
 }

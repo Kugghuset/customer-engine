@@ -10,6 +10,15 @@ BEGIN
     [orgName] varchar(256) NULL,
     [orgNr] varchar(256) NULL,
     [dateCreated] datetime2 DEFAULT GETUTCDATE() NULL,
-    [dateChanged] datetime2 DEFAULT GETUTCDATE() NULL
+    [dateChanged] datetime2 DEFAULT GETUTCDATE() NULL,
+    [isLocal] bit NULL -- Specifies whether the customer is created inside Tickity or is external
   )
 END
+ELSE
+  IF NOT EXISTS(SELECT * FROM sys.columns
+                WHERE Name = N'isLocal'
+                AND Object_ID = Object_ID(N'Customer'))
+  BEGIN
+    ALTER TABLE [dbo].[Customer]
+    ADD [isLocal] bit NULL
+  END

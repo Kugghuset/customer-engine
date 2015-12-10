@@ -135,3 +135,20 @@
     text-align: left;
   }
 }
+
+.card-area-header {
+  h1 {
+    display: inline-block;
+    width: 150px;
+    
+  }
+  
+  input {
+    @include input-placeholder {
+      color: $black-ish !important;
+    }
+    display: inline-block;
+    width: calc(100% - 175px) !important;
+  }
+  
+}

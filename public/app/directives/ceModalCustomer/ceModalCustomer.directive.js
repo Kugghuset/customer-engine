@@ -99,6 +99,22 @@ angular.module('customerEngineApp')
     return Customer.getFuzzyBy(query, colName);
   }
   
+  /**
+   * @param {Object} customer
+   * @return {Boolean}
+   */
+  $scope.allowSubmit = function (customer) {
+    
+    // No customer :(
+    if (!customer) { return false; }
+    
+    return _.every([
+      !!customer,
+      !!customer.orgName,
+      (!!customer.orgNr || !!customer.customerNumber)
+    ]);
+  }
+  
   $scope.onSelected = function ($item, $model, $label) {
     // When an existing customer is found, copy it to $scope.customer
     $scope.customer = angular.copy($item);
@@ -112,6 +128,10 @@ angular.module('customerEngineApp')
   }
   
   $scope.ok = function () {
+    
+    if (!$scope.allowSubmit($scope.customer)) {
+      return; // Early
+    }
     
     if (!$scope.isNew($scope.customer)) {
       // Existing customer, close and return it!

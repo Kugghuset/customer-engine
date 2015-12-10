@@ -47,8 +47,6 @@ angular.module('customerEngineApp')
         
         scope.lastTicket = getLastUpdated(tickets);
         
-        console.log(scope.lastTicket);
-        
         scope.aggregated = aggregateStatuses(tickets);
       }, true);
     }

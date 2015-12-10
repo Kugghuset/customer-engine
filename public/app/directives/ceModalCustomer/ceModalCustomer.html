@@ -43,7 +43,7 @@
 
     <div class="float-container">
 
-      <button ng-click="ok()" class="pane-button green pull-right offset-right">{{ isNew(customer) ? 'Create' : 'Select' }}</button>
+      <button ng-click="ok()" ng-disabled="!allowSubmit(customer)" class="pane-button green pull-right offset-right">{{ isNew(customer) ? 'Create' : 'Select' }}</button>
 
       <button ng-click="cancel()" class="pane-button red pull-right offset-right">Cancel</button>
 

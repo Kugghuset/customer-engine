@@ -6,6 +6,8 @@ var Promise = require('bluebird');
 var path = require('path');
 var fs = require('fs');
 
+var util = require('../../utils/utils');
+
 var customerFilePath = path.resolve('./server/assets/customers/customers.csv');
 
 function intialize() {
@@ -21,6 +23,14 @@ function intialize() {
   });
 }
 
+
+/**
+ * Fuzzy searches for values matching *query*.
+ * (orgNr, orgName, customerNumber)
+ * 
+ * @param {String} query
+ * @return {Promise} -> {Array} (Customer)
+ */
 exports.getFuzzy = function (query) {
   return sql.execute({
     query: sql.fromFile('./sql/customer.getFuzzy.sql'),
@@ -30,6 +40,63 @@ exports.getFuzzy = function (query) {
         val: query
       }
     }
+  });
+}
+
+/**
+ * Fuzzy searches the column at *colName* for values matching *query*.
+ * 
+ * @param {String} query
+ * @param {String} colName
+ * @return {Promise} -> {Array} (Customer)
+ */
+exports.getFuzzyBy = function (query, colName) {
+  return new Promise(function (resolve, reject) {
+    return sql.execute({
+      query: sql.fromFile('./sql/customer.getFuzzyBy.sql').replace(util.literalRegExp('{ colName }', 'gi'), colName),
+      params: {
+        query: {
+          type: sql.VARCHAR(256),
+          val: query
+        }
+      }
+    })
+    .then(function (customers) {
+      resolve(customers || []);
+    })
+    .catch(function (err) {
+      reject(err);
+    });
+  });
+}
+
+exports.create = function (_customer) {
+  return new Promise(function (resolve, reject) {
+    
+    sql.execute({
+      query: sql.fromFile('./sql/customer.create.sql'),
+      params: {
+        orgNr: {
+          type: sql.VARCHAR(256),
+          val: _customer.orgNr
+        },
+        orgName: {
+          type: sql.VARCHAR(256),
+          val: _customer.orgName
+        },
+        customerNumber: {
+          type: sql.VARCHAR(256),
+          val: _customer.customerNumber
+        },
+      }
+    })
+    .then(function (customers) {
+      // Get only the first one
+      resolve(_.first(customers));
+    })
+    .catch(function (err) {
+      reject(err);
+    });
   });
 }
 

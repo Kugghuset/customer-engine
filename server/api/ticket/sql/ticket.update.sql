@@ -23,7 +23,8 @@ SET
   [dbo].[Ticket].[transferredDepartmentId] = @transferredDepartmentId,
   [dbo].[Ticket].[productId] = @productId,
   [dbo].[Ticket].[ticketDate] = @ticketDate,
-  [dbo].[Ticket].[dateUpdated] = GETUTCDATE()
+  [dbo].[Ticket].[dateUpdated] = GETUTCDATE(),
+  [dbo].[Ticket].[ticketDateClosed] = @ticketDateClosed
   
 
 WHERE [ticketId] = @ticketId

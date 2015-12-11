@@ -60,6 +60,10 @@ function ticketParams(ticket, extra) {
       type: sql.DATETIME2,
       val: ticket.ticketDate
     },
+    ticketDateClosed: {
+      type: sql.DATETIME2,
+      val: ticket.ticketDateClosed
+    },
     name:  {
       type: sql.VARCHAR(256),
       val: ticket.name

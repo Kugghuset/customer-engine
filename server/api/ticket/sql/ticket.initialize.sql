@@ -21,6 +21,7 @@ BEGIN
     [customerId] bigint NULL,
     [userId] bigint NULL,
     [ticketDate] datetime2 DEFAULT GETUTCDATE() NULL,
+    [ticketDateClosed] datetime2 NULL, -- Should be set when the status is set to closed.
     [dateCreated] datetime2 DEFAULT GETUTCDATE() NULL,
     [dateUpdated] datetime2 DEFAULT GETUTCDATE() NULL
   )
@@ -107,7 +108,14 @@ ELSE
       -- Add transferredDepartmentId
       ALTER TABLE [dbo].[Ticket]
       ADD [departmentId] bigint NULL
-      
   END
   
+  -- Add ticketDateClosed if it doesn't exist
+  IF NOT EXISTS(SELECT * FROM sys.columns
+                WHERE Name = N'ticketDateClosed'
+                AND Object_ID = Object_ID(N'Ticket'))
+  BEGIN
+      ALTER TABLE [dbo].[Ticket]
+      ADD [ticketDateClosed] datetime2 NULL
+  END
   

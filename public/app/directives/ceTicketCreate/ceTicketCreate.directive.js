@@ -78,6 +78,11 @@ angular.module('customerEngineApp')
        * @param {Object} _ticket (Ticket)
        */
       scope.submit = function (_ticket) {
+        
+        if (_ticket.status === 'Closed' && !_ticket.ticketDateClosed) {
+          _ticket.ticketDateClosed = new Date();
+        }
+        
         submitted = true;
         Ticket.createOrUpdate(_.assign(_ticket))
         .then(function (ticket) {
@@ -249,6 +254,12 @@ angular.module('customerEngineApp')
         // Only allow closed tickets to be transferred
         if (ticket.status != 'Closed') {
           ticket.transferred = undefined;
+          // Swt ticketDateClosed to undefined
+          if (ticket.ticketDateClosed) {
+            ticket.ticketDateClosed = undefined;
+          }
+        } else {
+          ticket.ticketDateClosed = new Date();
         }
         
         // Remove transferredDepartment if ticket isn't transferred
@@ -256,7 +267,7 @@ angular.module('customerEngineApp')
           ticket.transferredDepartment = {};
         }
         
-        Ticket.autoSave(ticket)
+        Ticket.autoSave(ticket) 
         .then(function (t) {
           if (!t) { return; }
           if (t && !submitted) { Notification('Ticket autosaved'); }

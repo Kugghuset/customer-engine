@@ -11,9 +11,11 @@ angular.module('customerEngineApp')
     },
     link: function (scope, element, attrs, ctrl) {
       
+      var modalInstance;
+      
       scope.openModal = function (user) {
-
-        var modalInstance = $uibModal.open({
+        
+        modalInstance = $uibModal.open({
           animation: true,
           templateUrl: 'app/directives/ceModalUser/ceModalUser.html',
           controller: 'ModalInstanceCtrl',
@@ -34,14 +36,24 @@ angular.module('customerEngineApp')
         });
         
         modalInstance.result.then(function (user) {
+          if (!user) { return; } // early
+          
           Notification.success('Operator updated.')
           Auth.setCurrentUser(user);
         }, function () {
           // Cancelled
         });
       };
+      
+      scope.$on('$destroy', function (event) {
+        if (modalInstance) {
+          modalInstance.close();
+        }
+      });
+      
+    }
   }
-}}])
+}])
 .controller('ModalInstanceCtrl', function ($scope, $uibModalInstance, user, Auth, Department, Notification) {
   
   // assign $scope to a copy of user, as it's regarded as a service and we don't want to by mistake modify it.

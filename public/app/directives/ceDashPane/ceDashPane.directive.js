@@ -43,7 +43,7 @@ angular.module('customerEngineApp')
         if (Auth.isLoggedIn() && user && !user.name) {
           scope.openModal(user);
         }
-      })
+      });
       
       /**
        * Watches for changes in tickets

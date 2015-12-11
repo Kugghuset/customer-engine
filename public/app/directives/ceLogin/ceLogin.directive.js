@@ -13,6 +13,8 @@ angular.module('customerEngineApp')
       
       scope.tempUser = {};
       
+      scope.emailExists = false;
+      
       /**
        * Attempts to log the user in.
        * 

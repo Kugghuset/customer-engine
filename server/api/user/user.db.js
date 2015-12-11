@@ -91,6 +91,10 @@ exports.create = function (_user) {
         name: {
           type: sql.VARCHAR(256),
           val: _user.name
+        },
+        departmentId: {
+          type: sql.BIGINT,
+          val: _user.department ? _user.department.departmentId : _user.departmentId
         }
       }
     })
@@ -117,7 +121,7 @@ exports.auth = function(email, password) {
         // Get first item and create objects by dot notation
         var first = util.objectify(_.first(users));
         
-        if (!first) {
+        if (!users || !users.length) {
           // No users matching the email address.
           return resolve(undefined);
         } else if (!password && !first.password) {

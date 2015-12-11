@@ -79,7 +79,7 @@ exports.create = function (_user) {
     
     if (!_user.email) {
       return reject(new Error('Email is requried'));
-    } else if (_user.password) {
+    } else if (!_user.password) {
       reject(new Error('Password is required'));
     }
     

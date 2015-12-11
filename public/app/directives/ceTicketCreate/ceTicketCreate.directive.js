@@ -1,7 +1,9 @@
 (function () {
 
 angular.module('customerEngineApp')
-.directive('ceTicketCreate', ['$location', '$state', 'Customer', 'Ticket', 'Country', 'Category', 'Notification', 'Department', 'Product', function ($location, $state, Customer, Ticket, Country, Category, Notification, Department, Product) {
+.directive('ceTicketCreate',
+  ['$location', '$state', '$interval', 'Customer', 'Ticket', 'Country', 'Category', 'Notification', 'Department', 'Product', 'timerDiffFilter',
+  function ($location, $state, $interval, Customer, Ticket, Country, Category, Notification, Department, Product, timerDiffFilter) {
   return {
     templateUrl: 'app/directives/ceTicketCreate/ceTicketCreate.html',
     restrict: 'EA',
@@ -12,6 +14,42 @@ angular.module('customerEngineApp')
       ticketId: '='
     },
     link: function (scope, element, attrs) {
+      
+      function setTimerDates(ticket) {
+        scope.timerString = timerDiffFilter([
+          ticket // Start time
+            ? ticket.ticketDate
+            : new Date(),
+          ticket // End time
+            ? ticket.ticketDateClosed
+            : new Date()
+          ]);
+      }
+      
+      var timer;
+      
+      function startTimer() {
+        // Initial set
+        setTimerDates(scope.ticket);
+        
+        timer = $interval(function () {
+          setTimerDates(scope.ticket);
+        }, 1000);
+      }
+      
+      function stopTimer() {
+        if (timer) {
+          $interval.cancel(timer);
+        }
+      }
+      
+      function setupTimerString() {
+        if (scope.ticket && scope.ticket.status != 'Closed') {
+          startTimer();
+        } else {
+          setTimerDates(scope.ticket);
+        }
+      }
       
       scope.countries = Country.getShortAndNames();
       
@@ -60,13 +98,16 @@ angular.module('customerEngineApp')
           Ticket.getById(scope.ticketId)
           .then(function (ticket) {
             scope.ticket = cleanEmpty(ticket);
+            setupTimerString();
           })
           ['catch'](function (err) {
             scope.ticket = emptyTicket();
+            setupTimerString();
           });
         } else {
           // Set up new ticket
           scope.ticket = emptyTicket();
+          setupTimerString();
         }
       }
       
@@ -78,6 +119,11 @@ angular.module('customerEngineApp')
        * @param {Object} _ticket (Ticket)
        */
       scope.submit = function (_ticket) {
+        
+        if (_ticket.status === 'Closed' && !_ticket.ticketDateClosed) {
+          _ticket.ticketDateClosed = new Date();
+        }
+        
         submitted = true;
         Ticket.createOrUpdate(_.assign(_ticket))
         .then(function (ticket) {
@@ -249,6 +295,18 @@ angular.module('customerEngineApp')
         // Only allow closed tickets to be transferred
         if (ticket.status != 'Closed') {
           ticket.transferred = undefined;
+          // Set ticketDateClosed to undefined
+          if (ticket.ticketDateClosed) {
+            ticket.ticketDateClosed = undefined;
+          }
+          
+          setupTimerString();
+        } else {
+          ticket.ticketDateClosed = new Date();
+          if (timer) {
+            stopTimer();
+          }
+          setTimerDates(ticket);
         }
         
         // Remove transferredDepartment if ticket isn't transferred
@@ -256,7 +314,7 @@ angular.module('customerEngineApp')
           ticket.transferredDepartment = {};
         }
         
-        Ticket.autoSave(ticket)
+        Ticket.autoSave(ticket) 
         .then(function (t) {
           if (!t) { return; }
           if (t && !submitted) { Notification('Ticket autosaved'); }
@@ -291,6 +349,12 @@ angular.module('customerEngineApp')
       getCategories();
       getDepartments();
       getProducts();
+      
+      setupTimerString();
+      
+      scope.$on('$destroy', function (event) {
+        stopTimer();
+      })
       
     }
   };

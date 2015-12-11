@@ -37,7 +37,7 @@
 
     <div class="float-container">
 
-      <button ng-click="ok()" class="pane-button green pull-right offset-right">Save</button>
+      <button ng-click="ok()" ng-disabled="!hasName()" class="pane-button green pull-right offset-right">Save</button>
 
       <button ng-click="cancel()" class="pane-button red pull-right offset-right">Cancel</button>
 

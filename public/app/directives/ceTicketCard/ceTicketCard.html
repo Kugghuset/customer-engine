@@ -2,7 +2,6 @@
   
   <header>
     <h2>
-      
       <a ng-hide="isReadonly" href="" ui-sref="main.create_ticket({ticketId: ticket.ticketId})">
         {{ ticket.customer.orgName || 'Ticket ' + ticket.ticketId }}
       </a>
@@ -44,16 +43,24 @@
   
   <div class="card-footer">
     
-    <div>
-      <i class="glyphicon glyphicon-user"></i>
-      {{ ' ' + ticket.user.name }}
+    <div class="pull-left">
+      <div>
+        <i class="glyphicon glyphicon-user"></i>
+        {{ ' ' + ticket.user.name }}
+      </div>
+        
+      <div class="id">
+        {{ 'Ticket ' + ticket.ticketId }}
+      </div>
     </div>
-      
-    <div class="id">
-      {{ 'Ticket ' + ticket.ticketId }}
-    </div>
-    <div class="date">
-      {{ ticket.ticketDate | date: 'yyyy-MM-dd, HH:mm' }}
+    <div class="pull-right">
+      <div class="right">
+        <i class="glyphicon glyphicon-time" ng-show="ticket.status === 'Closed'"></i>
+        &nbsp;{{ ticket.status === 'Closed' ? ([ticket.ticketDate, ticket.ticketDateClosed] | timerDiff) : '' }}
+      </div>
+      <div class="date">
+        {{ ticket.ticketDate | date: 'yyyy-MM-dd, HH:mm' }}
+      </div>
     </div>
   </div>
   

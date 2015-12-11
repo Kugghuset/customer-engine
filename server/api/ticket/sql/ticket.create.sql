@@ -21,7 +21,8 @@ INSERT INTO [dbo].[Ticket] (
   [departmentId],
   [transferredDepartmentId],
   [productId],
-  [ticketDate]
+  [ticketDate],
+  [ticketDateClosed]
 )
 VALUES (
   @name,
@@ -38,7 +39,8 @@ VALUES (
   @departmentId,
   @transferredDepartmentId,
   @productId,
-  @ticketDate
+  @ticketDate,
+  @ticketDateClosed
 )
 
 INSERT INTO [dbo].[CategoryBlob] (

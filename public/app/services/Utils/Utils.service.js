@@ -2,8 +2,9 @@
 'use strict'
 
 angular.module('customerEngineApp')
-.factory('Utils', ['$q', '$http', function ($q, $http) {
+.factory('Utils', ['$q', '$http', '$timeout', function ($q, $http, $timeout) {
   
+  var startOfYear = moment().startOf('year');
   
   /**
   * Escapes characters which need escaping in a RegExp.

@@ -21,6 +21,7 @@ SELECT
   [U].[email] AS [user.email],
   [U].[name] AS [user.name],
   [A].[ticketDate],
+  [A].[ticketDateClosed],
   [A].[dateUpdated],
   [B].[categoryId] AS [category.categoryId],
   [C].[categoryName] AS [category.categoryName],

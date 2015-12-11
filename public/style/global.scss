@@ -112,6 +112,14 @@ label {
   font-size: $font-size-ms !important;
 }
 
+.right {
+  text-align: right;
+}
+
+.left {
+  text-align: left;
+}
+
 .offset-left {
   // Used for checkboxes in creat select
   margin-left: -30px;

@@ -11,10 +11,10 @@ angular.module('customerEngineApp')
       customer: '='
     },
     link: function (scope, element, attrs, ctrl) {
-      
+      var modalInstance;
       scope.openModal = function (user) {
 
-        var modalInstance = $uibModal.open({
+         modalInstance = $uibModal.open({
           animation: true,
           templateUrl: 'app/directives/ceModalCustomer/ceModalCustomer.html',
           controller: 'CustomerModalInstanceCtrl',
@@ -36,6 +36,12 @@ angular.module('customerEngineApp')
           // Cancelled
         });
       };
+      
+      scope.$on('$destroy', function (event) {
+        if(modalInstance) {
+          modalInstance.close();
+        }
+      });
   }
 }}])
 .controller('CustomerModalInstanceCtrl', function ($scope, $uibModalInstance, Customer, Department, Notification) {

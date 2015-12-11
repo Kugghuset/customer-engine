@@ -37,7 +37,16 @@ angular.module('customerEngineApp')
         // Only update the status when *status* doesn't match *oldStatus*
         // and *oldStatus* us truthy
         if (status != oldStatus && !!oldStatus) {
-          Ticket.updateStatus(scope.ticket);
+          Ticket.updateStatus(scope.ticket)
+          .then(function (data) {
+            console.log(data);
+            if (ticket.status === 'Closed') {
+              ticket.ticketDateEnd = new Date();
+            }
+          })
+          ['catch'](function (err) {
+            console.log(err);
+          });
         }
       });
     }

@@ -31,7 +31,12 @@ angular.module('customerEngineApp')
           $location.path('/dashboard');
         })
         ['catch'](function (err) {
-          Notification.error('Could\'t log in.');
+          
+          if (/incorrect password|email is required|password is required/i.test(err)) {
+            Notification.error(err);
+          } else {
+            Notification.error('Could\'t log in.');
+          }
         })
       }
       

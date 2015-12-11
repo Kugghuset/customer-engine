@@ -77,6 +77,12 @@ exports.create = function (_user) {
       // Ensure _user is an object
     if (!_.isObject(_user)) { _user = {}; }
     
+    if (!_user.email) {
+      return reject(new Error('Email is requried'));
+    } else if (_user.password) {
+      reject(new Error('Password is required'));
+    }
+    
     return sql.execute({
       query: sql.fromFile('./sql/user.insert.sql'),
       params: {
@@ -132,7 +138,8 @@ exports.auth = function(email, password) {
         if (first && bcrypt.compareSync(password, first.password)) {
           resolve(first);
         } else {
-          reject(new Error('Email or username was incorrect'));
+          // If there is no password, that's the problem, otherwise the actual pass is the issue.
+          reject(password ? new Error('Incorrect password') : new Error('Password is required'));
         }
       })
       .catch(reject);

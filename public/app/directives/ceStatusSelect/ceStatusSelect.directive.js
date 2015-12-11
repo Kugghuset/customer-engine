@@ -28,7 +28,6 @@ angular.module('customerEngineApp')
       
       scope.setValue = function (_status) {
         scope.status = _status.value
-        // scope.$apply(function () { scope.status = _status.value });
       }
       
       scope.getColor = function (_status) {

@@ -10,9 +10,13 @@
     <label class="left">Password</label>
     <input class="pane-input" type="password" name="password" placeholder="Password" ng-model="tempUser.password">
     
+    <div>
+      Log in using your email adress. A user will be created for you if it doesn't already exist.
+    </div>
+    
     <!--<span>Sign up</span>-->
     
-    <button type="submit" class="pane-button pull-right" ng-disabled="!formValid(loginForm, tempUser)">Log in</button>
+    <button type="submit" class="pane-button pull-right" ng-disabled="!formValid(loginForm, tempUser)">Log in / Sign up</button>
     
   </form>
   

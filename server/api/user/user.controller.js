@@ -55,6 +55,13 @@ exports.login = function (req, res) {
         utils.handleError(res, err);
       });
     }
+  })
+  .catch(function (err) {
+    if (/incorrect password|email is required|password is required/i.test(err.message)) {
+      res.status(400).send(err.message);
+    } else {
+      utils.handleError(res, err);
+    }
   });
 };
 

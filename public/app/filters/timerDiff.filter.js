@@ -10,6 +10,8 @@ angular.module('customerEngineApp')
     
     var diff = moment(stop || new Date()).diff(start || new Date(), 'seconds');
     
+    var isNegative = diff < 0;
+    
     diff = diff < 0 ? diff * -1 : diff;
       
       var format;
@@ -25,7 +27,7 @@ angular.module('customerEngineApp')
         format = 'DD hh:mm:ss';
       }
       
-      return moment().startOf('year').add(diff, 'seconds').format(format);
+      return (isNegative ? '- ' : '') + moment().startOf('year').add(diff, 'seconds').format(format);
   };
   
 });

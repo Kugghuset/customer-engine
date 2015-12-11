@@ -295,7 +295,7 @@ angular.module('customerEngineApp')
         // Only allow closed tickets to be transferred
         if (ticket.status != 'Closed') {
           ticket.transferred = undefined;
-          // Swt ticketDateClosed to undefined
+          // Set ticketDateClosed to undefined
           if (ticket.ticketDateClosed) {
             ticket.ticketDateClosed = undefined;
           }
@@ -306,6 +306,7 @@ angular.module('customerEngineApp')
           if (timer) {
             stopTimer();
           }
+          setTimerDates(ticket);
         }
         
         // Remove transferredDepartment if ticket isn't transferred

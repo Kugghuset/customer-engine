@@ -39,6 +39,12 @@ angular.module('customerEngineApp')
         scope.filter = scope.filter == filter ? '' : filter;
       }
       
+      scope.$watch('auth.getCurrentUser()', function (user) {
+        if (Auth.isLoggedIn() && user && !user.name) {
+          scope.openModal(user);
+        }
+      })
+      
       /**
        * Watches for changes in tickets
        * and sets scope.wipTickets to the tickets which are yet to be submitted.

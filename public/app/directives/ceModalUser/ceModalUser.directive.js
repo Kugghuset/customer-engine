@@ -47,6 +47,12 @@ angular.module('customerEngineApp')
   // assign $scope to a copy of user, as it's regarded as a service and we don't want to by mistake modify it.
   $scope.user = angular.copy(user);
   
+  $scope.hasName = function () {
+    return !!$scope.user && !!$scope.user.name;
+  }
+  
+  var savedName = !!user.name;
+  
   /**
     * Gets all departments and attaches them to scope.
     */
@@ -62,16 +68,24 @@ angular.module('customerEngineApp')
   
   $scope.ok = function () {
     Auth.update($scope.user)
-    .then($uibModalInstance.close)
+    .then(function (_user) {
+      savedName = !!_user.name;
+      $uibModalInstance.close(_user);
+    })
     ['catch'](function (err) {
       Notification.error('Something went wrong.')
-      console.log(err);
     })
   };
 
   $scope.cancel = function () {
     $uibModalInstance.dismiss('cancel');
   };
+  
+  $scope.$on('modal.closing', function (event) {
+    if (!savedName) {
+      event.preventDefault();
+    }
+  })
   
   getDepartments();
   

@@ -7,7 +7,7 @@
     <div class="pane-row">
         <label class="font-size-ms">Org. name</label>
         
-      <input type="text" ng-model="customer.orgName" placeholder="Customer number" uib-typeahead="cust as cust.orgName for cust in getCustomer($viewValue, 'orgName')"
+      <input type="text" ng-model="customer.orgName" placeholder="Org. name" uib-typeahead="cust as cust.orgName for cust in getCustomer($viewValue, 'orgName')"
         typeahead-loading="orgNameLoadingLocations" typeahead-on-select="onSelected($item, $model, $label)" class="pane-dropdown">
       <i ng-show="orgNameLoadingLocations" class="glyphicon glyphicon-refresh"></i>
 
@@ -17,7 +17,7 @@
       
       <label class="font-size-ms">Org. number</label>
       
-      <input type="text" ng-model="customer.orgNr" placeholder="Customer number" uib-typeahead="cust as cust.orgNr for cust in getCustomer($viewValue, 'orgNr')"
+      <input type="text" ng-model="customer.orgNr" placeholder="Org. number" uib-typeahead="cust as cust.orgNr for cust in getCustomer($viewValue, 'orgNr')"
         typeahead-loading="orgNrLoadingLocations" typeahead-on-select="onSelected($item, $model, $label)" class="pane-dropdown">
       <i ng-show="orgNrLoadingLocations" class="glyphicon glyphicon-refresh"></i>
 

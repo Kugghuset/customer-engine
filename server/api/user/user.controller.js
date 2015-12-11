@@ -49,6 +49,8 @@ exports.login = function (req, res) {
         // Attach the token.
         auth.setTokenCookie(req, res);
         
+        user.isNew = true;
+        
         return res.status(200).json(user);
       })
       .catch(function (err) {

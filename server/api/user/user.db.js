@@ -185,5 +185,28 @@ exports.update = function (user, userId) {
   });
 }
 
+exports.updateLastLoggedIn = function (_user) {
+  return new Promise(function (resolve, reject) {
+    
+    if (!_user) { return reject(new Error('No provided user')); }
+    
+    sql.execute({
+      query: sql.fromFile('./sql/user.updateLastLoggedIn.sql'),
+      params: {
+        userId: {
+          type: sql.BIGINT,
+          val: _user.userId
+        }
+      }
+    })
+    .then(function (users) {
+      // Really only returns one, but whatever.
+      resolve(_.first(util.objectify(users)));
+    })
+    .catch(reject);
+    
+  });
+}
+
 // Initialize the table
 intialize();

@@ -1,7 +1,13 @@
 /*
-Finds all users matching the @id (which should be only one).
+Sets the lastLoggedIn to now and selects the user.
 */
 
+-- Update lastLoggedIn
+UPDATE [dbo].[User]
+SET [dbo].[User].[lastLoggedIn] = GETUTCDATE()
+WHERE [dbo].[User].[userId] = @userId
+
+-- Select user on new
 SELECT
   [U].[userId],
   [U].[email],

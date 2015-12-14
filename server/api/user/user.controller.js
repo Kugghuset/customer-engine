@@ -39,7 +39,14 @@ exports.login = function (req, res) {
       // Attach the token.
       auth.setTokenCookie(req, res);
       
-      return res.status(200).json(user);
+      User.updateLastLoggedIn(user)
+      .then(function (user) {
+        return res.status(200).json(user);
+      })
+      .catch(function (err) {
+        console.log(err);
+        utils.handleError(res, new Error('Something went wrong when logging in.'))
+      })
     } else {
       // No user, let's create it
       User.create(req.body)
@@ -49,7 +56,15 @@ exports.login = function (req, res) {
         // Attach the token.
         auth.setTokenCookie(req, res);
         
-        user.isNew = true;
+        User.updateLastLoggedIn(user)
+        .then(function (user) {
+          user.isNew = true;
+          return res.status(200).json(user);
+        })
+        .catch(function (err) {
+          console.log(err);
+          utils.handleError(res, new Error('Something went wrong when logging in.'))
+        })
         
         return res.status(200).json(user);
       })

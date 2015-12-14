@@ -6,14 +6,20 @@ SET XACT_ABORT ON
 
 BEGIN TRAN
 
+-- Set person in other file
+-- { person }
+
+
+-- Ticket
 INSERT INTO [dbo].[Ticket] (
   [name],
   [email],
   [tel],
   [altTel],
+  [isReseller],
+  -- [personId],
   [summary],
   [transferred],
-  [isReseller],
   [status],
   [country],
   [customerId],
@@ -29,9 +35,10 @@ VALUES (
   @email,
   @tel,
   @altTel,
+  @isReseller,
+  -- @personId
   @summary,
   @transferred,
-  @isReseller,
   @status,
   @country,
   @customerId,
@@ -43,6 +50,7 @@ VALUES (
   @ticketDateClosed
 )
 
+-- Categort blob
 INSERT INTO [dbo].[CategoryBlob] (
   [ticketId],
   [categoryId],

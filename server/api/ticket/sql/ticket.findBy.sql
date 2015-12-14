@@ -8,10 +8,16 @@ SELECT
   [A].[email],
   [A].[tel],
   [A].[altTel],
+  [A].[isReseller],
+  -- [Q].[personId] AS [person.personId],
+  -- [Q].[name] AS [person.name],
+  -- [Q].[email] AS [person.email],
+  -- [Q].[tel] AS [person.tel],
+  -- [Q].[altTel] AS [person.altTel],
+  -- [Q].[isReseller] AS [person.isReseller],
   [A].[summary],
   [A].[transferred],
   [A].[status],
-  [A].[isReseller],
   [A].[country] AS [country.short],
   [A].[customerId] AS [customer.customerId],
   [F].[customerNumber] AS [customer.customerNumber],
@@ -75,6 +81,10 @@ ON [A].[transferredDepartmentId] = [H].[departmentId]
 -- Joins the productId
 LEFT JOIN [dbo].[Product] AS [P]
 ON [A].[productId] = [P].[productId]
+
+-- Joins the person, which includes contact info
+-- LEFT JOIN [dbo].[Person] AS [Q]
+-- ON [A].[personId] = [Q].[personId]
 
 WHERE [A].{ where_clause } { other }
 ORDER BY [A].[ticketDate] DESC

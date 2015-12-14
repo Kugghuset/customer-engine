@@ -1,23 +1,21 @@
-<section class="pane-section">
+<section class="pane-section pane-top">
   
-  <div class="float-container">
+  <div class="pane-top-content">
     
-    <div class="logged-in-as pull-left">Logged in as {{ auth.getCurrentUser().name || 'Agent ' +  auth.getCurrentUser().userId }}</div>
+    <div class="pane-top-text">Logged in as {{ auth.getCurrentUser().name || 'Agent ' +  auth.getCurrentUser().userId }}</div>
+      
+    <div class="pane-top-text">
+      <div>Department {{ auth.getCurrentUser().department.departmentName || 'Not assigned' }}</div>
+    </div>
     
-    <button ng-click="auth.logout()" class="pane-button red pull-right">Log out</button>
+    <div class="pane-top-text">
+      <div for="" class="">Last logged ticket {{ lastTicket.dateUpdated | date: 'yyyy-MM-dd, HH:mm' }}</div>
+    </div>
     
   </div>
   
-  <div class="pane-row">
-    <label>Department</label>
-    <div class="right-block width-auto">{{ auth.getCurrentUser().department.departmentName || 'Not assigned' }}</div>
-  </div>
-  
-  <div class="pane-row">
-    <label for="" class="">Last logged ticket</label>
-    <div class="right-block width-auto">{{ lastTicket.dateUpdated | date: 'yyyy-MM-dd, HH:mm' }}</div>
-  </div>
-  
+  <button ng-click="auth.logout()" class="pane-button red pull-right">Log out</button>
+    
 </section>
 <section class="pane-section">
   

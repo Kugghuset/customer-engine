@@ -197,11 +197,25 @@
   }
 }
 
-.logged-in-as {
-  font-size: $font-size-ml;
+.pane-top-text {
+  font-size: $font-size-m;
 }
 
 .modal-dialog {
   border-radius: 0 !important;
   @include thick-border;
+}
+
+.pane-top {
+  width: 100%;
+  position: relative;
+  padding-top: 0;
+  .pane-top-content {
+    width: calc(100% - 90px);
+  }
+  button {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
 }

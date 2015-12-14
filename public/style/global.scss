@@ -102,6 +102,13 @@ label {
   }
 }
 
+.animated-textarea {
+  -webkit-transition: height 50ms ease-in-out;
+         -moz-transition: height 50ms ease-in-out;
+           -o-transition: height 50ms ease-in-out;
+              transition: height 50ms ease-in-out;
+}
+
 .thick {
   font-size: $font-size-xl;
   font-weight: bold;

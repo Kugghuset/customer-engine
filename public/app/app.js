@@ -9,7 +9,8 @@ angular.module('customerEngineApp', [
   'angular-google-analytics',
   'ngIntlTelInput',
   'LocalForageModule',
-  'ngCacheBuster'
+  'ngCacheBuster',
+  'monospaced.elastic'
 ])
 .config(['$stateProvider', '$urlRouterProvider', '$httpProvider','AnalyticsProvider', 'ngIntlTelInputProvider', '$localForageProvider', 'httpRequestInterceptorCacheBusterProvider', function ($stateProvider, $urlRouterProvider, $httpProvider, AnalyticsProvider, ngIntlTelInputProvider, $localForageProvider, httpRequestInterceptorCacheBusterProvider) {
   

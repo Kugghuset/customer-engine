@@ -3,6 +3,7 @@
 var _ = require('lodash');
 var Promise = require('bluebird');
 var chalk = require('chalk');
+var moment = require('moment');
 
 var auth = require('../../services/auth');
 var User = require('./user.db');
@@ -90,7 +91,19 @@ exports.login = function (req, res) {
 exports.me = function (req, res) {
   User.findById(req.user.userId)
   .then(function (user) {
-    res.status(200).json(user);
+    
+    // either if there is no last logged in or it wasn't *today*, set last logged in to now
+    if (!user.lastLoggedIn || moment().diff(user.lastLoggedIn, 'days') > 0) {
+      User.updateLastLoggedIn(user)
+      .then(function (user) {
+        res.status(200).json(user);
+      })
+      .catch(function (err) {
+        utils.handleError(res, err);
+      });
+    } else {
+      res.status(200).json(user);
+    }
   })
   .catch(function (err) {
     utils.handleError(res, err);

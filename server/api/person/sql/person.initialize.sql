@@ -1,5 +1,6 @@
 /*
 Initializes the Person if it's not created already.
+NPS Dates can be found in that table.
 */
 
 IF (OBJECT_ID('Person', 'U') IS NULL)

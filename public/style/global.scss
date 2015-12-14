@@ -127,6 +127,11 @@ label {
   text-align: left;
 }
 
+.top-label {
+  vertical-align: top !important;
+  padding-top: 12px;
+}
+
 .offset-left {
   // Used for checkboxes in creat select
   margin-left: -30px;
@@ -168,4 +173,10 @@ ht {
 }
 .green {
   background-color: $green;
+}
+
+.grayout {
+  @include all-states {
+    color: $black-ish;
+  }
 }

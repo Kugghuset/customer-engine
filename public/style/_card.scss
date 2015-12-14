@@ -21,11 +21,14 @@
   &:not([disabled=disabled]) {
     &:hover {
       transform: scale(1.05);
-      // background-color: rgba($color: $gray, $alpha: 0.2);
       z-index: 1;
       box-shadow: 0 0 15px rgba($color: rgba($color: $black, $alpha: 0.1), $alpha: 0.1);
       color: $black;
     }
+  }
+  
+  .col-1-2:nth-of-type(2n) {
+    border-left: 1px solid $purple-light;
   }
   
   
@@ -40,6 +43,9 @@
       font-size: $font-size-l;
       font-weight: bolder;
       text-transform: uppercase;
+      a {
+        line-height: $font-size-l;
+      }
     }
     ce-status-select {
       float: right;
@@ -48,8 +54,7 @@
   }
 }
 
-.card-summary {
-  overflow: auto;
+.card-col-right {
   position: absolute;
   right: 0;
   bottom: 0;
@@ -57,11 +62,9 @@
   width: calc(50% + 10px);
   height: 100%;
   padding: 5px;
-  border-left: 1px solid $purple;
 }
 
-.card-contact-area {
-  overflow: auto;
+.card-col-left {
   position: absolute;
   left: 0;
   bottom: 0;
@@ -71,53 +74,51 @@
   padding: 5px;
 }
 
-.card-middle-section {
+.card-row {
   position: absolute;
-  max-width: calc(100% - 20px);
-  top: calc(50% - 100px);
-}
-
-.card-box {
-  display: table;
-  border-collapse: collapse;
-  background: $gray;
-  max-width: calc(100% - 20px);
-  position: relative;
-  span {
-    @include all-states {
-      color: $white;
-    }
-    display: table-cell;
-    vertical-align: middle;
-    text-align: center;
-    border: 2px solid $white;
-    padding: $size-xs / 2;
-    margin: ($size-xs / 2) 0;
-  }
-}
-
-.card-categories {
-  @extend .card-box;
-  background: $purple-light;
-}
-.card-product {
-  @extend .card-box;
-  background: $green;
-}
-
-.card-contact {
-  position: absolute;
-  top: 50%;
   left: 10px;
   right: 0px;
-  bottom: 60px;
+  max-width: calc(100% - 20px);
   h3 {
     text-transform: uppercase;
     font-size: $font-size-ml;
   }
   div {
-    font-size: $font-size-m;  
+    font-size: $font-size-m;
+    line-height: 1.2;
+    padding-right: 0;
   }
+  div:not(:last-of-type) {
+    padding-bottom: 5px;
+  }
+  p {
+    line-height: 1.2;
+    overflow: hidden;
+    word-break: break-word;
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    -ms-hyphens: auto;
+    hyphens: auto;
+    padding-right: 0;
+  }
+}
+
+.card-middle-section {
+  @extend .card-row;
+  top: calc(50% - 120px);
+  bottom: 50%;
+}
+
+.card-contact {
+  @extend .card-row;
+  top: calc(50% + 10px);
+  bottom: 60px;
+}
+
+.card-col-content {
+  overflow: auto;
+  width: 100%;
+  height: calc(100% - 27px);
 }
 
 .card-footer {

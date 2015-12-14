@@ -38,7 +38,7 @@ angular.module('customerEngineApp')
         modalInstance.result.then(function (user) {
           if (!user) { return; } // early
           
-          Notification.success('Operator updated.')
+          Notification.success('Updates saved.')
           Auth.setCurrentUser(user);
         }, function () {
           // Cancelled

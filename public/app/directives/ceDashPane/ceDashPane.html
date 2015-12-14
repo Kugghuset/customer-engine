@@ -2,7 +2,7 @@
   
   <div class="float-container">
     
-    <div class="logged-in-as pull-left">Logged in as {{ auth.getCurrentUser().name || 'Operator ' +  auth.getCurrentUser().userId }}</div>
+    <div class="logged-in-as pull-left">Logged in as {{ auth.getCurrentUser().name || 'Agent ' +  auth.getCurrentUser().userId }}</div>
     
     <button ng-click="auth.logout()" class="pane-button red pull-right">Log out</button>
     
@@ -16,14 +16,6 @@
   <div class="pane-row">
     <label for="" class="">Last logged ticket</label>
     <div class="right-block width-auto">{{ lastTicket.dateUpdated | date: 'yyyy-MM-dd, HH:mm' }}</div>
-  </div>
-  
-  <br>
-  
-  <div class="float-container">
-    
-    <button ng-click="openModal(auth.getCurrentUser())" class="pane-button purple pull-right">Edit operator</button>
-    
   </div>
   
 </section>
@@ -55,6 +47,14 @@
     </tbody>
     
   </table>
+  
+  <br>
+  
+  <div class="float-container">
+    
+    <button ng-click="openModal(auth.getCurrentUser())" class="pane-button purple pull-right">Settings</button>
+    
+  </div>
   
 </section>
 

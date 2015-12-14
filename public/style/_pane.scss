@@ -13,14 +13,13 @@
   clear: both;
   
   label:not(.checkbox-label) {
-    font-size: $font-size-ml;
+    font-size: $font-size-m;
     text-transform: uppercase;
     font-weight: bolder;
     width: 150px;
     text-align: right;
     padding-right: 15px;
-    vertical-align: top;
-    margin-top: 12px;
+    vertical-align: middle;
   }
   .checkbox-label {
     font-size: $font-size-m;

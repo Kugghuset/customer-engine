@@ -30,27 +30,31 @@
     To show tickets of only of a specific status, click the corresponding row below. To show all again, give it another click.
   </p>
   
-  <table class="pane-table">
-    <tbody>
-      <tr>
-        <td class="left" ng-class="{'green': filter == 'Open' }" ng-click="setFilter('Open')">Open</td>
-        <td class="center green">{{ aggregated.open || 0 }}</td>
-      </tr>
-      <tr>
-        <td class="left" ng-class="{'red': filter == 'Closed' }" ng-click="setFilter('Closed')">Closed</td>
-        <td class="center red">{{ aggregated.closed || 0 }}</td>
-      </tr>
-      <tr>
-        <td class="left" ng-class="{'beige': filter == 'Pending' }" ng-click="setFilter('Pending')">Pending</td>
-        <td class="center beige">{{ aggregated.pending || 0 }}</td>
-      </tr>
-      <tr>
-        <td class="left">Total</td>
-        <td class="center">{{ aggregated.total || 0 }}</td>
-      </tr>
-    </tbody>
+  <div class="relative">
+    <ce-loading is-loading="isLoading"></ce-loading>
     
-  </table>
+    <table class="pane-table" ng-hide="isLoading">
+      <tbody>
+        <tr>
+          <td class="left" ng-class="{'green': filter == 'Open' }" ng-click="setFilter('Open')">Open</td>
+          <td class="center green">{{ aggregated.open || 0 }}</td>
+        </tr>
+        <tr>
+          <td class="left" ng-class="{'red': filter == 'Closed' }" ng-click="setFilter('Closed')">Closed</td>
+          <td class="center red">{{ aggregated.closed || 0 }}</td>
+        </tr>
+        <tr>
+          <td class="left" ng-class="{'beige': filter == 'Pending' }" ng-click="setFilter('Pending')">Pending</td>
+          <td class="center beige">{{ aggregated.pending || 0 }}</td>
+        </tr>
+        <tr>
+          <td class="left">Total</td>
+          <td class="center">{{ aggregated.total || 0 }}</td>
+        </tr>
+      </tbody>
+      
+    </table>
+  </div>
   
   <br>
   

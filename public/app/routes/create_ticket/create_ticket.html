@@ -3,10 +3,12 @@
   <img src="assets/img/logo.png" class="logo" alt="Bambora logo">
   
   <aside class="pane vertical-fill fixed-left create">
-    <ce-ticket-create user="auth.getCurrentUser()" ticket="ticket" related-tickets="relatedTickets" customer-id="customerId" ticket-id="currentTicketId"></ce-ticket-create>
+    <ce-ticket-create user="auth.getCurrentUser()" ticket="ticket" related-tickets="relatedTickets" loading-tickets="loadingTickets" customer-id="customerId" ticket-id="currentTicketId"></ce-ticket-create>
   </aside>
 
   <ce-card-area child-class="vertical-fill fixed-right create">
+    
+    <ce-loading is-loading="loadingTickets"></ce-loading>
     
     <ce-card-area-header title="Related tickets" tickets="relatedTickets" ></ce-card-area-header>
     

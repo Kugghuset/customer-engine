@@ -17,7 +17,8 @@ angular.module('customerEngineApp')
   $scope.isLoading = false;
   
   function getTickets(userId, loading) {
-    $scope.isLoading = loading;
+    $scope.isLoading = _.isUndefined(loading) ? true : loading;
+    
     Ticket.getByUserId(userId)
     .then(function (tickets) {
       $scope.tickets = tickets;

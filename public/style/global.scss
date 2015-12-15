@@ -8,6 +8,7 @@
 @import 'status_select';
 @import 'date_picker';
 @import 'welcome';
+@import 'loading';
 
 @import '../app/app';
 
@@ -156,7 +157,14 @@ label {
 .float-container {
   overflow: auto;
 }
-ht {
+
+.relative {
+  position: relative;
+  width: 100%;
+  height: 200px;
+}
+
+.right {
   text-align: right !important;
 }
 

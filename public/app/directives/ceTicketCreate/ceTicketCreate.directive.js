@@ -2,8 +2,8 @@
 
 angular.module('customerEngineApp')
 .directive('ceTicketCreate',
-  ['$location', '$state', '$interval', 'Customer', 'Ticket', 'Country', 'Category', 'Notification', 'Department', 'Product', 'timerDiffFilter',
-  function ($location, $state, $interval, Customer, Ticket, Country, Category, Notification, Department, Product, timerDiffFilter) {
+  ['$location', '$state', '$timeout', '$interval', 'Customer', 'Ticket', 'Country', 'Category', 'Notification', 'Department', 'Product', 'timerDiffFilter',
+  function ($location, $state, $timeout, $interval, Customer, Ticket, Country, Category, Notification, Department, Product, timerDiffFilter) {
   return {
     templateUrl: 'app/directives/ceTicketCreate/ceTicketCreate.html',
     restrict: 'EA',
@@ -11,9 +11,12 @@ angular.module('customerEngineApp')
       ticket: '=',
       relatedTickets: '=',
       user: '=',
-      ticketId: '='
+      ticketId: '=',
+      loadingTickets: '='
     },
     link: function (scope, element, attrs) {
+      
+      scope.loadingCurrent = false;
       
       function setTimerDates(ticket) {
         scope.timerString = timerDiffFilter([
@@ -95,12 +98,16 @@ angular.module('customerEngineApp')
         
         if (scope.ticketId) {
           // Get ticket from local tickets
+          scope.loadingCurrent = true;
+          
           Ticket.getById(scope.ticketId)
           .then(function (ticket) {
+            scope.loadingCurrent = false;
             scope.ticket = cleanEmpty(ticket);
             setupTimerString();
           })
           ['catch'](function (err) {
+            scope.loadingCurrent = false;
             scope.ticket = emptyTicket();
             setupTimerString();
           });
@@ -268,11 +275,14 @@ angular.module('customerEngineApp')
        * @param {String} customerId
        */
       function getRelatedTickets(customerId) {
+        scope.loadingTickets = true;
         Ticket.getByCustomerId(customerId)
         .then(function (tickets) {
+          scope.loadingTickets = false;
           scope.relatedTickets = tickets;
         })
         ['catch'](function (err) {
+          scope.loadingTickets = false;
           Notification.error('Something went wrong with fetching related tickets.');
         });
       }

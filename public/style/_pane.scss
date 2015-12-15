@@ -6,7 +6,7 @@
   &.gray {
     background-color: $gray-dark;
     input, .pane-button {
-      box-shadow: none;
+      // box-shadow: none;
       outline: none;
     }
   }
@@ -93,6 +93,7 @@
 .pane-button {
   @include border-shadow;
   display: block;
+  position: relative;
   background-color: $purple;
   text-transform: uppercase;
   text-align: center;
@@ -107,13 +108,17 @@
   }
   
   @include all-states {
-    &[disabled=disabled] {
+    &[disabled="disabled"] {
       color: $black-ish;
       background-color: $gray;
-      box-shadow: thin none;
+      box-shadow: none;
     }
   }
   
+  &.is-loading {
+    box-shadow: inset 0px 0px 1px 5000px rgba($color: $white, $alpha: 0.5);
+    color: $gray-light;
+  }
 }
 
 .pane-button-big {

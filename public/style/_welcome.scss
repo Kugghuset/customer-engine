@@ -75,3 +75,13 @@
     position: static;
   }
 }
+
+.welcome-spinner {
+  color: $purple-dark;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  .glyphicon {
+    font-size: 20px;
+  }
+}

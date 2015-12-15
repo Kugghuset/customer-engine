@@ -16,7 +16,10 @@
     
     <!--<span>Sign up</span>-->
     
-    <button type="submit" class="pane-button pull-right" ng-disabled="!formValid(loginForm, tempUser)">Log in / Sign up</button>
+    <button type="submit" class="pane-button pull-right" ng-class="{'is-loading': isLoading}" ng-disabled="!formValid(loginForm, tempUser)">
+      Log in / Sign up
+      <span ng-show="isLoading" class="welcome-spinner"><i class="glyphicon glyphicon-refresh"></i></span>
+    </button>
     
   </form>
   

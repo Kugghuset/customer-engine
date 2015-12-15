@@ -49,7 +49,7 @@ angular.module('customerEngineApp')
 }])
 .controller('ConfirmModalInstanceCtrl', function ($scope, $uibModalInstance, title, question) {
   
-  if (!$scope.title) { $scope.title = 'Confirm'; }
+  if (!title) { $scope.title = 'Confirm'; }
   
   if (!question) { $scope.question = 'Are you sure?'; }
   

@@ -203,6 +203,12 @@
     
     <textarea class="animated-textarea" msd-elastic="\n" cols="30" rows="3" placeholder="Describe the call as you would want to read it." ng-model="ticket.summary"></textarea>
   
+    <div class="float-container">
+      
+      <button ng-click="openSummary(ticket.summary, ticket)" class="pane-button pull-right">Focus view</button>
+      
+    </div>
+  
   </div>
   
   
@@ -271,3 +277,4 @@
 
 <ce-modal-customer open-modal="openModal" customer="ticket.customer"></ce-modal-customer>
 <ce-modal-confirm open-modal="confirmDelete"></ce-modal-confirm>
+<ce-modal-summary open-modal="openSummary"></ce-modal-summary>

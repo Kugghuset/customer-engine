@@ -31,10 +31,6 @@
     // padding: $size-s + 3px;
     font-size: $font-size-m;
   }
-  textarea {
-    // width: 100%;
-    resize: vertical;
-  }
 }
 
 .right-block {
@@ -218,4 +214,8 @@
     top: 0;
     right: 0;
   }
+}
+
+.pane-typeahead {
+  
 }

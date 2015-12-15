@@ -11,7 +11,8 @@
   
   <label for="">Department</label>
   
-  <span uib-dropdown uib-keyboard-nav>
+  <span class="fill-by-label">
+    <span uib-dropdown uib-keyboard-nav>
       <button id="simple-btn-keyboard-nav" type="button" class="pane-button" uib-dropdown-toggle>
         {{ ticket.department.departmentName || 'Choose department' }} <span class="caret"></span>
       </button>
@@ -23,6 +24,8 @@
         </li>
       </ul>
     </span>
+  </span>
+  
   
 </div>
 
@@ -31,11 +34,12 @@
 
   <label for="">Customer</label>
 
-  <input type="text" ng-model="ticket.customer" placeholder="Search for customer" uib-typeahead="customer as matched(customer, 'customer') for customer in getCustomer($viewValue)"
-  typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="pane-dropdown">
-  <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
-  <span ng-show="noResults && ticket.customer"><i class="glyphicon glyphicon-remove"></i> No Results Found</span>
-
+  <span class="fill-by-label">
+    <input type="text" ng-model="ticket.customer" ng-class="{'padded-right': (loadingLocations || noResults && ticket.customer)}" placeholder="Search for customer" uib-typeahead="customer as matched(customer, 'customer') for customer in getCustomer($viewValue)"
+    typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="pane-dropdown">
+    <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh" title="Looking for matching customers"></i>
+    <i ng-show="noResults && ticket.customer" class="glyphicon glyphicon-remove" title="No results found"></i>
+  </span>
 
   <br>
   

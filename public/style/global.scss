@@ -43,6 +43,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .fill-by-label {
   width: calc(100% - 155px);
+  position: relative;
   .dropdown {
     width: 100%;
     .pane-button {
@@ -50,15 +51,20 @@ h1, h2, h3, h4, h5, h6 {
       margin-top: 8px;
     }
   }
+  @include text-inputs {
+    width: 100%;
+  }
+  .glyphicon {
+    position: absolute;
+    top: 15px;
+    right: 10px;
+  }
+  .padded-right {
+    padding-right: 30px;
+  }
 }
 
-input[type=text],
-input[type=email],
-input[type=password],
-input[type=search],
-input[type=time],
-input[type=url],
-textarea {
+@include text-inputs {
   @include border-shadow;
   @include input-placeholder {
     color: $white;
@@ -179,4 +185,12 @@ ht {
   @include all-states {
     color: $black-ish;
   }
+}
+
+.spin {
+  @include spinner;
+}
+
+.glyphicon-refresh {
+  @extend .spin;
 }

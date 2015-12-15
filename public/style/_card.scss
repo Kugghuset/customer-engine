@@ -1,6 +1,9 @@
 .card-area {
   margin-left: 10px;
   margin-right: -20px;
+  @include breakpoint(break-m) {
+    margin: 0;
+  }
 }
 
 .card {
@@ -150,8 +153,12 @@
       color: $black-ish !important;
     }
     display: inline-block;
-    width: calc(100% - 185px) !important;
+    width: calc(100% - 185px);
     margin-left: 10px;
+    
+    @include breakpoint(break-l) {
+      width: 100%;
+    }
   }
   
 }

@@ -41,7 +41,7 @@
   }
 }
  
-@include breakpoint(break-ms) {
+@include breakpoint(break-m) {
   .fixed-left, .fixed-right {
     &, &.create {
       position: static;

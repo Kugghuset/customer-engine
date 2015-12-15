@@ -70,7 +70,6 @@ h1, h2, h3, h4, h5, h6 {
   @include input-placeholder {
     color: $white;
   }
-  width: calc(100% - 155px);
   background-color: transparent;
   padding: $size-s;
   font-size: $font-size-m;

@@ -140,8 +140,9 @@
 .card-area-header {
   h1 {
     display: inline-block;
-    width: 150px;
-    
+    width: 160px;
+    position: relative;
+    top: 5px;
   }
   
   input {
@@ -149,7 +150,8 @@
       color: $black-ish !important;
     }
     display: inline-block;
-    width: calc(100% - 175px) !important;
+    width: calc(100% - 185px) !important;
+    margin-left: 10px;
   }
   
 }

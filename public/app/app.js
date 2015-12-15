@@ -12,7 +12,8 @@ angular.module('customerEngineApp', [
   'ngCacheBuster',
   'monospaced.elastic'
 ])
-.config(['$stateProvider', '$urlRouterProvider', '$httpProvider','AnalyticsProvider', 'ngIntlTelInputProvider', '$localForageProvider', 'httpRequestInterceptorCacheBusterProvider', function ($stateProvider, $urlRouterProvider, $httpProvider, AnalyticsProvider, ngIntlTelInputProvider, $localForageProvider, httpRequestInterceptorCacheBusterProvider) {
+.config(['$stateProvider', '$urlRouterProvider', '$httpProvider','AnalyticsProvider', 'ngIntlTelInputProvider', '$localForageProvider', 'httpRequestInterceptorCacheBusterProvider',
+function ($stateProvider, $urlRouterProvider, $httpProvider, AnalyticsProvider, ngIntlTelInputProvider, $localForageProvider, httpRequestInterceptorCacheBusterProvider) {
   
   $urlRouterProvider
   .otherwise('/dashboard');
@@ -45,6 +46,7 @@ angular.module('customerEngineApp', [
   
   httpRequestInterceptorCacheBusterProvider.setMatchlist([/.*api.*/],true);
   
+  
 }])
 .factory('authInterceptor', ['$q', '$cookies', '$location', function ($q, $cookies, $location) {
   return {
@@ -75,7 +77,7 @@ angular.module('customerEngineApp', [
       $location.path('/login');
     }
   });
-  
+
   $rootScope.$on('$stateChangeStart', function (event, next, params) {
     if (Auth.isLoggedIn()) {
       // User is logged in
@@ -90,7 +92,7 @@ angular.module('customerEngineApp', [
         $state.transitionTo('main.login');
       }
     }
-  })
+  });
   
   $rootScope.$on('$stateChangeSuccess', function (event, net, params) {
    

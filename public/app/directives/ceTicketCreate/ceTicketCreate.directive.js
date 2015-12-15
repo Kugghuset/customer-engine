@@ -321,7 +321,10 @@ angular.module('customerEngineApp')
           // Attach ticketId if not present
           if (t && t.ticketId && !ticket.ticketId) {
             scope.ticket.ticketId = t.ticketId;
-            $location.path($location.path() + t.ticketId);
+            $state.go($state.current.name, { ticketId: t.ticketId }, { location: true, notify: false })
+            .then(function (item) {
+              $location.replace();
+            })
           }
         })
         ['catch'](function (err) {

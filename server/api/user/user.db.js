@@ -53,7 +53,7 @@ exports.findByEmail = function (email) {
       params: {
         email: {
           type: sql.VARCHAR(256),
-          val: email
+          val: email ? email.toLowerCase() : email
         }
       }
     })
@@ -88,7 +88,7 @@ exports.create = function (_user) {
       params: {
         email: {
           type: sql.VARCHAR(256),
-          val: _user.email
+          val: _user.email ? _user.email.toLowerCase() : _user.email
         },
         password: {
           type: sql.VARCHAR(256),
@@ -118,7 +118,7 @@ exports.auth = function(email, password) {
         params: {
           email: {
             type: sql.VARCHAR(256),
-            val: email
+            val: email ? email.toLowerCase() : email
           }
         }
       })
@@ -162,7 +162,7 @@ exports.update = function (user, userId) {
       params: {
         email: {
           type: sql.VARCHAR(256),
-          val: user.email
+          val: user.email ? user.email.toLowerCase() : user.email
         },
         name: {
           type: sql.VARCHAR(256),

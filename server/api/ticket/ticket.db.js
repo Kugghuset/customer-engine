@@ -70,7 +70,7 @@ function ticketParams(ticket, extra) {
     },
     email: {
       type: sql.VARCHAR(256),
-      val: ticket.email
+      val: ticket.email ? ticket.email.toLowerCase() : ticket.email
     },
     tel: {
       type: sql.VARCHAR(256),

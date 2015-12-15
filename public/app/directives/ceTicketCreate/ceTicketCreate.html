@@ -39,9 +39,10 @@
     <label for="">Customer</label>
   
     <span class="fill-by-label">
-      <input type="text" ng-model="ticket.customer" ng-class="{'padded-right': (loadingLocations || noResults && ticket.customer)}" placeholder="Search for customer" uib-typeahead="customer as matched(customer, 'customer') for customer in getCustomer($viewValue)"
-      typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="pane-dropdown">
-      <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh" title="Looking for matching customers"></i>
+      <input type="text" ng-model="ticket.customer" ng-class="{'padded-right': (loadingCustomers || noResults && ticket.customer)}" placeholder="Search for customer"
+        uib-typeahead="customer as matched(customer, 'customer') for customer in getCustomer($viewValue)"
+        typeahead-loading="loadingCustomers" typeahead-no-results="noResults" class="pane-dropdown">
+      <i ng-show="loadingCustomers" class="glyphicon glyphicon-refresh" title="Looking for matching customers"></i>
       <i ng-show="noResults && ticket.customer" class="glyphicon glyphicon-remove" title="No results found"></i>
     </span>
   
@@ -49,7 +50,7 @@
     
     <div class="float-container">
       
-      <button ng-click="openModal()" class="pane-button pull-right">Create customer</button>
+      <button ng-click="openModal()" class="pane-button pull-right">Create/select customer</button>
       
     </div>
     

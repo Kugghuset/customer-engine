@@ -9,6 +9,12 @@ var utils = require('../../utils/utils');
  * ROUTE: PUT '/api/customers/fuzzy'
  */
 exports.fuzzyQuery = function (req, res) {
+  
+  // Return quickly for no query
+  if (!req.body.query) {
+    return res.status(200).json([]);
+  }
+  
   Customer.getFuzzy(req.body.query)
   .then(function (customers) {
     res.status(200).json(customers);
@@ -19,7 +25,7 @@ exports.fuzzyQuery = function (req, res) {
 }
 
 /**
- * ROUTE: PUT '/api/customers/fuzzy'
+ * ROUTE: PUT '/api/customers/fuzzy/:colName'
  */
 exports.fuzzyQueryBy = function (req, res) {
   Customer.getFuzzyBy(req.body.query, req.params.colName)

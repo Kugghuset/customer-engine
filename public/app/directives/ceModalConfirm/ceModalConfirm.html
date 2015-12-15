@@ -1,0 +1,18 @@
+<div class="pane">
+
+  <h1>{{ title }}</h1>
+
+  <p ng-repeat="line in question | split:'\n' track by $index">{{ line }}</p>
+
+  <br>
+
+  <div class="float-container">
+
+    <button ng-click="ok()" class="pane-button green pull-right offset-right">Ok</button>
+
+    <button ng-click="cancel()" class="pane-button red pull-right offset-right">Cancel</button>
+
+  </div>
+
+
+</div>

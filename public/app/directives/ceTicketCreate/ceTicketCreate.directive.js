@@ -147,13 +147,27 @@ angular.module('customerEngineApp')
       
       scope.discard = function (_ticket) {
         
-        if (confirm('Are you sure you want to discard the ticket?\n\nThis will delete it entirely.')) {
-          if (_ticket && _ticket.ticketId) {
-            Ticket.remove(_ticket.ticketId)
+        if (scope.confirmDelete) {
+          scope.confirmDelete(
+            'Discard ticket?',
+            'Are you sure you want to discard the ticket?\nThis will delete it entirely.',
+            function (answer) {
+              if (answer) {
+                if (_ticket && _ticket.ticketId) {
+                  Ticket.remove(_ticket.ticketId)
+                }
+                $state.transitionTo('main.dashboard');
+              }
+            }
+          );
+        } else {
+          if (confirm('Are you sure you want to discard the ticket?\n\nThis will delete it entirely.')) {
+            if (_ticket && _ticket.ticketId) {
+              Ticket.remove(_ticket.ticketId)
+            }
+            $state.transitionTo('main.dashboard');
           }
-          $state.transitionTo('main.dashboard');
         }
-        
       }
       
       scope.goBack = function (_ticket) {

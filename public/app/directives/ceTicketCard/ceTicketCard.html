@@ -47,8 +47,8 @@
     <div class="col-1-2 card-col-right">
       <h3>Summary</h3>
       <div class="card-col-content">
-        <p ng-show="ticket.summmary" ng-repeat="line in ticket.summary | split:'\n' track by $index">{{ line }}</p>
-        <p class="grayout" ng-show="!ticket.summmary">No summary</p>
+        <p ng-show="ticket.summary" ng-repeat="line in ticket.summary | split:'\n' track by $index">{{ line }}</p>
+        <p class="grayout" ng-show="!ticket.summary">No summary</p>
       </div>
     </div>
   </div>

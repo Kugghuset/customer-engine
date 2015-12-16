@@ -40,6 +40,32 @@ angular.module('customerEngineApp')
         .success(resolve)
         .error(reject);
       });
+    },
+    
+    personMatch: function (source, target) {
+      if (!(_.isObject(source) && _.isObject(target))) {
+        // Either one or both are falsy, I.E. aren't similar enough.
+        return false;
+      }
+      
+      return _.every([
+        source.name === target.name,
+        source.email === target.email,
+        source.tel === target.tel,
+        source.altTel === target.altTel
+      ]);
+    },
+    
+    cleanOther: function (person, colName) {
+      // If an existing person already is chosen but there's been an edit to it,
+      // empty the other fields.
+      if (!!person && !!person.personId) {
+        // Empty fields which aren't the one being edited.
+        _.chain(['name', 'email', 'tel', 'altTel', 'personId'])
+          .filter(function (col) { return col != colName; })
+          .map(function (col) { person[col] = undefined; })
+          .value();
+      }
     }
   };
   

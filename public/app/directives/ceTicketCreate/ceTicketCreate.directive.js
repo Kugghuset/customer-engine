@@ -18,6 +18,10 @@ angular.module('customerEngineApp')
       
       scope.loadingCurrent = false;
       
+      var timer;
+      
+      var existingPerson;
+      
       function setTimerDates(ticket) {
         scope.timerString = timerDiffFilter([
           ticket // Start time
@@ -28,9 +32,6 @@ angular.module('customerEngineApp')
             : new Date()
           ]);
       }
-      
-      var timer;
-      
       function startTimer() {
         // Initial set
         setTimerDates(scope.ticket);
@@ -287,7 +288,15 @@ angular.module('customerEngineApp')
         return Customer.getFuzzy(val);
       }
       
+      /**
+       * @param {String|Number} customerId
+       * @param {String} query
+       * @param {String} colName
+       * @return {Promise}
+       */
       scope.getContacts = function (customerId, query, colName) {
+        Person.cleanOther(scope.person, colName);
+        
         return Person.getFuzzyBy(customerId, query, colName);
       }
       
@@ -308,6 +317,21 @@ angular.module('customerEngineApp')
           scope.loadingTickets = false;
           Notification.error('Something went wrong with fetching related tickets.');
         });
+      }
+      
+      /**
+       * @param {Object} person
+       * @param {Object} $item
+       */
+      scope.setPerson = function (person, $item) {
+        // existingPerson = angular.copy($item);
+        
+        console.log($item);
+        console.log(person);
+        
+        console.log(scope.ticket.person === person);
+        
+        person = $item;
       }
       
       /**

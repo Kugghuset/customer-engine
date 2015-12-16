@@ -157,11 +157,14 @@ exports.create = function (ticket, user) {
     // Ensure there are properties
     ticket = ensureHasProps(ticket, user);
     
-    return sql.execute({
-      query: [
-        sql.fromFile('./sql/ticket.create.sql'),
+    var createQuery = [
+        sql.fromFile('./sql/ticket.create.sql')
+          .replace('{updateOrCreate}', sql.fromFile('../person/sql/person.updateOrCreate.sql')),
         findBy('ticketId')
-        ].join(' '),
+        ].join(' ');
+        
+    return sql.execute({
+      query: createQuery,
       params: ticketParams(ticket)
     })
     .then(function (ticket) {
@@ -187,11 +190,14 @@ exports.update = function (ticket, user) {
     // Ensure there are properties
     ticket = ensureHasProps(ticket, user);
     
-    sql.execute({
-      query: [
-        sql.fromFile('./sql/ticket.update.sql'),
+    var updateQuery = [
+        sql.fromFile('./sql/ticket.update.sql')
+          .replace('{updateOrCreate}', sql.fromFile('../person/sql/person.updateOrCreate.sql')),
         findBy('ticketId')
-      ].join(' '),
+      ].join(' ')
+    
+    sql.execute({
+      query: updateQuery,
       params: ticketParams(ticket, {
         ticketId: {
           type: sql.BIGINT,

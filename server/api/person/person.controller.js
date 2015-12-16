@@ -22,7 +22,7 @@ exports.fuzzyQuery = function (req, res) {
  * ROUTE: PUT '/api/persons/fuzzy'
  */
 exports.fuzzyQueryBy = function (req, res) {
-  Person.getFuzzyBy(req.body.query, req.params.colName)
+  Person.getFuzzyBy(req.body.query, req.params.colName, req.body.customerId)
   .then(function (persons) {
     res.status(200).json(persons);
   })

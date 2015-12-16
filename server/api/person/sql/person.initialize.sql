@@ -11,9 +11,26 @@ BEGIN
     [email] varchar(256) NULL,
     [tel] varchar(256) NULL,
     [altTel] varchar(256) NULL,
-    [isReseller] bit NULL,
     [customerId] bigint NULL, -- parent-ish
     [dateCreated] datetime2 DEFAULT GETUTCDATE() NULL,
-    [dateChanged] datetime2 DEFAULT GETUTCDATE() NULL
+    [dateChanged] datetime2 DEFAULT GETUTCDATE() NULL,
+    [dateContacted] datetime2 NULL -- For the NPS integration
   )
+END
+
+-- Delete isReseller from columns if it exists
+IF EXISTS(SELECT * FROM sys.columns
+          WHERE Name = N'isReseller'
+          AND Object_ID = Object_ID(N'Person'))
+BEGIN
+  ALTER TABLE [dbo].[Person]
+  DROP COLUMN [isReseller]
+END
+
+IF NOT EXISTS(SELECT * FROM sys.columns
+              WHERE Name = N'dateContacted'
+              AND Object_ID = Object_ID(N'Person'))
+BEGIN
+  ALTER TABLE [dbo].[Person]
+  ADD [dateContacted] datetime2 NULL
 END

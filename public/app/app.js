@@ -12,8 +12,8 @@ angular.module('customerEngineApp', [
   'ngCacheBuster',
   'monospaced.elastic'
 ])
-.config(['$stateProvider', '$urlRouterProvider', '$httpProvider','AnalyticsProvider', 'ngIntlTelInputProvider', '$localForageProvider', 'httpRequestInterceptorCacheBusterProvider',
-function ($stateProvider, $urlRouterProvider, $httpProvider, AnalyticsProvider, ngIntlTelInputProvider, $localForageProvider, httpRequestInterceptorCacheBusterProvider) {
+.config(['$stateProvider', '$urlRouterProvider', '$httpProvider','AnalyticsProvider', 'ngIntlTelInputProvider', '$localForageProvider', 'httpRequestInterceptorCacheBusterProvider', 'NotificationProvider',
+function ($stateProvider, $urlRouterProvider, $httpProvider, AnalyticsProvider, ngIntlTelInputProvider, $localForageProvider, httpRequestInterceptorCacheBusterProvider, NotificationProvider) {
   
   $urlRouterProvider
   .otherwise('/dashboard');
@@ -46,6 +46,10 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, AnalyticsProvider, 
   
   httpRequestInterceptorCacheBusterProvider.setMatchlist([/.*api.*/],true);
   
+  NotificationProvider.setOptions({
+    positionX: 'right',
+    startRight: 50
+  });
   
 }])
 .factory('authInterceptor', ['$q', '$cookies', '$location', function ($q, $cookies, $location) {

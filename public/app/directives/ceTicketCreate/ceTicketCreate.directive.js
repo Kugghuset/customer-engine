@@ -2,8 +2,8 @@
 
 angular.module('customerEngineApp')
 .directive('ceTicketCreate',
-  ['$location', '$state', '$timeout', '$interval', 'Customer', 'Ticket', 'Country', 'Category', 'Notification', 'Department', 'Product', 'timerDiffFilter',
-  function ($location, $state, $timeout, $interval, Customer, Ticket, Country, Category, Notification, Department, Product, timerDiffFilter) {
+  ['$location', '$state', '$timeout', '$interval', 'Customer', 'Person', 'Ticket', 'Country', 'Category', 'Notification', 'Department', 'Product', 'timerDiffFilter',
+  function ($location, $state, $timeout, $interval, Customer, Person, Ticket, Country, Category, Notification, Department, Product, timerDiffFilter) {
   return {
     templateUrl: 'app/directives/ceTicketCreate/ceTicketCreate.html',
     restrict: 'EA',
@@ -127,6 +127,8 @@ angular.module('customerEngineApp')
        */
       scope.submit = function (_ticket) {
         
+        // return console.log(_ticket);
+        
         if (_ticket.status === 'Closed' && !_ticket.ticketDateClosed) {
           _ticket.ticketDateClosed = new Date();
         }
@@ -185,8 +187,11 @@ angular.module('customerEngineApp')
        * @return {String}
        */
       scope.matched = function (item, itemName, options) {
+        
         if (!options) { options =  {}; }
         if (_.isUndefined(itemName)) { itemName = ''; }
+        
+        if (_.isString(item)) { return item; } // Early
         
         return _.chain(item)
           .filter(function (v, key) { return (key != itemName + 'Id') || !!~_.indexOf(options.skip, key); })
@@ -280,6 +285,10 @@ angular.module('customerEngineApp')
        */
       scope.getCustomer = function (val) {
         return Customer.getFuzzy(val);
+      }
+      
+      scope.getContacts = function (customerId, query, colName) {
+        return Person.getFuzzyBy(customerId, query, colName);
       }
       
       /**

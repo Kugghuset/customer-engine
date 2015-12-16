@@ -11,7 +11,7 @@ BEGIN
     [tel] varchar(256) NULL,
     [altTel] varchar(256) NULL,
     [isReseller] bit NULL,
-    -- [personId] bigint NULL,
+    [personId] bigint NULL,
     [summary] varchar(max) NULL,
     [country] varchar(256) NULL,
     [transferred] bit NULL,
@@ -120,14 +120,14 @@ ELSE
       ADD [ticketDateClosed] datetime2 NULL
   END
   
-  -- IF NOT EXISTS(SELECT * FROM sys.columns
-  --               WHERE Name = N'personId'
-  --               AND Object_ID = Object_ID(N'Ticket'))
-  -- BEGIN
-  --     ALTER TABLE [dbo].[Ticket]
-  --     ADD COLUMN [personId] bigint NULL
+  IF NOT EXISTS(SELECT * FROM sys.columns
+                WHERE Name = N'personId'
+                AND Object_ID = Object_ID(N'Ticket'))
+  BEGIN
+      ALTER TABLE [dbo].[Ticket]
+      ADD [personId] bigint NULL
       /*
         Somehow handle conversion of existing tickets' persons
         and remove old properties?
       */
-  -- END
+  END

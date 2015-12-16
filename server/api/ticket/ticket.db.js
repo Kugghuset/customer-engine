@@ -37,6 +37,7 @@ function ensureHasProps(ticket, user) {
     ticket.transferredDepartment = ticket.transferredDepartment || {};
     ticket.country = _.isObject(ticket.country) ? ticket.country.short : ticket.country;
     ticket.product = ticket.product || {};
+    ticket.person = ticket.person || {};
     
     return ticket;
 }
@@ -64,21 +65,27 @@ function ticketParams(ticket, extra) {
       type: sql.DATETIME2,
       val: ticket.ticketDateClosed
     },
-    name:  {
-      type: sql.VARCHAR(256),
-      val: ticket.name
+    personId: {
+      type: sql.BIGINT,
+      val: ticket.person ? (ticket.person.personId || null) : null // NULL or the value if it exists
     },
-    email: {
+    name:  { // Member of Person, but may be created
       type: sql.VARCHAR(256),
-      val: ticket.email ? ticket.email.toLowerCase() : ticket.email
+      val: ticket.person ? ticket.person.name : ticket.name
     },
-    tel: {
+    email: { // Member of Person, but may be created
       type: sql.VARCHAR(256),
-      val: ticket.tel
+      val: ticket.person
+        ? (ticket.person.email ? ticket.person.email.toLowerCase() : ticket.person.email)
+        : ticket.email ? ticket.email.toLowerCase() : ticket.email
     },
-    altTel: {
+    tel: { // Member of Person, but may be created
       type: sql.VARCHAR(256),
-      val: ticket.altTel
+      val: ticket.person ? ticket.person.tel : ticket.tel
+    },
+    altTel: { // Member of Person, but may be created
+      type: sql.VARCHAR(256),
+      val: ticket.person ? ticket.person.altTel : ticket.altTela
     },
     country: {
       type: sql.VARCHAR(256),
@@ -161,6 +168,7 @@ exports.create = function (ticket, user) {
       resolve(_.first(util.objectify(ticket)));
     })
     .catch(function (err) {
+      console.log(err);
       reject(err);
     });
   });

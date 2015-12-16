@@ -46,7 +46,8 @@ exports.getFuzzy = function (query) {
  * @param {String} colName
  * @return {Promise} -> {Array} (Person)
  */
-exports.getFuzzyBy = function (query, colName) {
+exports.getFuzzyBy = function (query, colName, customerId) {
+  
   return new Promise(function (resolve, reject) {
     return sql.execute({
       query: sql.fromFile('./sql/person.getFuzzyBy.sql').replace(util.literalRegExp('{ colName }', 'gi'), colName),
@@ -54,6 +55,10 @@ exports.getFuzzyBy = function (query, colName) {
         query: {
           type: sql.VARCHAR(256),
           val: query
+        },
+        customerId: {
+          type: sql.BIGINT,
+          val: customerId
         }
       }
     })
@@ -76,14 +81,26 @@ exports.create = function (_person) {
           type: sql.VARCHAR(256),
           val: _person.orgNr
         },
-        orgName: {
+        name: {
           type: sql.VARCHAR(256),
-          val: _person.orgName
+          val: _person.name
         },
-        personNumber: {
+        email: {
           type: sql.VARCHAR(256),
-          val: _person.personNumber
+          val: _person.email ? _person.email.toLowerCase() : _person.email
         },
+        tel: {
+          type: sql.VARCHAR(256),
+          val: _person.tel
+        },
+        altTel: {
+          type: sql.VARCHAR(256),
+          val: _person.altTel
+        },
+        customerId: {
+          type: sql.BIGINT,
+          val: null //_person.customer ? _person.customer.customerId : _person.customerId
+        }
       }
     })
     .then(function (persons) {

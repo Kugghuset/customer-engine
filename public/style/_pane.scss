@@ -168,6 +168,12 @@
   }
 }
 
+
+&.fill-by-label {
+    .intl-tel-input {
+      width: 100%;
+    }
+  }
 // -- Intl-tel-input --
 .pane {
   .intl-tel-input {

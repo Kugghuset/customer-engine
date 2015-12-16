@@ -9,5 +9,8 @@ IF EXISTS(SELECT * FROM sys.columns
 BEGIN
   SELECT TOP 12 [personId], [name], [email], [tel], [altTel]
   FROM [dbo].[Person]
-  WHERE [{ colName }] LIKE '%' + @query + '%';
+  WHERE [{ colName }] LIKE '%' + @query + '%'
+    AND (
+      [customerId] = @customerId
+      OR [customerId] IS NULL);
 END

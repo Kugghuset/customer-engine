@@ -4,17 +4,12 @@ Finds tickets by somethign and joins it. The something is determined by a where_
 
 SELECT
   [A].[ticketId],
-  [A].[name],
-  [A].[email],
-  [A].[tel],
-  [A].[altTel],
+  [Q].[personId] AS [person.personId],
+  [Q].[name] AS [person.name],
+  [Q].[email] AS [person.email],
+  [Q].[tel] AS [person.tel],
+  [Q].[altTel] AS [person.altTel],
   [A].[isReseller],
-  -- [Q].[personId] AS [person.personId],
-  -- [Q].[name] AS [person.name],
-  -- [Q].[email] AS [person.email],
-  -- [Q].[tel] AS [person.tel],
-  -- [Q].[altTel] AS [person.altTel],
-  -- [Q].[isReseller] AS [person.isReseller],
   [A].[summary],
   [A].[transferred],
   [A].[status],
@@ -83,8 +78,8 @@ LEFT JOIN [dbo].[Product] AS [P]
 ON [A].[productId] = [P].[productId]
 
 -- Joins the person, which includes contact info
--- LEFT JOIN [dbo].[Person] AS [Q]
--- ON [A].[personId] = [Q].[personId]
+LEFT JOIN [dbo].[Person] AS [Q]
+ON [A].[personId] = [Q].[personId]
 
 WHERE [A].{ where_clause } { other }
 ORDER BY [A].[ticketDate] DESC

@@ -40,7 +40,7 @@ angular.module('customerEngineApp')
           if (/incorrect password|email is required|password is required/i.test(err)) {
             Notification.error(err);
           } else {
-            Notification.error('Could\'t log in.');
+            Notification.error('Couldn\'t log in.');
           }
         })
       }

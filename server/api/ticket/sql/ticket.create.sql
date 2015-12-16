@@ -6,14 +6,14 @@ SET XACT_ABORT ON
 
 BEGIN TRAN
 
+{updateOrCreate}
+
+-- Ticket
 INSERT INTO [dbo].[Ticket] (
-  [name],
-  [email],
-  [tel],
-  [altTel],
+  [personId],
+  [isReseller],
   [summary],
   [transferred],
-  [isReseller],
   [status],
   [country],
   [customerId],
@@ -25,13 +25,10 @@ INSERT INTO [dbo].[Ticket] (
   [ticketDateClosed]
 )
 VALUES (
-  @name,
-  @email,
-  @tel,
-  @altTel,
+  @personId,
+  @isReseller,
   @summary,
   @transferred,
-  @isReseller,
   @status,
   @country,
   @customerId,
@@ -43,6 +40,7 @@ VALUES (
   @ticketDateClosed
 )
 
+-- Categort blob
 INSERT INTO [dbo].[CategoryBlob] (
   [ticketId],
   [categoryId],

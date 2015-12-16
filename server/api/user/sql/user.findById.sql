@@ -7,6 +7,7 @@ SELECT
   [U].[email],
   [U].[name],
   [U].[password],
+  [U].[lastLoggedIn],
   [D].[departmentId] AS [department.departmentId],
   [D].[departmentName] AS [department.departmentName],
   [D].[country] AS [department.country]

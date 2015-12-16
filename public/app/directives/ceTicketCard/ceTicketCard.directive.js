@@ -39,9 +39,8 @@ angular.module('customerEngineApp')
         if (status != oldStatus && !!oldStatus) {
           Ticket.updateStatus(scope.ticket)
           .then(function (data) {
-            console.log(data);
-            if (ticket.status === 'Closed') {
-              ticket.ticketDateEnd = new Date();
+            if (scope.ticket.status === 'Closed') {
+              scope.ticket.ticketDateEnd = new Date();
             }
           })
           ['catch'](function (err) {

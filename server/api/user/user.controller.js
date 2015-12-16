@@ -3,6 +3,7 @@
 var _ = require('lodash');
 var Promise = require('bluebird');
 var chalk = require('chalk');
+var moment = require('moment');
 
 var auth = require('../../services/auth');
 var User = require('./user.db');
@@ -39,7 +40,14 @@ exports.login = function (req, res) {
       // Attach the token.
       auth.setTokenCookie(req, res);
       
-      return res.status(200).json(user);
+      User.updateLastLoggedIn(user)
+      .then(function (user) {
+        return res.status(200).json(user);
+      })
+      .catch(function (err) {
+        console.log(err);
+        utils.handleError(res, new Error('Something went wrong when logging in.'))
+      })
     } else {
       // No user, let's create it
       User.create(req.body)
@@ -49,7 +57,15 @@ exports.login = function (req, res) {
         // Attach the token.
         auth.setTokenCookie(req, res);
         
-        user.isNew = true;
+        User.updateLastLoggedIn(user)
+        .then(function (user) {
+          user.isNew = true;
+          return res.status(200).json(user);
+        })
+        .catch(function (err) {
+          console.log(err);
+          utils.handleError(res, new Error('Something went wrong when logging in.'))
+        })
         
         return res.status(200).json(user);
       })
@@ -75,7 +91,19 @@ exports.login = function (req, res) {
 exports.me = function (req, res) {
   User.findById(req.user.userId)
   .then(function (user) {
-    res.status(200).json(user);
+    
+    // either if there is no last logged in or it wasn't *today*, set last logged in to now
+    if (!user.lastLoggedIn || moment().diff(user.lastLoggedIn, 'days') > 0) {
+      User.updateLastLoggedIn(user)
+      .then(function (user) {
+        res.status(200).json(user);
+      })
+      .catch(function (err) {
+        utils.handleError(res, err);
+      });
+    } else {
+      res.status(200).json(user);
+    }
   })
   .catch(function (err) {
     utils.handleError(res, err);

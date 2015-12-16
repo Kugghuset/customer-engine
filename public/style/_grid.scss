@@ -16,9 +16,6 @@ $pad: 20px;
 [class*='col-'] {
   float: left;
   padding-right: $pad;
-  // .grid &:last-of-type {
-  //   padding-right: 0;
-  // }
 }
 .col-2-3 {
   width: 66.66%;
@@ -45,13 +42,17 @@ $pad: 20px;
 .col-card {
   width: 33.33%;
   max-width: 400px;
+  min-width: 350px;
   
   @include breakpoint(break-xl) {
     width: 50%;
     max-width: 100%;
+    min-width: 350px;
   }
   @include breakpoint(break-l) {
     width: 100%;
+    min-width: auto;
+    padding-right: 0;
   }
 }
 

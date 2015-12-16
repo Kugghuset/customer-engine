@@ -23,6 +23,7 @@
   height: 500px;
   min-height: 500px;
   height: calc(100vh - 166px);
+  max-height: 750px;
   margin-bottom: 20px;
   padding-bottom: 50px;
   
@@ -72,5 +73,15 @@
 .logo-wrap {
   .logo {
     position: static;
+  }
+}
+
+.welcome-spinner {
+  color: $purple-dark;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  .glyphicon {
+    font-size: 20px;
   }
 }

@@ -12,12 +12,20 @@
   
   <div class="card-middle-section">
     
-    <div class="card-categories">
-      <span ng-repeat="category in plainCategory(ticket)">{{ category }}</span>
+    <div class="col-1-2 card-col-left">
+      <h3>Catetogories</h3>
+      <div class="card-col-content">
+        <div ng-repeat="category in plainCategory(ticket)">{{ category }}</div>
+        <div class="grayout" ng-show="!plainCategory(ticket).length">No category chosen</div>
+      </div>
+      
     </div>
-    
-    <div ng-show="ticket.product.productName" class="card-product">
-      <span>{{ ticket.product.productName }}</span>
+    <div class="col-1-2 card-col-right">
+      <h3>Product</h3>
+      <div class="card-col-content">
+        <div ng-show="ticket.product.productName">{{ ticket.product.productName }}</div>
+        <div class="grayout" ng-show="!ticket.product.productName">No chosen product</div>
+      </div>
     </div>
     
   </div>
@@ -25,17 +33,24 @@
   <br>
   
   <div class="card-contact">
-    <div class="col-1-2 card-contact-area">
+    <div class="col-1-2 card-col-left">
       <h3>Contact</h3>
-      <div>{{ ticket.name || 'Name missing' }}</div>
-      <div ng-show="ticket.email">{{ ticket.email }}</div>
-      <div ng-show="ticket.tel">{{ ticket.tel }}</div>
-      <div ng-show="ticket.isReseller"><i class="glyphicon glyphicon-ok"></i> Reseller</div>
-      <div ng-show="ticket.transferred"><i class="glyphicon glyphicon-arrow-right"></i> Transferred ({{ ticket.transferredDepartment.departmentName }})</div>
+      <div class="card-col-content">
+        <div ng-show="ticket.person.name">{{ ticket.person.name }}</div>
+        <div class="grayout" ng-show="!ticket.person.name">Name missing</div>
+        <div ng-show="ticket.person.email">{{ ticket.person.email }}</div>
+        <div ng-show="ticket.person.tel">{{ ticket.person.tel }}</div>
+        <div ng-show="ticket.person.altTel">{{ ticket.person.altTel }}</div>
+        <div ng-show="ticket.isReseller"><i class="glyphicon glyphicon-ok"></i> Reseller</div>
+        <div ng-show="ticket.transferred"><i class="glyphicon glyphicon-arrow-right"></i> Transferred ({{ ticket.transferredDepartment.departmentName }})</div>
+      </div>
     </div>
-    <div class="col-1-2 card-summary" ng-show="ticket.summary">
+    <div class="col-1-2 card-col-right">
       <h3>Summary</h3>
-      <p ng-repeat="line in ticket.summary | split:'\n' track by $index">{{ line }}</p>
+      <div class="card-col-content">
+        <p ng-show="ticket.summary" ng-repeat="line in ticket.summary | split:'\n' track by $index">{{ line }}</p>
+        <p class="grayout" ng-show="!ticket.summary">No summary</p>
+      </div>
     </div>
   </div>
   
@@ -55,8 +70,9 @@
     </div>
     <div class="pull-right">
       <div class="right">
-        <i class="glyphicon glyphicon-time" ng-show="ticket.status === 'Closed'"></i>
-        &nbsp;{{ ticket.status === 'Closed' ? ([ticket.ticketDate, ticket.ticketDateClosed] | timerDiff) : '' }}
+        <!--<i class="glyphicon glyphicon-time" ng-show="ticket.status === 'Closed'"></i>-->
+        <!--&nbsp;{{ ticket.status === 'Closed' ? ([ticket.ticketDate, ticket.ticketDateClosed] | timerDiff) : '' }}-->
+        &nbsp;
       </div>
       <div class="date">
         {{ ticket.ticketDate | date: 'yyyy-MM-dd, HH:mm' }}

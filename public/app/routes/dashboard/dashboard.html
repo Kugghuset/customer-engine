@@ -4,11 +4,13 @@
   
   <aside class="pane vertical-fill fixed-left">
     
-    <ce-dash-pane user="auth.getCurrentUser()" tickets="tickets" is-readonly="isReadonly" filter="tickFilter"></ce-dash-pane>
+    <ce-dash-pane user="auth.getCurrentUser()" is-loading="isLoading" tickets="tickets" is-readonly="isReadonly" filter="tickFilter"></ce-dash-pane>
     
   </aside>
   
   <ce-card-area child-class="vertical-fill fixed-right">
+    
+    <ce-loading is-loading="isLoading"></ce-loading>
     
     <ce-card-area-header title="My tickets" tickets="tickets" ></ce-card-area-header>
     

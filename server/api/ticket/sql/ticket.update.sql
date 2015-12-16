@@ -6,16 +6,16 @@ SET XACT_ABORT ON
 
 BEGIN TRAN
 
+{updateOrCreate}
+
+-- Ticket
 UPDATE [dbo].[Ticket]
 SET
-  [dbo].[Ticket].[name] = @name,
-  [dbo].[Ticket].[email] = @email,
-  [dbo].[Ticket].[tel] = @tel,
-  [dbo].[Ticket].[altTel] = @altTel,
+  [dbo].[Ticket].[personId] = @personId,
+  [dbo].[Ticket].[isReseller] = @isReseller,
   [dbo].[Ticket].[summary] = @summary,
   [dbo].[Ticket].[transferred] = @transferred,
   [dbo].[Ticket].[status] = @status,
-  [dbo].[Ticket].[isReseller] = @isReseller,
   [dbo].[Ticket].[country] = @country,
   [dbo].[Ticket].[customerId] = @customerId,
   [dbo].[Ticket].[userId] = @userId,

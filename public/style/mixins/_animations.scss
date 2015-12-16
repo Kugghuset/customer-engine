@@ -1,0 +1,19 @@
+@mixin spinner {
+  & {
+    -webkit-animation: spinnerRotate 1s infinite linear;
+        -moz-animation: spinnerRotate 1s infinite linear;
+            animation: spinnerRotate 1s infinite linear;
+  }
+  @-webkit-keyframes spinnerRotate {
+      from{-webkit-transform:rotate(0deg);}
+      to{-webkit-transform:rotate(360deg);}
+  }
+  @-moz-keyframes spinnerRotate {
+      from{-moz-transform:rotate(0deg);}
+      to{-moz-transform:rotate(360deg);}
+  }
+  @keyframes spinnerRotate {
+      from{transform:rotate(0deg);}
+      to{transform:rotate(360deg);}
+  }
+}

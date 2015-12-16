@@ -2,8 +2,8 @@
 
 angular.module('customerEngineApp')
 .directive('ceTicketCreate',
-  ['$location', '$state', '$interval', 'Customer', 'Ticket', 'Country', 'Category', 'Notification', 'Department', 'Product', 'timerDiffFilter',
-  function ($location, $state, $interval, Customer, Ticket, Country, Category, Notification, Department, Product, timerDiffFilter) {
+  ['$location', '$state', '$timeout', '$interval', 'Customer', 'Person', 'Ticket', 'Country', 'Category', 'Notification', 'Department', 'Product', 'timerDiffFilter',
+  function ($location, $state, $timeout, $interval, Customer, Person, Ticket, Country, Category, Notification, Department, Product, timerDiffFilter) {
   return {
     templateUrl: 'app/directives/ceTicketCreate/ceTicketCreate.html',
     restrict: 'EA',
@@ -11,9 +11,16 @@ angular.module('customerEngineApp')
       ticket: '=',
       relatedTickets: '=',
       user: '=',
-      ticketId: '='
+      ticketId: '=',
+      loadingTickets: '='
     },
     link: function (scope, element, attrs) {
+      
+      scope.loadingCurrent = false;
+      
+      var timer;
+      
+      var existingPerson;
       
       function setTimerDates(ticket) {
         scope.timerString = timerDiffFilter([
@@ -25,9 +32,6 @@ angular.module('customerEngineApp')
             : new Date()
           ]);
       }
-      
-      var timer;
-      
       function startTimer() {
         // Initial set
         setTimerDates(scope.ticket);
@@ -95,12 +99,16 @@ angular.module('customerEngineApp')
         
         if (scope.ticketId) {
           // Get ticket from local tickets
+          scope.loadingCurrent = true;
+          
           Ticket.getById(scope.ticketId)
           .then(function (ticket) {
+            scope.loadingCurrent = false;
             scope.ticket = cleanEmpty(ticket);
             setupTimerString();
           })
           ['catch'](function (err) {
+            scope.loadingCurrent = false;
             scope.ticket = emptyTicket();
             setupTimerString();
           });
@@ -119,6 +127,8 @@ angular.module('customerEngineApp')
        * @param {Object} _ticket (Ticket)
        */
       scope.submit = function (_ticket) {
+        
+        // return console.log(_ticket);
         
         if (_ticket.status === 'Closed' && !_ticket.ticketDateClosed) {
           _ticket.ticketDateClosed = new Date();
@@ -140,13 +150,27 @@ angular.module('customerEngineApp')
       
       scope.discard = function (_ticket) {
         
-        if (confirm('Are you sure you want to discard the ticket?\n\nThis will delete it entirely.')) {
-          if (_ticket && _ticket.ticketId) {
-            Ticket.remove(_ticket.ticketId)
+        if (scope.confirmDelete) {
+          scope.confirmDelete(
+            'Discard ticket?',
+            'Are you sure you want to discard the ticket?\nThis will delete it entirely.',
+            function (answer) {
+              if (answer) {
+                if (_ticket && _ticket.ticketId) {
+                  Ticket.remove(_ticket.ticketId)
+                }
+                $state.transitionTo('main.dashboard');
+              }
+            }
+          );
+        } else {
+          if (confirm('Are you sure you want to discard the ticket?\n\nThis will delete it entirely.')) {
+            if (_ticket && _ticket.ticketId) {
+              Ticket.remove(_ticket.ticketId)
+            }
+            $state.transitionTo('main.dashboard');
           }
-          $state.transitionTo('main.dashboard');
         }
-        
       }
       
       scope.goBack = function (_ticket) {
@@ -164,8 +188,11 @@ angular.module('customerEngineApp')
        * @return {String}
        */
       scope.matched = function (item, itemName, options) {
+        
         if (!options) { options =  {}; }
         if (_.isUndefined(itemName)) { itemName = ''; }
+        
+        if (_.isString(item)) { return item; } // Early
         
         return _.chain(item)
           .filter(function (v, key) { return (key != itemName + 'Id') || !!~_.indexOf(options.skip, key); })
@@ -262,19 +289,49 @@ angular.module('customerEngineApp')
       }
       
       /**
+       * @param {String|Number} customerId
+       * @param {String} query
+       * @param {String} colName
+       * @return {Promise}
+       */
+      scope.getContacts = function (customerId, query, colName) {
+        Person.cleanOther(scope.person, colName);
+        
+        return Person.getFuzzyBy(customerId, query, colName);
+      }
+      
+      /**
        * Gets the last 12 tickets made for for *customerId*
        * and attaches them to scope as scope.relatedTickets.
        * 
        * @param {String} customerId
        */
       function getRelatedTickets(customerId) {
+        scope.loadingTickets = true;
         Ticket.getByCustomerId(customerId)
         .then(function (tickets) {
+          scope.loadingTickets = false;
           scope.relatedTickets = tickets;
         })
         ['catch'](function (err) {
+          scope.loadingTickets = false;
           Notification.error('Something went wrong with fetching related tickets.');
         });
+      }
+      
+      /**
+       * @param {Object} person
+       * @param {Object} $item
+       */
+      scope.setPerson = function (person, $item) {
+        // existingPerson = angular.copy($item);
+        
+        console.log($item);
+        console.log(person);
+        
+        console.log(scope.ticket.person === person);
+        
+        person = $item;
       }
       
       /**
@@ -318,10 +375,18 @@ angular.module('customerEngineApp')
         .then(function (t) {
           if (!t) { return; }
           if (t && !submitted) { Notification('Ticket autosaved'); }
+          // Attach personId if not present
+          if (t && t.person && !(ticket.person && ticket.person.personId)) {
+            ticket.person.personId = t.person ? t.person.personId : t.person;
+          }
           // Attach ticketId if not present
           if (t && t.ticketId && !ticket.ticketId) {
             scope.ticket.ticketId = t.ticketId;
-            $location.path($location.path() + t.ticketId);
+            $state.go($state.current.name, { ticketId: t.ticketId }, { location: true, notify: false })
+            .then(function (item) {
+              // Replace the last history item with this route
+              $location.replace();
+            })
           }
         })
         ['catch'](function (err) {

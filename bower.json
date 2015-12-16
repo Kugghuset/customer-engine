@@ -42,6 +42,7 @@
     "rome": "~2.1.22",
     "moment": "~2.10.6",
     "angular-cache-buster": "~0.4.3",
-    "normalize-css": "~3.0.3"
+    "normalize-css": "~3.0.3",
+    "angular-elastic": "~2.5.1"
   }
 }

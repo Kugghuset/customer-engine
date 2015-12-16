@@ -53,7 +53,7 @@ exports.findByEmail = function (email) {
       params: {
         email: {
           type: sql.VARCHAR(256),
-          val: email
+          val: email ? email.toLowerCase() : email
         }
       }
     })
@@ -88,7 +88,7 @@ exports.create = function (_user) {
       params: {
         email: {
           type: sql.VARCHAR(256),
-          val: _user.email
+          val: _user.email ? _user.email.toLowerCase() : _user.email
         },
         password: {
           type: sql.VARCHAR(256),
@@ -118,7 +118,7 @@ exports.auth = function(email, password) {
         params: {
           email: {
             type: sql.VARCHAR(256),
-            val: email
+            val: email ? email.toLowerCase() : email
           }
         }
       })
@@ -162,7 +162,7 @@ exports.update = function (user, userId) {
       params: {
         email: {
           type: sql.VARCHAR(256),
-          val: user.email
+          val: user.email ? user.email.toLowerCase() : user.email
         },
         name: {
           type: sql.VARCHAR(256),
@@ -182,6 +182,29 @@ exports.update = function (user, userId) {
       resolve(util.objectify(_.first(_users)));
     })
     .catch(reject);
+  });
+}
+
+exports.updateLastLoggedIn = function (_user) {
+  return new Promise(function (resolve, reject) {
+    
+    if (!_user) { return reject(new Error('No provided user')); }
+    
+    sql.execute({
+      query: sql.fromFile('./sql/user.updateLastLoggedIn.sql'),
+      params: {
+        userId: {
+          type: sql.BIGINT,
+          val: _user.userId
+        }
+      }
+    })
+    .then(function (users) {
+      // Really only returns one, but whatever.
+      resolve(_.first(util.objectify(users)));
+    })
+    .catch(reject);
+    
   });
 }
 

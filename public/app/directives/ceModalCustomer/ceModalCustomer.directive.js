@@ -12,7 +12,7 @@ angular.module('customerEngineApp')
     },
     link: function (scope, element, attrs, ctrl) {
       var modalInstance;
-      scope.openModal = function (user) {
+      scope.openModal = function () {
 
          modalInstance = $uibModal.open({
           animation: true,

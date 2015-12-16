@@ -12,6 +12,7 @@ angular.module('customerEngineApp')
     link: function (scope, element, attrs) {
       
       scope.tempUser = {};
+      scope.isLoading = false;
       
       scope.emailExists = false;
       
@@ -21,6 +22,7 @@ angular.module('customerEngineApp')
        * @param {Object} _user
        */
       scope.login = function (loginForm, _user) {
+        scope.isLoading = true;
         
         // Ensure login can be peformed.
         if (!scope.formValid(loginForm, _user)) { return; }
@@ -34,7 +36,7 @@ angular.module('customerEngineApp')
           $location.path('/dashboard');
         })
         ['catch'](function (err) {
-          
+          scope.isLoading = false;
           if (/incorrect password|email is required|password is required/i.test(err)) {
             Notification.error(err);
           } else {

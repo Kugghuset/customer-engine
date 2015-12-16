@@ -1,31 +1,21 @@
-<section class="pane-section">
+<section class="pane-section pane-top">
   
-  <div class="float-container">
+  <div class="pane-top-content">
     
-    <div class="logged-in-as pull-left">Logged in as {{ auth.getCurrentUser().name || 'Operator ' +  auth.getCurrentUser().userId }}</div>
+    <div class="pane-top-text">Logged in as {{ auth.getCurrentUser().name || 'Agent ' +  auth.getCurrentUser().userId }}</div>
+      
+    <div class="pane-top-text">
+      <div>Department: {{ auth.getCurrentUser().department.departmentName || 'Not assigned' }}</div>
+    </div>
     
-    <button ng-click="auth.logout()" class="pane-button red pull-right">Log out</button>
-    
-  </div>
-  
-  <div class="pane-row">
-    <label>Department</label>
-    <div class="right-block width-auto">{{ auth.getCurrentUser().department.departmentName || 'Not assigned' }}</div>
-  </div>
-  
-  <div class="pane-row">
-    <label for="" class="font-size-ms">Last logged ticket</label>
-    <div class="right-block width-auto">{{ lastTicket.dateUpdated | date: 'yyyy-MM-dd, HH:mm' }}</div>
-  </div>
-  
-  <br>
-  
-  <div class="float-container">
-    
-    <button ng-click="openModal(auth.getCurrentUser())" class="pane-button purple pull-right">Edit operator</button>
+    <div class="pane-top-text">
+      <div for="" class="">Last logged in: {{ (auth.getCurrentUser().lastLoggedIn | date: 'yyyy-MM-dd, HH:mm') || 'No login date' }}</div>
+    </div>
     
   </div>
   
+  <button ng-click="auth.logout()" class="pane-button red pull-right">Log out</button>
+    
 </section>
 <section class="pane-section">
   
@@ -34,27 +24,45 @@
 </section>
 <section class="pane-section">
   
-  <table class="pane-table">
-    <tbody>
-      <tr>
-        <td class="left" ng-class="{'green': filter == 'Open' }" ng-click="setFilter('Open')">Open</td>
-        <td class="center green">{{ aggregated.open || 0 }}</td>
-      </tr>
-      <tr>
-        <td class="left" ng-class="{'red': filter == 'Closed' }" ng-click="setFilter('Closed')">Closed</td>
-        <td class="center red">{{ aggregated.closed || 0 }}</td>
-      </tr>
-      <tr>
-        <td class="left" ng-class="{'beige': filter == 'Pending' }" ng-click="setFilter('Pending')">Pending</td>
-        <td class="center beige">{{ aggregated.pending || 0 }}</td>
-      </tr>
-      <tr>
-        <td class="left">Total</td>
-        <td class="center">{{ aggregated.total || 0 }}</td>
-      </tr>
-    </tbody>
+  <h2>My overview</h2>
+  
+  <param>
+    To show tickets of only of a specific status, click the corresponding row below. To show all again, give it another click.
+  </p>
+  
+  <div class="relative">
+    <ce-loading is-loading="isLoading"></ce-loading>
     
-  </table>
+    <table class="pane-table" ng-hide="isLoading">
+      <tbody>
+        <tr>
+          <td class="left" ng-class="{'green': filter == 'Open' }" ng-click="setFilter('Open')">Open</td>
+          <td class="center green">{{ aggregated.open || 0 }}</td>
+        </tr>
+        <tr>
+          <td class="left" ng-class="{'red': filter == 'Closed' }" ng-click="setFilter('Closed')">Closed</td>
+          <td class="center red">{{ aggregated.closed || 0 }}</td>
+        </tr>
+        <tr>
+          <td class="left" ng-class="{'beige': filter == 'Pending' }" ng-click="setFilter('Pending')">Pending</td>
+          <td class="center beige">{{ aggregated.pending || 0 }}</td>
+        </tr>
+        <tr>
+          <td class="left">Total</td>
+          <td class="center">{{ aggregated.total || 0 }}</td>
+        </tr>
+      </tbody>
+      
+    </table>
+  </div>
+  
+  <br>
+  
+  <div class="float-container">
+    
+    <button ng-click="openModal(auth.getCurrentUser())" class="pane-button purple pull-right">Settings</button>
+    
+  </div>
   
 </section>
 

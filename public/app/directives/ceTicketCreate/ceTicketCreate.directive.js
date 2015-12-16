@@ -68,7 +68,7 @@ angular.module('customerEngineApp')
           ticketDate: new Date(),
           user: scope.user,
           status: 'Open',
-          department: scope.user.department
+          department: scope.user ? scope.user.department : undefined
         };
       }
       

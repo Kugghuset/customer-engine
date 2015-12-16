@@ -159,7 +159,7 @@ exports.create = function (ticket, user) {
     
     var createQuery = [
         sql.fromFile('./sql/ticket.create.sql')
-          .replace('{updateOrCreate}', sql.fromFile('../person/sql/person.updateOrCreate.sql')),
+          .replace('{updateOrCreate}', sql.fromFile('../person/sql/person.owned.sql')),
         findBy('ticketId')
         ].join(' ');
         
@@ -192,7 +192,7 @@ exports.update = function (ticket, user) {
     
     var updateQuery = [
         sql.fromFile('./sql/ticket.update.sql')
-          .replace('{updateOrCreate}', sql.fromFile('../person/sql/person.updateOrCreate.sql')),
+          .replace('{updateOrCreate}', sql.fromFile('../person/sql/person.owned.sql')),
         findBy('ticketId')
       ].join(' ')
     

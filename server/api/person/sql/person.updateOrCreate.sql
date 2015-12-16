@@ -1,4 +1,9 @@
 
+/*
+Needs adjustments, but should either create or update the current person.
+Right now it's not predictable enough (2015-12-17)
+*/
+
 IF EXISTS(SELECT *
           FROM [dbo].[Person]
           WHERE [dbo].[Person].[tel] = @tel

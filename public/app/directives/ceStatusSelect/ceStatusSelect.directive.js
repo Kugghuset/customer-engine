@@ -36,10 +36,10 @@ angular.module('customerEngineApp')
         
         switch (_status) {
           case 'Open':
-            return 'green';
+            return 'purple';
             break;
           case 'Closed':
-            return 'red';
+            return 'green';
             break;
           case 'Pending':
             return 'beige';

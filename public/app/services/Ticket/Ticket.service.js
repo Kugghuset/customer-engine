@@ -4,7 +4,8 @@ angular.module('customerEngineApp')
 .factory('Ticket', ['$q', '$http', '$localForage', function ($q, $http, $localForage) {
   
   var lastUpdate = {
-    dateTime: undefined
+    dateTime: undefined,
+    queue: []
   };
   
   /**
@@ -126,10 +127,13 @@ angular.module('customerEngineApp')
       return $q(function (resolve, reject) {
         
         lastUpdate.dateTime = new Date();
+        lastUpdate.queue = [ ticket ];
         setTimeout(function () {
           // Return if there's been an update the last two seconds.
-          if (new Date() - lastUpdate.dateTime < 5000) { return resolve(undefined); }
+          if (new Date() - lastUpdate.dateTime < 5000 || !lastUpdate.queue.length) { return resolve(undefined); }
           
+          lastUpdate.dateTime = undefined;
+          lastUpdate.queue.pop();
           // Save to db.
           createOrUpdate(ticket)
           .then(function (_ticket) {

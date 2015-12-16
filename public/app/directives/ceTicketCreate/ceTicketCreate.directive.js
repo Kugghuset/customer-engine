@@ -376,7 +376,7 @@ angular.module('customerEngineApp')
           if (!t) { return; }
           if (t && !submitted) { Notification('Ticket autosaved'); }
           // Attach personId if not present
-          if (t && t.person && !(ticket.person && ticket.person.personId)) {
+          if (t && t.person && (ticket.person && !ticket.person.personId)) {
             ticket.person.personId = t.person ? t.person.personId : t.person;
           }
           // Attach ticketId if not present

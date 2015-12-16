@@ -37,7 +37,7 @@ angular.module('customerEngineApp')
         })
         ['catch'](function (err) {
           scope.isLoading = false;
-          if (/incorrect password|email is required|password is required/i.test(err)) {
+          if (/password|email is required|/i.test(err)) {
             Notification.error(err);
           } else {
             Notification.error('Couldn\'t log in.');

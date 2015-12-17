@@ -79,7 +79,7 @@
     <label for="">Phone</label>
   
     <span class="fill-by-label">
-      <input class="block" type="text" ng-model="ticket.person.tel" ng-intl-tel-input placeholder="Phone number">
+      <input class="block" type="text" ng-model="ticket.person.tel" ng-intl-tel-input>
       
       <!--<input type="text" ng-class="{'padded-right': personTelLoading}" ng-intl-tel-input ng-model="ticket.person.tel" placeholder="Phone number" uib-typeahead="person as person.tel for person in getContacts(ticket.customer.customerId, $viewValue, 'tel')"
         typeahead-loading="personTelLoading" typeahead-no-results="noTelResults" typeahead-on-select="ticket.person = $item" class="pane-dropdown block">
@@ -90,7 +90,7 @@
     <label for="">&nbsp;</label>
     
     <span class="fill-by-label">
-      <input class="block" type="text" ng-model="ticket.person.altTel" ng-intl-tel-input placeholder="Alt. phone number">
+      <input class="block" type="text" ng-model="ticket.person.altTel" ng-intl-tel-input>
     
       <!--<input type="text" ng-class="{'padded-right': personAltTelLoading}" ng-intl-tel-input ng-model="ticket.person.altTel" placeholder="Alt. phone number" uib-typeahead="person as person.altTel for person in getContacts(ticket.customer.customerId, $viewValue, 'altTel')"
         typeahead-loading="personAltTelLoading" typeahead-no-results="noAltTelResults" typeahead-on-select="ticket.person = $item" class="pane-dropdown block">
@@ -278,10 +278,10 @@
       </label>
       
       <div uib-dropdown uib-keyboard-nav ng-show="ticket.transferred">
-        <button id="simple-btn-keyboard-nav" type="button" class="pane-button" uib-dropdown-toggle>
+        <button id="simpe-btn-keyboard-nav" type="button" class="pane-button" uib-dropdown-toggle>
           {{ ticket.transferredDepartment.departmentName || 'Choose department' }} <span class="caret"></span>
         </button>
-        <ul class="uib-dropdown-menu pane-dropdown" role="menu" aria-labelledby="simple-btn-keyboard-nav">
+        <ul class="uib-dropdown-menu pane-dropdown" role="menu" aria-labelledby="simpe-btn-keyboard-nav">
           <li role="menuitem" ng-repeat="department in departments">
             <a href="" ng-click="ticket.transferredDepartment = department">{{ department.departmentName }}</a>
           </li>

@@ -43,7 +43,7 @@
         uib-typeahead="customer as matched(customer, 'customer') for customer in getCustomer($viewValue, ticket.customer)"
         typeahead-loading="loadingCustomers" typeahead-no-results="noResults" class="pane-dropdown" typeahead-on-select="setCustomer($item)">
       <i ng-show="loadingCustomers" class="glyphicon glyphicon-refresh" title="Looking for matching customers"></i>
-      <i ng-show="noResults && ticket.customer" class="glyphicon glyphicon-remove" title="No results found"></i>
+      <i ng-show="noResults && ticket.customer" class="glyphicon glyphicon-exclamation-sign" title="No results found"></i>
     </span>
   
     <br>
@@ -68,7 +68,7 @@
       <input type="text" ng-class="{'padded-right': personNameLoading}" ng-model="ticket.person.name" placeholder="Name" uib-typeahead="person as person.name for person in getContacts(ticket.customer.customerId, $viewValue, 'name')"
         typeahead-loading="personNameLoading" typeahead-no-results="noNameResults" typeahead-on-select="ticket.person = $item" class="pane-dropdown">
       <i ng-show="personNameLoading" class="glyphicon glyphicon-refresh" title="Looking for people matching the phone number"></i>
-      <i ng-show="noNameResults && ticket.person.name" class="glyphicon glyphicon-remove" title="No results found"></i>
+      <i ng-show="noNameResults && ticket.person.name" class="glyphicon glyphicon-exclamation-sign" title="No results found"></i>
     </span>-->
   
   </div>
@@ -84,7 +84,7 @@
       <!--<input type="text" ng-class="{'padded-right': personTelLoading}" ng-intl-tel-input ng-model="ticket.person.tel" placeholder="Phone number" uib-typeahead="person as person.tel for person in getContacts(ticket.customer.customerId, $viewValue, 'tel')"
         typeahead-loading="personTelLoading" typeahead-no-results="noTelResults" typeahead-on-select="ticket.person = $item" class="pane-dropdown block">
       <i ng-show="personTelLoading" class="glyphicon glyphicon-refresh" title="Looking for people matching the phone number"></i>
-      <i ng-show="noTelResults && ticket.person.tel" class="glyphicon glyphicon-remove" title="No results found"></i>-->
+      <i ng-show="noTelResults && ticket.person.tel" class="glyphicon glyphicon-exclamation-sign" title="No results found"></i>-->
     </span>
   
     <label for="">Alt. phone</label>
@@ -95,7 +95,7 @@
       <!--<input type="text" ng-class="{'padded-right': personAltTelLoading}" ng-intl-tel-input ng-model="ticket.person.altTel" placeholder="Alt. phone number" uib-typeahead="person as person.altTel for person in getContacts(ticket.customer.customerId, $viewValue, 'altTel')"
         typeahead-loading="personAltTelLoading" typeahead-no-results="noAltTelResults" typeahead-on-select="ticket.person = $item" class="pane-dropdown block">
       <i ng-show="personAltTelLoading" class="glyphicon glyphicon-refresh" title="Looking for people matching the alt. phone  number"></i>
-      <i ng-show="noAltTelResults && ticket.person.altTel" class="glyphicon glyphicon-remove" title="No results found"></i>-->
+      <i ng-show="noAltTelResults && ticket.person.altTel" class="glyphicon glyphicon-exclamation-sign" title="No results found"></i>-->
     
     </span>
   </div>
@@ -111,7 +111,7 @@
       <input type="text" ng-class="{'padded-right': personEmailLoading}" ng-model="ticket.person.email" placeholder="Email address" uib-typeahead="person as person.email for person in getContacts(ticket.customer.customerId, $viewValue, 'email')"
         typeahead-loading="personEmailLoading" typeahead-no-results="noEmailResults" typeahead-on-select="ticket.person = $item" class="pane-dropdown">
       <i ng-show="personEmailLoading" class="glyphicon glyphicon-refresh" title="Looking for people matching the phone number"></i>
-      <i ng-show="noEmailResults && ticket.person.email" class="glyphicon glyphicon-remove" title="No results found"></i>-->
+      <i ng-show="noEmailResults && ticket.person.email" class="glyphicon glyphicon-exclamation-sign" title="No results found"></i>-->
     </span>
   
   </div>

@@ -312,7 +312,7 @@ angular.module('customerEngineApp')
        * @return {Promise} -> ([Customer])
        */
       scope.getCustomer = function (val, current) {
-        // Remove everything but orgName from current if it's set to clean when changing.
+        // Remove everything but orgName from current if *val* doesn't match.
         if (current && current.orgName != val) {
           delete current.customerId;
           delete current.orgNr;

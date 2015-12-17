@@ -22,6 +22,10 @@ angular.module('customerEngineApp')
       
       var existingPerson;
       
+      scope.romeOptions = {
+        max: moment().endOf('day')
+      };
+      
       function setTimerDates(ticket) {
         scope.timerString = timerDiffFilter([
           ticket // Start time
@@ -68,7 +72,7 @@ angular.module('customerEngineApp')
           ticketDate: new Date(),
           user: scope.user,
           status: 'Open',
-          department: scope.user.department
+          department: scope.user ? scope.user.department : undefined
         };
       }
       
@@ -376,7 +380,7 @@ angular.module('customerEngineApp')
           if (!t) { return; }
           if (t && !submitted) { Notification('Ticket autosaved'); }
           // Attach personId if not present
-          if (t && t.person && !(ticket.person && ticket.person.personId)) {
+          if (t && t.person && (ticket.person && !ticket.person.personId)) {
             ticket.person.personId = t.person ? t.person.personId : t.person;
           }
           // Attach ticketId if not present

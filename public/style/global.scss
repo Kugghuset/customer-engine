@@ -30,6 +30,7 @@ h1, h2, h3, h4, h5, h6 {
   width: 100%;
 }
 
+
 .block {
   display: block;
 }
@@ -68,12 +69,17 @@ h1, h2, h3, h4, h5, h6 {
 @include text-inputs {
   @include border-shadow;
   @include input-placeholder {
-    color: $white;
+    color: $gray-very-dark;
   }
   background-color: transparent;
   padding: $size-s;
   font-size: $font-size-m;
   margin: $size-xs 0;
+  &.ng-invalid {
+    border-color: $red;
+    box-shadow: 1px 1px 10px rgba($color: $black, $alpha: 0.1);
+    // z-index: 1;
+  }
 }
 
 input[type="checkbox"] {
@@ -102,6 +108,7 @@ label {
     width: 9px;
     height: 16px;
     border: solid $black;
+    
     border-width: 0 5px 5px 0;
     box-shadow: 2px 2px 1px rgba($color: $white, $alpha: 0.1);
     transform: rotate(45deg);

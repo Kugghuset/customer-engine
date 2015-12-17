@@ -85,3 +85,12 @@
     font-size: 20px;
   }
 }
+
+.link-like {
+  padding: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  &:hover {
+    text-decoration: underline;
+  }
+}

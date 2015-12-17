@@ -39,10 +39,13 @@
         <div ng-show="ticket.person.name">{{ ticket.person.name }}</div>
         <div class="grayout" ng-show="!ticket.person.name">Name missing</div>
         <div ng-show="ticket.person.email">{{ ticket.person.email }}</div>
-        <div ng-show="ticket.person.tel">{{ ticket.person.tel }}</div>
-        <div ng-show="ticket.person.altTel">{{ ticket.person.altTel }}</div>
+        <div ng-show="ticket.person.tel">{{ ticket.person.tel | phoneNumber:ticket.country.short }}</div>
+        <div ng-show="ticket.person.altTel">{{ ticket.person.altTel | phoneNumber:ticket.country.short }}</div>
         <div ng-show="ticket.isReseller"><i class="glyphicon glyphicon-ok"></i> Reseller</div>
-        <div ng-show="ticket.transferred"><i class="glyphicon glyphicon-arrow-right"></i> Transferred ({{ ticket.transferredDepartment.departmentName }})</div>
+        <div ng-show="ticket.transferred"><i class="glyphicon glyphicon-arrow-right"></i>
+          <span ng-show="ticket.transferredDepartment.departmentName"> Transferred ({{ ticket.transferredDepartment.departmentName }})</span>
+          <span ng-show="!ticket.transferredDepartment.departmentName"> Transferred</span>
+        </div>
       </div>
     </div>
     <div class="col-1-2 card-col-right">

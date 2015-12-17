@@ -30,10 +30,17 @@ exports.show = function (req, res) {
 exports.login = function (req, res) {
   // No user, so we can't login.
   if (!req.body) { return utils.handleError(res, new Error('No user provided')); }
-
+  
+  
+  
   //Authenticate user with submitted email and password
   User.auth(req.body.email, req.body.password)
   .then(function (user) {
+    
+    if (user && req.body.passwordRepeat) {
+      return res.status(401).send('User already exists.');
+    }
+    
     if (user) {
       
       req.user = user;
@@ -49,6 +56,9 @@ exports.login = function (req, res) {
         utils.handleError(res, new Error('Something went wrong when logging in.'))
       })
     } else {
+      if (!req.body.passwordRepeat) {
+        return res.status(404).send('User doesn\'t exist.');
+      }
       // No user, let's create it
       User.create(req.body)
       .then(function (user) {
@@ -65,9 +75,7 @@ exports.login = function (req, res) {
         .catch(function (err) {
           console.log(err);
           utils.handleError(res, new Error('Something went wrong when logging in.'))
-        })
-        
-        return res.status(200).json(user);
+        });
       })
       .catch(function (err) {
         utils.handleError(res, err);

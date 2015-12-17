@@ -10,16 +10,20 @@
     <label class="left">Password</label>
     <input class="pane-input" type="password" name="password" placeholder="Password" ng-model="tempUser.password">
     
-    <div>
+    <label class="left" ng-if="!isLogin">Repeat password</label>
+    <input class="pane-input" ng-if="!isLogin" type="password" name="passwordRepeat" placeholder="Repeat password" ng-model="tempUser.passwordRepeat">
+    
+    
+    <!--<div>
       Log in using your email adress. A user will be created for you if it doesn't already exist.
-    </div>
-    
-    <!--<span>Sign up</span>-->
-    
+    </div>-->
     <button type="submit" class="pane-button pull-right" ng-class="{'is-loading': isLoading}" ng-disabled="!formValid(loginForm, tempUser)">
-      Log in / Sign up
+      {{ isLogin ? 'Log in' : 'Sign up' }}
       <span ng-show="isLoading" class="welcome-spinner"><i class="glyphicon glyphicon-refresh"></i></span>
     </button>
+    
+    <label ng-click="isLogin = !isLogin; tempUser.passwordRepeat = undefined;" class="pull-right link-like ">{{ !isLogin ? 'Log in' : 'Sign up' }}</label>
+    
     
   </form>
   

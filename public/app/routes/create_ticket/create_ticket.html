@@ -1,6 +1,8 @@
 <section class="grid" ng-show="auth.getCurrentUser().email">
   
-  <img src="assets/img/logo.png" class="logo" alt="Bambora logo">
+  <a href="" ui-sref="main.dashboard">
+    <img src="assets/img/logo.png" class="logo" alt="Bambora logo">
+  </a>
   
   <aside class="pane vertical-fill fixed-left create">
     <ce-ticket-create user="auth.getCurrentUser()" ticket="ticket" related-tickets="relatedTickets" loading-tickets="loadingTickets" customer-id="customerId" ticket-id="currentTicketId"></ce-ticket-create>
@@ -11,6 +13,9 @@
     <ce-loading is-loading="loadingTickets"></ce-loading>
     
     <ce-card-area-header title="Related tickets" tickets="relatedTickets" ></ce-card-area-header>
+    
+    <!--<h2 ng-hide="loadingTickets || !noTickets(ticket.ticketId, relatedTickets)">No related tickets could be found</h2>-->
+    <!--<h2 ng-hide="loadingTickets">No related tickets could be found</h2>-->
     
     <ce-ticket-card class="col-card" ticket="_ticket" ng-show="ticket.ticketId != _ticket.ticketId && !_ticket.hide" is-readonly="true" ng-repeat="_ticket in relatedTickets"></ce-ticket-card>
   </ce-card-area>

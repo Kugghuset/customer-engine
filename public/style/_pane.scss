@@ -5,6 +5,7 @@
   
   @include text-inputs {
     width: calc(100% - 155px);
+    max-width: 100%;
   }
   
   &.gray {
@@ -168,7 +169,7 @@
   }
 }
 
-
+  
 &.fill-by-label {
     .intl-tel-input {
       width: 100%;
@@ -186,6 +187,10 @@
           outline: none;
           color: $white;
         }
+        @include hover-shadow;
+        top: 1px;
+        bottom: 1px;
+        left: 1px;
       }
       .arrow {
         border-top-color: $white;

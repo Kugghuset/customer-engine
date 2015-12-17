@@ -23,11 +23,15 @@ angular.module('customerEngineApp')
         return _.some(ticket, function (val, key) {
           if (key === '$$hashKey' || key === 'hide') { return false; }
           
-          
+          if (_.isBoolean(val) && val) {
+            return Utils.literalRegExp(query, 'gi').test(key);
+          }
           
           if (_.isDate(val) || key === 'ticketDate') {
+            // Check dates
             return Utils.literalRegExp(query, 'gi').test(moment(val).format('YYYY-MM-DD, HH:mm'));
           } else if (_.isObject(val)) {
+            // Recursion for objects
             return showTicket(val, query);
           }
           
@@ -61,5 +65,5 @@ angular.module('customerEngineApp')
     }
   }
 }]);
-
+ 
 })();

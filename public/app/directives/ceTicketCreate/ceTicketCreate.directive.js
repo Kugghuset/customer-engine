@@ -373,11 +373,6 @@ angular.module('customerEngineApp')
       scope.setPerson = function (person, $item) {
         // existingPerson = angular.copy($item);
         
-        console.log($item);
-        console.log(person);
-        
-        console.log(scope.ticket.person === person);
-        
         person = $item;
       }
       
@@ -406,7 +401,9 @@ angular.module('customerEngineApp')
           
           setupTimerString();
         } else {
-          ticket.ticketDateClosed = new Date();
+          if (!ticket.ticketDateClosed) {
+            ticket.ticketDateClosed = new Date();
+          }
           if (timer) {
             stopTimer();
           }

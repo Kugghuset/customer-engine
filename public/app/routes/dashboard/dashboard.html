@@ -16,6 +16,6 @@
     
     <ce-card-area-header title="My tickets" tickets="tickets" ></ce-card-area-header>
     
-    <ce-ticket-card class="col-card" ticket="ticket" ng-show="!ticket.hide && (!tickFilter || ticket.status == tickFilter)" ng-repeat="ticket in tickets"></ce-ticket-card>
+    <ce-ticket-card class="col-card" ticket="ticket" ng-show="!ticket.hide && (!tickFilter || ticket.status == tickFilter)" ng-repeat="ticket in tickets | alphaSort:['ticketDate','ticketId']:true"></ce-ticket-card>
   </ce-card-area>
 </section>

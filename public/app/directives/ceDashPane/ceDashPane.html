@@ -35,16 +35,16 @@
     
     <table class="pane-table" ng-hide="isLoading">
       <tbody>
-        <tr>
-          <td class="left" ng-class="{'purple': filter == 'Open' }" ng-click="setFilter('Open')">Open</td>
+        <tr ng-click="setFilter('Open')">
+          <td class="left" ng-class="{'purple': filter == 'Open' }">Open</td>
           <td class="center purple">{{ aggregated.open || 0 }}</td>
         </tr>
-        <tr>
-          <td class="left" ng-class="{'green': filter == 'Closed' }" ng-click="setFilter('Closed')">Closed</td>
+        <tr ng-click="setFilter('Closed')">
+          <td class="left" ng-class="{'green': filter == 'Closed' }">Closed</td>
           <td class="center green">{{ aggregated.closed || 0 }}</td>
         </tr>
-        <tr>
-          <td class="left" ng-class="{'beige': filter == 'Pending' }" ng-click="setFilter('Pending')">Pending</td>
+        <tr ng-click="setFilter('Pending')">
+          <td class="left" ng-class="{'beige': filter == 'Pending' }">Pending</td>
           <td class="center beige">{{ aggregated.pending || 0 }}</td>
         </tr>
         <tr>

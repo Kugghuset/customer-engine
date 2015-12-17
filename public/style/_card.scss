@@ -150,11 +150,12 @@
   
   input {
     @include input-placeholder {
-      color: $black-ish !important;
+      color: $black-ish-dark !important;
     }
     display: inline-block;
     width: calc(100% - 185px);
     margin-left: 10px;
+    color: $black;
     
     @include breakpoint(break-l) {
       width: 100%;

@@ -85,7 +85,12 @@ angular.module('customerEngineApp')
       $uibModalInstance.close(_user);
     })
     ['catch'](function (err) {
-      Notification.error('Something went wrong.')
+      
+      if (/email/gi.test(err)) {
+        Notification.error(err);
+      } else {
+        Notification.error('Something went wrong.')
+      }
     })
   };
 

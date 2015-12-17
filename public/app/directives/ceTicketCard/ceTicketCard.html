@@ -73,9 +73,11 @@
     </div>
     <div class="pull-right">
       <div class="right">
+        <i class="glyphicon glyphicon-briefcase" ng-show="ticket.department.departmentName"></i>
+        &nbsp;{{ ticket.department.departmentName }}
         <!--<i class="glyphicon glyphicon-time" ng-show="ticket.status === 'Closed'"></i>-->
         <!--&nbsp;{{ ticket.status === 'Closed' ? ([ticket.ticketDate, ticket.ticketDateClosed] | timerDiff) : '' }}-->
-        &nbsp;
+        <!--&nbsp;-->
       </div>
       <div class="date">
         {{ ticket.ticketDate | date: 'yyyy-MM-dd, HH:mm' }}

@@ -132,7 +132,7 @@ angular.module('customerEngineApp')
        */
       scope.submit = function (_ticket) {
         
-        // return console.log(_ticket);
+        Ticket.emptyQueue();
         
         if (_ticket.status === 'Closed' && !_ticket.ticketDateClosed) {
           _ticket.ticketDateClosed = new Date();
@@ -282,14 +282,57 @@ angular.module('customerEngineApp')
         ]);
       }
       
+      // Used in openCreateCustomerForNew and scope.setCustomer
+      var custs = {
+        arr: [],
+        lastChange: undefined
+      };
+      
+      /**
+       * @param {Object} customer
+       */
+      function openCreateCustomerForNew(customer) {
+        custs.arr = [ customer ];
+        custs.lastChange = new Date();
+        
+        $timeout(function () {
+          var last = _.last(custs.arr);
+          if (moment().diff(custs.lastChange) >= 2000 && last && !last.customerId) {
+            custs.arr.pop();
+            scope.openModal(customer);
+          }
+        }, 2000)
+      }
+      
       /**
        * Gets top 12 customers somehow matching *val*.
        * 
        * @param {String} val
+       * @param {Object} current
        * @return {Promise} -> ([Customer])
        */
-      scope.getCustomer = function (val) {
+      scope.getCustomer = function (val, current) {
+        // Remove everything but orgName from current if *val* doesn't match.
+        if (current && current.orgName != val) {
+          delete current.customerId;
+          delete current.orgNr;
+          delete current.customerNumber;
+        }
+        if (current && !current.customerId) {
+          openCreateCustomerForNew(current);
+        }
         return Customer.getFuzzy(val);
+      }
+      
+      /**
+       * Sets scope.ticket.customer to *$item*
+       * and "disables" the array.
+       * @param {Object} $item (Customer)
+       */
+      scope.setCustomer = function ($item) {
+        scope.ticket.customer = $item;
+        custs.arr = [];
+        custs.lastChange = undefined;
       }
       
       /**
@@ -330,11 +373,6 @@ angular.module('customerEngineApp')
       scope.setPerson = function (person, $item) {
         // existingPerson = angular.copy($item);
         
-        console.log($item);
-        console.log(person);
-        
-        console.log(scope.ticket.person === person);
-        
         person = $item;
       }
       
@@ -363,7 +401,9 @@ angular.module('customerEngineApp')
           
           setupTimerString();
         } else {
-          ticket.ticketDateClosed = new Date();
+          if (!ticket.ticketDateClosed) {
+            ticket.ticketDateClosed = new Date();
+          }
           if (timer) {
             stopTimer();
           }

@@ -11,7 +11,7 @@
           return _.map(this.getFull(), function (item) { return item.name });
         },
         getShortAndNames: function () {
-          return _.map(this.getFull(), function (item) { return { name: item.name, short: item.altSpellings[0] } })
+          return _.map(this.getFull(), function (item) { return { short: item.altSpellings[0], full: item.name } })
         },
         getFull: function () {
           return [

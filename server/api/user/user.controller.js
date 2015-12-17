@@ -127,7 +127,11 @@ exports.me = function (req, res) {
 exports.update = function (req, res) {
   User.update(req.body, req.params.id)
   .then(function (user) {
-    res.status(200).json(user);
+    if (user.error) {
+      return res.status(400).send(user.error);
+    } else {
+      res.status(200).json(user);
+    }
   })
   .catch(function (err) {
     utils.handleError(res, err);

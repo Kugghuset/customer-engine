@@ -13,7 +13,8 @@ BEGIN
     [isReseller] bit NULL,
     [personId] bigint NULL,
     [summary] varchar(max) NULL,
-    [country] varchar(256) NULL,
+    [countryShort] varchar(256) NULL,
+    [countryFull] varchar(256) NULL,
     [transferred] bit NULL,
     [status] varchar(256) NULL,
     [departmentId] bigint NULL,
@@ -130,4 +131,21 @@ ELSE
         Somehow handle conversion of existing tickets' persons
         and remove old properties?
       */
+  END
+  
+  -- Rename country column to countryShort
+  IF EXISTS(SELECT * FROM sys.columns
+            WHERE Name = N'country'
+            AND Object_ID = Object_ID(N'Ticket'))
+  BEGIN
+    EXEC sp_rename 'Ticket.country', 'countryShort', 'COLUMN'
+  END
+  
+  -- Add countryFull if it's non-existant
+  IF NOT EXISTS(SELECT * FROM sys.columns
+                WHERE Name = N'countryFull'
+                AND OBJECT_ID = OBJECT_ID(N'Ticket'))
+  BEGIN
+    ALTER TABLE [dbo].[Ticket]
+    ADD [countryFull] varchar(256) NULL
   END

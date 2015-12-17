@@ -35,7 +35,7 @@ function ensureHasProps(ticket, user) {
     ticket.descriptor = ticket.descriptor || {};
     ticket.department = ticket.department || {};
     ticket.transferredDepartment = ticket.transferredDepartment || {};
-    ticket.country = _.isObject(ticket.country) ? ticket.country.short : ticket.country;
+    ticket.country = ticket.country || {};
     ticket.product = ticket.product || {};
     ticket.person = ticket.person || {};
     
@@ -87,9 +87,13 @@ function ticketParams(ticket, extra) {
       type: sql.VARCHAR(256),
       val: ticket.person ? ticket.person.altTel : ticket.altTela
     },
-    country: {
+    countryShort: {
       type: sql.VARCHAR(256),
-      val: ticket.country
+      val: ticket.country.short
+    },
+    countryFull: {
+      type: sql.VARCHAR(256),
+      val: ticket.country.full || ticket.country.name
     },
     summary: {
       type: sql.VARCHAR,

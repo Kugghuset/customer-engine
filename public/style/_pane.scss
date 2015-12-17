@@ -169,7 +169,7 @@
   }
 }
 
-
+  
 &.fill-by-label {
     .intl-tel-input {
       width: 100%;
@@ -187,6 +187,10 @@
           outline: none;
           color: $white;
         }
+        @include hover-shadow;
+        top: 1px;
+        bottom: 1px;
+        left: 1px;
       }
       .arrow {
         border-top-color: $white;

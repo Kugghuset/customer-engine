@@ -22,6 +22,10 @@ angular.module('customerEngineApp')
       
       var existingPerson;
       
+      scope.romeOptions = {
+        max: moment().endOf('day')
+      };
+      
       function setTimerDates(ticket) {
         scope.timerString = timerDiffFilter([
           ticket // Start time

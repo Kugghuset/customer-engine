@@ -145,6 +145,11 @@ angular.module('customerEngineApp')
       });
     },
     
+    emptyQueue: function (_ticket) {
+      lastUpdate.dateTime = undefined;
+      lastUpdate.queue = [];
+    },
+    
     updateStatus: function (ticket) {
       return $q(function (resolve, reject) {
         $http.put('/api/tickets/status/', ticket)

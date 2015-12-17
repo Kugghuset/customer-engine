@@ -132,7 +132,7 @@ angular.module('customerEngineApp')
        */
       scope.submit = function (_ticket) {
         
-        // return console.log(_ticket);
+        Ticket.emptyQueue();
         
         if (_ticket.status === 'Closed' && !_ticket.ticketDateClosed) {
           _ticket.ticketDateClosed = new Date();

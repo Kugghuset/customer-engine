@@ -36,6 +36,11 @@ exports.login = function (req, res) {
   //Authenticate user with submitted email and password
   User.auth(req.body.email, req.body.password)
   .then(function (user) {
+    
+    if (user && req.body.passwordRepeat) {
+      return res.status(401).send('User already exists.');
+    }
+    
     if (user) {
       
       req.user = user;

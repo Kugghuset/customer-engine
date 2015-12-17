@@ -16,6 +16,13 @@ angular.module('customerEngineApp')
   $scope.auth = Auth;
   $scope.user = Auth.getCurrentUser();
   
+  // $scope.noTickets = function (ticketId, related) {
+  //   return !_.some(related, function (t) {
+  //     if (!t || t.ticketId === ticketId || t.hide) { return true; }
+  //     return false;
+  //   })
+  // }
+  
   /**
    * Watches for changes in the user and sets the value of the scoped user.
    */

@@ -282,14 +282,57 @@ angular.module('customerEngineApp')
         ]);
       }
       
+      // Used in openCreateCustomerForNew and scope.setCustomer
+      var custs = {
+        arr: [],
+        lastChange: undefined
+      };
+      
+      /**
+       * @param {Object} customer
+       */
+      function openCreateCustomerForNew(customer) {
+        custs.arr = [ customer ];
+        custs.lastChange = new Date();
+        
+        $timeout(function () {
+          var last = _.last(custs.arr);
+          if (moment().diff(custs.lastChange) >= 2000 && last && !last.customerId) {
+            custs.arr.pop();
+            scope.openModal(customer);
+          }
+        }, 2000)
+      }
+      
       /**
        * Gets top 12 customers somehow matching *val*.
        * 
        * @param {String} val
+       * @param {Object} current
        * @return {Promise} -> ([Customer])
        */
-      scope.getCustomer = function (val) {
+      scope.getCustomer = function (val, current) {
+        // Remove everything but orgName from current if it's set to clean when changing.
+        if (current && current.orgName != val) {
+          delete current.customerId;
+          delete current.orgNr;
+          delete current.customerNumber;
+        }
+        if (current && !current.customerId) {
+          openCreateCustomerForNew(current);
+        }
         return Customer.getFuzzy(val);
+      }
+      
+      /**
+       * Sets scope.ticket.customer to *$item*
+       * and "disables" the array.
+       * @param {Object} $item (Customer)
+       */
+      scope.setCustomer = function ($item) {
+        scope.ticket.customer = $item;
+        custs.arr = [];
+        custs.lastChange = undefined;
       }
       
       /**

@@ -12,13 +12,16 @@ angular.module('customerEngineApp')
     },
     link: function (scope, element, attrs, ctrl) {
       var modalInstance;
-      scope.openModal = function () {
+      scope.openModal = function (customer) {
 
          modalInstance = $uibModal.open({
           animation: true,
           templateUrl: 'app/directives/ceModalCustomer/ceModalCustomer.html',
           controller: 'CustomerModalInstanceCtrl',
           resolve: {
+            currentCustomer: function () {
+              return customer;
+            },
             Customer: function () {
               return Customer;
             },
@@ -44,10 +47,10 @@ angular.module('customerEngineApp')
       });
   }
 }}])
-.controller('CustomerModalInstanceCtrl', function ($scope, $uibModalInstance, Customer, Department, Notification) {
+.controller('CustomerModalInstanceCtrl', function ($scope, $uibModalInstance, currentCustomer, Customer, Department, Notification) {
   
   var existingCustomer = undefined;
-  $scope.customer = {};
+  $scope.customer = currentCustomer;
   
   /**
    * Compares the similarities of *source* and *target*

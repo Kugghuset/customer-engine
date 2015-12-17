@@ -5,6 +5,7 @@
   
   @include text-inputs {
     width: calc(100% - 155px);
+    max-width: 100%;
   }
   
   &.gray {

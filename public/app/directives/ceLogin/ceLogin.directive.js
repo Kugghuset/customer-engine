@@ -13,6 +13,7 @@ angular.module('customerEngineApp')
       
       scope.tempUser = {};
       scope.isLoading = false;
+      scope.isLogin = true;
       
       scope.emailExists = false;
       
@@ -23,6 +24,10 @@ angular.module('customerEngineApp')
        */
       scope.login = function (loginForm, _user) {
         scope.isLoading = true;
+        
+        if (!scope.isLogin && _user.password != _user.passwordRepeat) {
+          return Notification.error('Passwords doesn\'t match.')
+        }
         
         // Ensure login can be peformed.
         if (!scope.formValid(loginForm, _user)) { return; }
@@ -55,7 +60,9 @@ angular.module('customerEngineApp')
         
         return _.every([
           loginForm.email.$valid,
-          user.email && user.email.length
+          user.email && user.email.length,
+          user.password && user.password.length,
+          (scope.isLogin || user.passwordRepeat === user.password)
         ]);
       }
       

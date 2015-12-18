@@ -137,3 +137,33 @@ exports.update = function (req, res) {
     utils.handleError(res, err);
   })
 }
+
+/**
+ * Sets the user password if the old match and there is a new one.
+ * 
+ */
+exports.setPassword = function (req, res) {
+  
+  if (!req.body.new) {
+    // Return early if no new password is provided
+    return res.status(400).send('New password is required.');
+  } else if (!req.body.current) {
+    // Return early if the current password is not provided
+    return res.status(400).send('Current password is required.');
+  }
+  
+  // Set the password
+  User.setPassword(req.params.id, req.body.current, req.body.new)
+  .then(function (_user) {
+    res.status(204).send('Password changed');
+  })
+  .catch(function (err) {
+    
+    if (/password/gi.test(err.message)) {
+      res.status(403).send(err.message);
+    } else {
+      utils.handleError(res, err);
+    }
+    
+  });
+}

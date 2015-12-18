@@ -2,16 +2,25 @@
 
   <h1>Agent settings</h1>
 
-  <form action="">
+  <div class="font-size-ms" ng-hide="savedName">
+    <p>Hi there, agent!</p>
+    <p>As it's the first time logging in, we'd love to get to know you.</p>
+    <p>What's your name, and what department do you belong to?</p>
+    
+    <br>
+    
+  </div>
+
+  <form novalidate>
 
     <div class="pane-row">
       <label>Name</label>
-      <input type="text" ng-model="user.name" placeholder="Name">
+      <input type="text" name="name" ng-model="user.name" placeholder="Name">
     </div>
 
     <div class="pane-row">
       <label>Email</label>
-      <input type="text" ng-model="user.email" placeholder="Email">
+      <input type="email" name="email" ng-model="user.email" placeholder="Email">
     </div>
 
     <div class="pane-row">
@@ -36,14 +45,63 @@
     <br>
 
     <div class="float-container">
-
-      <button ng-click="ok()" ng-disabled="!hasName()" class="pane-button green pull-right offset-right">Save</button>
-
-      <button ng-click="cancel()" class="pane-button red pull-right offset-right">Cancel</button>
+      
+      <button ng-click="ok()" ng-disabled="!canUpdateUser(user)" class="pane-button glyph-container green pull-right offset-right">
+        Save
+        <span ng-show="loadingUser" class="welcome-spinner"><i class="glyphicon glyphicon-refresh"></i></span>
+      </button>
+      
+      <!--<button ng-click="cancel()" class="pane-button red pull-right offset-right">Cancel</button>-->
 
     </div>
 
   </form>
-
+  
+  <section ng-show="savedName">
+      
+    <hr>
+    
+    <h2>Change password</h2>
+    
+    <form novalidate>
+      
+      <div class="pane-row">
+        <label>Current password</label>
+        <input type="password" ng-model="password.current" placeholder="Current password">
+      </div>
+    
+      <div class="pane-row">
+        <label>New password</label>
+        <input type="password" ng-model="password.new" placeholder="New password">
+      </div>
+      
+      <div class="pane-row">
+        <label>Repeat password</label>
+        <input type="password" ng-model="password.repeat" placeholder="Repeat new password">
+      </div>
+    
+      <div class="float-container">
+        
+        <button ng-click="updatePassword(password)" ng-disabled="!canUpdatePassword(password)" class="pane-button glyph-container green pull-right offset-right">
+          Change password
+          <span ng-show="loadingPassword" class="welcome-spinner"><i class="glyphicon glyphicon-refresh"></i></span>
+        </button>
+        
+        <!--<button ng-click="cancel()" class="pane-button red pull-right offset-right">Cancel</button>-->
+        
+      </div>
+      
+    </form>
+  
+    <hr>
+  
+    <div class="float-container">
+      
+      <button ng-click="cancel()" class="pane-button red pull-right offset-right">Close</button>
+      
+    </div>
+    
+  </section>
+  
 
 </div>

@@ -43,10 +43,35 @@ angular.module('customerEngineApp')
   
   function setup() {
     $scope.user = Auth.getCurrentUser();
-      if ($scope.user && $scope.user.userId) {
-        getTickets($scope.user.userId);
-      }
+    if ($scope.user && $scope.user.userId) {
+      getTickets($scope.user.userId);
+    }
   }
+  
+  /**
+   * Returns either true or false for whether the ticket should be shown.
+   * 
+   * @param {Object} ticket
+   * @param {String} tickFilter
+   * @return {Boolean}
+   */
+  $scope.showTicket = function (ticket, tickFilter) {
+    
+    // Obviously, tickets tagged with *hide* should not be shown.
+    if (ticket.hide) { return false; }
+    
+    // If there is no tickFilter, the ticket should be shown.
+    if (!tickFilter) { return true; }
+    
+    // If it's the special snowflake 'ClosedTransferred', check for 'Closed' and transferred.
+    if (tickFilter === 'ClosedTransferred') {
+      return ticket.transferred && ticket.status === 'Closed';
+    }
+    
+    // Return whether the status matches *tickFilter*
+    return ticket.status === tickFilter;
+  }
+  
   
   // Run the set up.
   setup();

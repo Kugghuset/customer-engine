@@ -6,7 +6,8 @@ angular.module('customerEngineApp')
   $stateProvider.state('main.create_ticket', {
     url: '/ticket/:ticketId',
     templateUrl: 'app/routes/create_ticket/create_ticket.html',
-    controller: 'CreateTicketCtrl'
+    controller: 'CreateTicketCtrl',
+    title: 'Ticket'
   });
 }])
 .controller('CreateTicketCtrl', ['$scope', '$stateParams', '$location', 'Auth', 'Ticket', function ($scope, $stateParams, $location, Auth, Ticket) {

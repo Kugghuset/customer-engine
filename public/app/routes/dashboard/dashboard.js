@@ -6,7 +6,8 @@ angular.module('customerEngineApp')
   $stateProvider.state('main.dashboard', {
     url: '/dashboard',
     templateUrl: 'app/routes/dashboard/dashboard.html',
-    controller: 'DashboardCtrl'
+    controller: 'DashboardCtrl',
+    title: 'Dashboard'
   });
 }])
 .controller('DashboardCtrl', ['$scope', '$timeout', 'Auth', 'Ticket', function ($scope, $timeout, Auth, Ticket) {

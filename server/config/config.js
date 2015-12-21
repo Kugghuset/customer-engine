@@ -10,7 +10,7 @@ module.exports = {
     server: userConfig.server || 'MSSQL',
     user: userConfig.user || 'sa',
     password: userConfig.password || 'pass',
-    database: userConfig.database || 'customer-engine',
+    database: userConfig.database || 'tickety',
     options: _.assign({}, { encrypt: true }, userConfig.options)
   },
   secrets: {

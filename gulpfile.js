@@ -110,7 +110,9 @@ gulp.task('minify', function () {
         // console.log(fs.readFileSync(htmlFile, 'utf8'));
         
         
-       fs.createReadStream(htmlFile).pipe(fs.createWriteStream('../../dist'))
+        console.log(__dirname);
+        
+      //  fs.createReadStream(htmlFile).pipe(fs.createWriteStream(''))
       }
     
     })

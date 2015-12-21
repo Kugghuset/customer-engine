@@ -19,7 +19,7 @@ require('./descriptor/index')
  */
 module.exports = function (app, logger) {
   // Front end app
-  app.use(express.static(root + '/public'));
+  app.use(express.static(root + '/dist'));
   
   // Logging for API routes
   app.use(morgan('combined', { stream: logger.stream }));

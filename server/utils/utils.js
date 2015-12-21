@@ -65,9 +65,62 @@ function escapeRegex(text) {
 function literalRegExp(text, flags) {
   return new RegExp(escapeRegex(text), flags);
 }
+
+function regexModules(filename, utils) {
+  return new RegExp([
+      utils.escapeRegex('<!--file:{filename}-->'.replace('{filename}', filename)),
+      '[^]*',
+      utils.escapeRegex('<!--end-file:{filename}-->'.replace('{filename}', filename))
+    ].join(''), 'gi');
+}
+
+/**
+ * Returns the filenames of scripts and/or css files included between
+ * a <!--file:{filename}--> and <!--end-file:{filename}--> as an array.
+ * 
+ * If there either is none or *filename* cannot be found, an empty array is returned.
+ * 
+ * @param {String} fileContents
+ * @param {String} filename
+ * @return {Array}
+ */
+function getModulesFromIndex(fileContents, filename) {
+  var utils = this;
+  
+  try {
+    return _.chain(
+      _.first(fileContents.match(
+          regexModules(filename, utils)
+      , '')).split('\n'))
+      .map(function (line) {
+        return line.replace(new RegExp(
+          '(<(?:script src|link .* href)=")' +
+          '(.*)' +
+          '(">(</script>)?)'
+        ), '$2').replace(/\s/g, '');
+      })
+      .filter(function (line) {
+        // Filter out lines 
+        return !/<!--(end-)?file:/gi.test(line);
+      })
+      .filter() // Filter out potentially empty lines
+      .value()
+  } catch (error) {
+    return [];
+  }
+}
+
+function removeModules(fileContents, filename) {
+  var utils = this;
+  return fileContents
+    .replace(regexModules(filename, utils), '');
+}
+
 module.exports = {
   objectify: objectify,
   handleError: handleError,
   escapeRegex: escapeRegex,
-  literalRegExp: literalRegExp
+  literalRegExp: literalRegExp,
+  getModulesFromIndex: getModulesFromIndex,
+  removeModules: removeModules
 };

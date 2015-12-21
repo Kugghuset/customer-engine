@@ -6,3 +6,4 @@ userConfig.js
 **/public/css/**/*.css
 **/iisnode
 **/*.map
+**/dist

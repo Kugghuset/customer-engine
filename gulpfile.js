@@ -10,7 +10,8 @@ var gexec = require('gulp-exec');
 var livereload = require('gulp-livereload');
 var chalk = require('chalk');
 var sass = require('gulp-sass');
-var Promise = require('bluebird');
+var minifyCss = require('gulp-minify-css');
+var sourcemaps = require('gulp-sourcemaps');
 
 var node;
 
@@ -51,7 +52,10 @@ gulp.task('assume-unchanged', function () {
 // Runs compiles the sass
 gulp.task('sass', function () {
   gulp.src('./public/style/global.scss')
-    .pipe(sass.sync().on('error', sass.logError))
+    .pipe(sourcemaps.init())
+      .pipe(sass.sync().on('error', sass.logError))
+      .pipe(minifyCss({ compatibility: 'ie8' }))
+    .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest('./public/css'))
     .on('unpipe', function (src) {
       
@@ -74,7 +78,7 @@ gulp.task('watch', function () {
 // Builds the application
 gulp.task('build', ['sass']);
 
-gulp.task('default', ['livereload-listen', 'sass', 'server', 'watch']);
+gulp.task('default', ['livereload-listen', 'build', 'server', 'watch']);
 
 process.on('exit', function () {
   if (node) { node.kill(); }

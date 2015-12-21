@@ -5,3 +5,4 @@ userConfig.js
 **/assets/customers/
 **/public/css/**/*.css
 **/iisnode
+**/*.map

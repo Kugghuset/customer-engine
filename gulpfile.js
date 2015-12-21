@@ -54,6 +54,9 @@ gulp.task('sass', function () {
     .pipe(sass.sync().on('error', sass.logError))
     .pipe(gulp.dest('./public/css'))
     .on('unpipe', function (src) {
+      
+      console.log();
+      
       livereload.changed('./public/css/global.css');
     })
     
@@ -66,6 +69,9 @@ gulp.task('watch', function () {
   gulp.watch(['./public/app/**', './public/index.html'], ['reload']);
   gulp.watch(['./public/style/**/*.scss', './public/app/**/*.scss'], ['sass']);
 });
+
+// Builds the application
+gulp.task('build', ['sass']);
 
 livereload.listen()
 gulp.task('default', ['sass', 'server', 'watch']);

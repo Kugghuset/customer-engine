@@ -208,5 +208,45 @@ exports.updateLastLoggedIn = function (_user) {
   });
 }
 
+exports.setPassword = function (userId, currentPass, password) {
+  return new Promise(function (resolve, reject) {
+    this.findById(userId)
+    .then(function (user) {
+      return new Promise(function (resolve, reject) {
+        
+        // Check for user
+        if (!user || _.isEqual({}, user)) {
+          // No users, which is problematic
+          return reject(new Error('User not found.'));
+        }
+        
+        // Check the passwords
+        if (!bcrypt.compareSync(currentPass, user.password)) {
+          // The provided password doesn't match the stored one
+          return reject(new Error('Password doesn\'t match current password.'));
+        }
+        
+        // Everything went well, resolve the query object.
+        resolve({
+          query: sql.fromFile('./sql/user.setPassword.sql'),
+          params: {
+            password: {
+              type: sql.VARCHAR(256),
+              val: bcrypt.hashSync(password, bcrypt.genSaltSync(10)) //Hash user submitted password
+            },
+            userId: {
+              type: sql.BIGINT,
+              val: userId
+            }
+          }
+        });
+      });
+    })
+    .then(sql.execute)
+    .then(resolve)
+    .catch(reject);
+  }.bind(this));
+}
+
 // Initialize the table
 intialize();

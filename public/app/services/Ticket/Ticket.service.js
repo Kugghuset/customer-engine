@@ -121,16 +121,19 @@ angular.module('customerEngineApp')
      * few secods on change.
      * 
      * @param {Object} ticket
+     * @param {Number} waitingTime - defaults to 5000 ms
      * @return {Promise} -> {Object} (Ticket)
      */
-    autoSave: function (ticket) {
+    autoSave: function (ticket, waitingTime) {
       return $q(function (resolve, reject) {
+        
+        waitingTime = _.isNumber(waitingTime) ? waitingTime : 5000;
         
         lastUpdate.dateTime = new Date();
         lastUpdate.queue = [ ticket ];
         setTimeout(function () {
-          // Return if there's been an update the last two seconds.
-          if (new Date() - lastUpdate.dateTime < 5000 || !lastUpdate.queue.length) { return resolve(undefined); }
+          // Return "early" if there's been an update the last two seconds.
+          if (new Date() - lastUpdate.dateTime < waitingTime || !lastUpdate.queue.length) { return resolve(undefined); }
           
           lastUpdate.dateTime = undefined;
           lastUpdate.queue.pop();
@@ -141,7 +144,7 @@ angular.module('customerEngineApp')
             resolve(_ticket);
           })
           ['catch'](reject);
-        }, 5000);
+        }, waitingTime);
       });
     },
     

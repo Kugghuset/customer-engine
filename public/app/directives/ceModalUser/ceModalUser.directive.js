@@ -37,11 +37,9 @@ angular.module('customerEngineApp')
         
         modalInstance.result.then(function (user) {
           if (!user) { return; } // early
-          
-          Notification.success('Updates saved.')
           Auth.setCurrentUser(user);
         }, function () {
-          // Cancelled
+          // Something absolutely went horribly wrong!
         });
       };
       
@@ -56,17 +54,38 @@ angular.module('customerEngineApp')
 }])
 .controller('ModalInstanceCtrl', function ($scope, $uibModalInstance, user, Auth, Department, Notification) {
   
-  // assign $scope to a copy of user, as it's regarded as a service and we don't want to by mistake modify it.
-  $scope.user = angular.copy(user);
+  var allowClose = false;
   
-  $scope.hasName = function () {
-    return !!$scope.user && !!$scope.user.name;
-  }
+  $scope.savedName = !!user.name;
   
-  var savedName = !!user.name;
+  $scope.original;
+  $scope.user;
+  $scope.loadingUser;
+  $scope.loadingPassword;
+  
+  // Setup
+  setLocalUser(user);
+  getDepartments();
+  
   
   /**
-    * Gets all departments and attaches them to scope.
+   * Copys _user onto $scope.original and $scope.user
+   * and returns a copy of _user;
+   * 
+   * @param {Object} _user
+   * @return {Object}
+   */
+  function setLocalUser(_user) {
+    // Keep a copy of the user for further use
+    $scope.original = angular.copy(_user);
+    // assign $scope to a copy of user, as it's regarded as a service and we don't want to by mistake modify it.
+    $scope.user = angular.copy(_user);
+    
+    return angular.copy(_user);
+  }
+  
+  /**
+    * Gets all departments and attaches them to $scope.
     */
   function getDepartments() {
     Department.getAll()
@@ -74,18 +93,27 @@ angular.module('customerEngineApp')
       $scope.departments = departments;
     })
     ['catch'](function (err) {
-      console.log('Something went wrong with fetching the departments, please refresh the page.')
+      Notification.error('Something went wrong with fetching the departments, please refresh the page.')
     });
   }
   
+  /**
+   * Updates the user in the DB.
+   */
   $scope.ok = function () {
+    if (!$scope.canUpdateUser($scope.user)) {
+      return; // earlu
+    }
+    $scope.loadingUser = true;
     Auth.update($scope.user)
     .then(function (_user) {
-      savedName = !!_user.name;
-      $uibModalInstance.close(_user);
+      $scope.savedName = !!_user.name;
+      setLocalUser(_user);
+      Notification.success('User updated.');
+      $scope.loadingUser = false;
     })
     ['catch'](function (err) {
-      
+      $scope.loadingUser = false;
       if (/email/gi.test(err)) {
         Notification.error(err);
       } else {
@@ -94,17 +122,96 @@ angular.module('customerEngineApp')
     })
   };
 
+  /**
+   * Closes the modal and returns the original user
+   * (which should match the user in the DB)
+   */
   $scope.cancel = function () {
-    $uibModalInstance.dismiss('cancel');
+    allowClose = true;
+    $uibModalInstance.close($scope.original);
   };
   
-  $scope.$on('modal.closing', function (event) {
-    if (!savedName) {
-      event.preventDefault();
-    }
-  })
+  /**
+   * Returns true or false for whether the user
+   * matches the original one and whether there is a name and email.
+   * 
+   * @param {Object} user
+   * @return {Boolean}
+   */
+  $scope.canUpdateUser = function (user) {
+    return _.every([
+      user && user.name,
+      _.some([
+        user.name != $scope.original.name,
+        user.email && user.email != $scope.original.email
+      ])
+    ]);
+  }
   
-  getDepartments();
+  /**
+   * Returns true or false for whether there are any passwords
+   * and the new and repeated password exists.
+   * 
+   * @param {Object} passObj { current: String, new: String, repeat: String }
+   * @return {Boolean}
+   */
+  $scope.canUpdatePassword = function (passObj) {
+    if (!passObj) { return false; }
+    
+    return _.every([
+      passObj.current,
+      passObj.new,
+      passObj.new === passObj.repeat
+    ]);
+  }
+  
+  /**
+   * If the passwords match, updates the password in the DB.
+   * 
+   * @param {Object} passObj
+   */
+  $scope.updatePassword = function (passObj) {
+    if (!$scope.canUpdatePassword(passObj)) {
+      return; // early
+    }
+    
+    $scope.loadingPassword = true;
+    
+    Auth.setPassword($scope.user.userId, passObj)
+    .then(function (res) {
+      $scope.loadingPassword = false;
+      $scope.password = {
+        current: '',
+        new: '',
+        repeat: ''
+      }
+      Notification.success('Password successfully updated.');
+    })
+    .catch(function (err) {
+      $scope.loadingPassword = false;
+      Notification.error(
+        /password/gi.test(err)
+        ? err
+        : 'Could not update the password. Something went wrong.'
+      );
+    });
+  }
+  
+  /**
+   * Subsrcibes to the closing event
+   * and disallows it if the user has no name,
+   * or passes the close event through to the close function
+   * to ensure the updated user is returned.
+   */
+  $scope.$on('modal.closing', function (event) {
+    if (!$scope.savedName) {
+      allowClose = false;
+      event.preventDefault();
+    } else if (!allowClose) {
+      event.preventDefault();
+      $scope.cancel();
+    }
+  });
   
 });
 

@@ -21,7 +21,15 @@ angular.module('customerEngineApp')
       function aggregateStatuses(tickets) {
         return _.assign(
           _.chain(tickets)
-          .groupBy('status')
+          .groupBy(function (item) {
+            if (item.status === 'Closed' && item.transferred) {
+              // If the item is closed AND transferred, use 'ClosedTransferred'
+              return 'ClosedTransferred';
+            } else {
+              // Otherwise use the status
+              return item.status;
+            }
+          })
           .map(function (v, k) { return [ _.camelCase(k), v.length ] })
           .zipObject()
           .value()

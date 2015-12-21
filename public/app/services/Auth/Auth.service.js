@@ -121,6 +121,21 @@ angular.module('customerEngineApp')
         .success(resolve)
         .error(reject);
       });
+    },
+    
+    /**
+     * Updates the current user's password
+     * in the DB.
+     * 
+     * @param {Object} passObj
+     * @return {Promise}
+     */
+    setPassword: function (userId, passObj) {
+      return $q(function (resolve, reject) {
+        $http.put('/api/users/' + userId + '/password', passObj)
+        .success(resolve)
+        .error(reject);
+      });
     }
   }
 }]);

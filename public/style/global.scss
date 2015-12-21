@@ -66,6 +66,22 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+.go-back {
+  position: absolute;
+  top: 60px;
+  left: 20px;
+  font-size: 25px;
+  text-decoration: none;
+  color: $purple-dark;
+  padding-right: 130px;
+  padding-top: 15px;
+  font-family: BebasNeue, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: bold;
+  &:hover {
+    color: $purple;
+  }
+}
+
 @include text-inputs {
   @include border-shadow;
   @include input-placeholder {
@@ -201,6 +217,10 @@ label {
 }
 .green {
   background-color: $green;
+}
+
+.black-ish {
+  background-color: $black-ish;
 }
 
 .grayout {

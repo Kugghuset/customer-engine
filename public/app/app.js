@@ -27,7 +27,7 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, AnalyticsProvider, 
   AnalyticsProvider.setAccount([
     {
       tracker: 'UA-XXXXXXXX-X',
-      name: 'customer-engine'
+      name: 'tickety'
     }
   ]);
   

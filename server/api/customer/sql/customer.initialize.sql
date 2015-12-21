@@ -11,7 +11,7 @@ BEGIN
     [orgNr] varchar(256) NULL,
     [dateCreated] datetime2 DEFAULT GETUTCDATE() NULL,
     [dateChanged] datetime2 DEFAULT GETUTCDATE() NULL,
-    [isLocal] bit NULL -- Specifies whether the customer is created inside Tickity or is external
+    [isLocal] bit NULL -- Specifies whether the customer is created inside Tickety or is external
   )
 END
 ELSE

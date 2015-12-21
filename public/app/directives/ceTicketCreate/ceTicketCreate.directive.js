@@ -20,8 +20,6 @@ angular.module('customerEngineApp')
       
       var timer;
       
-      var existingPerson;
-      
       scope.romeOptions = {
         max: moment().endOf('day')
       };
@@ -67,6 +65,15 @@ angular.module('customerEngineApp')
         'Pending'
       ];
       
+      /**
+       * Returns a default ticket object
+       * which defaults to the current user as the user,
+       * the user's department as the department,
+       * its ticketDate to now
+       * and the status set to 'Open'.
+       * 
+       * @return {Object}
+       */
       function emptyTicket() {
         return {
           ticketDate: new Date(),
@@ -132,8 +139,19 @@ angular.module('customerEngineApp')
        */
       scope.submit = function (_ticket) {
         
+        // Check if the ticket is allowed to be saved.
+        if (!scope.canSave(_ticket)) {
+          scope.confirmDelete(
+            'No chosen customer.',
+            'To save, please choose a customer.'
+          );
+          return; // early
+        }
+        
+        // Removes the ticket from the autosave queue.
         Ticket.emptyQueue();
         
+        // Set ticketDateClosed to now if it's unset and the status is closed.
         if (_ticket.status === 'Closed' && !_ticket.ticketDateClosed) {
           _ticket.ticketDateClosed = new Date();
         }
@@ -152,14 +170,27 @@ angular.module('customerEngineApp')
         });
       }
       
+      /**
+       * Deletes the ticket in the DB and returns to the dashboard.
+       * If there is a modal (scope.confirmDelete), it uses that to ask the user,
+       * otherwise the regular confirm prompt will be used.
+       * 
+       * If the user says OK, the ticket is completely removed from the system,
+       * and is then transitioned to the dashboard.
+       * Otherwise really nothing happens.
+       * 
+       * @param {Object} _ticket
+       */
       scope.discard = function (_ticket) {
         
+        // Check for the custom modal
         if (scope.confirmDelete) {
           scope.confirmDelete(
             'Discard ticket?',
             'Are you sure you want to discard the ticket?\nThis will delete it entirely.',
             function (answer) {
               if (answer) {
+                // Remove if it's been saved, I.E. if there's an ID
                 if (_ticket && _ticket.ticketId) {
                   Ticket.remove(_ticket.ticketId)
                 }
@@ -177,8 +208,17 @@ angular.module('customerEngineApp')
         }
       }
       
+      /**
+       * Transitions to dashboard and, if allowed, saves the user
+       * 
+       * @param {Object} _ticket
+       */
       scope.goBack = function (_ticket) {
-        Ticket.autoSave(_ticket);
+        if (scope.canSave(_ticket)) {
+          // Save if it's allowed
+          Ticket.autoSave(_ticket);
+        }
+        // Go to dashboard
         $state.transitionTo('main.dashboard');
       }
       
@@ -204,6 +244,23 @@ angular.module('customerEngineApp')
           .filter() // Remove empty posts
           .value()
           .join(', ');
+      }
+      
+      /**
+       * Returns a boolean value for whether the ticket is allowed to be saved or not.
+       * This is determined by whether there is a company or not.
+       * 
+       * @param {Object} ticket
+       * @return {Boolean}
+       */
+      scope.canSave = function (ticket) {
+        // sort of null check
+        if (!ticket) { return false; }
+        
+        return _.every([
+          // customers require an ID, as it otherwise cannot be stored.
+          ticket.customer && ticket.customer.customerId
+        ]);
       }
       
       /**
@@ -367,11 +424,12 @@ angular.module('customerEngineApp')
       }
       
       /**
+       * Sets *person* to *$item*.
+       * 
        * @param {Object} person
        * @param {Object} $item
        */
       scope.setPerson = function (person, $item) {
-        // existingPerson = angular.copy($item);
         
         person = $item;
       }
@@ -415,7 +473,12 @@ angular.module('customerEngineApp')
           ticket.transferredDepartment = {};
         }
         
-        Ticket.autoSave(ticket) 
+        // Only auto save if there's a customer object.
+        if (!scope.canSave(ticket)) {
+          return; // early
+        }
+        
+        Ticket.autoSave(ticket)
         .then(function (t) {
           if (!t) { return; }
           if (t && !submitted) { Notification('Ticket autosaved'); }

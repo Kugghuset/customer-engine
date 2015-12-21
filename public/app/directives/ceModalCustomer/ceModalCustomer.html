@@ -2,7 +2,7 @@
 
   <h1>{{ isNew(customer) ? 'Create' : 'Select' }} Customer</h1>
 
-  <form action="">
+  <form novalidate>
 
     <div class="pane-row">
       <label class="font-size-ms">Org. name</label>
@@ -43,7 +43,7 @@
 
     <div ng-show="isNew(customer)">
       
-      <i class="glyphicon glyphicon-exclamation-sign"></i> A new customer tagged as created in Tickity will be added to the customer database.
+      <i class="glyphicon glyphicon-exclamation-sign"></i> A new customer tagged as created in Tickety will be added to the customer database.
       
     </div>
 

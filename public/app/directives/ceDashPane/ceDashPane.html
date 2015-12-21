@@ -40,8 +40,12 @@
           <td class="center purple">{{ aggregated.open || 0 }}</td>
         </tr>
         <tr ng-click="setFilter('Closed')">
-          <td class="left" ng-class="{'green': filter == 'Closed' }">Closed</td>
+          <td class="left" ng-class="{'green': filter == 'Closed' }">Closed, not transferred</td>
           <td class="center green">{{ aggregated.closed || 0 }}</td>
+        </tr>
+        <tr ng-click="setFilter('ClosedTransferred')">
+          <td class="left" ng-class="{'black-ish': filter == 'ClosedTransferred' }">Closed, transferred</td>
+          <td class="center black-ish">{{ aggregated.closedTransferred || 0 }}</td>
         </tr>
         <tr ng-click="setFilter('Pending')">
           <td class="left" ng-class="{'beige': filter == 'Pending' }">Pending</td>

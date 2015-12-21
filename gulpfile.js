@@ -55,12 +55,13 @@ gulp.task('sass', function () {
     .pipe(gulp.dest('./public/css'))
     .on('unpipe', function (src) {
       
-      console.log();
-      
+      // Reloads if livereload is running
       livereload.changed('./public/css/global.css');
-    })
-    
-    
+    });
+});
+
+gulp.task('livereload-listen', function () {
+  livereload.listen();
 });
 
 // Watches the server and public folders and does stuff
@@ -73,8 +74,7 @@ gulp.task('watch', function () {
 // Builds the application
 gulp.task('build', ['sass']);
 
-livereload.listen()
-gulp.task('default', ['sass', 'server', 'watch']);
+gulp.task('default', ['livereload-listen', 'sass', 'server', 'watch']);
 
 process.on('exit', function () {
   if (node) { node.kill(); }

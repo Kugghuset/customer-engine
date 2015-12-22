@@ -75,6 +75,19 @@ function regexModules(filename, utils) {
 }
 
 /**
+ * Returns a RegExp object which matches all href's tags;
+ * @param {String} flags
+ * @return {RegExp}
+ */
+function regexSrcHref(flags) {
+  return new RegExp(
+      '(<(?:script src|link .* href)=")' +
+      '(.*)' +
+      '(">(</script>)?)'
+    , flags ? flags : '');
+}
+
+/**
  * Returns the filenames of scripts and/or css files included between
  * a <!--file:{filename}--> and <!--end-file:{filename}--> as an array.
  * 
@@ -93,11 +106,7 @@ function getModulesFromIndex(fileContents, filename) {
           regexModules(filename, utils)
       , '')).split('\n'))
       .map(function (line) {
-        return line.replace(new RegExp(
-          '(<(?:script src|link .* href)=")' +
-          '(.*)' +
-          '(">(</script>)?)'
-        ), '$2').replace(/\s/g, '');
+        return line.replace(regexSrcHref(), '$2').replace(/\s/g, '');
       })
       .filter(function (line) {
         // Filter out lines 
@@ -110,10 +119,51 @@ function getModulesFromIndex(fileContents, filename) {
   }
 }
 
+/**
+ * Removes all modules inside a <!--file:*filename*--> block
+ * in the fileContents and returns the cleaned version.
+ * 
+ * @param {String} fileContents
+ * @param {String} filename
+ * @return {String}
+ */
 function removeModules(fileContents, filename) {
   var utils = this;
   return fileContents
     .replace(regexModules(filename, utils), '');
+}
+
+/**
+ * Cachebusts the files by appending
+ * a query to the filenames lik ?cachebuster={Date.now()}
+ * 
+ * @param {String} fileContents
+ * @param {Array|String} urls
+ * @return {String}
+ */
+function cacheBustFiles(fileContent, urls) {
+  
+  if (!_.isArray(urls)) { urls = [ urls ]; }
+  
+  var fc = fileContent;
+  
+  _.forEach(urls, function (url) {
+    fc = fc.replace(url, url + '?cachebuster=' + Date.now())
+  });
+  
+  return fc;
+}
+
+/**
+ * Returns an array of all filenames linked in *fileContent*.
+ * 
+ * @param {String} fileContent
+ * @return {Array}
+ */
+function getAllModuleNames(fileContent) {
+  return _.map(fileContent.match(regexSrcHref('gi')), function (line) {
+    return line.replace(regexSrcHref(), '$2').replace(/\s/g, '');
+  });
 }
 
 module.exports = {
@@ -122,5 +172,7 @@ module.exports = {
   escapeRegex: escapeRegex,
   literalRegExp: literalRegExp,
   getModulesFromIndex: getModulesFromIndex,
-  removeModules: removeModules
+  removeModules: removeModules,
+  cacheBustFiles: cacheBustFiles,
+  getAllModuleNames: getAllModuleNames
 };

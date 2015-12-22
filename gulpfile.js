@@ -1,28 +1,36 @@
 'use strict'
 
-var p_json = require('./package.json');
-
+// Various gulp dependencies
 var gulp = require('gulp');
-var shell = require('shelljs');
-var spawn = require('child_process').spawn;
-var exec = require('child_process').exec;
 var gexec = require('gulp-exec');
 var livereload = require('gulp-livereload');
-var chalk = require('chalk');
 var sass = require('gulp-sass');
 var minifyCss = require('gulp-minify-css');
 var rename = require('gulp-rename');
-var fs = require('fs');
-var path = require('path');
 var sourcemaps = require('gulp-sourcemaps');
-var _ = require('lodash');
 var concat = require('gulp-concat');
 var ngAnnotate = require('gulp-ng-annotate')
 var uglify = require('gulp-uglify')
+var templateCache = require('gulp-angular-templatecache');
 
+// Various dependencies
+var shell = require('shelljs');
+var spawn = require('child_process').spawn;
+var exec = require('child_process').exec;
+var chalk = require('chalk');
+var fs = require('fs');
+var path = require('path');
+var _ = require('lodash');
+var sql = require('seriate');
+
+// package.json
+var p_json = require('./package.json');
+
+// Project files
 var utils = require('./server/utils/utils');
+var config = require('./server/config/config');
 
-
+// Used for running the node instance
 var node;
 
 // The server task
@@ -79,11 +87,24 @@ gulp.task('sass', function () {
     });
 });
 
-gulp.task('minify', function () {
+gulp.task('templates', function () {
+  return gulp.src('./public/app/{routes,directives}/**/*.html')
+    .pipe(templateCache({standalone: true}))
+    .pipe(gulp.dest('./public/dist'));
+})
+
+gulp.task('minify', function (cb) {
+  
+  /**
+   * TODO: FIX THIS
+   * 
+   * CURRENTLY DOES NOT WORK AS EXPECTED DUE TO BOWER DEPENDENCIES
+   * TRYING TO ACCESS FILES WHICH AREN'T LOCATED WHERE THEY SHOULD BE.
+   * 
+   */
+  
   // Get the file contents of index.html
-  
-  
-  var indexFile = fs.readFileSync(path.resolve('./public/index.html'), 'utf8');
+  var indexFile = fs.readFileSync(path.resolve('./public/app.html'), 'utf8');
   
   var filenames = [
     'vendor.min.css',
@@ -91,17 +112,33 @@ gulp.task('minify', function () {
     'app.min.js'
   ];
   
-  // Iterate over the filenames to which the write should occur.
-  _.forEach(filenames, function (filename) {
+  /**
+   * Recursively iterates over items in *_files*
+   * and calls *cb* when the iteration is finished.
+   * 
+   * @param {Array} _files
+   * @param {Function} cb
+   * @param {Array} finishedFiles - set recursively, do not set.
+   */
+  function _forEvery(_files, cb, finishedFiles) {
+    
+    if (!finishedFiles) { finishedFiles = []; }
+    if (finishedFiles.length === _files.length || !_files) {
+      // Call the callback
+      if (cb) { cb(); }
+      return;
+    }
+    
+    var filename = _files[finishedFiles.length];
+    finishedFiles.push(filename);
     
     // Itereate over the result of getModulesFromIndex
     var files = _.map(utils.getModulesFromIndex(indexFile, filename), function (item) {
       return ['./public/', item].join('');
     });
     
-    indexFile = utils.removeModules(indexFile, filename);
-    
     if (/\.js$/i.test(filename)) {
+      
       gulp.src(files)
         .pipe(sourcemaps.init())
           .pipe(concat(filename))
@@ -109,20 +146,62 @@ gulp.task('minify', function () {
           .pipe(uglify())
         .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest('public/dist'))
+        .on('unpipe', function (src) {
+          
+          // Recursion!!
+          return _forEvery(_files, cb, finishedFiles);
+        });
+      
     } else if (/\.css/i.test(filename)) {
+
+      indexFile = utils.removeModules(indexFile, filename);
+      indexFile = utils.cacheBustFiles(indexFile, filename);
+      
       gulp.src(files)
         .pipe(sourcemaps.init())
           .pipe(concat(filename))
         .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest('public/css'))
+        .on('unpipe', function (src) {
+          indexFile = utils.cacheBustFiles(indexFile, _.map(files, function (file) {
+            return file.replace('./public/', '');
+          }));
+          
+          // Recursion!!
+          return _forEvery(_files, cb, finishedFiles);
+        });
     }
-    
+  }
+  
+  // Asynchronous foreach loop
+  _forEvery(filenames, function () {
+    fs.writeFileSync('./public/index.html', indexFile);
+    if (cb) { cb(); }
   });
-  
-  console.log();
-  
-  // fs.writeFileSync('./dist/index.html', indexFile);
+
 });
+
+// Sets the DB up
+gulp.task('db-setup', function (cb) {
+  // Setup the database.
+  sql.setDefaultConfig(config.db);
+  
+  // Require all API files
+  
+  var apiPath = path.resolve('./server/api');
+  _.forEach(fs.readdirSync(apiPath), function (folderName) {
+    
+    if (!fs.statSync(path.resolve(apiPath, folderName)).isFile()) {
+      
+      var _module = path.resolve(apiPath, folderName)
+        .replace(__dirname, '.')
+        .replace(/[\/\\]/g, '/');
+      
+      _.attempt(function () { require(_module); /* required only for for the initialize functions to run. */ })
+    }
+  });
+  if (cb) { cb(); }
+})
 
 gulp.task('livereload-listen', function () {
   livereload.listen();
@@ -135,8 +214,22 @@ gulp.task('watch', function () {
   gulp.watch(['./public/style/**/*.scss', './public/app/**/*.scss'], ['sass']);
 });
 
+// Cachebusts all files
+gulp.task('cachebust', function () {
+  
+  var indexFile = fs.readFileSync(path.resolve('./public/app.html'), 'utf8');
+  
+  indexFile = utils.cacheBustFiles(
+    indexFile,
+    utils.getAllModuleNames(indexFile)
+  );
+  
+  // Create the index file
+  fs.writeFileSync('./public/index.html', indexFile);
+})
+
 // Builds the application
-gulp.task('build', ['sass', 'minify']);
+gulp.task('build', ['sass', /* 'templates', 'minify',*/ 'cachebust', 'db-setup']);
 
 gulp.task('default', ['livereload-listen', 'build', 'server', 'watch']);
 

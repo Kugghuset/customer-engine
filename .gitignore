@@ -7,3 +7,4 @@ userConfig.js
 **/iisnode
 **/*.map
 **/dist
+**/public/index.html

@@ -71,16 +71,17 @@ gulp.task('sass', function () {
       return path;
     }))
     .pipe(sourcemaps.write('./'))
-    .pipe(gulp.dest('./dist/css'))
+    .pipe(gulp.dest('./public/css'))
     .on('unpipe', function (src) {
       
       // Reloads if livereload is running
-      livereload.changed('./dist/css/global.css');
+      livereload.changed('./public/css/global.css');
     });
 });
 
 gulp.task('minify', function () {
   // Get the file contents of index.html
+  
   
   var indexFile = fs.readFileSync(path.resolve('./public/index.html'), 'utf8');
   
@@ -98,44 +99,29 @@ gulp.task('minify', function () {
       return ['./public/', item].join('');
     });
     
-    
     indexFile = utils.removeModules(indexFile, filename);
-    
-    _.forEach(files, function (file) {
-      // console.log(file);
-      var htmlFile = path.resolve(__dirname + file.split('.')[1] + '.html');
-      console.log(htmlFile);
-      console.log(fs.existsSync(htmlFile));
-      if (fs.existsSync(htmlFile)) {
-        // console.log(fs.readFileSync(htmlFile, 'utf8'));
-        
-        
-        console.log(__dirname);
-        
-      //  fs.createReadStream(htmlFile).pipe(fs.createWriteStream(''))
-      }
-    
-    })
     
     if (/\.js$/i.test(filename)) {
       gulp.src(files)
         .pipe(sourcemaps.init())
           .pipe(concat(filename))
-          .pipe(ngAnnotate())
+          // .pipe(ngAnnotate())
           .pipe(uglify())
         .pipe(sourcemaps.write('./'))
-        .pipe(gulp.dest('dist'))
-    } else {
+        .pipe(gulp.dest('public/dist'))
+    } else if (/\.css/i.test(filename)) {
       gulp.src(files)
         .pipe(sourcemaps.init())
           .pipe(concat(filename))
         .pipe(sourcemaps.write('./'))
-        .pipe(gulp.dest('dist'))
+        .pipe(gulp.dest('public/css'))
     }
     
   });
   
-  fs.writeFileSync('./dist/index.html', indexFile);
+  console.log();
+  
+  // fs.writeFileSync('./dist/index.html', indexFile);
 });
 
 gulp.task('livereload-listen', function () {
@@ -144,7 +130,7 @@ gulp.task('livereload-listen', function () {
 
 // Watches the server and public folders and does stuff
 gulp.task('watch', function () {
-  gulp.watch('./server/**', ['server']);
+  gulp.watch(['./server/**', './userConfig.js'], ['server']);
   gulp.watch(['./public/app/**', './public/index.html'], ['reload']);
   gulp.watch(['./public/style/**/*.scss', './public/app/**/*.scss'], ['sass']);
 });

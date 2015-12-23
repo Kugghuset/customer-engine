@@ -52,6 +52,9 @@ function findBy(paramName, other) {
 }
 
 /**
+ * Returns an object of all params regarding the ticket
+ * in question.
+ * 
  * @param {Object} ticket
  * @reruturn {Object} params object for seriate
  */
@@ -326,6 +329,36 @@ exports.remove = function (ticketId) {
     }
   });
 }
+
+/**
+ * Returns the filecontents of the SQL file matching *filename*.
+ * NOTE: *filename* should be only the name of the file,
+ * E.G. 'ticket.findBy.sql' or 'ticket.update.sql'
+ * 
+ * @param {String} filename
+ * @returm {String}
+ */
+exports.rawSqlFile = function (filename) {
+  return sql.fromFile('./sql/' + filename);
+}
+
+/**
+ * Returns an object of all params regarding the ticket
+ * in question.
+ * 
+ * @param {Object} ticket
+ * @reruturn {Object} params object for seriate
+ */
+exports.ticketParams = ticketParams;
+
+/**
+ * Ensures all properties atleast exists
+ * to ensure no undefined exceptions are thrown.
+ * 
+ * @param {Object} ticket
+ * @return {Object} (Ticket)
+ */
+exports.ensureHasProps = ensureHasProps;
 
 // Initialize the table
 initialize();

@@ -16,12 +16,17 @@ var Ticket = require('../api/ticket/ticket.db');
  */
 function getLastWeek() {
   return new Promise(function (resolve, reject) {
+    
     var query = Ticket.rawSqlFile('ticket.findBy.sql')
       .replace(new RegExp(
         utils.escapeRegex('{ where_clause }') + '.*'
         , 'gi'), [
           '[ticketDate] < @upperDateLimit',
-          'AND [ticketDate] > @lowerDateLimit'
+          'AND [A].[ticketDate] > @lowerDateLimit',
+          'AND NOT EXISTS(SELECT * FROM [dbo].[NPSResponse]',
+                          'WHERE REPLACE([dbo].[NPSResponse].[npsResponseTel], \'+\', \'\') = [Q].[tel]',
+                          'AND ([dbo].[NPSResponse].[npsResponseDate] < @upperDateLimit',
+                              'AND [dbo].[NPSResponse].[npsResponseDate] > @lowerDateLimit))'
         ].join(' '));
     
     sql.execute({
@@ -40,7 +45,9 @@ function getLastWeek() {
         }
       )
     })
-    .then(function (tickets) { resolve(utils.objectify(tickets)); })
+    .then(function (tickets) {
+      resolve(utils.objectify(tickets));
+    })
     .catch(reject);
   });
 }

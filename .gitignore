@@ -3,6 +3,7 @@
 **/typings
 userConfig.js
 **/assets/customers/
+**/assets/nps/
 **/public/css/**/*.css
 **/iisnode
 **/*.map

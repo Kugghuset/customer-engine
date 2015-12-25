@@ -179,6 +179,8 @@ function getPage(url, options) {
     // *options* must be an object
     if (!_.isObject(options)) { options = {}; }
     
+    console.log('Making a GET request to ' + url);
+    
     request.get({
       uri: url,
       encoding: options.encoding || null,

@@ -92,6 +92,8 @@ function getReceivers() {
 }
 
 /**
+ * // Sends the messages and inputs it to the db.
+ * 
  * @param {Array} tickets
  * @param {Array} sentTickets - Set recursively, do not set.
  * @return {Promise} -> {Array}
@@ -151,7 +153,7 @@ function npsUrl(ticket) {
     'serviceid=' + config.nps.serviceId,
     'queue=1', // Don't know if this is correct
     'agentid=' + ticket.ticketId, // We're using the ticketId instead of the agent's ID
-    'msisdn=' + ticket.person.tel,
+    'msisdn=' + '+' + ticket.person.tel,
     'password=' + config.nps.password,
     'customer_key=' + ticket.customer.customerNumber || ticket.customer.orgNr, // Not sure this is correct
     'user_id=' + ticket.user.userId, // probably not correct

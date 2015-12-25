@@ -6,7 +6,8 @@ var chalk = require('chalk');
 var later = require('later');
 
 var schedule = {
-  fns: []
+  fns: [],
+  interval: undefined
 };
 
 /**
@@ -37,6 +38,38 @@ schedule.addToNPSSchedule = function (fn) {
   }
   
   this.fns.push(fn);
+  
+  // Start the schedule if it's not running already
+  this.startSchedule();
+  
+  return this;
+}.bind(schedule);
+
+/**
+ * Calls all functions in schedule.fns
+ */
+schedule.callFns = function () {
+  
+  _.forEach(this.fns, function (fn) {
+    // call the function if it's actually a function
+    if (_.isFunction(fn)) { fn(); }
+  });
+  
+  return this;
+}.bind(schedule);
+
+/**
+ * Starts the schedule if there isn't one on going already.
+ */
+schedule.startSchedule = function () {
+  
+  if (this.interval) {
+    // Return early if there already is an interval set
+    return;
+  }
+  
+  this.interval = later.setInterval(this.callFns, this.NPSSchedule);
+  
   return this;
 }.bind(schedule);
 

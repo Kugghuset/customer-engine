@@ -10,6 +10,7 @@ var utils = require('../utils/utils');
 var config = require('../config/config');
 var Ticket = require('../api/ticket/ticket.db');
 var NPS = require('../api/nps/nps.db');
+var schedule = require('./schedule');
 
 /**
  * Finds all tickets which where set to have their ticketDate last week
@@ -172,7 +173,16 @@ function getAndSend() {
   .then(sendMessages);
 }
 
-getAndSend();
+/**
+ * Schedules getAndSend method for every thursday at 15:00.
+ */
+function scheduleNps() {
+  schedule.addToNPSSchedule(getAndSend);
+}
+
+scheduleNps();
+
+console.log(schedule);
 
 exports.module = {
   getAndSend: getAndSend

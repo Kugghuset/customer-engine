@@ -152,13 +152,13 @@ function sendMessages(tickets, sentTickets) {
 function npsUrl(ticket) {
   return encodeURI('http://interactive.intele.com/customersurvey/RequestHandlerServlet?' + [
     'serviceid=' + config.nps.serviceId,
-    'queue=1', // Don't know if this is correct
-    'agentid=' + ticket.ticketId, // We're using the ticketId instead of the agent's ID
+    'queue=1',
+    'agentid=' + ticket.ticketId,
     'msisdn=' + '+' + ticket.person.tel,
     'password=' + config.nps.password,
-    'customer_key=' + ticket.customer.customerNumber || ticket.customer.orgNr, // Not sure this is correct
-    'user_id=' + ticket.user.userId, // probably not correct
-    'related_iq_session=' + 'tickety' // most probably not correct
+    'customer_key=' + ticket.customer.customerNumber || ticket.customer.orgNr,
+    'user_id=' + ticket.user.userId,
+    'related_iq_session=' + 'tickety'
   ].join('&'))
 }
 
@@ -181,8 +181,6 @@ function scheduleNps() {
 }
 
 scheduleNps();
-
-console.log(schedule);
 
 exports.module = {
   getAndSend: getAndSend

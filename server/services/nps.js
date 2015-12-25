@@ -25,8 +25,7 @@ function getLastWeek() {
           'AND [A].[ticketDate] > @lowerDateLimit',
           'AND NOT EXISTS(SELECT * FROM [dbo].[NPSResponse]',
                           'WHERE REPLACE([dbo].[NPSResponse].[npsResponseTel], \'+\', \'\') = [Q].[tel]',
-                          'AND ([dbo].[NPSResponse].[npsResponseDate] < @upperDateLimit',
-                              'AND [dbo].[NPSResponse].[npsResponseDate] > @lowerDateLimit))'
+                          'AND [dbo].[NPSResponse].[npsResponseDate] > @threeMontshAgo)'
         ].join(' '));
     
     sql.execute({
@@ -41,6 +40,10 @@ function getLastWeek() {
           lowerDateLimit: {
             type: sql.DATETIME2,
             val: moment().subtract(1, 'weeks').startOf('week').toDate()
+          },
+          threeMontshAgo: {
+            type: sql.DATETIME2,
+            val: moment().subtract(3, 'months').toDate()
           }
         }
       )

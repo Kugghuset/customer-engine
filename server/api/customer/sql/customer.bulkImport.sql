@@ -25,7 +25,7 @@ BEGIN
   FROM '{ filepath }'
   WITH
   (
-    FIELDTERMINATOR = ',',
+    FIELDTERMINATOR = ';',
     ROWTERMINATOR = '\n',
     DATAFILETYPE = 'widechar', -- This part is super important for åäö
     CODEPAGE = 'RAW' -- Supposedly this one too

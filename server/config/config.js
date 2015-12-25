@@ -13,6 +13,11 @@ module.exports = {
     database: userConfig.database || 'tickety',
     options: _.assign({}, { encrypt: true }, userConfig.options)
   },
+  nps: {
+    sendSms: _.isBoolean(userConfig.nps.sendSms) ? userConfig.nps.sendSms : false,
+    serviceId: userConfig.nps.serviceId || '',
+    password: userConfig.nps.password ||''
+  },
   secrets: {
     session: 'sssshhharedSecret'
   }

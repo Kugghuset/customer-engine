@@ -20,6 +20,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 require('./api/routes')(app, logger);
 
+require('./services/nps');
+
 function serve() {
   var server = app.listen(config.port, function () {
     var port = server.address().port;

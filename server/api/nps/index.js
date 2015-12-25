@@ -1,8 +1,8 @@
 'use strict'
 
 var express = require('express');
-var NPSResponse = require('./npsResponse.db');
-var controller = require('./npsResponse.controller');
+var NPS = require('./nps.db');
+var controller = require('./nps.controller');
 
 var router = express.Router();
 

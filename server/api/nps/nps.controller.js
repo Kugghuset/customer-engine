@@ -6,5 +6,5 @@ var chalk = require('chalk');
 
 var utils = require('../../utils/utils');
 
-var npsResponse = require('./npsResponse.db');
+var NPS = require('./nps.db');
 

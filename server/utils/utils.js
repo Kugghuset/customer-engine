@@ -4,6 +4,7 @@ var _ = require('lodash');
 var Promise = require('bluebird');
 var chalk = require('chalk');
 var DataObjectParser = require('dataobject-parser')
+var request = require('request');
 
 /**
  * Returns a new object where property names
@@ -166,6 +167,31 @@ function getAllModuleNames(fileContent) {
   });
 }
 
+/**
+ * Makes a GET request to *url*
+ * and returns a promise of the body as a string.
+ * 
+ * @param {String} url - URI to request
+ * @param {Object} options - optional, options object
+ */
+function getPage(url, options) {
+  return new Promise(function (resolve, reject) {
+    // *options* must be an object
+    if (!_.isObject(options)) { options = {}; }
+    
+    request.get({
+      uri: url,
+      encoding: options.encoding || null,
+      headers: _.assign({}, {
+        'Connection': 'keep-alive'
+      }, options.headers)
+    }, function (err, res, body) {
+      if (err) { reject(err); }
+      else { console.log(res.statusCode); console.log(body.toString('utf8')); resolve(body.toString('utf8')); }
+    })
+  });
+}
+
 module.exports = {
   objectify: objectify,
   handleError: handleError,
@@ -174,5 +200,6 @@ module.exports = {
   getModulesFromIndex: getModulesFromIndex,
   removeModules: removeModules,
   cacheBustFiles: cacheBustFiles,
-  getAllModuleNames: getAllModuleNames
+  getAllModuleNames: getAllModuleNames,
+  getPage: getPage
 };

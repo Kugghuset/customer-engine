@@ -10,7 +10,7 @@ angular.module('customerEngineApp')
      * Keys are tested from first to last until a value is found, with which the sort will be made.
      * If none of the values of the keys are defined (= all returns falsy) the element itself is used for comparison.
      * 
-     * If *input* isn't iterable (I.E. an object or an element), *input* is returned as-is.
+     * If *input* isn't iterable (I.E. an object or an array), *input* is returned as-is.
      * 
      * @param {Array|Object} input
      * @param {Array} keys

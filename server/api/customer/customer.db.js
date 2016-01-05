@@ -101,25 +101,41 @@ exports.create = function (_customer) {
 }
 
 function bulkImport() {
-  if (!fs.existsSync(customerFilePath)) {
-    // No file to import.
-    return;
-  }
-  
-  // Get the actual path to the customers.csv file
-  var _query = sql
-    .fromFile('./sql/customer.bulkImport.sql')
-    .replace('{ filepath }', customerFilePath);
+  return new Promise(function (resolve, reject) {
     
+    if (!fs.existsSync(customerFilePath)) {
+      // No file to import.
+      return;
+      resolve();
+    }
+      
+    // Get the actual path to the customers.csv file
+    var _query = sql
+      .fromFile('./sql/customer.bulkImport.sql')
+      .replace('{ filepath }', customerFilePath);
+      
+    return sql.execute({
+      query: _query
+    }).then(function (result) {
+      // Do something?
+      resolve(result);
+    })
+    .catch(function (err) {
+      // Handle error
+      reject(err);
+    });
+  });
+}
+
+/**
+ * Merges the customer database on the DW into Tickety.
+ */
+function merge() {
   return sql.execute({
-    query: _query
-  }).then(function (result) {
-    // Do something?
-  })
-  .catch(function (err) {
-    // Handle error
+    query: sql.fromFile('./sql/customer.merge.sql')
   });
 }
 
 intialize();
-bulkImport();
+bulkImport()
+.then(merge);

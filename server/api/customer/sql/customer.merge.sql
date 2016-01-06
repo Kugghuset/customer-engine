@@ -13,7 +13,7 @@ BEGIN
     [CustomerNr] -- Subject to change
   FROM (
     MERGE [tickety].[dbo].[Customer] AS [Target]
-    USING [BamboraDW].[dbo].[] AS [Source]
+    USING [BamboraDW].[dbo].[DimCustomer] AS [Source]
       ON [Target].[customerNumber] = [Source].[CustomerNr] -- Either the key matches
       OR ( -- Or there's no key, but the name and orgNr matches
         [Target].[customerNumber] IS NULL

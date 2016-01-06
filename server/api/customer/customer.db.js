@@ -102,11 +102,9 @@ exports.create = function (_customer) {
 
 function bulkImport() {
   return new Promise(function (resolve, reject) {
-    
     if (!fs.existsSync(customerFilePath)) {
       // No file to import.
-      return;
-      resolve();
+      return resolve();
     }
       
     // Get the actual path to the customers.csv file
@@ -138,4 +136,7 @@ function merge() {
 
 intialize();
 bulkImport()
-.then(merge);
+.then(merge)
+.catch(function (err) {
+  console.log(err);
+})

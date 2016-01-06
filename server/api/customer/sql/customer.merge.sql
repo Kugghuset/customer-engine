@@ -1,59 +1,67 @@
 
 IF DB_ID(N'BamboraDW') IS NOT NULL
 BEGIN
+  
+  -- Update entries where there's no customerNumber,
+  -- but both orgName and orgNr matches their equivalent in DimCustomer.
+  -- It also makes sure the match doesn't already exist in the DB.
+  UPDATE [Tickety].[dbo].[Customer]
+  SET
+    [Tickety].[dbo].[Customer].[customerNumber] = [Source].[CustomerNr],
+    [Tickety].[dbo].[Customer].[dateChanged] = GETUTCDATE(),
+    [Tickety].[dbo].[Customer].[isLocal] = NULL
 
-  INSERT INTO [dbo].[Customer] (
+  FROM [BamboraDW].[dbo].[DimCustomer] AS [Source]
+  WHERE
+          [Tickety].[dbo].[Customer].[customerNumber] IS NULL
+      AND [Source].[CustomerName] = [Tickety].[dbo].[Customer].[orgName]
+      AND [Source].[OrgNum] = [Tickety].[dbo].[Customer].[orgNr]
+      AND NOT EXISTS(SELECT * FROM [Tickety].[dbo].[Customer]
+                    WHERE [Tickety].[dbo].[Customer].[customerNumber] = [Source].[CustomerNr])
+ 
+  -- Update or insert the other customers.
+  -- New customers will be inserted
+  -- and existing customers which have changed either
+  -- their orgName or orgNr will update the customer
+  -- which should convert local customers.
+  INSERT INTO [Tickety].[dbo].[Customer] (
     [orgName],
-    [orgNr],
+    [orgNr],	
     [customerNumber]
   )
   SELECT
-    [CustomerName], -- Subject to change
-    [OrgNum], -- Subject to change
-    [CustomerNr] -- Subject to change
+    [CustomerName],
+    [OrgNum],
+    [CustomerNr]
   FROM (
-    MERGE [tickety].[dbo].[Customer] AS [Target]
+    MERGE [Tickety].[dbo].[Customer] AS [Target]
     USING [BamboraDW].[dbo].[DimCustomer] AS [Source]
-      ON [Target].[customerNumber] = [Source].[CustomerNr] -- Either the key matches
-      OR ( -- Or there's no key, but the name and orgNr matches
-        [Target].[customerNumber] IS NULL
-        AND [Source].[CustomerName] = [Target].[customerName]
-        AND [Source].[OrgNum] = [Target].[orgNr]
-      )
-    WHEN MATCHED AND ( -- Match with CustomerNr
-        [Target].[customerNumber] = [Source].[CustomerNr]
-        AND [Source].[CustomerNr] IS NOT NULL
-    AND (
-          [Source].[CustomerName] != [Target].[customerName]
-          OR [Source].[OrgNum] != [Target].[orgNr]
-        )
-    )
+      ON [Target].[customerNumber] = [Source].[CustomerNr]
+    WHEN MATCHED AND (
+        [Target].[orgName] != [Source].[CustomerName]
+    OR  [Target].[orgNr] != [Source].[OrgNum]
+    OR  [Target].[orgNr] IS NULL
+  )
     THEN UPDATE SET
       [Target].[orgName] = [Source].[CustomerName],
       [Target].[orgNr] = [Source].[OrgNum],
-      [Target].[dateUpdated] = GETUTCDATE()
-    WHEN MATCHED AND (
-      [Target].[customerNumber] IS NULL
-      AND NOT EXISTS(SELECT * FROM [Target]
-                    WHERE [Target].[customerNumber] = [Source].[CustomerNr])
-    )
-    THEN UPDATE SET
-      [Target].[customerNumber] = [Source].[CustomerNr],
-      [Target].[dateUpdated] = GETUTCDATE(),
-      [Target].[isLocal] = 0
-    WHEN NOT MATCHED BY TARGET
+      [Target].[dateChanged] = GETUTCDATE(),
+      [Target].[isLocal] = NULL
+
+	WHEN NOT MATCHED BY TARGET
       THEN INSERT (
         [customerNumber],
         [orgNr],
         [orgName]
       )
       VALUES (
-        [Source].[CustomerName],
+        [Source].[CustomerNr],
         [Source].[OrgNum],
-        [Source].[CustomerNr]
+        [Source].[CustomerName]
       )
+	  
     OUTPUT $action AS [Action], [Source].*
   ) AS [MergeOuput]
-    WHERE [MergeOuput].[Action] = 'Update'
+    WHERE [MergeOuput].[Action] = NULL
   
 END

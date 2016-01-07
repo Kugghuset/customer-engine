@@ -42,6 +42,7 @@ BEGIN
           [Target].[orgName] != [Source].[CustomerName]
       OR  [Target].[orgNr] != [Source].[OrgNum]
       OR  [Target].[orgNr] IS NULL
+      OR  [Target].[isLocal] = 1
     )
     -- Updated or otherwise different customers will be updated.
     THEN UPDATE SET

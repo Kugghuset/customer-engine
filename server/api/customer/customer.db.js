@@ -106,7 +106,7 @@ function bulkImport() {
       // No file to import.
       return resolve();
     }
-      
+    
     // Get the actual path to the customers.csv file
     var _query = sql
       .fromFile('./sql/customer.bulkImport.sql')
@@ -128,7 +128,7 @@ function bulkImport() {
 /**
  * Merges the customer database on the DW into Tickety.
  */
-function merge() {
+function mergeCustomers() {
   return sql.execute({
     query: sql.fromFile('./sql/customer.merge.sql')
   });
@@ -136,7 +136,11 @@ function merge() {
 
 intialize();
 bulkImport()
-.then(merge)
+.then(mergeCustomers)
+.then(function () {
+  console.log('Customer merge finished');
+})
 .catch(function (err) {
+  console.log('Something went wrong with merging customers from BamboraDW.');
   console.log(err);
 })

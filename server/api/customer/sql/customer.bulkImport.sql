@@ -2,8 +2,9 @@
 Inserts the customers in bulk from the file in assets, which is specifide in JavaScript code.
 */
 
--- Only run the insert if there are no Customers
-IF NOT EXISTS (SELECT * FROM [dbo].[Customer])
+-- Only run the insert if there are no Customers and BamboraDW doesn't exist.
+IF (NOT EXISTS (SELECT * FROM [dbo].[Customer]))
+              AND (DB_ID(N'BamboraDW') IS NULL)
 BEGIN
   
   -- Drop TempCustomer if it's defined already
@@ -25,6 +26,7 @@ BEGIN
   FROM '{ filepath }'
   WITH
   (
+    FIRSTROW = 2, -- Skip the column name row
     FIELDTERMINATOR = ';',
     ROWTERMINATOR = '\n',
     DATAFILETYPE = 'widechar', -- This part is super important for åäö
@@ -37,14 +39,6 @@ BEGIN
       [orgName] = RTRIM(LTRIM([orgName])),
       [orgNr] = RTRIM(LTRIM([orgNr]))
     
-  -- Add customerId to simplify editing removal of column name row
-  ALTER TABLE [dbo].[TempCustomer]
-  ADD [customerId] bigint IDENTITY(1, 1) PRIMARY KEY NOT NULL
-  
-  -- Delete column name row
-  DELETE FROM [dbo].[TempCustomer]
-  WHERE [customerId] = 1
-  
   -- Insert the customers
   INSERT INTO [dbo].[Customer] (
     [customerNumber],
@@ -53,8 +47,10 @@ BEGIN
   )
   SELECT [customerNumber], [orgName], [orgNr]
   FROM [dbo].[TempCustomer]
+  -- Filter out rows where both orgName is the string 'NULL'
+  WHERE [orgName] != 'NULL'
   
   -- Remove temp table
   DROP TABLE [dbo].[TempCustomer]
-
+  
 END

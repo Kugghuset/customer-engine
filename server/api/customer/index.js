@@ -10,5 +10,6 @@ var router = express.Router();
 router.put('/fuzzy', auth.isAuthenticated(), controller.fuzzyQuery);
 router.put('/fuzzy/:colName', auth.isAuthenticated(), controller.fuzzyQueryBy);
 router.post('/', auth.isAuthenticated(), controller.create);
+router.get('/merge', controller.merge);
 
 module.exports = router;

@@ -127,12 +127,15 @@ function bulkImport() {
 
 /**
  * Merges the customer database on the DW into Tickety.
+ * @return {Promise} -> undefined
  */
 function mergeCustomers() {
   return sql.execute({
     query: sql.fromFile('./sql/customer.merge.sql')
   });
 }
+
+exports.merge = mergeCustomers;
 
 intialize();
 bulkImport()

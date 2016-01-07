@@ -21,6 +21,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 require('./api/routes')(app, logger);
 
 require('./services/nps');
+require('./services/merge');
 
 function serve() {
   var server = app.listen(config.port, function () {

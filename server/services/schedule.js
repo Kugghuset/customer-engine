@@ -6,8 +6,10 @@ var chalk = require('chalk');
 var later = require('later');
 
 var schedule = {
-  fns: [],
-  interval: undefined
+  npsFns: [],
+  npsInterval: undefined,
+  mergeFns: [],
+  mergeInterval: undefined
 };
 
 /**
@@ -17,6 +19,15 @@ var schedule = {
 schedule.NPSSchedule = later.parse.recur()
   .on(5).dayOfWeek()
   .on(15).hour();
+
+/**
+ * Schedule for running the merge script every
+ * 1st and 15th day of the month.
+ */
+schedule.mergeSchedule = later.parse.recur()
+  .on(1).dayOfMonth()
+  .and()
+  .on(15).dayOfMonth();
 
 /**
  * Adds *fn* to schedule which will run
@@ -32,12 +43,32 @@ schedule.addToNPSSchedule = function (fn) {
     return; // Early
   }
   
-  // Check if *fn* is alreay in schedule.fns
-  if (~this.fns.indexOf(fn)) {
+  // Check if *fn* is alreay in schedule.npsFns
+  if (~this.npsFns.indexOf(fn)) {
     return; // early if found
   }
   
-  this.fns.push(fn);
+  this.npsFns.push(fn);
+  
+  // Start the schedule if it's not running already
+  this.startSchedule();
+  
+  return this;
+}.bind(schedule);
+
+schedule.addToMergeSchedule = function (fn) {
+  
+  // No schedule to add
+  if (!fn) {
+    return; // Early
+  }
+  
+  // Check if *fn* is alreay in schedule.mergeFns
+  if (~this.mergeFns.indexOf(fn)) {
+    return; // early if found
+  }
+  
+  this.mergeFns.push(fn);
   
   // Start the schedule if it's not running already
   this.startSchedule();
@@ -46,11 +77,24 @@ schedule.addToNPSSchedule = function (fn) {
 }.bind(schedule);
 
 /**
- * Calls all functions in schedule.fns
+ * Calls all functions in schedule.npsFns
  */
-schedule.callFns = function () {
+schedule.callnpsFns = function () {
   
-  _.forEach(this.fns, function (fn) {
+  _.forEach(this.npsFns, function (fn) {
+    // call the function if it's actually a function
+    if (_.isFunction(fn)) { fn(); }
+  });
+  
+  return this;
+}.bind(schedule);
+
+/**
+ * Calls all functions in schedule.mergeFns
+ */
+schedule.callMergeFns = function () {
+  
+  _.forEach(this.mergeFns, function (fn) {
     // call the function if it's actually a function
     if (_.isFunction(fn)) { fn(); }
   });
@@ -63,12 +107,13 @@ schedule.callFns = function () {
  */
 schedule.startSchedule = function () {
   
-  if (this.interval) {
-    // Return early if there already is an interval set
-    return;
+  if (!this.npsInterval) {
+    this.npsInterval = later.setInterval(this.callnpsFns, this.NPSSchedule);
   }
   
-  this.interval = later.setInterval(this.callFns, this.NPSSchedule);
+  if (!this.mergeInterval) {
+    this.mergeInterval = later.setInterval(this.callMergeFns, this.mergeSchedule);
+  }
   
   return this;
 }.bind(schedule);

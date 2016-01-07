@@ -51,3 +51,19 @@ exports.create = function (req, res) {
     utils.handleError(res, err);
   });
 }
+
+/**
+ * ROUTE: GET '/api/customers/merge'
+ */
+exports.merge = function (req, res) {
+  Customer.merge()
+  .then(function () {
+    console.log('Manual customer merge finished');
+    res.status(200).send('OK');
+  })
+  .catch(function (err) {
+    console.log('Something went wrong with merging customers from BamboraDW.');
+    console.log(err);
+    res.status(500).send('Internal Error');
+  })
+}

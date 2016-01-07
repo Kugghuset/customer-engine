@@ -62,7 +62,7 @@ exports.insert = function (_nps) {
   
   if ('ticketId' in _nps) {
     nps = {
-      npsTel: _nps.person.tel,
+      npsTel: _nps.person.tel.replace(/(^[^+])/, '+$1'),
       npsDate: new Date(),
       isLocal: true
     }

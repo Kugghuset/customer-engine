@@ -16,6 +16,9 @@ angular.module('customerEngineApp')
     },
     link: function (scope, element, attrs) {
       
+      var saveOnDestroy = true;
+      var hasUpdates = false;
+      
       scope.loadingCurrent = false;
       
       var timer;
@@ -478,8 +481,10 @@ angular.module('customerEngineApp')
           return; // early
         }
         
+        hasUpdates = true;
         Ticket.autoSave(ticket)
         .then(function (t) {
+          hasUpdates = false;
           if (!t) { return; }
           if (t && !submitted) { Notification('Ticket autosaved'); }
           // Attach personId if not present
@@ -497,6 +502,7 @@ angular.module('customerEngineApp')
           }
         })
         ['catch'](function (err) {
+          hasUpdates = true;
           Notification.error('Auto save failed.')
         });
       }, true);
@@ -526,7 +532,20 @@ angular.module('customerEngineApp')
       
       scope.$on('$destroy', function (event) {
         stopTimer();
-      })
+        
+        if (hasUpdates && scope.canSave(scope.ticket)) {
+          // Save if it's allowed
+          Ticket.emptyQueue();
+          Ticket.autoSave(scope.ticket, 0)
+          .then(function (res) {
+            // updated
+          })
+          ['catch'](function (err) {
+             console.log(err);
+          })
+        }
+        
+      });
       
     }
   };

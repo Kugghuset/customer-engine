@@ -150,16 +150,14 @@ function sendMessages(tickets, sentTickets) {
  * @return {String}
  */
 function npsUrl(ticket) {
-  return encodeURI('http://interactive.intele.com/customersurvey/RequestHandlerServlet?' + [
-    'serviceid=' + config.nps.serviceId,
-    'queue=1',
-    'agentid=' + ticket.ticketId,
-    'msisdn=' + '+' + ticket.person.tel,
-    'password=' + config.nps.password,
-    'customer_key=' + ticket.customer.customerNumber || ticket.customer.orgNr,
-    'user_id=' + ticket.user.userId,
-    'related_iq_session=' + 'tickety'
-  ].join('&'))
+  return 'http://interactive.intele.com/customersurvey/RequestHandlerServlet?' + [
+    'serviceid=' + encodeURIComponent(config.nps.serviceId),
+    'queue=' + encodeURIComponent('1'),
+    'team=' + encodeURIComponent(ticket.department.departmentName),
+    'agentid=' + encodeURIComponent(ticket.ticketId),
+    'msisdn=' + encodeURIComponent('+' + ticket.person.tel),
+    'password=' + encodeURIComponent(config.nps.password)
+  ].join('&')
 }
 
 /**

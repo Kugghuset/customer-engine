@@ -83,16 +83,23 @@
       
       &:hover {
         color: $white;
-        background-color: $purple;
+        background-color: $purple !important;
         outline: none;
       }
       &:active, &:focus {
         color: $white;
-        background-color: $purple-dark;
+        background-color: $purple-dark !important;
         outline: none;
       }
     }
   }
+}
+
+.dropdown-menu > .active > a, .dropdown-menu > .active > a:hover, .dropdown-menu > .active > a:focus {
+  // super ugly, but overrides the default color.
+  color: $white;
+  background-color: $purple-dark;
+  outline: none;
 }
 
 .pane-button {
@@ -263,3 +270,4 @@
   vertical-align: middle;
   padding-top: 7px;
 }
+

@@ -30,7 +30,7 @@ BEGIN
       AND [Source].[OrgNum] = [Tickety].[dbo].[Customer].[orgNr]
       AND NOT EXISTS(SELECT * FROM [Tickety].[dbo].[Customer]
                     WHERE [Tickety].[dbo].[Customer].[customerNumber] = [Source].[CustomerNr])
-      -- AND [Source].[isActive] = 1 -- Only use the active row, the row name is probably different.
+      AND [Source].[EndDate] IS NULL -- Only use the active row, the row name is probably different.
 
   -- Updates or inserts the other customers.
   -- New customers will be inserted and existing customers which have changed either
@@ -50,7 +50,7 @@ BEGIN
     -- as it allows for filtering the results
     USING (SELECT *
            FROM [BamboraDW].[dbo].[DimCustomer]
-          --  WHERE [isActive] = 1 -- Might need to be changed
+           WHERE [EndDate] IS NULL -- Might need to be changed
           ) AS [Source]
       ON  [Target].[customerNumber] = [Source].[CustomerNr]
     

@@ -2,8 +2,9 @@
   color: $white;
   padding: $size-xs;
   outline: none;
-  text-align: center;
   border: thin none;
+  text-align: center;
+  @include border-shadow;
   min-width: 100px;
 }
 .status-select {
@@ -22,24 +23,20 @@
 }
 
 .status-dropdown {
-  transform: translateY(-2px);
-  padding: 0;
-  border-radius: 0;
   min-width: 100px;
-  box-shadow: none;
-  border: thin none;
+  left: -1px;
   & > li {
     & > a {
       @extend .base-status-select;
       &:hover {
         color: $white;
-        outline: none;
+        // outline: none;
         background-color: inherit;
         box-shadow: inset 0px 0px 1px 5000px rgba($color: #000000, $alpha: 0.1cm);
       }
       &:active, &:focus {
         color: $white;
-        outline: none;
+        // outline: none;
         background-color: inherit;
         box-shadow: inset 0px 0px 1px 5000px rgba($color: #000000, $alpha: 0.2cm);
       }

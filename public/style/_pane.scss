@@ -75,24 +75,35 @@
       color: $white;
       display: block;
       padding: $size-xs;
-      text-align: center;
+      text-align: left;
       width: 100%;
       border: 2px solid $white;
       border-collapse: collapse;
       outline: none;
+      @include hover-shadow;
       
       &:hover {
         color: $white;
-        background-color: $purple;
+        background-color: inherit !important;
         outline: none;
       }
       &:active, &:focus {
         color: $white;
-        background-color: $purple-dark;
+        background-color: inherit !important;
         outline: none;
       }
     }
   }
+  &.open {
+    width: 100%;
+  }
+}
+
+.dropdown-menu > .active > a, .dropdown-menu > .active > a:hover, .dropdown-menu > .active > a:focus {
+  // super ugly, but overrides the default color.
+  color: $white;
+  background-color: $purple-dark !important;
+  outline: none;
 }
 
 .pane-button {
@@ -236,6 +247,58 @@
   }
 }
 
-.pane-typeahead {
-  
+.pane-row {
+  label:not(.checkbox-label) {
+    display: block;
+    width: 100% !important;
+    margin: 0;
+    padding: 0;
+    padding-top: 10px;
+  }
+  .fill-by-label {
+    display: block;
+    width: 100%;
+    padding: 0;
+    padding-top: 0;
+    @include text-inputs {
+      margin: 0;
+      margin-top: 8px;
+    }
+    .dropdown-menu {
+      width: 100%;
+    }
+  }
+  .animated-textarea {
+    resize: none !important;
+    min-height: 100px;
+  }
+}
+
+.padding-fix-by-checkbox {
+  vertical-align: middle;
+  padding-top: 7px;
+}
+
+.modal-content {
+  .dropdown {
+    .pane-dropdown {
+      width: 100%;
+    }
+  }
+}
+
+.dep-pane-button {
+  display: relative;
+  right: 0;
+  min-height: 40px;
+  & > * {
+    position: absolute;
+    right: 0;
+    left: 50%;
+    width: 50%;
+    @include breakpoint(break-m) {
+      width: 100%;
+      left: 0;
+    }
+  }
 }

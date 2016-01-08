@@ -263,17 +263,14 @@
       <ce-status-select class="offset-top" status="ticket.status"></ce-status-select>
     </span>
     
-  </div>
-  
-  <br>
-  
-  <div class="pane-row" ng-show="ticket.ticketId">
+  </di
+  <div class="pane-row">
     
     <!--<span class="fill-label"></span>-->
     
     <div class="float-container">
       
-      <div class="pull-left">
+      <div class="pull-left" ng-show="ticket.ticketId">
         <span class="padding-fix-by-checkbox">
           
           <span>Ticket</span>
@@ -290,21 +287,18 @@
           <i class="offset-left" ></i> Ticket was transferred
         </label>
         
-        
       </div>
-      
       
     </div>
     
-    
   </div>
   
-  <div class="pane-row" ng-show="ticket.status == 'Closed'">
+  <div ng-show="ticket.status == 'Closed'">
     <!-- Transferred -->
     
-    <div class="float-container offset-top">
+    <div class="offset-top">
       
-      <div uib-dropdown uib-keyboard-nav class="pull-right" ng-show="ticket.transferred">
+      <div class="dep-pane-button" uib-dropdown uib-keyboard-nav ng-show="ticket.transferred">
         <button id="simpe-btn-keyboard-nav" type="button" class="pane-button" uib-dropdown-toggle>
           {{ ticket.transferredDepartment.departmentName || 'Choose department' }} <span class="caret"></span>
         </button>
@@ -329,7 +323,10 @@
     <button ng-click="discard(ticket)" class="pane-button red pull-right offset-right">{{ ticket.ticketId ? 'Delete' : 'Discard' }} ticket</button>
     <!--<button ng-click="goBack(ticket)" class="pane-button purple pull-right offset-right">Back to dashboard</button>-->
   </div>
-
+  
+  <!--<div>&nbsp;</div>-->
+  <br>
+  
 </section>
 
 <ce-modal-customer open-modal="openModal" customer="ticket.customer"></ce-modal-customer>

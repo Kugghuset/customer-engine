@@ -29,7 +29,7 @@ BEGIN
       AND [Source].[CustomerName] = [Tickety].[dbo].[Customer].[orgName]
       AND [Source].[OrgNum] = [Tickety].[dbo].[Customer].[orgNr]
       AND NOT EXISTS(SELECT * FROM [Tickety].[dbo].[Customer]
-                    WHERE [Tickety].[dbo].[Customer].[customerNumber] = [Source].[CustomerNr])
+                    WHERE [Tickety].[dbo].[Customer].[customerNumber] = CAST([Source].[CustomerNr] AS varchar(255)))
       AND [Source].[EndDate] IS NULL -- Only use the active row, the row name is probably different.
 
   -- Updates or inserts the other customers.
@@ -43,7 +43,7 @@ BEGIN
   SELECT
     [CustomerName],
     [OrgNum],
-    [CustomerNr]
+    CAST([CustomerNr] AS varchar(255))
   FROM (
     MERGE [Tickety].[dbo].[Customer] AS [Target]
     -- Use a sub query to work with SCB
@@ -52,7 +52,7 @@ BEGIN
            FROM [BamboraDW].[dbo].[DimCustomer]
            WHERE [EndDate] IS NULL -- Might need to be changed
           ) AS [Source]
-      ON  [Target].[customerNumber] = [Source].[CustomerNr]
+      ON  [Target].[customerNumber] = CAST([Source].[CustomerNr] AS varchar(255))
     
     -- Matches customers which updated and/or different from
     -- the customer in Tickety.
@@ -76,7 +76,7 @@ BEGIN
       [orgName]
     )
     VALUES (
-      [Source].[CustomerNr],
+      CAST([Source].[CustomerNr] AS varchar(255)),
       [Source].[OrgNum],
       [Source].[CustomerName]
     )

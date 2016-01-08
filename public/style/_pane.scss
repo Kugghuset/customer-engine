@@ -236,6 +236,30 @@
   }
 }
 
-.pane-typeahead {
-  
+.pane-row {
+  label:not(.checkbox-label) {
+    display: block;
+    width: 100% !important;
+    margin: 0;
+    padding: 0;
+    padding-top: 10px;
+  }
+  .fill-by-label {
+    display: block;
+    width: 100%;
+    padding: 0;
+    padding-top: 0;
+    @include text-inputs {
+      margin: 0;
+      margin-top: 8px;
+    }
+  }
+  .animated-textarea {
+    resize: none !important;
+  }
+}
+
+.padding-fix-by-checkbox {
+    vertical-align: middle;
+    padding-top: 7px;
 }

@@ -7,7 +7,9 @@
   
     <label for="">Date</label>
   
-    <input type="text" ce-rome rome-model="ticket.ticketDate" options="romeOptions" placeholder="YYYY-MM-DD HH:mm">
+    <span class="fill-by-label">
+      <input type="text" ce-rome rome-model="ticket.ticketDate" options="romeOptions" placeholder="YYYY-MM-DD HH:mm">
+    </span>
     
   </div>
   
@@ -62,7 +64,9 @@
   
     <label for="">Customer contact</label>
   
-    <input type="text" ng-model="ticket.person.name" placeholder="Name">
+    <span class="fill-by-label">
+      <input type="text" ng-model="ticket.person.name" placeholder="Name">
+    </span>
       
     <!--<span class="fill-by-label">
       <input type="text" ng-class="{'padded-right': personNameLoading}" ng-model="ticket.person.name" placeholder="Name" uib-typeahead="person as person.name for person in getContacts(ticket.customer.customerId, $viewValue, 'name')"
@@ -106,7 +110,9 @@
   
     <label for="">Email</label>
   
-    <input type="email" ng-model="ticket.person.email" placeholder="Email address">
+    <span class="fill-by-label">
+      <input type="email" ng-model="ticket.person.email" placeholder="Email address">
+    </span>
       
     <!--<span class="fill-by-label">
       <input type="text" ng-class="{'padded-right': personEmailLoading}" ng-model="ticket.person.email" placeholder="Email address" uib-typeahead="person as person.email for person in getContacts(ticket.customer.customerId, $viewValue, 'email')"
@@ -142,8 +148,10 @@
   
     <label>Country</label>
     
-    <input type="text" ng-model="ticket.country" uib-typeahead="country as matched(country, country) for country in countries | filter:$viewValue | limitTo:12"
-    placeholder="Type country name">
+    <span class="fill-by-label">
+      <input type="text" ng-model="ticket.country" uib-typeahead="country as matched(country, country) for country in countries | filter:$viewValue | limitTo:12"
+      placeholder="Type country name">
+    </span>
   
     <div>
   
@@ -233,7 +241,9 @@
   
     <label class="top-label">Summary</label>
     
-    <textarea class="animated-textarea" msd-elastic="\n" cols="30" rows="3" placeholder="Describe the call as you would want to read it." ng-model="ticket.summary"></textarea>
+    <span class="fill-by-label">
+      <textarea class="animated-textarea" msd-elastic="\n" cols="30" rows="3" placeholder="Describe the call as you would want to read it." ng-model="ticket.summary"></textarea>
+    </span>
   
     <!--<div class="float-container">
       
@@ -261,24 +271,40 @@
     
     <!--<span class="fill-label"></span>-->
     
-    <label>Ticket</label>
+    <div class="float-container">
+      
+      <div class="pull-left">
+        <span class="padding-fix-by-checkbox">
+          
+          <span>Ticket</span>
+            
+          <span class="left">{{ ticket.ticketId }}</span>
+          
+        </span>
+          
+      </div>
+      
+      <div class="pull-right" ng-show="ticket.status == 'Closed'">
+        <label class="checkbox-label">
+          <input type="checkbox" ng-model="ticket.transferred">
+          <i class="offset-left" ></i> Ticket was transferred
+        </label>
+        
+        
+      </div>
+      
+      
+    </div>
     
-    <label class="left">{{ ticket.ticketId }}</label>
     
   </div>
   
   <div class="pane-row" ng-show="ticket.status == 'Closed'">
     <!-- Transferred -->
     
-    <span class="fill-label"></span>
-    
-    <span>
-      <label class="checkbox-label">
-        <input type="checkbox" ng-model="ticket.transferred">
-        <i class="offset-left" ></i> Ticket was transferred
-      </label>
+    <div class="float-container offset-top">
       
-      <div uib-dropdown uib-keyboard-nav ng-show="ticket.transferred">
+      <div uib-dropdown uib-keyboard-nav class="pull-right" ng-show="ticket.transferred">
         <button id="simpe-btn-keyboard-nav" type="button" class="pane-button" uib-dropdown-toggle>
           {{ ticket.transferredDepartment.departmentName || 'Choose department' }} <span class="caret"></span>
         </button>
@@ -288,9 +314,8 @@
           </li>
         </ul>
       </div>
+    </div>
       
-    </span>
-    
     <br>
   
   </div>
@@ -301,7 +326,7 @@
   
   <div class="float-container">
     <button ng-click="submit(ticket)" class="pane-button green pull-right offset-right">Submit ticket</button>
-    <button ng-click="discard(ticket)" class="pane-button red pull-right offset-right">Discard ticket</button>
+    <button ng-click="discard(ticket)" class="pane-button red pull-right offset-right">{{ ticket.ticketId ? 'Delete' : 'Discard' }} ticket</button>
     <!--<button ng-click="goBack(ticket)" class="pane-button purple pull-right offset-right">Back to dashboard</button>-->
   </div>
 

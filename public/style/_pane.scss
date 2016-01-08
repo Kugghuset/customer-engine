@@ -80,15 +80,16 @@
       border: 2px solid $white;
       border-collapse: collapse;
       outline: none;
+      @include hover-shadow;
       
       &:hover {
         color: $white;
-        background-color: $purple !important;
+        background-color: inherit !important;
         outline: none;
       }
       &:active, &:focus {
         color: $white;
-        background-color: $purple-dark !important;
+        background-color: inherit !important;
         outline: none;
       }
     }
@@ -98,7 +99,7 @@
 .dropdown-menu > .active > a, .dropdown-menu > .active > a:hover, .dropdown-menu > .active > a:focus {
   // super ugly, but overrides the default color.
   color: $white;
-  background-color: $purple-dark;
+  background-color: $purple-dark !important;
   outline: none;
 }
 

@@ -47,7 +47,7 @@ angular.module('customerEngineApp')
     }
   }
 }])
-.controller('SummaryModalInstanceCtrl', function ($scope, $uibModalInstance, summary) {
+.controller('SummaryModalInstanceCtrl',['$scope', '$uibModalInstance', 'summary', function ($scope, $uibModalInstance, summary) {
   var allowClose = false;
   
   $scope.summary = summary;
@@ -68,6 +68,6 @@ angular.module('customerEngineApp')
     }
   });
   
-});
+}]);
 
 })();

@@ -72,7 +72,8 @@ angular.module('customerEngineApp')
       });
   }
 }}])
-.controller('CustomerModalInstanceCtrl', function ($scope, $uibModalInstance, currentCustomer, Customer, Department, Notification) {
+.controller('CustomerModalInstanceCtrl', ['$scope', '$uibModalInstance', 'currentCustomer', 'Customer', 'Department', 'Notification',
+  function ($scope, $uibModalInstance, currentCustomer, Customer, Department, Notification) {
   
   var existingCustomer = undefined;
   $scope.customer = currentCustomer;
@@ -187,6 +188,6 @@ angular.module('customerEngineApp')
     $uibModalInstance.dismiss('cancel');
   };
   
-});
+}]);
 
 })();

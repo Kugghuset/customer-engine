@@ -96,7 +96,7 @@ gulp.task('templates', function () {
 gulp.task('minify', function (cb) {
   
   /**
-   * TODO: FIX THIS
+   * TODO: BOWER DEPS
    * 
    * CURRENTLY DOES NOT WORK AS EXPECTED DUE TO BOWER DEPENDENCIES
    * TRYING TO ACCESS FILES WHICH AREN'T LOCATED WHERE THEY SHOULD BE.
@@ -107,8 +107,8 @@ gulp.task('minify', function (cb) {
   var indexFile = fs.readFileSync(path.resolve('./public/app.html'), 'utf8');
   
   var filenames = [
-    'vendor.min.css',
-    'vendor.min.js',
+    // 'vendor.min.css',
+    // 'vendor.min.js',
     'app.min.js'
   ];
   
@@ -139,6 +139,8 @@ gulp.task('minify', function (cb) {
     
     if (/\.js$/i.test(filename)) {
       
+      indexFile = utils.removeModules(indexFile, filename);
+      
       gulp.src(files)
         .pipe(sourcemaps.init())
           .pipe(concat(filename))
@@ -155,7 +157,7 @@ gulp.task('minify', function (cb) {
     } else if (/\.css/i.test(filename)) {
 
       indexFile = utils.removeModules(indexFile, filename);
-      indexFile = utils.cacheBustFiles(indexFile, filename);
+      // indexFile = utils.cacheBustFiles(indexFile, filename);
       
       gulp.src(files)
         .pipe(sourcemaps.init())
@@ -163,9 +165,9 @@ gulp.task('minify', function (cb) {
         .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest('public/css'))
         .on('unpipe', function (src) {
-          indexFile = utils.cacheBustFiles(indexFile, _.map(files, function (file) {
-            return file.replace('./public/', '');
-          }));
+        // indexFile = utils.cacheBustFiles(indexFile, _.map(files, function (file) {
+        //     return file.replace('./public/', '');
+        //   }));
           
           // Recursion!!
           return _forEvery(_files, cb, finishedFiles);
@@ -215,9 +217,9 @@ gulp.task('watch', function () {
 });
 
 // Cachebusts all files
-gulp.task('cachebust', function () {
+gulp.task('cachebust', ['minify'], function () {
   
-  var indexFile = fs.readFileSync(path.resolve('./public/app.html'), 'utf8');
+  var indexFile = fs.readFileSync(path.resolve('./public/index.html'), 'utf8');
   
   indexFile = utils.cacheBustFiles(
     indexFile,
@@ -229,7 +231,7 @@ gulp.task('cachebust', function () {
 })
 
 // Builds the application
-gulp.task('build', ['sass', /* 'templates', 'minify',*/ 'cachebust', 'db-setup']);
+gulp.task('build', ['sass', 'templates', 'minify', 'cachebust', 'db-setup']);
 
 gulp.task('default', ['livereload-listen', 'build', 'server', 'watch']);
 

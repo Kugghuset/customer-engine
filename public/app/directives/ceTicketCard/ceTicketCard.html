@@ -7,7 +7,7 @@
       </a>
       <span ng-show="isReadonly">{{ ticket.customer.orgName || 'Ticket ID: ' + ticket.ticketId }}</span>
     </h2>
-    <ce-status-select status="ticket.status"></ce-status-select>
+    <ce-status-select on-status-changed="onStatusChanged" status="ticket.status"></ce-status-select>
   </header>
   
   <div class="card-middle-section">

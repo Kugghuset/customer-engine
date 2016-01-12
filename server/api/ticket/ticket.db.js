@@ -255,7 +255,8 @@ exports.updateStatus = function (ticket) {
         }
       }
     })
-    
+    .then(resolve)
+    .catch(reject);
   });
 }
 
@@ -320,8 +321,6 @@ exports.findByUserId = function (userId) {
 }
 
 exports.getFreshByUserId = function (userId) {
-  
-  console.log('getting fresh tickets');
   
   return new Promise(function (resolve, reject) {
     sql.execute({

@@ -7,7 +7,8 @@ angular.module('customerEngineApp')
     restrict: 'EA',
     scope: {
       status: '=',
-      isReadonly: '='
+      isReadonly: '=',
+      onStatusChanged: '='
     },
     link: function (scope, element, attrs) {
       
@@ -28,6 +29,9 @@ angular.module('customerEngineApp')
       
       scope.setValue = function (_status) {
         scope.status = _status.value
+        if (_.isFunction(scope.onStatusChanged)) {
+          scope.onStatusChanged(_status.value);
+        }
       }
       
       scope.getColor = function (_status) {

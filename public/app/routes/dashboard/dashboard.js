@@ -60,18 +60,17 @@ angular.module('customerEngineApp')
     
     Ticket.getFresh(Auth.getCurrentUser().userId)
     .then(function (tickets) {
-      // Iterate over all tickets
-      _.forEach(tickets, function (ticket) {
-        var i;
-        // If there's a matching ticket, replace it
-        if (~(i = _.findIndex($scope.tickets), { ticketId: ticket.ticketId })) {
-          $scope.tickets.splice(i, 1, ticket);
-        } else {
-          // Or push it if it doesn't exist yet.
-          $scope.tickets.push(ticket);
-        }
-      });
       
+      if (!tickets.length) { return; }
+      
+      $scope.tickets = _.map($scope.tickets, function (ticket) {
+        var _t;
+        _t = _.find(tickets, function (t) { return t.ticketId == ticket.ticketId; });
+        
+        return (_t)
+           ? _t
+           : ticket;
+      });
     })
     ['catch'](function (err) {
       console.log(err);
@@ -118,8 +117,6 @@ angular.module('customerEngineApp')
   $timeout(function () {
     getUpdates();
   }, 4000);
-  
-  
   
 }]);
 

@@ -50,7 +50,7 @@ gulp.task('server', function () {
 });
 
 // Reloads the page
-gulp.task('reload', function () {
+gulp.task('reload', ['build'], function () {
   livereload.reload();
 });
 
@@ -229,7 +229,7 @@ gulp.task('livereload-listen', function () {
 // Watches the server and public folders and does stuff
 gulp.task('watch', function () {
   gulp.watch(['./server/**', './userConfig.js'], ['server']);
-  gulp.watch(['./public/app/**', './public/app.html'], ['reload']);
+  gulp.watch(['./public/app/**', './public/app.html'], ['build', 'reload']);
   gulp.watch(['./public/style/**/*.scss', './public/app/**/*.scss'], ['sass']);
 });
 

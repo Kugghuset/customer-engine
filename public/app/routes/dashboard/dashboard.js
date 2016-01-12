@@ -53,11 +53,25 @@ angular.module('customerEngineApp')
     }
   }
   
+  /**
+   * Gets tickets updated the last five seconds by the current user.
+   */
   function getUpdates() {
     
     Ticket.getFresh(Auth.getCurrentUser().userId)
     .then(function (tickets) {
-      console.log(tickets);
+      // Iterate over all tickets
+      _.forEach(tickets, function (ticket) {
+        var i;
+        // If there's a matching ticket, replace it
+        if (~(i = _.findIndex($scope.tickets), { ticketId: ticket.ticketId })) {
+          $scope.tickets.splice(i, 1, ticket);
+        } else {
+          // Or push it if it doesn't exist yet.
+          $scope.tickets.push(ticket);
+        }
+      });
+      
     })
     ['catch'](function (err) {
       console.log(err);

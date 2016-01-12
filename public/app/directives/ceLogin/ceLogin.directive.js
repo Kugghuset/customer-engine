@@ -1,7 +1,7 @@
 (function () {
 'use strict'
 
-angular.module('customerEngineApp')
+angular.module('ticketyApp')
 .directive('ceLogin', ['$location', 'Auth', 'Notification', function ($location, Auth, Notification) {
   return {
     templateUrl: 'app/directives/ceLogin/ceLogin.html',

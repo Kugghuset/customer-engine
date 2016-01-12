@@ -3,7 +3,7 @@
 (function () {
   'use strict'
 
-  angular.module('customerEngineApp')
+  angular.module('ticketyApp')
     .factory('Country', ['$q', '$http', function ($q, $http) {
 
       return {

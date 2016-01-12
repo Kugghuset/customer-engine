@@ -1,7 +1,7 @@
 (function () {
 'use strict'
 
-angular.module('customerEngineApp')
+angular.module('ticketyApp')
 .directive('ceModalConfirm', ['$uibModal', '$timeout', function ($uibModal, $timeout) {
   return {
     template: '<div></div>',

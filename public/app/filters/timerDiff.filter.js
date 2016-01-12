@@ -1,6 +1,6 @@
 (function () {
 
-angular.module('customerEngineApp')
+angular.module('ticketyApp')
 .filter('timerDiff', function () {
   
   return function (dates) {

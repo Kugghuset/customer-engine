@@ -1,7 +1,7 @@
 (function () {
 'use strict'
 
-angular.module('customerEngineApp')
+angular.module('ticketyApp')
 .factory('Auth', ['$rootScope', '$http', '$q', '$cookies', '$state', function ($rootScope, $http, $q, $cookies, $state) {
   var _user;
   

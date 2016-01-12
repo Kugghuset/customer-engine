@@ -1,7 +1,7 @@
 (function () {
 'use strict'
 
-angular.module('customerEngineApp')
+angular.module('ticketyApp')
 .directive('ceCardAreaHeader', ['Utils', function (Utils) {
   return {
     templateUrl: 'app/directives/ceCardAreaHeader/ceCardAreaHeader.html',

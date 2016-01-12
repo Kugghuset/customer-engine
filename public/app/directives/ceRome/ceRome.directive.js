@@ -3,7 +3,7 @@
 (function () {
 'use strict'
 
-angular.module('customerEngineApp')
+angular.module('ticketyApp')
 .directive('ceRome', ['$timeout', function ($timeout) {
   return {
     restrict : 'EA',

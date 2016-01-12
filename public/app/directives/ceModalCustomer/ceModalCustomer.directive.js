@@ -1,7 +1,7 @@
 (function () {
 'use strict'
 
-angular.module('customerEngineApp')
+angular.module('ticketyApp')
 .directive('ceModalCustomer', ['$uibModal', 'Notification', 'Customer', '$timeout', function ($uibModal, Notification, Customer, $timeout) {
   return {
     template: '<div></div>',

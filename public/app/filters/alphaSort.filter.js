@@ -1,6 +1,6 @@
 (function () {
 
-angular.module('customerEngineApp')
+angular.module('ticketyApp')
 .filter('alphaSort', function () {
   
   return function (input, keys, reverse) {

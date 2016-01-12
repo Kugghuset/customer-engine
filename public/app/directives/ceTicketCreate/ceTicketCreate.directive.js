@@ -1,6 +1,6 @@
 (function () {
 
-angular.module('customerEngineApp')
+angular.module('ticketyApp')
 .directive('ceTicketCreate',
   ['$location', '$state', '$timeout', '$interval', 'Customer', 'Person', 'Ticket', 'Country', 'Category', 'Notification', 'Department', 'Product',
   function ($location, $state, $timeout, $interval, Customer, Person, Ticket, Country, Category, Notification, Department, Product) {

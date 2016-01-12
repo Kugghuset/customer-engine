@@ -1,7 +1,7 @@
 (function () {
 'use strict'
 
-angular.module('customerEngineApp')
+angular.module('ticketyApp')
 .directive('ceLoading', function () {
   return {
     templateUrl: 'app/directives/ceLoading/ceLoading.html',

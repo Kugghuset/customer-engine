@@ -1,7 +1,7 @@
 (function () {
 'use strict'
 
-angular.module('customerEngineApp')
+angular.module('ticketyApp')
 .factory('Department', ['$q', '$http', function ($q, $http) {
   
   return {

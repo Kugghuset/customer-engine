@@ -1,7 +1,7 @@
 (function () {
 'use strict'
 
-angular.module('customerEngineApp')
+angular.module('ticketyApp')
 .directive('cePane', function () {
   return {
     templateUrl: 'app/directives/cePane/cePane.html',

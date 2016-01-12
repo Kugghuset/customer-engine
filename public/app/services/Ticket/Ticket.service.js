@@ -1,6 +1,6 @@
 'use strict'
 
-angular.module('customerEngineApp')
+angular.module('ticketyApp')
 .factory('Ticket', ['$q', '$http', '$localForage', function ($q, $http, $localForage) {
   
   var lastUpdate = {

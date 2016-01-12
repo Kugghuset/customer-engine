@@ -29,7 +29,6 @@
   "dependencies": {
     "angular": "~1.4.7",
     "angular-ui": "~0.4.0-alpha",
-    "angular-google-analytics": "~1.1.3",
     "angular-ui-router": "~0.2.15",
     "angular-cookies": "~1.4.7",
     "angular-bootstrap": "~0.14.3",

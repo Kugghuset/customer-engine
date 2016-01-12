@@ -1,6 +1,6 @@
 (function () {
 
-angular.module('customerEngineApp')
+angular.module('ticketyApp')
 .directive('ceStatusSelect', function () {
   return {
     templateUrl: 'app/directives/ceStatusSelect/ceStatusSelect.html',

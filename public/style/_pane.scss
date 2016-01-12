@@ -60,6 +60,12 @@
   outline-width: 0;
 }
 
+.dropdown-menu {
+  max-height: 500px;
+  overflow: auto;
+  box-shadow: 0 0 15px 15px rgba($color: rgba($color: $black, $alpha: 0.1), $alpha: 0.1)
+}
+
 .pane-dropdown, .dropdown-menu {
   padding: 0;
   border-radius: 0;

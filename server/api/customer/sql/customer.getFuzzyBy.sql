@@ -7,7 +7,7 @@ IF EXISTS(SELECT * FROM sys.columns
           AND Object_ID = Object_ID(N'Customer'))
 
 BEGIN
-  SELECT TOP 12  [customerId], [customerNumber], [orgNr], [orgName]
+  SELECT TOP 50  [customerId], [customerNumber], [orgNr], [orgName]
   FROM [dbo].[Customer]
   WHERE [{ colName }] LIKE '%' + @query + '%';
 END

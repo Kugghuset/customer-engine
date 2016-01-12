@@ -23,7 +23,7 @@ angular.module('customerEngineApp')
           !!customer.customerNumber
         ])) {
           
-          if (!/[a-z]/i.test(customer && customer.orgName)) {
+          if (!/[a-ö]/i.test(customer && customer.orgName)) {
             customer = _.assign({}, customer, {
               orgNr: customer.orgName,
               orgName: ''

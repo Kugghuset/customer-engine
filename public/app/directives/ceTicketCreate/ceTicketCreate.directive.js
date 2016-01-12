@@ -342,26 +342,43 @@ angular.module('customerEngineApp')
         ]);
       }
       
-      // Used in openCreateCustomerForNew and scope.setCustomer
-      var custs = {
-        arr: [],
-        lastChange: undefined
-      };
-      
       /**
        * @param {Object} customer
        */
-      function openCreateCustomerForNew(customer) {
-        custs.arr = [ customer ];
-        custs.lastChange = new Date();
-        
+      scope.openCreateCustomerForNew = function () {
         $timeout(function () {
-          var last = _.last(custs.arr);
-          if (moment().diff(custs.lastChange) >= 2000 && last && !last.customerId) {
-            custs.arr.pop();
-            scope.openModal(customer);
+          // Don't open the modal again.
+          if (scope.customerModalIsOpen) { return; }
+          
+          var customer = scope.ticket.customer || {};
+          
+          if (!_.every([
+            !!customer.orgName,
+            !!customer.orgNr,
+            !!customer.customerNumber
+          ])) {
+            scope.openModal(scope.ticket.customer)
           }
-        }, 2000)
+            
+        }, 150)
+      }
+      
+      /**
+       * Returns true or false for whether the customer is deemed valid
+       * @return {Boolean}
+       */
+      scope.customerIsValid = function (customer) {
+        if (!scope.ticket && !customer) { return true; }
+        
+        customer = customer || scope.ticket.customer || {};
+        
+        return !_.some([ // Either all are empty
+          !!(customer.orgName),
+          !!(customer.orgNr || customer.customerNumber)
+        ]) || _.every([ // Or all has values
+          !!(customer.orgName),
+          !!(customer.orgNr || customer.customerNumber)
+        ]);
       }
       
       /**
@@ -378,9 +395,7 @@ angular.module('customerEngineApp')
           delete current.orgNr;
           delete current.customerNumber;
         }
-        if (current && !current.customerId) {
-          openCreateCustomerForNew(current);
-        }
+        
         return Customer.getFuzzy(val);
       }
       
@@ -391,8 +406,6 @@ angular.module('customerEngineApp')
        */
       scope.setCustomer = function ($item) {
         scope.ticket.customer = $item;
-        custs.arr = [];
-        custs.lastChange = undefined;
       }
       
       /**
@@ -516,6 +529,15 @@ angular.module('customerEngineApp')
         if (_.isUndefined(customerId)) { scope.relatedTickets = []; }
         else { getRelatedTickets(customerId); }
       })
+      
+      /**
+       * Watches for changes in the customer object for the ticket.
+       */
+      scope.$watch('ticket.customer', function (customer, oldCustomer) {
+        if (customer && !customer.orgName) {
+          scope.ticket.customer = {};
+        }
+      }, true);
       
       /**
        * Watches for changes in user and assigns ticket.user to user.

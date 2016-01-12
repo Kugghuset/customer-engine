@@ -8,12 +8,33 @@ angular.module('customerEngineApp')
     restrict : 'EA',
     scope: {
       openModal: '=',
-      customer: '='
+      customer: '=',
+      modalIsOpen: '='
     },
     link: function (scope, element, attrs, ctrl) {
       var modalInstance;
       scope.openModal = function (customer) {
-
+        
+        customer = customer || {};
+        
+        if (!_.every([
+          !!customer.orgName,
+          !!customer.orgNr,
+          !!customer.customerNumber
+        ])) {
+          
+          if (!/[a-z]/i.test(customer && customer.orgName)) {
+            customer = _.assign({}, customer, {
+              orgNr: customer.orgName,
+              orgName: ''
+            });
+          }
+        }
+        
+        $timeout(function () {
+            scope.modalIsOpen = true;
+          });
+        
          modalInstance = $uibModal.open({
           animation: true,
           templateUrl: 'app/directives/ceModalCustomer/ceModalCustomer.html',
@@ -34,9 +55,13 @@ angular.module('customerEngineApp')
         modalInstance.result.then(function (customer) {
           $timeout(function () {
             scope.customer = customer;
+            scope.modalIsOpen = false;
           });
         }, function () {
           // Cancelled
+          $timeout(function () {
+            scope.modalIsOpen = false;
+          });
         });
       };
       

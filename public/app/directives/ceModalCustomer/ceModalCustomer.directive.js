@@ -1,19 +1,40 @@
 (function () {
 'use strict'
 
-angular.module('customerEngineApp')
+angular.module('ticketyApp')
 .directive('ceModalCustomer', ['$uibModal', 'Notification', 'Customer', '$timeout', function ($uibModal, Notification, Customer, $timeout) {
   return {
     template: '<div></div>',
     restrict : 'EA',
     scope: {
       openModal: '=',
-      customer: '='
+      customer: '=',
+      modalIsOpen: '='
     },
     link: function (scope, element, attrs, ctrl) {
       var modalInstance;
       scope.openModal = function (customer) {
-
+        
+        customer = customer || {};
+        
+        if (!_.every([
+          !!customer.orgName,
+          !!customer.orgNr,
+          !!customer.customerNumber
+        ])) {
+          
+          if (!/[a-ö]/i.test(customer && customer.orgName)) {
+            customer = _.assign({}, customer, {
+              orgNr: customer.orgName,
+              orgName: ''
+            });
+          }
+        }
+        
+        $timeout(function () {
+            scope.modalIsOpen = true;
+          });
+        
          modalInstance = $uibModal.open({
           animation: true,
           templateUrl: 'app/directives/ceModalCustomer/ceModalCustomer.html',
@@ -34,9 +55,13 @@ angular.module('customerEngineApp')
         modalInstance.result.then(function (customer) {
           $timeout(function () {
             scope.customer = customer;
+            scope.modalIsOpen = false;
           });
         }, function () {
           // Cancelled
+          $timeout(function () {
+            scope.modalIsOpen = false;
+          });
         });
       };
       
@@ -47,7 +72,8 @@ angular.module('customerEngineApp')
       });
   }
 }}])
-.controller('CustomerModalInstanceCtrl', function ($scope, $uibModalInstance, currentCustomer, Customer, Department, Notification) {
+.controller('CustomerModalInstanceCtrl', ['$scope', '$uibModalInstance', 'currentCustomer', 'Customer', 'Department', 'Notification',
+  function ($scope, $uibModalInstance, currentCustomer, Customer, Department, Notification) {
   
   var existingCustomer = undefined;
   $scope.customer = currentCustomer;
@@ -162,6 +188,6 @@ angular.module('customerEngineApp')
     $uibModalInstance.dismiss('cancel');
   };
   
-});
+}]);
 
 })();

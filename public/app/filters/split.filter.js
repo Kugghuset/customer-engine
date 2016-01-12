@@ -1,6 +1,6 @@
 (function () {
 
-angular.module('customerEngineApp')
+angular.module('ticketyApp')
 .filter('split', function () {
   
   return function (input, delimiter) {

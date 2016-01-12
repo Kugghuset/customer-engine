@@ -1,7 +1,7 @@
 (function () {
 'use strict'
 
-angular.module('customerEngineApp')
+angular.module('ticketyApp')
 .directive('ceModalUser', ['$uibModal', 'Auth', 'Department', 'Notification', function ($uibModal, Auth, Department, Notification) {
   return {
     template: '<div></div>',
@@ -52,7 +52,8 @@ angular.module('customerEngineApp')
     }
   }
 }])
-.controller('ModalInstanceCtrl', function ($scope, $uibModalInstance, user, Auth, Department, Notification) {
+.controller('ModalInstanceCtrl', ['$scope', '$uibModalInstance', 'user', 'Auth', 'Department', 'Notification',
+  function ($scope, $uibModalInstance, user, Auth, Department, Notification) {
   
   var allowClose = false;
   
@@ -213,6 +214,6 @@ angular.module('customerEngineApp')
     }
   });
   
-});
+}]);
 
 })();

@@ -1,6 +1,6 @@
 (function () {
 
-angular.module('customerEngineApp')
+angular.module('ticketyApp')
 .directive('ceTicketPreview', function () {
   return {
     templateUrl: 'app/directives/ceTicketPreview/ceTicketPreview.html',

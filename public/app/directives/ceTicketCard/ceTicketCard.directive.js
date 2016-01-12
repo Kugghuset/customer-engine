@@ -1,6 +1,6 @@
 (function () {
 
-angular.module('customerEngineApp')
+angular.module('ticketyApp')
 .directive('ceTicketCard',['Ticket', function (Ticket) {
   return {
     templateUrl: 'app/directives/ceTicketCard/ceTicketCard.html',
@@ -29,15 +29,11 @@ angular.module('customerEngineApp')
       }
       
       /**
-       * Watches for changes in ticket.status
-       * and updates the status of the ticket
-       * if it's different from the old.
+       * @param {String} status
        */
-      scope.$watch('ticket.status', function (status, oldStatus) {
-        // Only update the status when *status* doesn't match *oldStatus*
-        // and *oldStatus* us truthy
-        if (status != oldStatus && !!oldStatus) {
-          Ticket.updateStatus(scope.ticket)
+      scope.onStatusChanged = function (status) {
+        scope.ticket.status = status;
+        Ticket.updateStatus(scope.ticket)
           .then(function (data) {
             if (scope.ticket.status === 'Closed') {
               scope.ticket.ticketDateEnd = new Date();
@@ -46,8 +42,7 @@ angular.module('customerEngineApp')
           ['catch'](function (err) {
             console.log(err);
           });
-        }
-      });
+      }
     }
   };
 }]);

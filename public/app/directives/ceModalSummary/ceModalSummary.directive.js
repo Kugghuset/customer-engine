@@ -1,7 +1,7 @@
 (function () {
 'use strict'
 
-angular.module('customerEngineApp')
+angular.module('ticketyApp')
 .directive('ceModalSummary', ['$uibModal', '$timeout', function ($uibModal, $timeout) {
   return {
     template: '<div></div>',
@@ -47,7 +47,7 @@ angular.module('customerEngineApp')
     }
   }
 }])
-.controller('SummaryModalInstanceCtrl', function ($scope, $uibModalInstance, summary) {
+.controller('SummaryModalInstanceCtrl',['$scope', '$uibModalInstance', 'summary', function ($scope, $uibModalInstance, summary) {
   var allowClose = false;
   
   $scope.summary = summary;
@@ -68,6 +68,6 @@ angular.module('customerEngineApp')
     }
   });
   
-});
+}]);
 
 })();

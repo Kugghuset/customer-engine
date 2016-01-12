@@ -1,5 +1,5 @@
 /*
-Creates the Subcategor table
+Creates the Subcategory table
 */
 
 -- 
@@ -105,5 +105,17 @@ BEGIN
       ('Terminaltransaktion', (SELECT TOP 1 [categoryId] FROM [dbo].[Category] WHERE [categoryName] = 'Terminal')),
       ('Terminalrapport', (SELECT TOP 1 [categoryId] FROM [dbo].[Category] WHERE [categoryName] = 'Terminal')),
       ('Reparationer', (SELECT TOP 1 [categoryId] FROM [dbo].[Category] WHERE [categoryName] = 'Terminal')),
+      ('Uppsägning', (SELECT TOP 1 [categoryId] FROM [dbo].[Category] WHERE [categoryName] = 'Terminal')),
       ('Diverse', (SELECT TOP 1 [categoryId] FROM [dbo].[Category] WHERE [categoryName] = 'Terminal'))
+END
+
+IF NOT EXISTS(SELECT * FROM [dbo].[Subcategory]
+              WHERE [subcategoryName] = 'Uppsägning'
+              AND [categoryId] = (SELECT TOP 1 [categoryId] FROM [dbo].[Category] WHERE [categoryName] = 'Terminal'))
+BEGIN
+  INSERT INTO [dbo].[Subcategory] (
+      [subcategoryName],
+      [categoryId]
+  )
+  VALUES ('Uppsägning', (SELECT TOP 1 [categoryId] FROM [dbo].[Category] WHERE [categoryName] = 'Terminal'))
 END

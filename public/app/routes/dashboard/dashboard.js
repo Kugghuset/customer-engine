@@ -1,7 +1,7 @@
 (function () {
 'use strict'
 
-angular.module('customerEngineApp')
+angular.module('ticketyApp')
 .config(['$stateProvider', function ($stateProvider) {
   $stateProvider.state('main.dashboard', {
     url: '/dashboard',
@@ -42,11 +42,40 @@ angular.module('customerEngineApp')
     }
   });
   
-  function setup() {
+  function setup(setLoading) {
+    
+    setLoading = _.isUndefined(setLoading) ? true : setLoading;
+    
     $scope.user = Auth.getCurrentUser();
+    
     if ($scope.user && $scope.user.userId) {
-      getTickets($scope.user.userId);
+      getTickets($scope.user.userId, setLoading);
     }
+  }
+  
+  /**
+   * Gets tickets updated the last five seconds by the current user.
+   */
+  function getUpdates() {
+    
+    Ticket.getFresh(Auth.getCurrentUser().userId)
+    .then(function (tickets) {
+      
+      if (!tickets.length) { return; }
+      
+      $scope.tickets = _.map($scope.tickets, function (ticket) {
+        var _t;
+        _t = _.find(tickets, function (t) { return t.ticketId == ticket.ticketId; });
+        
+        return (_t)
+           ? _t
+           : ticket;
+      });
+    })
+    ['catch'](function (err) {
+      console.log(err);
+    });
+    
   }
   
   /**
@@ -79,10 +108,15 @@ angular.module('customerEngineApp')
   
   // To ensure setup :)
   $timeout(function () {
-    if ($scope.tickets &&  !$scope.tickets.length) {
+    if ($scope.tickets && !$scope.tickets.length) {
       setup();
     }
   }, 2000);
+  
+  // Wait four seconds and setup again to fetch very recent updates.
+  $timeout(function () {
+    getUpdates();
+  }, 4000);
   
 }]);
 

@@ -1,7 +1,7 @@
 (function () {
 'use strict'
 
-angular.module('customerEngineApp')
+angular.module('ticketyApp')
 .config(['$stateProvider', function ($stateProvider) {
   $stateProvider.state('main.create_ticket', {
     url: '/ticket/:ticketId',

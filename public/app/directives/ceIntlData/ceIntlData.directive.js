@@ -3,7 +3,7 @@
 (function () {
 'use strict'
 
-angular.module('customerEngineApp')
+angular.module('ticketyApp')
 .directive('ceIntlData', ['$timeout', 'Country', function ($timeout, Country) {
   return {
     restrict : 'A',

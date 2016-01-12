@@ -91,7 +91,20 @@ exports.findByUserId = function (req, res) {
   })
   .catch(function (err) {
     utils.handleError(res, err);
+  });
+}
+
+/**
+ * ROUTE: PUT '/api/tickets/user/:id/fresh'
+ */
+exports.getFreshByUserId = function (req, res) {
+  Ticket.getFreshByUserId(req.params.id)
+  .then(function (tickets) {
+    res.status(200).json(tickets);
   })
+  .catch(function (err) {
+    utils.handleError(res, err);
+  });
 }
 
 exports.remove = function (req, res) {

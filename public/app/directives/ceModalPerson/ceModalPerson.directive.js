@@ -1,7 +1,7 @@
 (function () {
 'use strict'
 
-angular.module('customerEngineApp')
+angular.module('ticketyApp')
 .directive('ceModalPerson', ['$uibModal', 'Notification', 'Person', '$timeout', function ($uibModal, Notification, Person, $timeout) {
   return {
     template: '<div></div>',
@@ -47,7 +47,8 @@ angular.module('customerEngineApp')
       });
   }
 }}])
-.controller('PersonModalInstanceCtrl', function ($scope, $uibModalInstance, Person, Department, Notification, ticket) {
+.controller('PersonModalInstanceCtrl', ['$scope', '$uibModalInstance', 'Person', 'Department', 'Notification', 'ticket',
+   function ($scope, $uibModalInstance, Person, Department, Notification, ticket) {
   
   var existingPerson = undefined;
   $scope.person = {};
@@ -165,6 +166,6 @@ angular.module('customerEngineApp')
     $uibModalInstance.dismiss('cancel');
   };
   
-});
+}]);
 
 })();

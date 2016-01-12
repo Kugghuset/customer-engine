@@ -1,7 +1,7 @@
 (function () {
 'use strict'
 
-angular.module('customerEngineApp')
+angular.module('ticketyApp')
 .directive('ceModalConfirm', ['$uibModal', '$timeout', function ($uibModal, $timeout) {
   return {
     template: '<div></div>',
@@ -47,7 +47,8 @@ angular.module('customerEngineApp')
     }
   }
 }])
-.controller('ConfirmModalInstanceCtrl', function ($scope, $uibModalInstance, title, question) {
+.controller('ConfirmModalInstanceCtrl', ['$scope', '$uibModalInstance', 'title', 'question',
+  function ($scope, $uibModalInstance, title, question) {
   
   if (!title) { $scope.title = 'Confirm'; }
   
@@ -64,6 +65,6 @@ angular.module('customerEngineApp')
     $uibModalInstance.dismiss(false);
   }
   
-});
+}]);
 
 })();

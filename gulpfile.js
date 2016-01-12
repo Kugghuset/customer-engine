@@ -50,7 +50,7 @@ gulp.task('server', function () {
 });
 
 // Reloads the page
-gulp.task('reload', function () {
+gulp.task('reload', ['build'], function () {
   livereload.reload();
 });
 
@@ -96,7 +96,7 @@ gulp.task('templates', function () {
 gulp.task('minify', function (cb) {
   
   /**
-   * TODO: FIX THIS
+   * TODO: BOWER CSS DEPS
    * 
    * CURRENTLY DOES NOT WORK AS EXPECTED DUE TO BOWER DEPENDENCIES
    * TRYING TO ACCESS FILES WHICH AREN'T LOCATED WHERE THEY SHOULD BE.
@@ -107,7 +107,7 @@ gulp.task('minify', function (cb) {
   var indexFile = fs.readFileSync(path.resolve('./public/app.html'), 'utf8');
   
   var filenames = [
-    'vendor.min.css',
+    // 'vendor.min.css', // outcommented as there are issues with file paths in the css
     'vendor.min.js',
     'app.min.js'
   ];
@@ -137,12 +137,31 @@ gulp.task('minify', function (cb) {
       return ['./public/', item].join('');
     });
     
-    if (/\.js$/i.test(filename)) {
+    if (/vendor\.min\.js/.test(filename)) {
+      
+      indexFile = utils.removeModules(indexFile, filename);
       
       gulp.src(files)
         .pipe(sourcemaps.init())
           .pipe(concat(filename))
-          // .pipe(ngAnnotate())
+          .pipe(ngAnnotate())
+          // .pipe(uglify())
+        .pipe(sourcemaps.write('./'))
+        .pipe(gulp.dest('public/dist'))
+        .on('unpipe', function (src) {
+          
+          // Recursion!!
+          return _forEvery(_files, cb, finishedFiles);
+        });
+      
+    } else if (/\.js$/i.test(filename)) {
+      
+      indexFile = utils.removeModules(indexFile, filename);
+      
+      gulp.src(files)
+        .pipe(sourcemaps.init())
+          .pipe(concat(filename))
+          .pipe(ngAnnotate())
           .pipe(uglify())
         .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest('public/dist'))
@@ -155,7 +174,7 @@ gulp.task('minify', function (cb) {
     } else if (/\.css/i.test(filename)) {
 
       indexFile = utils.removeModules(indexFile, filename);
-      indexFile = utils.cacheBustFiles(indexFile, filename);
+      // indexFile = utils.cacheBustFiles(indexFile, filename);
       
       gulp.src(files)
         .pipe(sourcemaps.init())
@@ -163,9 +182,9 @@ gulp.task('minify', function (cb) {
         .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest('public/css'))
         .on('unpipe', function (src) {
-          indexFile = utils.cacheBustFiles(indexFile, _.map(files, function (file) {
-            return file.replace('./public/', '');
-          }));
+        // indexFile = utils.cacheBustFiles(indexFile, _.map(files, function (file) {
+        //     return file.replace('./public/', '');
+        //   }));
           
           // Recursion!!
           return _forEvery(_files, cb, finishedFiles);
@@ -210,14 +229,18 @@ gulp.task('livereload-listen', function () {
 // Watches the server and public folders and does stuff
 gulp.task('watch', function () {
   gulp.watch(['./server/**', './userConfig.js'], ['server']);
-  gulp.watch(['./public/app/**', './public/index.html'], ['reload']);
+  gulp.watch(['./public/app/**', './public/app.html'], ['build', 'reload']);
   gulp.watch(['./public/style/**/*.scss', './public/app/**/*.scss'], ['sass']);
 });
 
 // Cachebusts all files
-gulp.task('cachebust', function () {
+gulp.task('cachebust', ['minify'], function () {
   
-  var indexFile = fs.readFileSync(path.resolve('./public/app.html'), 'utf8');
+  var fileName = fs.existsSync(path.resolve('./public/index.html'))
+    ? path.resolve('./public/index.html')
+    : path.resolve('./public/app.html');
+  
+  var indexFile = fs.readFileSync(fileName, 'utf8');
   
   indexFile = utils.cacheBustFiles(
     indexFile,
@@ -229,7 +252,7 @@ gulp.task('cachebust', function () {
 })
 
 // Builds the application
-gulp.task('build', ['sass', /* 'templates', 'minify',*/ 'cachebust', 'db-setup']);
+gulp.task('build', ['sass', 'templates', 'minify', 'cachebust', 'db-setup']);
 
 gulp.task('default', ['livereload-listen', 'build', 'server', 'watch']);
 

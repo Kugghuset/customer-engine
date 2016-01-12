@@ -1,6 +1,6 @@
 (function () {
 
-angular.module('customerEngineApp')
+angular.module('ticketyApp')
 .filter('phoneNumber', function () {
   
   return function (tel, countryCode) {

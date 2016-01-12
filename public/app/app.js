@@ -1,35 +1,24 @@
 (function (params) {
 'use strict'
 
-angular.module('customerEngineApp', [
+angular.module('ticketyApp', [
   'ui.router',
   'ngCookies',
   'ui.bootstrap',
   'ui-notification',
-  'angular-google-analytics',
   'ngIntlTelInput',
   'LocalForageModule',
   'ngCacheBuster',
   'monospaced.elastic'
 ])
-.config(['$stateProvider', '$urlRouterProvider', '$httpProvider','AnalyticsProvider', 'ngIntlTelInputProvider', '$localForageProvider', 'httpRequestInterceptorCacheBusterProvider', 'NotificationProvider',
-function ($stateProvider, $urlRouterProvider, $httpProvider, AnalyticsProvider, ngIntlTelInputProvider, $localForageProvider, httpRequestInterceptorCacheBusterProvider, NotificationProvider) {
+.config(['$stateProvider', '$urlRouterProvider', '$httpProvider', 'ngIntlTelInputProvider', '$localForageProvider', 'httpRequestInterceptorCacheBusterProvider', 'NotificationProvider',
+function ($stateProvider, $urlRouterProvider, $httpProvider, ngIntlTelInputProvider, $localForageProvider, httpRequestInterceptorCacheBusterProvider, NotificationProvider) {
   
   $urlRouterProvider
   .otherwise('/dashboard');
   
   // Adds authInterceptor to http requests
   $httpProvider.interceptors.push('authInterceptor')
-  
-  // Analytics
-  AnalyticsProvider.useAnalytics(false); // set to true when in prod
-  AnalyticsProvider.setPageEvent('$stateChangeSuccess');
-  AnalyticsProvider.setAccount([
-    {
-      tracker: 'UA-XXXXXXXX-X',
-      name: 'tickety'
-    }
-  ]);
   
   // Settings for international phone numbers
   ngIntlTelInputProvider.set({
@@ -40,7 +29,7 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, AnalyticsProvider, 
   
   // Set default config for $localForageProvider
   $localForageProvider.config({
-    name: 'customerEngineApp',
+    name: 'ticketyApp',
     storeName: 'tickets'
   });
   

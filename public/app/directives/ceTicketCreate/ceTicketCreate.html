@@ -41,9 +41,16 @@
     <label for="">Customer</label>
   
     <span class="fill-by-label">
-      <input type="text" ng-model="ticket.customer.orgName" ng-class="{'padded-right': (loadingCustomers || noResults && ticket.customer)}" placeholder="Search for customer"
+      <input type="text"
+        ng-model="ticket.customer.orgName"
+        ng-class="{'padded-right': (loadingCustomers || noResults && ticket.customer), 'ng-invalid': !customerIsValid()}"
+        placeholder="Search for customer"
         uib-typeahead="customer as matched(customer, 'customer') for customer in getCustomer($viewValue, ticket.customer)"
-        typeahead-loading="loadingCustomers" typeahead-no-results="noResults" class="pane-dropdown" typeahead-on-select="setCustomer($item)">
+        typeahead-loading="loadingCustomers"
+        typeahead-no-results="noResults"
+        ng-blur="openCreateCustomerForNew()"
+        class="pane-dropdown"
+        typeahead-on-select="setCustomer($item)">
       <i ng-show="loadingCustomers" class="glyphicon glyphicon-refresh" title="Looking for matching customers"></i>
       <i ng-show="noResults && ticket.customer" class="glyphicon glyphicon-exclamation-sign" title="No results found"></i>
     </span>
@@ -314,10 +321,6 @@
   
   </div>
   
-  <!--<div class="pane-row">
-    <h3>Handling time: {{ timerString }}</h3>
-  </div>-->
-  
   <div class="float-container">
     <button ng-click="submit(ticket)" class="pane-button green pull-right offset-right">Submit ticket</button>
     <button ng-click="discard(ticket)" class="pane-button red pull-right offset-right">{{ ticket.ticketId ? 'Delete' : 'Discard' }} ticket</button>
@@ -329,7 +332,7 @@
   
 </section>
 
-<ce-modal-customer open-modal="openModal" customer="ticket.customer"></ce-modal-customer>
+<ce-modal-customer open-modal="openModal" modal-is-open="customerModalIsOpen" customer="ticket.customer"></ce-modal-customer>
 <!--<ce-modal-person open-modal="openPersonModal" person="ticket.person"></ce-modal-person>-->
 <ce-modal-confirm open-modal="confirmDelete"></ce-modal-confirm>
 <ce-modal-summary open-modal="openSummary"></ce-modal-summary>

@@ -1,7 +1,7 @@
 (function () {
 'use strict'
 
-angular.module('customerEngineApp')
+angular.module('ticketyApp')
 .directive('ceDashPane', ['Ticket', 'Auth', function (Ticket, Auth) {
   return {
     templateUrl: 'app/directives/ceDashPane/ceDashPane.html',

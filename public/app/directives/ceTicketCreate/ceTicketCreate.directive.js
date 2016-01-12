@@ -1,9 +1,9 @@
 (function () {
 
-angular.module('customerEngineApp')
+angular.module('ticketyApp')
 .directive('ceTicketCreate',
-  ['$location', '$state', '$timeout', '$interval', 'Customer', 'Person', 'Ticket', 'Country', 'Category', 'Notification', 'Department', 'Product', 'timerDiffFilter',
-  function ($location, $state, $timeout, $interval, Customer, Person, Ticket, Country, Category, Notification, Department, Product, timerDiffFilter) {
+  ['$location', '$state', '$timeout', '$interval', 'Customer', 'Person', 'Ticket', 'Country', 'Category', 'Notification', 'Department', 'Product',
+  function ($location, $state, $timeout, $interval, Customer, Person, Ticket, Country, Category, Notification, Department, Product) {
   return {
     templateUrl: 'app/directives/ceTicketCreate/ceTicketCreate.html',
     restrict: 'EA',
@@ -21,44 +21,9 @@ angular.module('customerEngineApp')
       
       scope.loadingCurrent = false;
       
-      var timer;
-      
       scope.romeOptions = {
         max: moment().endOf('day')
       };
-      
-      function setTimerDates(ticket) {
-        scope.timerString = timerDiffFilter([
-          ticket // Start time
-            ? ticket.ticketDate
-            : new Date(),
-          ticket // End time
-            ? ticket.ticketDateClosed
-            : new Date()
-          ]);
-      }
-      function startTimer() {
-        // Initial set
-        setTimerDates(scope.ticket);
-        
-        timer = $interval(function () {
-          setTimerDates(scope.ticket);
-        }, 1000);
-      }
-      
-      function stopTimer() {
-        if (timer) {
-          $interval.cancel(timer);
-        }
-      }
-      
-      function setupTimerString() {
-        if (scope.ticket && scope.ticket.status != 'Closed') {
-          startTimer();
-        } else {
-          setTimerDates(scope.ticket);
-        }
-      }
       
       scope.countries = Country.getShortAndNames();
       
@@ -119,17 +84,14 @@ angular.module('customerEngineApp')
           .then(function (ticket) {
             scope.loadingCurrent = false;
             scope.ticket = cleanEmpty(ticket);
-            setupTimerString();
           })
           ['catch'](function (err) {
             scope.loadingCurrent = false;
             scope.ticket = emptyTicket();
-            setupTimerString();
           });
         } else {
           // Set up new ticket
           scope.ticket = emptyTicket();
-          setupTimerString();
         }
       }
       
@@ -342,26 +304,43 @@ angular.module('customerEngineApp')
         ]);
       }
       
-      // Used in openCreateCustomerForNew and scope.setCustomer
-      var custs = {
-        arr: [],
-        lastChange: undefined
-      };
-      
       /**
        * @param {Object} customer
        */
-      function openCreateCustomerForNew(customer) {
-        custs.arr = [ customer ];
-        custs.lastChange = new Date();
-        
+      scope.openCreateCustomerForNew = function () {
         $timeout(function () {
-          var last = _.last(custs.arr);
-          if (moment().diff(custs.lastChange) >= 2000 && last && !last.customerId) {
-            custs.arr.pop();
-            scope.openModal(customer);
+          // Don't open the modal again.
+          if (scope.customerModalIsOpen) { return; }
+          
+          var customer = scope.ticket.customer || {};
+          
+          if (!_.every([
+            !!customer.orgName,
+            !!customer.orgNr,
+            !!customer.customerNumber
+          ])) {
+            scope.openModal(scope.ticket.customer)
           }
-        }, 2000)
+            
+        }, 150)
+      }
+      
+      /**
+       * Returns true or false for whether the customer is deemed valid
+       * @return {Boolean}
+       */
+      scope.customerIsValid = function (customer) {
+        if (!scope.ticket && !customer) { return true; }
+        
+        customer = customer || scope.ticket.customer || {};
+        
+        return !_.some([ // Either all are empty
+          !!(customer.orgName),
+          !!(customer.orgNr || customer.customerNumber)
+        ]) || _.every([ // Or all has values
+          !!(customer.orgName),
+          !!(customer.orgNr || customer.customerNumber)
+        ]);
       }
       
       /**
@@ -378,9 +357,7 @@ angular.module('customerEngineApp')
           delete current.orgNr;
           delete current.customerNumber;
         }
-        if (current && !current.customerId) {
-          openCreateCustomerForNew(current);
-        }
+        
         return Customer.getFuzzy(val);
       }
       
@@ -391,8 +368,6 @@ angular.module('customerEngineApp')
        */
       scope.setCustomer = function ($item) {
         scope.ticket.customer = $item;
-        custs.arr = [];
-        custs.lastChange = undefined;
       }
       
       /**
@@ -459,16 +434,10 @@ angular.module('customerEngineApp')
           if (ticket.ticketDateClosed) {
             ticket.ticketDateClosed = undefined;
           }
-          
-          setupTimerString();
         } else {
           if (!ticket.ticketDateClosed) {
             ticket.ticketDateClosed = new Date();
           }
-          if (timer) {
-            stopTimer();
-          }
-          setTimerDates(ticket);
         }
         
         // Remove transferredDepartment if ticket isn't transferred
@@ -518,6 +487,15 @@ angular.module('customerEngineApp')
       })
       
       /**
+       * Watches for changes in the customer object for the ticket.
+       */
+      scope.$watch('ticket.customer', function (customer, oldCustomer) {
+        if (customer && !customer.orgName) {
+          scope.ticket.customer = {};
+        }
+      }, true);
+      
+      /**
        * Watches for changes in user and assigns ticket.user to user.
        */
       scope.$watch('user', function (user, oldUser) {
@@ -528,10 +506,9 @@ angular.module('customerEngineApp')
       getDepartments();
       getProducts();
       
-      setupTimerString();
-      
       scope.$on('$destroy', function (event) {
-        stopTimer();
+        
+        scope.loadingCurrent = false;
         
         if (hasUpdates && scope.canSave(scope.ticket)) {
           // Save if it's allowed

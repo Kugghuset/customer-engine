@@ -1,6 +1,6 @@
 'use strict'
 
-angular.module('customerEngineApp')
+angular.module('ticketyApp')
 .factory('Ticket', ['$q', '$http', '$localForage', function ($q, $http, $localForage) {
   
   var lastUpdate = {
@@ -121,18 +121,18 @@ angular.module('customerEngineApp')
      * few secods on change.
      * 
      * @param {Object} ticket
-     * @param {Number} waitingTime - defaults to 5000 ms
+     * @param {Number} waitingTime - defaults to 10000 ms
      * @return {Promise} -> {Object} (Ticket)
      */
     autoSave: function (ticket, waitingTime) {
       return $q(function (resolve, reject) {
         
-        waitingTime = _.isNumber(waitingTime) ? waitingTime : 5000;
+        waitingTime = _.isNumber(waitingTime) ? waitingTime : 10000;
         
         lastUpdate.dateTime = new Date();
         lastUpdate.queue = [ ticket ];
         setTimeout(function () {
-          // Return "early" if there's been an update the last two seconds.
+          // Return "early" if there's been an update the last 15 seconds.
           if (new Date() - lastUpdate.dateTime < waitingTime || !lastUpdate.queue.length) { return resolve(undefined); }
           
           lastUpdate.dateTime = undefined;
@@ -175,6 +175,16 @@ angular.module('customerEngineApp')
         .success(resolve)
         .error(reject);
       });
+    },
+    
+    getFresh: function (userId) {
+      
+      return $q(function (resolve, reject) {
+        $http.get('/api/tickets/user/' + userId + '/fresh')
+        .success(resolve)
+        ['catch'](reject);
+      });
+      
     },
     
     /**

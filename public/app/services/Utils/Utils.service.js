@@ -1,7 +1,7 @@
 (function () {
 'use strict'
 
-angular.module('customerEngineApp')
+angular.module('ticketyApp')
 .factory('Utils', ['$q', '$http', '$timeout', function ($q, $http, $timeout) {
   
   var startOfYear = moment().startOf('year');

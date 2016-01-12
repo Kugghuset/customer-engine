@@ -42,10 +42,14 @@ angular.module('customerEngineApp')
     }
   });
   
-  function setup() {
+  function setup(setLoading) {
+    
+    setLoading = _.isUndefined(setLoading) ? true : setLoading;
+    
     $scope.user = Auth.getCurrentUser();
+    
     if ($scope.user && $scope.user.userId) {
-      getTickets($scope.user.userId);
+      getTickets($scope.user.userId, setLoading);
     }
   }
   
@@ -79,10 +83,17 @@ angular.module('customerEngineApp')
   
   // To ensure setup :)
   $timeout(function () {
-    if ($scope.tickets &&  !$scope.tickets.length) {
+    if ($scope.tickets && !$scope.tickets.length) {
       setup();
     }
   }, 2000);
+  
+  // Wait four seconds and setup again to fetch very recent updates.
+  $timeout(function () {
+    setup(false);
+  }, 4000);
+  
+  
   
 }]);
 

@@ -3,6 +3,7 @@
 var _ = require('lodash');
 var Promise = require('bluebird');
 var sql = require('seriate');
+var moment = require('moment');
 
 var util = require('../../utils/utils');
 
@@ -310,6 +311,35 @@ exports.findByUserId = function (userId) {
       }
     })
     .then(function (tickets) {
+      resolve(util.objectify(tickets));
+    })
+    .catch(function (err) {
+      reject(err);
+    });
+  });
+}
+
+exports.getFreshByUserId = function (userId) {
+  
+  console.log('getting fresh tickets');
+  
+  return new Promise(function (resolve, reject) {
+    sql.execute({
+      query: findBy(
+        'userId',
+        'AND [dateUpdated] > @whenUpdated'
+      ),
+      params: {
+        whenUpdated: {
+          type: sql.DATETIME2,
+          val: moment().subtract(5, 'seconds').toDate()
+        },
+        userId: {
+          type: sql.BIGINT,
+          val: userId
+        }
+      }
+    }).then(function (tickets) {
       resolve(util.objectify(tickets));
     })
     .catch(function (err) {

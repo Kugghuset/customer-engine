@@ -177,6 +177,16 @@ angular.module('customerEngineApp')
       });
     },
     
+    getFresh: function (userId) {
+      
+      return $q(function (resolve, reject) {
+        $http.get('/api/tickets/user/' + userId + '/fresh')
+        .success(resolve)
+        ['catch'](reject);
+      });
+      
+    },
+    
     /**
     * @return {Promise} -> {Array} (Ticket)
     */

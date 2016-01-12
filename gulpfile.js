@@ -96,7 +96,7 @@ gulp.task('templates', function () {
 gulp.task('minify', function (cb) {
   
   /**
-   * TODO: BOWER DEPS
+   * TODO: BOWER CSS DEPS
    * 
    * CURRENTLY DOES NOT WORK AS EXPECTED DUE TO BOWER DEPENDENCIES
    * TRYING TO ACCESS FILES WHICH AREN'T LOCATED WHERE THEY SHOULD BE.
@@ -107,8 +107,8 @@ gulp.task('minify', function (cb) {
   var indexFile = fs.readFileSync(path.resolve('./public/app.html'), 'utf8');
   
   var filenames = [
-    // 'vendor.min.css',
-    // 'vendor.min.js',
+    // 'vendor.min.css', // outcommented as there are issues with file paths in the css
+    'vendor.min.js',
     'app.min.js'
   ];
   
@@ -137,14 +137,31 @@ gulp.task('minify', function (cb) {
       return ['./public/', item].join('');
     });
     
-    if (/\.js$/i.test(filename)) {
+    if (/vendor\.min\.js/.test(filename)) {
       
       indexFile = utils.removeModules(indexFile, filename);
       
       gulp.src(files)
         .pipe(sourcemaps.init())
           .pipe(concat(filename))
-          // .pipe(ngAnnotate())
+          .pipe(ngAnnotate())
+          // .pipe(uglify())
+        .pipe(sourcemaps.write('./'))
+        .pipe(gulp.dest('public/dist'))
+        .on('unpipe', function (src) {
+          
+          // Recursion!!
+          return _forEvery(_files, cb, finishedFiles);
+        });
+      
+    } else if (/\.js$/i.test(filename)) {
+      
+      indexFile = utils.removeModules(indexFile, filename);
+      
+      gulp.src(files)
+        .pipe(sourcemaps.init())
+          .pipe(concat(filename))
+          .pipe(ngAnnotate())
           .pipe(uglify())
         .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest('public/dist'))
@@ -212,14 +229,18 @@ gulp.task('livereload-listen', function () {
 // Watches the server and public folders and does stuff
 gulp.task('watch', function () {
   gulp.watch(['./server/**', './userConfig.js'], ['server']);
-  gulp.watch(['./public/app/**', './public/index.html'], ['reload']);
+  gulp.watch(['./public/app/**', './public/app.html'], ['reload']);
   gulp.watch(['./public/style/**/*.scss', './public/app/**/*.scss'], ['sass']);
 });
 
 // Cachebusts all files
 gulp.task('cachebust', ['minify'], function () {
   
-  var indexFile = fs.readFileSync(path.resolve('./public/index.html'), 'utf8');
+  var fileName = fs.existsSync(path.resolve('./public/index.html'))
+    ? path.resolve('./public/index.html')
+    : path.resolve('./public/app.html');
+  
+  var indexFile = fs.readFileSync(fileName, 'utf8');
   
   indexFile = utils.cacheBustFiles(
     indexFile,

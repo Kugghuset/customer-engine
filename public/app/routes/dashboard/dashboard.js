@@ -53,6 +53,18 @@ angular.module('customerEngineApp')
     }
   }
   
+  function getUpdates() {
+    
+    Ticket.getFresh(Auth.getCurrentUser().userId)
+    .then(function (tickets) {
+      console.log(tickets);
+    })
+    ['catch'](function (err) {
+      console.log(err);
+    });
+    
+  }
+  
   /**
    * Returns either true or false for whether the ticket should be shown.
    * 
@@ -90,7 +102,7 @@ angular.module('customerEngineApp')
   
   // Wait four seconds and setup again to fetch very recent updates.
   $timeout(function () {
-    setup(false);
+    getUpdates();
   }, 4000);
   
   

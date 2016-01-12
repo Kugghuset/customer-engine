@@ -14,5 +14,6 @@ router.get('/:id', auth.isAuthenticated(), controller.findById);
 router.delete('/:id', auth.isAuthenticated(), controller.remove);
 router.get('/customer/:id', auth.isAuthenticated(), controller.findByCustomerId);
 router.get('/user/:id', auth.isAuthenticated(), controller.findByUserId);
+router.get('/user/:id/fresh', auth.isAuthenticated(), controller.getFreshByUserId);
 
 module.exports = router;

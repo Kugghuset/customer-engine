@@ -7,13 +7,23 @@ angular.module('ticketyApp')
     template: '<div></div>',
     restrict : 'EA',
     scope: {
-      openModal: '='
+      openModal: '=',
+      modalIsOpen: '='
     },
     link: function (scope, element, attrs, ctrl) {
       
       var modalInstance;
       
       scope.openModal = function (title, question, callback) {
+        
+        if (scope.modalIsOpen) {
+          // Only one instance can be open.
+          return;
+        }
+        
+        $timeout(function () {
+          scope.modalIsOpen = true;
+        });
         
         modalInstance = $uibModal.open({
           animation: true,
@@ -31,9 +41,15 @@ angular.module('ticketyApp')
         
         // Set the confirm result
         modalInstance.result.then(function (res) {
+          $timeout(function () {
+            scope.modalIsOpen = false;
+          });
           if (callback) { callback(true); }
         })
         ['catch'](function (res) {
+          $timeout(function () {
+            scope.modalIsOpen = false;
+          });
           if (callback) { callback(false); }
         });
       };

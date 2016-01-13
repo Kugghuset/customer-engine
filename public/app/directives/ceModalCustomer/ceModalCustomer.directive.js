@@ -12,8 +12,19 @@ angular.module('ticketyApp')
       modalIsOpen: '='
     },
     link: function (scope, element, attrs, ctrl) {
+      
       var modalInstance;
+      
       scope.openModal = function (customer) {
+        
+        if (scope.modalIsOpen) {
+          // Only one instance can be open.
+          return;
+        }
+        
+        $timeout(function () {
+          scope.modalIsOpen = true;
+        });
         
         customer = customer || {};
         
@@ -30,10 +41,6 @@ angular.module('ticketyApp')
             });
           }
         }
-        
-        $timeout(function () {
-            scope.modalIsOpen = true;
-          });
         
          modalInstance = $uibModal.open({
           animation: true,

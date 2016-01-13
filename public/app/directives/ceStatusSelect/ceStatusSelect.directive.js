@@ -3,7 +3,7 @@
 angular.module('ticketyApp')
 .directive('ceStatusSelect', function () {
   return {
-    templateUrl: 'app/directives/ceStatusSelect/ceStatusSelect.html',
+    templateUrl: 'directives/ceStatusSelect/ceStatusSelect.html',
     restrict: 'EA',
     scope: {
       status: '=',

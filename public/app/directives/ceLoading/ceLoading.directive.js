@@ -4,7 +4,7 @@
 angular.module('ticketyApp')
 .directive('ceLoading', function () {
   return {
-    templateUrl: 'app/directives/ceLoading/ceLoading.html',
+    templateUrl: 'directives/ceLoading/ceLoading.html',
     restrict : 'EA',
     scope: {
       isLoading: '=',

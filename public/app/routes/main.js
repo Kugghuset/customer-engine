@@ -4,7 +4,7 @@
 angular.module('ticketyApp')
 .config(['$stateProvider', function ($stateProvider) {
   $stateProvider.state('main', {
-    templateUrl: 'app/routes/main.html',
+    templateUrl: 'routes/main.html',
     controller: 'MainCtrl'
   });
 }])

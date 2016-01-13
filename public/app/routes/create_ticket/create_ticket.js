@@ -5,7 +5,7 @@ angular.module('ticketyApp')
 .config(['$stateProvider', function ($stateProvider) {
   $stateProvider.state('main.create_ticket', {
     url: '/ticket/:ticketId',
-    templateUrl: 'app/routes/create_ticket/create_ticket.html',
+    templateUrl: 'routes/create_ticket/create_ticket.html',
     controller: 'CreateTicketCtrl',
     title: 'Ticket'
   });

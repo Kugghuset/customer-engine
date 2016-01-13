@@ -4,7 +4,7 @@
 angular.module('ticketyApp')
 .directive('cePane', function () {
   return {
-    templateUrl: 'app/directives/cePane/cePane.html',
+    templateUrl: 'directives/cePane/cePane.html',
     restrict : 'EA',
     transclude: true,
     scope: {

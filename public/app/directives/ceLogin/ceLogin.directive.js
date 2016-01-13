@@ -4,7 +4,7 @@
 angular.module('ticketyApp')
 .directive('ceLogin', ['$location', 'Auth', 'Notification', function ($location, Auth, Notification) {
   return {
-    templateUrl: 'app/directives/ceLogin/ceLogin.html',
+    templateUrl: 'directives/ceLogin/ceLogin.html',
     restrict : 'EA',
     scope: {
       user: '='

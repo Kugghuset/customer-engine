@@ -17,7 +17,7 @@ angular.module('ticketyApp')
         
         modalInstance = $uibModal.open({
           animation: true,
-          templateUrl: 'app/directives/ceModalSummary/ceModalSummary.html',
+          templateUrl: 'directives/ceModalSummary/ceModalSummary.html',
           controller: 'SummaryModalInstanceCtrl',
           resolve: {
             summary: function () {

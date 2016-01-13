@@ -17,7 +17,7 @@ angular.module('ticketyApp')
         
         modalInstance = $uibModal.open({
           animation: true,
-          templateUrl: 'app/directives/ceModalConfirm/ceModalConfirm.html',
+          templateUrl: 'directives/ceModalConfirm/ceModalConfirm.html',
           controller: 'ConfirmModalInstanceCtrl',
           resolve: {
             title: function () {

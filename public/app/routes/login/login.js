@@ -5,7 +5,7 @@ angular.module('ticketyApp')
 .config(['$stateProvider', function ($stateProvider) {
   $stateProvider.state('main.login', {
     url: '/login',
-    templateUrl: 'app/routes/login/login.html',
+    templateUrl: 'routes/login/login.html',
     controller: 'LoginCtrl'
   });
 }])

@@ -3,7 +3,7 @@
 angular.module('ticketyApp')
 .directive('ceTicketCard',['Ticket', function (Ticket) {
   return {
-    templateUrl: 'app/directives/ceTicketCard/ceTicketCard.html',
+    templateUrl: 'directives/ceTicketCard/ceTicketCard.html',
     restrict: 'EA',
     scope: {
       ticket: '=',

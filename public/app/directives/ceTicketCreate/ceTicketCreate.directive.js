@@ -5,7 +5,7 @@ angular.module('ticketyApp')
   ['$location', '$state', '$timeout', '$interval', 'Customer', 'Person', 'Ticket', 'Country', 'Category', 'Notification', 'Department', 'Product',
   function ($location, $state, $timeout, $interval, Customer, Person, Ticket, Country, Category, Notification, Department, Product) {
   return {
-    templateUrl: 'app/directives/ceTicketCreate/ceTicketCreate.html',
+    templateUrl: 'directives/ceTicketCreate/ceTicketCreate.html',
     restrict: 'EA',
     scope: {
       ticket: '=',

@@ -17,7 +17,7 @@ angular.module('ticketyApp')
         
         modalInstance = $uibModal.open({
           animation: true,
-          templateUrl: 'app/directives/ceModalUser/ceModalUser.html',
+          templateUrl: 'directives/ceModalUser/ceModalUser.html',
           controller: 'ModalInstanceCtrl',
           resolve: {
             user: function () {

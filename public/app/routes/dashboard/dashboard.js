@@ -5,7 +5,7 @@ angular.module('ticketyApp')
 .config(['$stateProvider', function ($stateProvider) {
   $stateProvider.state('main.dashboard', {
     url: '/dashboard',
-    templateUrl: 'app/routes/dashboard/dashboard.html',
+    templateUrl: 'routes/dashboard/dashboard.html',
     controller: 'DashboardCtrl',
     title: 'Dashboard'
   });

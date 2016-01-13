@@ -4,7 +4,7 @@
 angular.module('ticketyApp')
 .directive('ceDashPane', ['Ticket', 'Auth', function (Ticket, Auth) {
   return {
-    templateUrl: 'app/directives/ceDashPane/ceDashPane.html',
+    templateUrl: 'directives/ceDashPane/ceDashPane.html',
     restrict: 'EA',
     scope: {
       user: '=',

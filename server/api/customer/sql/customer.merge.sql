@@ -1,5 +1,5 @@
 /*
-Merges the DimCustomer table in BamboraDW into the Customer table in Tickety.
+Merges the vi_DimCustomers table in Tickety into the Customer table in Tickety.
 Any modified rows will be updated and any new rows will be inserted.
 This will also update locally created rows:
   - Rows matched by customerNumber will update orgName and orgNr, and set isLocal to NULL
@@ -11,11 +11,17 @@ TODO: Uncomment and modify [Source].[isLocal] to actual names.
 
 */
 
-IF DB_ID(N'BamboraDW') IS NOT NULL
+
+SET XACT_ABORT ON
+
+BEGIN TRAN
+
+IF EXISTS(SELECT * FROM tickety.sys.views
+          WHERE Name = N'vi_DimCustomers')
 BEGIN
 
   -- Update entries where there's no customerNumber,
-  -- but both orgName and orgNr matches their equivalent in DimCustomer.
+  -- but both orgName and orgNr matches their equivalent in vi_DimCustomers.
   -- It also makes sure the match doesn't already exist in the DB.
   UPDATE [Tickety].[dbo].[Customer]
   SET
@@ -23,14 +29,14 @@ BEGIN
     [Tickety].[dbo].[Customer].[dateChanged] = GETUTCDATE(),
     [Tickety].[dbo].[Customer].[isLocal] = NULL
 
-  FROM [BamboraDW].[dbo].[DimCustomer] AS [Source]
+  FROM [Tickety].[dbo].[vi_DimCustomers] AS [Source]
   WHERE
           [Tickety].[dbo].[Customer].[customerNumber] IS NULL
       AND [Source].[CustomerName] = [Tickety].[dbo].[Customer].[orgName]
-      AND [Source].[OrgNum] = [Tickety].[dbo].[Customer].[orgNr]
+      AND [Source].[CustomerRegistrationNumber] = [Tickety].[dbo].[Customer].[orgNr]
       AND NOT EXISTS(SELECT * FROM [Tickety].[dbo].[Customer]
                     WHERE [Tickety].[dbo].[Customer].[customerNumber] = CAST([Source].[CustomerNr] AS varchar(255)))
-      AND [Source].[EndDate] IS NULL -- Only use the active row, the row name is probably different.
+      -- AND [Source].[EndDate] IS NULL -- Only use the active row, the row name is probably different.
 
   -- Updates or inserts the other customers.
   -- New customers will be inserted and existing customers which have changed either
@@ -42,15 +48,15 @@ BEGIN
   )
   SELECT
     [CustomerName],
-    [OrgNum],
+    [CustomerRegistrationNumber],
     CAST([CustomerNr] AS varchar(255))
   FROM (
     MERGE [Tickety].[dbo].[Customer] AS [Target]
     -- Use a sub query to work with SCB
     -- as it allows for filtering the results
     USING (SELECT *
-           FROM [BamboraDW].[dbo].[DimCustomer]
-           WHERE [EndDate] IS NULL -- Might need to be changed
+           FROM [Tickety].[dbo].[vi_DimCustomers]
+          --  WHERE [EndDate] IS NULL -- Might need to be changed
           ) AS [Source]
       ON  [Target].[customerNumber] = CAST([Source].[CustomerNr] AS varchar(255))
     
@@ -58,14 +64,14 @@ BEGIN
     -- the customer in Tickety.
     WHEN MATCHED AND (
           [Target].[orgName] != [Source].[CustomerName]
-      OR  [Target].[orgNr] != [Source].[OrgNum]
+      OR  [Target].[orgNr] != [Source].[CustomerRegistrationNumber]
       OR  [Target].[orgNr] IS NULL
       OR  [Target].[isLocal] = 1
     )
     -- Updated or otherwise different customers will be updated.
     THEN UPDATE SET
       [Target].[orgName] = [Source].[CustomerName],
-      [Target].[orgNr] = [Source].[OrgNum],
+      [Target].[orgNr] = [Source].[CustomerRegistrationNumber],
       [Target].[dateChanged] = GETUTCDATE(),
       [Target].[isLocal] = NULL
   
@@ -77,7 +83,7 @@ BEGIN
     )
     VALUES (
       CAST([Source].[CustomerNr] AS varchar(255)),
-      [Source].[OrgNum],
+      [Source].[CustomerRegistrationNumber],
       [Source].[CustomerName]
     )
 
@@ -86,3 +92,5 @@ BEGIN
     WHERE [MergeOuput].[Action] = NULL
 
 END
+
+COMMIT TRAN

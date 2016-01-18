@@ -24,7 +24,7 @@ BEGIN
   SET
     [Tickety].[dbo].[Customer].[customerNumber] = [Source].[CustomerNr],
     [Tickety].[dbo].[Customer].[dateChanged] = GETUTCDATE(),
-    [Tickety].[dbo].[Customer].[isLocal] = NULL
+    [Tickety].[dbo].[Customer].[isMerged] = 1
 
   FROM [Tickety].[dbo].[vi_DimCustomers] AS [Source]
   WHERE
@@ -53,7 +53,7 @@ BEGIN
     USING (SELECT *
            FROM [Tickety].[dbo].[vi_DimCustomers]
           ) AS [Source]
-      ON  [Target].[customerNumber] = CAST([Source].[CustomerNr] AS varchar(255))
+      ON [Target].[customerNumber] = CAST([Source].[CustomerNr] AS varchar(255))
     
     -- Matches customers which updated and/or different from
     -- the customer in Tickety.
@@ -61,7 +61,7 @@ BEGIN
           [Target].[orgName] != [Source].[CustomerName]
       OR  [Target].[orgNr] != [Source].[CompanyRegistrationNr]
       OR  [Target].[orgNr] IS NULL
-      OR  [Target].[isLocal] = 1
+      OR  ([Target].[isLocal] = 1 AND [Target].[isMerged] = 0)
     )
     -- Updated or otherwise different customers will be updated.
     THEN UPDATE SET

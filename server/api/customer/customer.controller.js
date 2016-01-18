@@ -67,3 +67,18 @@ exports.merge = function (req, res) {
     res.status(500).send('Internal Error');
   })
 }
+
+/**
+ * ROUTE: GET '/api/customers/local'
+ */
+exports.getLocal = function (req, res) {
+  
+  Customer.getLocal()
+  .then(function (customers) {
+    res.status(200).json(customers);
+  })
+  .catch(function (err) {
+    utils.handleError(res, err);
+  });
+  
+}

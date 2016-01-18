@@ -33,7 +33,7 @@ BEGIN
   WHERE
           [Tickety].[dbo].[Customer].[customerNumber] IS NULL
       AND [Source].[CustomerName] = [Tickety].[dbo].[Customer].[orgName]
-      AND [Source].[CustomerRegistrationNumber] = [Tickety].[dbo].[Customer].[orgNr]
+      AND [Source].[CompanyRegistrationNr] = [Tickety].[dbo].[Customer].[orgNr]
       AND NOT EXISTS(SELECT * FROM [Tickety].[dbo].[Customer]
                     WHERE [Tickety].[dbo].[Customer].[customerNumber] = CAST([Source].[CustomerNr] AS varchar(255)))
       -- AND [Source].[EndDate] IS NULL -- Only use the active row, the row name is probably different.
@@ -48,7 +48,7 @@ BEGIN
   )
   SELECT
     [CustomerName],
-    [CustomerRegistrationNumber],
+    [CompanyRegistrationNr],
     CAST([CustomerNr] AS varchar(255))
   FROM (
     MERGE [Tickety].[dbo].[Customer] AS [Target]
@@ -64,14 +64,14 @@ BEGIN
     -- the customer in Tickety.
     WHEN MATCHED AND (
           [Target].[orgName] != [Source].[CustomerName]
-      OR  [Target].[orgNr] != [Source].[CustomerRegistrationNumber]
+      OR  [Target].[orgNr] != [Source].[CompanyRegistrationNr]
       OR  [Target].[orgNr] IS NULL
       OR  [Target].[isLocal] = 1
     )
     -- Updated or otherwise different customers will be updated.
     THEN UPDATE SET
       [Target].[orgName] = [Source].[CustomerName],
-      [Target].[orgNr] = [Source].[CustomerRegistrationNumber],
+      [Target].[orgNr] = [Source].[CompanyRegistrationNr],
       [Target].[dateChanged] = GETUTCDATE(),
       [Target].[isLocal] = NULL
   
@@ -83,7 +83,7 @@ BEGIN
     )
     VALUES (
       CAST([Source].[CustomerNr] AS varchar(255)),
-      [Source].[CustomerRegistrationNumber],
+      [Source].[CompanyRegistrationNr],
       [Source].[CustomerName]
     )
 

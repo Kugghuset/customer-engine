@@ -40,7 +40,26 @@ angular.module('ticketyApp')
         .success(resolve)
         .error(reject);
       });
-    }
+    },
+    
+    /**
+     * Gets all customers with the flag isLocal == 1
+     * @return {Promise} -> {Array}
+     */
+    getLocal: function () {
+      return $q(function (resolve, reject) {
+        $http.get('api/customers/local')
+        .success(resolve)
+        .error(reject);
+      });
+    },
+    
+    /**
+     * Creates or updates a local customer.
+     * 
+     * @param {Object} customer - (Customer)
+     * @return {Promise} -> {Object} (Customer)
+     */
   };
   
 }]);

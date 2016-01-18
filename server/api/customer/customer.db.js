@@ -102,18 +102,67 @@ exports.create = function (_customer) {
 
 exports.getLocal = function () {
   return new Promise(function (resolve, reject) {
-    
     sql.execute({
       query: sql.fromFile('./sql/customer.getLocal.sql')
     })
-    .then(function (customers) {
-      resolve(util.objectify(customers));
-    })
-    .catch(function (err) {
-      reject(err);
-    });
+    .then(resolve)
+    .catch(reject);
   });
 }
+
+exports.updateOrCreate = function (_customer) {
+  return new Promise(function (resolve, reject) {
+    if (!_customer) {
+      return reject(new Error('No provided customer'));
+    }
+    
+    // New customers should be created.
+    if (!_customer.customerId) {
+      exports.create(_customer)
+      .then(resolve)
+      .catch(reject);
+    } else {
+      sql.execute({
+        query: sql.fromFile('./sql/customer.update.sql'),
+        params: {
+          customerId: {
+            type: sql.BIGINT,
+            val: _customer.customerId
+          },
+          orgNr: {
+            type: sql.VARCHAR(256),
+            val: _customer.orgNr
+          },
+          orgName: {
+            type: sql.VARCHAR(256),
+            val: _customer.orgName
+          },
+          customerNumber: {
+            type: sql.VARCHAR(256),
+            val: _customer.customerNumber
+          },
+        }
+      })
+      .then(resolve)
+      .catch(function (err) {
+        
+        if (/illegal update/i.test(err)) {
+          return reject(new Error('Illegal update. Cannot update non-local customers'));
+        }
+        
+        reject(err);
+      });
+    }
+  });
+}
+
+exports.updateOrCreate({customerId: 12412})
+.then(function (res) {
+  console.log(res);
+})
+.catch(function name(err) {
+  console.log(err);
+})
 
 function bulkImport() {
   return new Promise(function (resolve, reject) {

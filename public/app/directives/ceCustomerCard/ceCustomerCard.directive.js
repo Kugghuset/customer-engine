@@ -1,17 +1,19 @@
 (function () {
 
 angular.module('ticketyApp')
-.directive('ceTicketPreview', function () {
+.directive('ceCustomerCard',[function () {
   return {
-    templateUrl: 'directives/ceTicketPreview/ceTicketPreview.html',
+    templateUrl: 'directives/ceCustomerCard/ceCustomerCard.html',
     restrict: 'EA',
     scope: {
-      ticket: '='
+      customer: '='
     },
     link: function (scope, element, attrs) {
-      // Add logic? nah
+      
+      
+      
     }
   };
-});
+}]);
 
 })();

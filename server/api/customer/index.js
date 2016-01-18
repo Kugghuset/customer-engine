@@ -12,5 +12,6 @@ router.put('/fuzzy/:colName', auth.isAuthenticated(), controller.fuzzyQueryBy);
 router.post('/', auth.isAuthenticated(), controller.create);
 router.get('/merge', controller.merge);
 router.get('/local', auth.isAuthenticated(), controller.getLocal);
+router.post('/', auth.isAuthenticated(), controller.createOrUpdate);
 
 module.exports = router;

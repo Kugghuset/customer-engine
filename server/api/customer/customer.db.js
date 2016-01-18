@@ -110,59 +110,61 @@ exports.getLocal = function () {
   });
 }
 
-exports.updateOrCreate = function (_customer) {
+exports.update = function (_customer) {
+  return new Promise(function (resolve, reject) {
+    sql.execute({
+      query: sql.fromFile('./sql/customer.update.sql'),
+      params: {
+        customerId: {
+          type: sql.BIGINT,
+          val: _customer.customerId
+        },
+        orgNr: {
+          type: sql.VARCHAR(256),
+          val: _customer.orgNr
+        },
+        orgName: {
+          type: sql.VARCHAR(256),
+          val: _customer.orgName
+        },
+        customerNumber: {
+          type: sql.VARCHAR(256),
+          val: _customer.customerNumber
+        },
+      }
+    })
+    .then(function (customers) {
+      resolve(_.first(customers));
+    })
+    .catch(function (err) {
+      if (/illegal update/i.test(err)) {
+        return reject(new Error('Illegal update. Cannot update non-local customers'));
+      }
+      
+      reject(err);
+    })
+  });
+}
+
+exports.createOrUpdate = function (_customer) {
   return new Promise(function (resolve, reject) {
     if (!_customer) {
       return reject(new Error('No provided customer'));
     }
     
-    // New customers should be created.
     if (!_customer.customerId) {
+      // New customers should be created.
       exports.create(_customer)
       .then(resolve)
       .catch(reject);
     } else {
-      sql.execute({
-        query: sql.fromFile('./sql/customer.update.sql'),
-        params: {
-          customerId: {
-            type: sql.BIGINT,
-            val: _customer.customerId
-          },
-          orgNr: {
-            type: sql.VARCHAR(256),
-            val: _customer.orgNr
-          },
-          orgName: {
-            type: sql.VARCHAR(256),
-            val: _customer.orgName
-          },
-          customerNumber: {
-            type: sql.VARCHAR(256),
-            val: _customer.customerNumber
-          },
-        }
-      })
+      // Existing customer should be updated
+      exports.update(_customer)
       .then(resolve)
-      .catch(function (err) {
-        
-        if (/illegal update/i.test(err)) {
-          return reject(new Error('Illegal update. Cannot update non-local customers'));
-        }
-        
-        reject(err);
-      });
+      .catch(reject);
     }
   });
 }
-
-exports.updateOrCreate({customerId: 12412})
-.then(function (res) {
-  console.log(res);
-})
-.catch(function name(err) {
-  console.log(err);
-})
 
 function bulkImport() {
   return new Promise(function (resolve, reject) {

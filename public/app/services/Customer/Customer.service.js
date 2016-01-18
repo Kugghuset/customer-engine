@@ -60,6 +60,13 @@ angular.module('ticketyApp')
      * @param {Object} customer - (Customer)
      * @return {Promise} -> {Object} (Customer)
      */
+    createOrUpdate: function (customer) {
+      return $q(function (resolve, reject) {
+        $http.put('api/customers/', customer)
+        .success(resolve)
+        .error(reject);
+      });
+    }
   };
   
 }]);

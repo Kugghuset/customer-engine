@@ -82,3 +82,16 @@ exports.getLocal = function (req, res) {
   });
   
 }
+
+/**
+ * ROUTE: PUT '/api/customers/'
+ */
+exports.createOrUpdate = function (req, res) {
+  Customer.createOrUpdate(req.body)
+  .then(function (customer) {
+    res.status(200).json(customer);
+  })
+  .catch(function (err) {
+    utils.handleError(res, err);
+  });
+}

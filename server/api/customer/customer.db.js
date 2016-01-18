@@ -100,6 +100,21 @@ exports.create = function (_customer) {
   });
 }
 
+exports.getLocal = function () {
+  return new Promise(function (resolve, reject) {
+    
+    sql.execute({
+      query: sql.fromFile('./sql/customer.getLocal.sql')
+    })
+    .then(function (customers) {
+      resolve(util.objectify(customers));
+    })
+    .catch(function (err) {
+      reject(err);
+    });
+  });
+}
+
 function bulkImport() {
   return new Promise(function (resolve, reject) {
     if (!fs.existsSync(customerFilePath)) {

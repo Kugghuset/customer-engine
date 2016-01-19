@@ -2,7 +2,7 @@
 Gets organisations by a fuzzy search
 */
 
-SELECT TOP 50  [customerId], [customerNumber], [orgNr], [orgName]
+SELECT TOP 50 [customerId], [customerNumber], [orgNr], [orgName], [isLocal], [isMerged]
 FROM [dbo].[Customer]
 WHERE [orgNr] LIKE '%' + @query + '%'
    OR [orgName] LIKE '%' + @query + '%'

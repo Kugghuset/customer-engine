@@ -22,7 +22,7 @@ angular.module('ticketyApp')
   function getLocalCustomers(showLoading) {
     
     $scope.customersLoading = _.isUndefined(showLoading) ? true : showLoading;
-  
+    
     Customer.getLocal()
     .then(function (customers) {
       $scope.customersLoading = false;
@@ -38,7 +38,10 @@ angular.module('ticketyApp')
   $scope.onClose = function (customer, allowSubmit) {
     
     // If allowSubmit is falsy, don't do anything.
-    if (!allowSubmit) { return; }
+    if (!allowSubmit || !customer || !_.every([
+        !!customer.orgName,
+        (!!customer.orgNr || !!customer.customerNumber)
+      ])) { return; }
     
     Customer.createOrUpdate(customer)
     .then(function (_customer) {

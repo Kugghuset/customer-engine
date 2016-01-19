@@ -83,6 +83,20 @@ exports.getLocal = function (req, res) {
   
 }
 
+exports.delete = function (req, res) {
+  Customer.delete(req.params.id)
+  .then(function () {
+    res.status(204).send('No content');
+  })
+  .catch(function (err) {
+    if (/tickets exists|not local/i.test(err)) {
+      res.status(405).send(err);
+    } else {
+      utils.handleError(res, err);
+    }
+  });
+}
+
 /**
  * ROUTE: PUT '/api/customers/'
  */

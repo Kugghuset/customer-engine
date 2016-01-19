@@ -166,6 +166,33 @@ exports.createOrUpdate = function (_customer) {
   });
 }
 
+exports.delete = function (customerId) {
+  return new Promise(function (resolve, reject) {
+    
+    sql.execute({
+      query: sql.fromFile('./sql/customer.delete.sql'),
+      params: {
+        customerId: {
+          type: sql.BIGINT,
+          val: customerId
+        }
+      }
+    })
+    .then(function () {
+      resolve();
+    })
+    .catch(function (err) {
+      if (/tickets exists/i.test(err)) {
+        reject(new Error('Customer cannot be delete because related tickets exists.'));
+      } else if (/not local/i.test(err)) {
+        reject(new Error('Customer cannot be delete because it is not local.'));
+      } else {
+        reject(err);
+      }
+    });
+  });
+}
+
 function bulkImport() {
   return new Promise(function (resolve, reject) {
     if (!fs.existsSync(customerFilePath)) {

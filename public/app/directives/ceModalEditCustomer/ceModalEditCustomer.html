@@ -1,0 +1,72 @@
+<div class="pane">
+
+  <h1>{{ isNew(customer) ? 'Create' : 'Update' }} Customer</h1>
+
+  <form novalidate>
+
+    <div class="pane-row">
+      
+      <label class="font-size-ms">Org. number</label>
+      
+      <span class="fill-by-label">
+        <input type="text" ng-class="{'padded-right': orgNrLoadingLocations}" ng-model="customer.orgNr" placeholder="Org. number" uib-typeahead="cust as cust.orgNr for cust in getFuzzy($viewValue, 'orgNr')"
+          typeahead-loading="orgNrLoadingLocations" typeahead-on-select="onSelected($item)" class="pane-dropdown">
+        <i ng-show="orgNrLoadingLocations" class="glyphicon glyphicon-refresh" title="Looking for customers matching the org. number"></i>
+      </span>
+
+    </div>
+
+    <div class="pane-row">
+      
+      <label class="font-size-ms">Customer number</label>
+      
+      <span class="fill-by-label">
+        <input type="text" ng-class="{'padded-right': customerNumberLoadingLocations}" ng-model="customer.customerNumber" placeholder="Customer number" uib-typeahead="cust as cust.customerNumber for cust in getFuzzy($viewValue, 'customerNumber')"
+          typeahead-loading="customerNumberLoadingLocations" typeahead-on-select="onSelected($item)" class="pane-dropdown">
+        <i ng-show="customerNumberLoadingLocations" class="glyphicon glyphicon-refresh" title="Looking for customers matching the customer number"></i>
+      </span>
+
+    </div>
+    
+    <div class="pane-row">
+      <label class="font-size-ms">Customer name</label>
+        
+      <span class="fill-by-label">
+        <input type="text" ng-class="{'padded-right': orgNameLoadingLocations}" ng-model="customer.orgName" placeholder="Customer name" uib-typeahead="cust as cust.orgName for cust in getFuzzy($viewValue, 'orgName')"
+          typeahead-loading="orgNameLoadingLocations" typeahead-on-select="onSelected($item)" class="pane-dropdown">
+        <i ng-show="orgNameLoadingLocations" class="glyphicon glyphicon-refresh" title="Looking for customers matching the customer name"></i>
+      </span>
+
+    </div>
+    
+    <br>
+
+    <div ng-show="isNew(customer)">
+      
+      <i class="glyphicon glyphicon-exclamation-sign"></i> A new customer tagged as created in Tickety will be added to the customer database.
+      
+    </div>
+
+    <div ng-show="isEditable(customer)">
+      
+      <i class="glyphicon glyphicon-exclamation-sign"></i> The customer will be updated in in database and tagged as local.
+      
+    </div>
+    
+    <div ng-show="!isNew(customer) && !isEditable(customer)">
+      
+      <i class="glyphicon glyphicon-exclamation-sign"></i> The customer is an existing customer and cannot be edited.
+      
+    </div>
+
+    <div class="float-container">
+
+      <button ng-click="submit(customer)" ng-disabled="!allowSubmit(customer)" class="pane-button green pull-right offset-right">{{ isNew(customer) ? 'Create' : 'Update' }}</button>
+
+      <button ng-click="cancel()" class="pane-button red pull-right offset-right">Cancel</button>
+
+    </div>
+
+  </form>
+
+</div>

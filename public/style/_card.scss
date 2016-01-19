@@ -62,6 +62,22 @@
   }
 }
 
+.card-delete {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 20px;
+  i {
+    color: $red;
+    &:hover {
+      color: darken($red, 10%);
+    }
+    &:active, &:focus {
+      color: darken($red, 20%);
+    }
+  }
+}
+
 .card-col-right {
   position: absolute;
   right: 0;

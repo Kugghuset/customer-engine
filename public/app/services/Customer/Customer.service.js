@@ -66,6 +66,18 @@ angular.module('ticketyApp')
         .success(resolve)
         .error(reject);
       });
+    },
+    
+    /**
+     * @param {Objecet} customer
+     * @return {Promsise} -> {Object}
+     */
+    delete: function (customer) {
+      return $q(function (resolve, reject) {
+        $http.delete('api/customers/' + customer.customerId)
+        .success(resolve)
+        .error(reject);
+      });
     }
   };
   

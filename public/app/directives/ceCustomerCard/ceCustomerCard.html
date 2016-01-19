@@ -1,5 +1,7 @@
 <section class="card customer clickable " ng-disabled="isReadonly">
   
+  <div class="card-delete"><i class="glyphicon glyphicon-remove" ng-click="delete(customer)"></i></div>
+  
   <dl>
     <dt>Org. Number</dt>
     <dd>{{ customer.orgNr || 'Missing' }}</dd>

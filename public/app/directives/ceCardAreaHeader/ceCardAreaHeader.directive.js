@@ -7,8 +7,9 @@ angular.module('ticketyApp')
     templateUrl: 'directives/ceCardAreaHeader/ceCardAreaHeader.html',
     restrict : 'EA',
     scope: {
-      tickets: '=',
-      title: '@'
+      collection: '=',
+      title: '@',
+      placeholder: '@'
     },
     link: function (scope, element, attrs) {
 
@@ -42,8 +43,8 @@ angular.module('ticketyApp')
       scope.queryTickets = function (_query) {
         scope.query = _query;
 
-        // Mark tickets with 'hide'
-        _.forEach(scope.tickets, function (ticket) {
+        // Mark collection with 'hide'
+        _.forEach(scope.collection, function (ticket) {
           if (!showTicket(ticket, scope.query)) {
             ticket.hide = true;
           } else {
@@ -52,7 +53,7 @@ angular.module('ticketyApp')
         });
       }
 
-      scope.$watch('tickets', function (params) {
+      scope.$watch('collection', function (params) {
         scope.queryTickets(scope.query);
       })
 

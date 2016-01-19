@@ -1,0 +1,44 @@
+<section class="grid">
+  
+  <a href="" ui-sref="main.dashboard">
+    <img src="assets/img/logo.png" class="logo" alt="Bambora logo">
+    <span class="go-back">
+      <i class="glyphicon glyphicon-arrow-left"></i> Go back
+    </span>
+  </a>
+ 
+  <aside class="pane vertical-fill fixed-left create">
+    
+    <h1>Manage customers</h1>
+    
+    <section class="pane-section">
+      <button class="pane-button-medium fill" ng-click="openEditCustomer({})">Create customer</button>
+    </section>
+    
+    <section class="pane-section">
+      
+      <p>On this page you can add, update or delete customers. Only customers created inside Tickety can be modified, and only those which aren't currently associated to any tickets can be deleted.</p>
+      
+      <hr>
+      
+      <p>To edit an existing customer, simply click the desired customer to the right.</p>
+      
+      <p>To create a new customer, click the button above.</p>
+      
+    </section>
+  </aside>
+  
+  <ce-card-area child-class="vertical-fill fixed-right create">
+    
+    <ce-loading is-loading="customersLoading"></ce-loading>
+    
+    <ce-card-area-header title="Related customers" data-placeholder="Filter the customers" collection="customers"></ce-card-area-header>
+    
+    <ce-customer-card ng-click="editCustomer(customer)" on-delete="deleteCustomer" on-confirm="confirmDelete" ng-show="showCustomer(customer, custFilter)" class="col-card" customer="customer" ng-repeat="customer in customers | alphaSort:['orgName', 'orgNr', 'customerNumber']"></ce-customer-card>
+    
+  </ce-card-area>
+  
+</section>
+
+<ce-modal-edit-customer modal-is-open="customerModalIsOpen" on-close="onClose" customer="customer" open-modal="openEditCustomer"></ce-modal-edit-customer>
+<ce-modal-confirm modal-is-open="customerModalIsOpen" open-modal="confirmDelete"></ce-modal-confirm>

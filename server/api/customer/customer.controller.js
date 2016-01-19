@@ -67,3 +67,45 @@ exports.merge = function (req, res) {
     res.status(500).send('Internal Error');
   })
 }
+
+/**
+ * ROUTE: GET '/api/customers/local'
+ */
+exports.getLocal = function (req, res) {
+  
+  Customer.getLocal()
+  .then(function (customers) {
+    res.status(200).json(customers);
+  })
+  .catch(function (err) {
+    utils.handleError(res, err);
+  });
+  
+}
+
+exports.delete = function (req, res) {
+  Customer.delete(req.params.id)
+  .then(function () {
+    res.status(204).send('No content');
+  })
+  .catch(function (err) {
+    if (/tickets exists|not local/i.test(err)) {
+      res.status(405).send(err);
+    } else {
+      utils.handleError(res, err);
+    }
+  });
+}
+
+/**
+ * ROUTE: PUT '/api/customers/'
+ */
+exports.createOrUpdate = function (req, res) {
+  Customer.createOrUpdate(req.body)
+  .then(function (customer) {
+    res.status(200).json(customer);
+  })
+  .catch(function (err) {
+    utils.handleError(res, err);
+  });
+}

@@ -143,6 +143,12 @@
   }
 }
 
+.pane-button-medium {
+  @extend .pane-button;
+  padding: $size-s;
+  font-size: $font-size-l;
+}
+
 .pane-button-big {
   @extend .pane-button;
   padding: $size-m;

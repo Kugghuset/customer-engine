@@ -12,6 +12,7 @@ var concat = require('gulp-concat');
 var ngAnnotate = require('gulp-ng-annotate')
 var uglify = require('gulp-uglify')
 var templateCache = require('gulp-angular-templatecache');
+var open = require('gulp-open');
 
 // Various dependencies
 var shell = require('shelljs');
@@ -22,6 +23,12 @@ var fs = require('fs');
 var path = require('path');
 var _ = require('lodash');
 var sql = require('seriate');
+var os = require('os');
+
+// Set the browser for the current operating system.
+var browser = os.platform() === 'linux' ? 'google-chrome' : (
+  os.platform() === 'darwin' ? 'google chrome' : (
+  os.platform() === 'win32' ? 'chrome' : 'firefox'));
 
 // package.json
 var p_json = require('./package.json');
@@ -249,12 +256,17 @@ gulp.task('cachebust', ['minify'], function () {
   
   // Create the index file
   fs.writeFileSync('./public/index.html', indexFile);
-})
+});
+
+gulp.task('open', ['build'], function () {
+  gulp.src(__filename)
+    .pipe(open({ uri: 'http://localhost:5000', app: browser }))
+});
 
 // Builds the application
 gulp.task('build', ['sass', 'templates', 'minify', 'cachebust', 'db-setup']);
 
-gulp.task('default', ['livereload-listen', 'build', 'server', 'watch']);
+gulp.task('default', ['livereload-listen', 'build', 'server', 'watch', 'open']);
 
 process.on('exit', function () {
   if (node) { node.kill(); }

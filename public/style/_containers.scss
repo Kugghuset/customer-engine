@@ -4,7 +4,7 @@
 }
 
 .logo {
-  width: 450 / 2px;
+  height: 116px;
 }
 
 .fixed-left {
@@ -17,6 +17,10 @@
   width: 450px;
   &.create {
     width: 500px;
+  }
+  &.customer-create {
+    width: 680px;
+    max-width: 60%;
   }
   @include breakpoint(break-m) {
     overflow-y: visible;
@@ -38,7 +42,7 @@
  
 @include breakpoint(break-m) {
   .fixed-left, .fixed-right {
-    &, &.create {
+    &, &.create, &.customer-create {
       position: static;
       height: auto;
       width: 100%;

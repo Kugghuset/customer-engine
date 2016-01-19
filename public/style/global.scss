@@ -236,3 +236,7 @@ label {
 .glyphicon-refresh {
   @extend .spin;
 }
+
+.clickable {
+  cursor: pointer;
+}

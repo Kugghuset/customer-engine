@@ -16,11 +16,9 @@
     
     <ce-loading is-loading="loadingTickets"></ce-loading>
     
-    <ce-card-area-header title="Related tickets" tickets="relatedTickets" ></ce-card-area-header>
-    
-    <!--<h2 ng-hide="loadingTickets || !noTickets(ticket.ticketId, relatedTickets)">No related tickets could be found</h2>-->
-    <!--<h2 ng-hide="loadingTickets">No related tickets could be found</h2>-->
+    <ce-card-area-header title="Related tickets" collection="relatedTickets" ></ce-card-area-header>
     
     <ce-ticket-card class="col-card" ticket="_ticket" ng-show="ticket.ticketId != _ticket.ticketId && !_ticket.hide" is-readonly="true" ng-repeat="_ticket in relatedTickets | alphaSort:['ticketDate','ticketId']:true"></ce-ticket-card>
+    
   </ce-card-area>
 </section>

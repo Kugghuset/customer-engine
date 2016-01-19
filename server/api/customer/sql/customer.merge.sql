@@ -6,9 +6,6 @@ This will also update locally created rows:
   - Rows matched by orgNr and orgName with a NULL value of customerNumber
     will be assigned the first match with customerNumber, and isLocal will be set to NULL
   - Rows which are matched entirely will only have isLocal set to NULL
-
-TODO: Uncomment and modify [Source].[isLocal] to actual names.
-
 */
 
 
@@ -27,7 +24,7 @@ BEGIN
   SET
     [Tickety].[dbo].[Customer].[customerNumber] = [Source].[CustomerNr],
     [Tickety].[dbo].[Customer].[dateChanged] = GETUTCDATE(),
-    [Tickety].[dbo].[Customer].[isLocal] = NULL
+    [Tickety].[dbo].[Customer].[isMerged] = 1
 
   FROM [Tickety].[dbo].[vi_DimCustomers] AS [Source]
   WHERE
@@ -36,7 +33,6 @@ BEGIN
       AND [Source].[CompanyRegistrationNr] = [Tickety].[dbo].[Customer].[orgNr]
       AND NOT EXISTS(SELECT * FROM [Tickety].[dbo].[Customer]
                     WHERE [Tickety].[dbo].[Customer].[customerNumber] = CAST([Source].[CustomerNr] AS varchar(255)))
-      -- AND [Source].[EndDate] IS NULL -- Only use the active row, the row name is probably different.
 
   -- Updates or inserts the other customers.
   -- New customers will be inserted and existing customers which have changed either
@@ -56,9 +52,8 @@ BEGIN
     -- as it allows for filtering the results
     USING (SELECT *
            FROM [Tickety].[dbo].[vi_DimCustomers]
-          --  WHERE [EndDate] IS NULL -- Might need to be changed
           ) AS [Source]
-      ON  [Target].[customerNumber] = CAST([Source].[CustomerNr] AS varchar(255))
+      ON [Target].[customerNumber] = CAST([Source].[CustomerNr] AS varchar(255))
     
     -- Matches customers which updated and/or different from
     -- the customer in Tickety.
@@ -66,14 +61,14 @@ BEGIN
           [Target].[orgName] != [Source].[CustomerName]
       OR  [Target].[orgNr] != [Source].[CompanyRegistrationNr]
       OR  [Target].[orgNr] IS NULL
-      OR  [Target].[isLocal] = 1
+      OR  ([Target].[isLocal] = 1 AND [Target].[isMerged] = 0)
     )
     -- Updated or otherwise different customers will be updated.
     THEN UPDATE SET
       [Target].[orgName] = [Source].[CustomerName],
       [Target].[orgNr] = [Source].[CompanyRegistrationNr],
       [Target].[dateChanged] = GETUTCDATE(),
-      [Target].[isLocal] = NULL
+      [Target].[isMerged] = 1
   
   WHEN NOT MATCHED BY TARGET
     THEN INSERT (

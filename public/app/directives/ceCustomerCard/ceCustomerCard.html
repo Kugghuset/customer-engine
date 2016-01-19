@@ -1,0 +1,30 @@
+<section class="card customer clickable " ng-disabled="isReadonly">
+  
+  <div class="card-delete"><i class="glyphicon glyphicon-remove" ng-click="delete(customer)"></i></div>
+  
+  <dl>
+    <dt>Org. Number</dt>
+    <dd>{{ customer.orgNr || 'Missing' }}</dd>
+  </dl>
+  
+  <dl>
+    <dt>Customer number</dt>
+    <dd>{{ customer.customerNumber || 'Missing' }}</dd>
+  </dl>
+  
+  <dl>
+    <dt>Customer name</dt>
+    <dd>{{ customer.orgName || 'Missing' }}</dd>
+  </dl>
+  <dl>
+  
+  <div class="card-footer">
+    <div class="pull-right">
+      <div class="date" title="Date of creation">
+        <i class="glyphicon glyphicon-time"></i>
+        {{ customer.dateCreated | date: 'yyyy-MM-dd, HH:mm' }}
+      </div>
+    </div>
+  </div>
+  
+</section>

@@ -10,13 +10,15 @@ INSERT INTO [dbo].[Customer] (
   [orgName],
   [orgNr],
   [customerNumber],
-  [isLocal]
+  [isLocal],
+  [isMerged]
 )
 VALUES (
   @orgName,
   @orgNr,
   @customerNumber,
-  1
+  1,
+  0
 )
 
 COMMIT TRAN
@@ -25,6 +27,7 @@ SELECT TOP 1
   [customerId],
   [customerNumber],
   [orgNr],
-  [orgName]
+  [orgName],
+  [isMerged]
 FROM [dbo].[Customer]
 ORDER BY [customerId] DESC

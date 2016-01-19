@@ -11,10 +11,13 @@ BEGIN
     [orgNr] varchar(256) NULL,
     [dateCreated] datetime2 DEFAULT GETUTCDATE() NULL,
     [dateChanged] datetime2 DEFAULT GETUTCDATE() NULL,
-    [isLocal] bit NULL -- Specifies whether the customer is created inside Tickety or is external
+    [isLocal] bit NULL, -- Specifies whether the customer is created inside Tickety or is external
+    [isMerged] bit DEFAULT 1 NULL -- Specifies whether the customer is merged by the merge script
   )
 END
 ELSE
+
+  -- Add the [isLocal] column if it doesn't exist
   IF NOT EXISTS(SELECT * FROM sys.columns
                 WHERE Name = N'isLocal'
                 AND Object_ID = Object_ID(N'Customer'))
@@ -22,3 +25,30 @@ ELSE
     ALTER TABLE [dbo].[Customer]
     ADD [isLocal] bit NULL
   END
+  
+  -- Add the [isMerged] column if it doesn't exist
+  IF NOT EXISTS(SELECT * FROM sys.columns
+                WHERE Name = N'isMerged'
+                AND Object_ID = Object_ID(N'Customer'))
+  BEGIN
+      
+    ALTER TABLE [dbo].[Customer]
+    ADD [isMerged] bit DEFAULT 1 NULL
+    
+  END
+  
+  -- If [isMerged] didn't exist, there won't by any rows where isMerged = 1
+  -- This statement must be separate from the above statement as it otherwise won't find [isMerged]
+  IF NOT EXISTS(SELECT *
+                FROM [dbo].[Customer]
+                WHERE [isMerged] = 1)
+  BEGIN
+  
+    UPDATE [dbo].[Customer]
+    SET [isMerged] = CASE
+      WHEN [isLocal] = 1 THEN 0
+      ELSE 1
+    END
+    
+  END
+

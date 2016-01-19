@@ -100,6 +100,99 @@ exports.create = function (_customer) {
   });
 }
 
+exports.getLocal = function () {
+  return new Promise(function (resolve, reject) {
+    sql.execute({
+      query: sql.fromFile('./sql/customer.getLocal.sql')
+    })
+    .then(resolve)
+    .catch(reject);
+  });
+}
+
+exports.update = function (_customer) {
+  return new Promise(function (resolve, reject) {
+    sql.execute({
+      query: sql.fromFile('./sql/customer.update.sql'),
+      params: {
+        customerId: {
+          type: sql.BIGINT,
+          val: _customer.customerId
+        },
+        orgNr: {
+          type: sql.VARCHAR(256),
+          val: _customer.orgNr
+        },
+        orgName: {
+          type: sql.VARCHAR(256),
+          val: _customer.orgName
+        },
+        customerNumber: {
+          type: sql.VARCHAR(256),
+          val: _customer.customerNumber
+        },
+      }
+    })
+    .then(function (customers) {
+      resolve(_.first(customers));
+    })
+    .catch(function (err) {
+      if (/illegal update/i.test(err)) {
+        return reject(new Error('Illegal update. Cannot update non-local customers'));
+      }
+      
+      reject(err);
+    })
+  });
+}
+
+exports.createOrUpdate = function (_customer) {
+  return new Promise(function (resolve, reject) {
+    if (!_customer) {
+      return reject(new Error('No provided customer'));
+    }
+    
+    if (!_customer.customerId) {
+      // New customers should be created.
+      exports.create(_customer)
+      .then(resolve)
+      .catch(reject);
+    } else {
+      // Existing customer should be updated
+      exports.update(_customer)
+      .then(resolve)
+      .catch(reject);
+    }
+  });
+}
+
+exports.delete = function (customerId) {
+  return new Promise(function (resolve, reject) {
+    
+    sql.execute({
+      query: sql.fromFile('./sql/customer.delete.sql'),
+      params: {
+        customerId: {
+          type: sql.BIGINT,
+          val: customerId
+        }
+      }
+    })
+    .then(function () {
+      resolve();
+    })
+    .catch(function (err) {
+      if (/tickets exists/i.test(err)) {
+        reject(new Error('Customer cannot be delete because related tickets exists.'));
+      } else if (/not local/i.test(err)) {
+        reject(new Error('Customer cannot be delete because it is not local.'));
+      } else {
+        reject(err);
+      }
+    });
+  });
+}
+
 function bulkImport() {
   return new Promise(function (resolve, reject) {
     if (!fs.existsSync(customerFilePath)) {

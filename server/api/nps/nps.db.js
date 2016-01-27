@@ -5,8 +5,12 @@ var Promise = require('bluebird');
 var sql = require('seriate');
 var fs = require('fs');
 var path = require('path');
+var iconv = require('iconv-lite');
+var chalk = require('chalk');
 
 var npsFilePath = path.resolve('./server/assets/nps/total_nps_score.csv');
+
+var npsFolderpath = path.resolve('./server/assets/nps');
 
 function initialize() {
   return new Promise(function (resolve, reject) {
@@ -31,22 +35,53 @@ exports.getAll = function () {
   });
 };
 
-function bulkImport() {
+function bulkImport(files, readFiles) {
   
-  if (!fs.existsSync(npsFilePath)) {
-    // No file to import.
-    return;
+  // First time check
+  if (!files) {
+    
+    var statObj = fs.existsSync(npsFolderpath)
+      ? fs.statSync(npsFolderpath)
+      : undefined;
+      
+    // The folder either doesn't exist, or it's not a folder
+    // Early return if either is true
+    if (!statObj || statObj.isFile()) { return; }
+    
+    // Get all files
+    files = _.chain(fs.readdirSync(npsFolderpath))
+      .filter(function (filename) {
+        return fs.statSync(path.resolve(npsFolderpath, filename)).isFile();
+      })
+      .map(function (filename) { return path.resolve(npsFolderpath, filename); })
+      .value();
+    
+    readFiles = [];
   }
+  
+  // Return early if there are no files
+  if (!files || !files.length) {
+    return console.log('No NPS score files found, no bulk import.');
+  }
+  
+  // We're all set here
+  if (readFiles.length === files.length) {
+    return console.log('Bulk import of NPS data finished.');
+  }
+  
+  // The file to perform the bulk import on.
+  var currentFile = files[readFiles.length];
   
   sql.execute({
     query: sql
       .fromFile('./sql/nps.bulkImport.sql')
-      .replace('{ filepath }', npsFilePath)
-  }).then(function (result) {
-    // Do something?
-    
+      .replace('{ filepath }', currentFile)
+  }).then(function () {
+    // continue recursively
+    return bulkImport(files, readFiles.concat([currentFile]));
   }).catch(function (err) {
-    // Handle error
+    // Assumme the file simply shouldn't be imported, continue recursively
+    return bulkImport(files, readFiles.concat([currentFile]));
   });
 }
 

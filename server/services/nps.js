@@ -60,6 +60,53 @@ function getLastWeek() {
 }
 
 /**
+ * Finds all tickets which where set to have their ticketDate before three months (minus one day)
+ * and their person.tel hasn't been texted the in three months.
+ * 
+ * @return {Promise} -> {Array}
+ */
+function getNonQuarantined() {
+  return new Promise(function (resolve, reject) {
+    
+    var query = Ticket.rawSqlFile('ticket.findBy.sql')
+      .replace(new RegExp(
+        utils.escapeRegex('{ where_clause }') + '.*'
+        , 'gi'), [
+          '[ticketDate] < @upperDateLimit',
+          'AND [A].[ticketDate] > @lowerDateLimit',
+          'AND NOT EXISTS(SELECT * FROM [dbo].[NPS]',
+                          'WHERE REPLACE([dbo].[NPS].[npsTel], \'+\', \'\') = [Q].[tel]',
+                          'AND [dbo].[NPS].[npsDate] > @threeMontshAgo)'
+        ].join(' '));
+    
+    sql.execute({
+      query: query,
+      params: Ticket.ticketParams(
+        Ticket.ensureHasProps({}, {}),
+        {
+          upperDateLimit: {
+            type: sql.DATETIME2,
+            val: moment().subtract(1, 'weeks').endOf('week').toDate()
+          },
+          lowerDateLimit: {
+            type: sql.DATETIME2,
+            val: moment().subtract(3, 'months').add(1, 'days').toDate()
+          },
+          threeMontshAgo: {
+            type: sql.DATETIME2,
+            val: moment().subtract(3, 'months').toDate()
+          }
+        }
+      )
+    })
+    .then(function (tickets) {
+      resolve(utils.objectify(tickets));
+    })
+    .catch(reject);
+  });
+}
+
+/**
  * Filters out tickets lacking person.tel and duplice person.tels.
  * 
  * @param {Array} tickets
@@ -83,13 +130,14 @@ function filterUnique(tickets) {
 }
 
 /**
- * Gets all numbers (without duplicates) which have been created last week
+ * Gets all numbers (without duplicates)
+ * which have been created since the current quarantine started (minus one day)
  * and haven't been texted in three months.
  * 
  * @return {Promise} -> {Array}
  */
 function getReceivers() {
-  return getLastWeek().then(filterUnique);
+  return getNonQuarantined().then(filterUnique);
 }
 
 /**

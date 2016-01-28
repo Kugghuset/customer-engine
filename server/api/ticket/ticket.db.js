@@ -43,13 +43,27 @@ function ensureHasProps(ticket, user) {
     return ticket;
 }
 
-
-function findBy(paramName, other) {
+/**
+ * Returns the query for finding tickets by specific criteria.
+ * 
+ * @param {String} paramName
+ * @param {Object} other
+ * @param {Number} top
+ * @param {Number} offset
+ * @return {String}
+ */
+function findBy(paramName, other, top, offset) {
   if (!other) { other = ''; }
-  return sql.fromFile('./sql/ticket.findBy.sql')
+  
+  var query = sql.fromFile('./sql/ticket.findBy.sql')
   .replace(util.literalRegExp('{ where_clause }', 'gi'), '[{paramName}] = @{paramName}')
   .replace(util.literalRegExp('{paramName}', 'gi'), paramName)
   .replace(util.literalRegExp('{ other }', 'gi'), other);
+  
+  //
+  return !!top
+    ? query + ['\nOFFSET', (offset || 0), 'ROWS', 'FETCH NEXT', top, 'ROWS ONLY'].join(' ')
+    : query;
 }
 
 /**

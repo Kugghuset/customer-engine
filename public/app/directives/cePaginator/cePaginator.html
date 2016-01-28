@@ -1,0 +1,14 @@
+<nav class="card-area-header purple-dark offset-bottom">
+  
+  <span uib-dropdown uib-keyboard-nav>
+    <button id="simple-btn-keyboard-nav" type="button" class="pane-button" uib-dropdown-toggle>
+        {{ activePage || 'Select page' }} <span class="caret"></span>
+      </button>
+      <ul class="uib-dropdown-menu pane-dropdown" role="menu" aria-labelledby="simple-btn-keyboard-nav">
+        <li role="menuitem" ng-repeat="pageNum in pages">
+          <a href="" ng-click="activePage = pageNum">{{ pageNum }}</a>
+        </li>
+      </ul>
+  </span>
+  
+</nav>

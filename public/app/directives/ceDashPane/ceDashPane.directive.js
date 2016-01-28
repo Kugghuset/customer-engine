@@ -9,6 +9,7 @@ angular.module('ticketyApp')
     scope: {
       user: '=',
       tickets: '=',
+      statusTickets: '=',
       isLoading: '=',
       isReadonly: '=',
       filter: '='
@@ -19,20 +20,25 @@ angular.module('ticketyApp')
       scope.aggregated = {};
       
       function aggregateStatuses(tickets) {
+        
+        // Merge in the new tickets
+        scope.statusTickets = Ticket.merge(scope.statusTickets, tickets);
+        
+        // Calculate stuff
         return _.assign(
-          _.chain(tickets)
-          .groupBy(function (item) {
-            if (item.status === 'Closed' && item.transferred) {
-              // If the item is closed AND transferred, use 'ClosedTransferred'
-              return 'ClosedTransferred';
-            } else {
-              // Otherwise use the status
-              return item.status;
-            }
-          })
-          .map(function (v, k) { return [ _.camelCase(k), v.length ] })
-          .zipObject()
-          .value()
+          _.chain(scope.statusTickets)
+            .groupBy(function (item) {
+              if (item.status === 'Closed' && item.transferred) {
+                // If the item is closed AND transferred, use 'ClosedTransferred'
+                return 'ClosedTransferred';
+              } else {
+                // Otherwise use the status
+                return item.status;
+              }
+            })
+            .map(function (v, k) { return [ _.camelCase(k), v.length ] })
+            .zipObject()
+            .value()
         , { total: tickets.length });
       }
       
@@ -53,6 +59,12 @@ angular.module('ticketyApp')
       scope.$watch('tickets', function (tickets) {
         
         scope.aggregated = aggregateStatuses(tickets);
+      }, true);
+      
+      scope.$watch('statusTickets', function (tickets) {
+        scope.statusTickets = tickets;
+        
+        scope.aggregated = aggregateStatuses([]);
       }, true);
     }
   };

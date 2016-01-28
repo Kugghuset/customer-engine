@@ -163,7 +163,7 @@ angular.module('ticketyApp')
     
     getByUserId: function (userId) {
       return $q(function (resolve, reject) {
-        $http.get('/api/tickets/user/' + userId)
+        $http.get('/api/tickets/user/:id/10/10'.replace(':id', userId))
         .success(resolve)
         ['catch'](reject);
       });
@@ -203,6 +203,48 @@ angular.module('ticketyApp')
     
     removeAllLocal: function () {
       $localForage.clear();
+    },
+    
+    /**
+     * @param {String} userId
+     * @return {Promise} -> {Object}
+     */
+    getStatusTickets: function (userId) {
+      return $q(function (resolve, reject) {
+        $http.get('/api/tickets/user/:id/status'.replace(':id', userId))
+        .success(resolve)
+        .error(reject);
+      });
+    },
+    
+    /**
+     * @param {Array} existing
+     * @param {Array} tickets
+     * @return {Array}
+     */
+    merge: function (existing, tickets) {
+      
+      // Ensure existance
+      if (!existing) { existing = []; }
+      if (!tickets) { tickets = []; }
+      
+      existing = _.map(existing, function (ticket) {
+        var _t;
+          _t = _.find(tickets, function (t) { return t.ticketId == ticket.ticketId; });
+          
+          return (_t)
+            ? _t
+            : ticket;
+      });
+      
+      // Get any new tickets
+      var newTickets = _.filter(tickets, function (ticket) {
+        return !_.find(existing, function (t) { return t.ticketId === ticket.ticketId; });
+      });
+      
+      existing = existing.concat(newTickets);
+      
+      return existing;
     }
     
   }

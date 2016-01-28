@@ -6,7 +6,7 @@
   
   <aside class="pane vertical-fill fixed-left">
     
-    <ce-dash-pane user="auth.getCurrentUser()" is-loading="isLoading" tickets="tickets" is-readonly="isReadonly" filter="tickFilter"></ce-dash-pane>
+    <ce-dash-pane user="auth.getCurrentUser()" is-loading="isLoading" tickets="tickets" status-tickets="statusTickets" is-readonly="isReadonly" filter="tickFilter"></ce-dash-pane>
     
   </aside>
   
@@ -15,6 +15,8 @@
     <ce-loading is-loading="isLoading"></ce-loading>
     
     <ce-card-area-header title="My tickets" collection="tickets" ></ce-card-area-header>
+    
+    <ce-paginator></ce-paginator>
     
     <ce-ticket-card class="col-card" ticket="ticket" ng-show="showTicket(ticket, tickFilter)" ng-repeat="ticket in tickets | alphaSort:['ticketDate','ticketId']:true"></ce-ticket-card>
   </ce-card-area>

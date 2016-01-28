@@ -60,7 +60,7 @@ function findBy(paramName, other, top, offset) {
   .replace(util.literalRegExp('{paramName}', 'gi'), paramName)
   .replace(util.literalRegExp('{ other }', 'gi'), other);
   
-  //
+  // Allows for pagination.
   return !!top
     ? query + ['\nOFFSET', (offset || 0), 'ROWS', 'FETCH NEXT', top, 'ROWS ONLY'].join(' ')
     : query;
@@ -370,6 +370,54 @@ exports.remove = function (ticketId) {
         val: ticketId
       }
     }
+  });
+}
+
+/**
+ * Gets all tickets belonging to the user with *userId*
+ * from the offset to the top
+ * 
+ * @param {String} userId
+ * @param {Number} top
+ * @param {Number} offset
+ * @return {Promise} -> {Array} (Ticket)
+ */
+exports.paginate = function (userId, top, offset) {
+  return new Promise(function (resolve, reject) {
+    
+    sql.execute({
+      query: findBy('userId', undefined, top, offset),
+      params: {
+        userId: {
+          type: sql.BIGINT,
+          val: userId
+        }
+      }
+    })
+    .then(function (tickets) {
+      resolve(util.objectify(tickets));
+    })
+    .catch(function (err) {
+      reject(err);
+    });
+  });
+}
+
+/**
+ * Returns only the vitals for the status table.
+ * 
+ * @param {String} userId
+ * @return {Promise} -> {Array}
+ */
+exports.statusTickets = function (userId) {
+  return new Promise(function (resolve, reject) {
+  exports.findByUserId(userId)
+  .then(function (tickets) {
+    resolve(_.map(tickets, function (ticket) {
+      return _.pick(ticket, ['ticketId', 'status', 'transferred']);
+    }));
+  })
+  .catch(reject);
   });
 }
 

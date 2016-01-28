@@ -116,3 +116,29 @@ exports.remove = function (req, res) {
     utils.handleError(res, err);
   })
 }
+
+// ROUTE: GET 'api/tickets/user/:id/:top/:offset
+exports.paginate = function (req, res) {
+  Ticket.paginate(req.params.id, req.params.top, req.params.offset)
+  .then(function (tickets) {
+    res.status(200).json(tickets);
+  })
+  .catch(function (err) {
+    utils.handleError(res, err);
+  })
+}
+
+/**
+ * ROUTE: GET '/api/tickets/user/:id/status'
+ */
+exports.statusTickets = function (req, res) {
+  
+  Ticket.statusTickets(req.params.id)
+  .then(function (tickets) {
+    res.status(200).json(tickets);
+  })
+  .catch(function (err) {
+    utils.handleError(res, err);
+  })
+  
+}

@@ -10,7 +10,7 @@ angular.module('ticketyApp')
     title: 'Dashboard'
   });
 }])
-.controller('DashboardCtrl', ['$scope', '$timeout', 'Auth', 'Ticket', function ($scope, $timeout, Auth, Ticket) {
+.controller('DashboardCtrl', ['$scope', '$timeout', '$q', 'Auth', 'Ticket', function ($scope, $timeout, $q, Auth, Ticket) {
   
   $scope.user;
   
@@ -20,9 +20,15 @@ angular.module('ticketyApp')
   function getTickets(userId, loading) {
     $scope.isLoading = _.isUndefined(loading) ? true : loading;
     
-    Ticket.getByUserId(userId)
-    .then(function (tickets) {
-      $scope.tickets = tickets;
+    
+    $q.all([
+      Ticket.getByUserId(userId),
+      Ticket.getStatusTickets(userId)
+    ])
+    .then(function (res) {
+      $scope.tickets = res[0];
+      $scope.statusTickets = res[1];
+      
       $scope.isLoading = false;
     })
     ['catch'](function (err) {
@@ -61,16 +67,10 @@ angular.module('ticketyApp')
     Ticket.getFresh(Auth.getCurrentUser().userId)
     .then(function (tickets) {
       
+      // Nothing new here
       if (!tickets.length) { return; }
       
-      $scope.tickets = _.map($scope.tickets, function (ticket) {
-        var _t;
-        _t = _.find(tickets, function (t) { return t.ticketId == ticket.ticketId; });
-        
-        return (_t)
-           ? _t
-           : ticket;
-      });
+      $scope.tickets = Ticket.merge($scope.tickets, tickets);
     })
     ['catch'](function (err) {
       console.log(err);

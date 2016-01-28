@@ -11,7 +11,12 @@ module.exports = {
     user: userConfig.user || 'sa',
     password: userConfig.password || 'pass',
     database: userConfig.database || 'tickety',
-    options: _.assign({}, { encrypt: true }, userConfig.options)
+    options: _.assign({}, { encrypt: true }, userConfig.options),
+    pool: _.assign({
+      max: 10,
+      min: 4,
+      idleTimeoutMillis: 3000
+    }, userConfig.pool)
   },
   nps: {
     sendSms: _.isBoolean(userConfig.nps.sendSms) ? userConfig.nps.sendSms : false,

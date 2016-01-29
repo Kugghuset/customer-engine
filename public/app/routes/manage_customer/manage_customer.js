@@ -14,19 +14,29 @@ angular.module('ticketyApp')
   
   $scope.customersLoading = false;
   
+  $scope.filteredCustomers = 0;
+  
+  $scope.state = {
+    currentPage: 1,
+    customerCount: 0
+  };
+  
   /**
    * Gets all local customers from the DB.
    * 
    * @param {Boolean} showLoading - defaults to true
    */
-  function getLocalCustomers(showLoading) {
+  function getLocalCustomers(showLoading, pageNum) {
+    
+    pageNum = _.isUndefined(pageNum) ? 1 : pageNum;
     
     $scope.customersLoading = _.isUndefined(showLoading) ? true : showLoading;
     
-    Customer.getLocal()
-    .then(function (customers) {
+    Customer.getLocal(20, pageNum)
+    .then(function (data) {
       $scope.customersLoading = false;
-      $scope.customers = customers;
+      $scope.customers = data.customers;
+      $scope.state.customerCount = data.customerCount;
       $scope.filteredCustomers = _.map($scope.customers);
     })
     ['catch'](function (err) {
@@ -99,6 +109,13 @@ angular.module('ticketyApp')
   $scope.showCustomer = function (customer) {
     return customer && !customer.hide;
   }
+  
+  $scope.$watch('state.currentPage', function (currentPage, prevPage) {
+    // return early if they are the same
+    if (currentPage === prevPage) { return; }
+    
+    getLocalCustomers(undefined, currentPage);
+  });
   
   getLocalCustomers();
   

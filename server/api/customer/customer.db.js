@@ -100,12 +100,29 @@ exports.create = function (_customer) {
   });
 }
 
-exports.getLocal = function () {
+exports.getLocal = function (top, page) {
+  
+  var query = sql.fromFile('./sql/customer.getLocal.sql');
+  
+    // Ensure it's not below 1
+    if (page < 1) { page = 1; }
+    
+    var offset = (page - 1) * top;
+    
   return new Promise(function (resolve, reject) {
     sql.execute({
-      query: sql.fromFile('./sql/customer.getLocal.sql')
+      query: query.replace(util.literalRegExp('{ offset }', 'gi'),
+        !_.isUndefined(top)
+          ?  ['OFFSET', (offset || 0), 'ROWS', 'FETCH NEXT', top, 'ROWS ONLY'].join(' ')
+          : ''),
+          multiple: true
     })
-    .then(resolve)
+    .then(function (data) {
+      resolve({
+        customers: data[0],
+        customerCount: data[1][0].customerCount
+      })
+    })
     .catch(reject);
   });
 }

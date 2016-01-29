@@ -5,13 +5,17 @@
 
 .logo {
   height: 116px;
+  @include breakpoint(break-m) {
+    height: auto;
+    max-width: 100%;
+  }
 }
 
 .fixed-left {
   height: calc(100vh - 136px);
   // margin-top: 20px;
   margin-left: 20px;
-  position: fixed;
+  position: absolute;
   left: 0;
   overflow-y: auto;
   width: 450px;
@@ -31,7 +35,7 @@
   top: 0;
   padding-top: 105px;
   height: 100vh;
-  position: fixed;
+  position: absolute;
   right: 20px;
   overflow-y: auto;
   width: calc(100% - 470px);

@@ -205,7 +205,7 @@ angular.module('ticketyApp')
         if (_.isString(item)) { return item; } // Early
         
         return _.chain(item)
-          .filter(function (v, key) { return (key != itemName + 'Id') || !!~_.indexOf(options.skip, key); })
+          .filter(function (v, key) { return _.isBoolean(v) ? false : (key != itemName + 'Id') || !!~_.indexOf(options.skip, key); })
           .map(function (value) { return value; })
           .filter() // Remove empty posts
           .value()

@@ -72,7 +72,7 @@ exports.findById = function (req, res) {
  * ROUTE: GET '/api/tickets/customer/:id'
  */
 exports.findByCustomerId = function (req, res) {
-  Ticket.findByCustomerId(req.params.id)
+  Ticket.findByCustomerId(req.params.id, req.params.top, req.params.page)
   .then(function (tickets) {
     res.status(200).json(tickets);
   })
@@ -115,4 +115,30 @@ exports.remove = function (req, res) {
   .catch(function (err) {
     utils.handleError(res, err);
   })
+}
+
+// ROUTE: GET 'api/tickets/user/:id/:top/:page
+exports.paginate = function (req, res) {
+  Ticket.paginate(req.params.id, req.params.top, req.params.page)
+  .then(function (tickets) {
+    res.status(200).json(tickets);
+  })
+  .catch(function (err) {
+    utils.handleError(res, err);
+  })
+}
+
+/**
+ * ROUTE: GET '/api/tickets/user/:id/status'
+ */
+exports.statusTickets = function (req, res) {
+  
+  Ticket.statusTickets(req.params.id)
+  .then(function (tickets) {
+    res.status(200).json(tickets);
+  })
+  .catch(function (err) {
+    utils.handleError(res, err);
+  })
+  
 }

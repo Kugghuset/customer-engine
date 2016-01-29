@@ -5,13 +5,17 @@
 
 .logo {
   height: 116px;
+  @include breakpoint(break-m) {
+    height: auto;
+    max-width: 100%;
+  }
 }
 
 .fixed-left {
   height: calc(100vh - 136px);
   // margin-top: 20px;
   margin-left: 20px;
-  position: fixed;
+  position: absolute;
   left: 0;
   overflow-y: auto;
   width: 450px;
@@ -31,18 +35,25 @@
   top: 0;
   padding-top: 105px;
   height: 100vh;
-  position: fixed;
+  position: absolute;
   right: 20px;
   overflow-y: auto;
-  width: calc(100% - 470px);
+  width: calc(100% - 420px);
+  padding-left: 90px;
   &.create {
+    width: calc(100% - 450px);
+  }
+  &.paginated.create {
     width: calc(100% - 520px);
+  }
+  &.paginated {
+    width: calc(100% - 470px);
   }
 }
  
 @include breakpoint(break-m) {
   .fixed-left, .fixed-right {
-    &, &.create, &.customer-create {
+    &, &.create, &.customer-create, &.paginated, &.paginated.create {
       position: static;
       height: auto;
       width: 100%;

@@ -141,7 +141,6 @@ angular.module('ticketyApp')
   $scope.onSelected = function ($item, $model, $label) {
     // When an existing customer is found, copy it to $scope.customer
     $scope.customer = angular.copy($item);
-    console.log($scope.customer);
     
     existingCustomer = $item;
   }

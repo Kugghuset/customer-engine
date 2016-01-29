@@ -73,7 +73,7 @@ exports.merge = function (req, res) {
  */
 exports.getLocal = function (req, res) {
   
-  Customer.getLocal()
+  Customer.getLocal(req.params.top, req.params.page)
   .then(function (customers) {
     res.status(200).json(customers);
   })

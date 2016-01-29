@@ -10,24 +10,42 @@ angular.module('ticketyApp')
     title: 'Dashboard'
   });
 }])
-.controller('DashboardCtrl', ['$scope', '$timeout', 'Auth', 'Ticket', function ($scope, $timeout, Auth, Ticket) {
+.controller('DashboardCtrl', ['$scope', '$timeout', '$q', 'Auth', 'Ticket', function ($scope, $timeout, $q, Auth, Ticket) {
   
   $scope.user;
   
   $scope.tickets = [];
-  $scope.isLoading = false;
+  // initial state is loading
+  $scope.isLoading = true;
+  $scope.ticketsLoading = false;
   
-  function getTickets(userId, loading) {
+  $scope.state = {
+    currentPage: 1
+  };
+  
+  function getTickets(userId, loading, pageNum) {
     $scope.isLoading = _.isUndefined(loading) ? true : loading;
     
-    Ticket.getByUserId(userId)
-    .then(function (tickets) {
-      $scope.tickets = tickets;
+    $scope.ticketsLoading = true;
+    
+    pageNum = _.isUndefined(pageNum) ? 1 : pageNum;
+    
+    $q.all([
+      Ticket.getByUserId(userId, 20, pageNum),
+      Ticket.getStatusTickets(userId)
+    ])
+    .then(function (res) {
+      $scope.tickets = res[0];
+      $scope.statusTickets = res[1];
+      
       $scope.isLoading = false;
+      
+      $scope.ticketsLoading = false;
     })
     ['catch'](function (err) {
       // Oh no!
       $scope.isLoading = false;
+      $scope.ticketsLoading = false;
     })
   }
   
@@ -42,14 +60,14 @@ angular.module('ticketyApp')
     }
   });
   
-  function setup(setLoading) {
+  function setup(setLoading, pageNum) {
     
     setLoading = _.isUndefined(setLoading) ? true : setLoading;
     
     $scope.user = Auth.getCurrentUser();
     
     if ($scope.user && $scope.user.userId) {
-      getTickets($scope.user.userId, setLoading);
+      getTickets($scope.user.userId, setLoading, pageNum);
     }
   }
   
@@ -61,16 +79,10 @@ angular.module('ticketyApp')
     Ticket.getFresh(Auth.getCurrentUser().userId)
     .then(function (tickets) {
       
+      // Nothing new here
       if (!tickets.length) { return; }
       
-      $scope.tickets = _.map($scope.tickets, function (ticket) {
-        var _t;
-        _t = _.find(tickets, function (t) { return t.ticketId == ticket.ticketId; });
-        
-        return (_t)
-           ? _t
-           : ticket;
-      });
+      $scope.tickets = Ticket.merge($scope.tickets, tickets);
     })
     ['catch'](function (err) {
       console.log(err);
@@ -86,6 +98,8 @@ angular.module('ticketyApp')
    * @return {Boolean}
    */
   $scope.showTicket = function (ticket, tickFilter) {
+    
+    if ($scope.isLoading || $scope.ticketsLoading) { return false; }
     
     // Obviously, tickets tagged with *hide* should not be shown.
     if (ticket.hide) { return false; }
@@ -117,6 +131,16 @@ angular.module('ticketyApp')
   $timeout(function () {
     getUpdates();
   }, 4000);
+  
+  $scope.$watch('state.currentPage', function (currentPage, prevPage) {
+    // return early if they are the same
+    if (currentPage === prevPage) { return; }
+    
+    // No user yet
+    if (!Auth.getCurrentUser()) { return; }
+    
+    getTickets(Auth.getCurrentUser().userId, false, currentPage);
+  });
   
 }]);
 

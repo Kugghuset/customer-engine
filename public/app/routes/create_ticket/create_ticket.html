@@ -9,16 +9,18 @@
   </a>
   
   <aside class="pane vertical-fill fixed-left create">
-    <ce-ticket-create user="auth.getCurrentUser()" ticket="ticket" related-tickets="relatedTickets" loading-tickets="loadingTickets" customer-id="customerId" ticket-id="currentTicketId"></ce-ticket-create>
+    <ce-ticket-create user="auth.getCurrentUser()" state="state" ticket="ticket" related-tickets="relatedTickets" loading-tickets="loadingTickets" customer-id="customerId" ticket-id="currentTicketId"></ce-ticket-create>
   </aside>
 
-  <ce-card-area child-class="vertical-fill fixed-right create">
+  <ce-card-area child-class="vertical-fill fixed-right create" child-ng-class="{'paginated': relatedTickets.length > 20}">
     
-    <ce-loading is-loading="loadingTickets"></ce-loading>
+    <ce-paginator state="state" ticket-count="relatedTickets.length"></ce-paginator>
     
     <ce-card-area-header title="Related tickets" collection="relatedTickets" ></ce-card-area-header>
     
     <ce-ticket-card class="col-card" ticket="_ticket" ng-show="ticket.ticketId != _ticket.ticketId && !_ticket.hide" is-readonly="true" ng-repeat="_ticket in relatedTickets | alphaSort:['ticketDate','ticketId']:true"></ce-ticket-card>
+    
+    <ce-loading is-loading="loadingTickets"></ce-loading>
     
   </ce-card-area>
 </section>

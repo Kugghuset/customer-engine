@@ -10,19 +10,16 @@ angular.module('ticketyApp')
     title: 'Ticket'
   });
 }])
-.controller('CreateTicketCtrl', ['$scope', '$stateParams', '$location', 'Auth', 'Ticket', function ($scope, $stateParams, $location, Auth, Ticket) {
+.controller('CreateTicketCtrl', ['$scope', '$timeout', '$stateParams', '$location', 'Auth', 'Ticket', function ($scope, $timeout, $stateParams, $location, Auth, Ticket) {
   
   $scope.currentTicketId = $stateParams.ticketId;
   
   $scope.auth = Auth;
   $scope.user = Auth.getCurrentUser();
   
-  // $scope.noTickets = function (ticketId, related) {
-  //   return !_.some(related, function (t) {
-  //     if (!t || t.ticketId === ticketId || t.hide) { return true; }
-  //     return false;
-  //   })
-  // }
+  $scope.state = {
+    currentPage: 1
+  };
   
   /**
    * Watches for changes in the user and sets the value of the scoped user.

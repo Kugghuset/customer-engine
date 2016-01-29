@@ -100,9 +100,18 @@ angular.module('ticketyApp')
       });
     },
     
-    getByCustomerId: function (customerId) {
+    getByCustomerId: function (customerId, top, page) {
       return $q(function (resolve, reject) {
-        $http.get('/api/tickets/customer/' + customerId)
+        
+        $http.get( _.isUndefined(top)
+          ? '/api/tickets/customer/:id'
+            .replace(':id', customerId)
+            
+          : '/api/tickets/customer/:id/:top/:page'
+            .replace(':id', customerId)
+            .replace(':top', top)
+            .replace(':page', page)
+          )
         .success(resolve)
         .error(reject);
       });
@@ -161,11 +170,28 @@ angular.module('ticketyApp')
       });
     },
     
-    getByUserId: function (userId) {
+    /**
+     * @param {String} userId
+     * @param {Number} top - defaults to 0, length number of items to get
+     * @param {Number} page - defaults to 0, the relative page num to the number of items to get
+     */
+    getByUserId: function (userId, top, page) {
       return $q(function (resolve, reject) {
-        $http.get('/api/tickets/user/' + userId)
+        
+        if (!top) {
+          // it doesn't matter, as the query will contain all tickets
+          top = 0;
+          page = 0;
+        }
+        
+        $http.get(
+          '/api/tickets/user/:id/:top/:page'
+          .replace(':id', userId)
+          .replace(':top', top)
+          .replace(':page', page)
+        )
         .success(resolve)
-        ['catch'](reject);
+        .error(reject);
       });
     },
     
@@ -203,6 +229,48 @@ angular.module('ticketyApp')
     
     removeAllLocal: function () {
       $localForage.clear();
+    },
+    
+    /**
+     * @param {String} userId
+     * @return {Promise} -> {Object}
+     */
+    getStatusTickets: function (userId) {
+      return $q(function (resolve, reject) {
+        $http.get('/api/tickets/user/:id/status'.replace(':id', userId))
+        .success(resolve)
+        .error(reject);
+      });
+    },
+    
+    /**
+     * @param {Array} existing
+     * @param {Array} tickets
+     * @return {Array}
+     */
+    merge: function (existing, tickets) {
+      
+      // Ensure existance
+      if (!existing) { existing = []; }
+      if (!tickets) { tickets = []; }
+      
+      existing = _.map(existing, function (ticket) {
+        var _t;
+          _t = _.find(tickets, function (t) { return t.ticketId == ticket.ticketId; });
+          
+          return (_t)
+            ? _t
+            : ticket;
+      });
+      
+      // Get any new tickets
+      var newTickets = _.filter(tickets, function (ticket) {
+        return !_.find(existing, function (t) { return t.ticketId === ticket.ticketId; });
+      });
+      
+      existing = existing.concat(newTickets);
+      
+      return existing;
     }
     
   }

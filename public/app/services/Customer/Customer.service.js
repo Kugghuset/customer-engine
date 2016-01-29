@@ -44,11 +44,19 @@ angular.module('ticketyApp')
     
     /**
      * Gets all customers with the flag isLocal == 1
+     * @param {Number} top - defaults to 0, length number of items to get
+     * @param {Number} page - defaults to 0, the relative page num to the number of items to get
      * @return {Promise} -> {Array}
      */
-    getLocal: function () {
+    getLocal: function (top, page) {
       return $q(function (resolve, reject) {
-        $http.get('api/customers/local')
+        $http.get(
+          _.isUndefined(top)
+          ? 'api/customers/local'
+          : 'api/customers/local/:top/:page'
+            .replace(':top', top)
+            .replace(':page', page)
+        )
         .success(resolve)
         .error(reject);
       });

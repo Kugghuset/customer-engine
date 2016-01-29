@@ -1,0 +1,81 @@
+.paginator {
+  position: fixed;
+  padding: 20px 0;
+  width: 70px;
+  height: calc(100vh - 136px);
+  bottom: 20px;
+  left: 480px;
+  background-color: $purple;
+  font-family: BebasNeue, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: $font-size-l;
+  overflow: auto;
+  
+  h2 {
+    text-align: center;
+  }
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    
+    li {
+      padding: 10px;
+      width: 100%;
+      text-align: center;
+      color: $white;
+      @include user-select(none);
+      &.active {
+        background: $purple-dark;
+        &:hover {
+          cursor: default;
+        }
+      }
+      &:hover:not(.active) {
+        background-color: lighten($purple, 20%);
+        cursor: pointer;
+      }
+    }
+  }
+  
+  @include breakpoint(break-m) {
+    position: relative;
+    top: 0;
+    left: 0;
+    min-width: calc(100% + 40px);
+    width: auto;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    height: auto;
+    margin: 0 -20px;
+    padding: 0;
+    margin-bottom: 10px;
+    
+    h2 {
+      width: 70px;
+      display: inline-block;
+    }
+    
+    ul {
+      display: inline-block;
+      li {
+        display: inline-block;
+        width: 70px;
+      }
+    }
+  }
+  
+}
+
+.create {
+  .paginator {
+    left: 530px;
+  }
+}
+@include breakpoint(break-m) {
+  .create {
+    .paginator {
+      left: 0;
+    }
+  }
+}

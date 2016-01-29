@@ -1,0 +1,7 @@
+<nav class="paginator" ng-show="pages.length > 1">
+  <h2>Page</h2>
+  <ul>
+    <li ng-repeat="pageNum in pages" ng-class="{'active': (pageNum == state.currentPage)}" ng-click="setPage(pageNum)" ng-bind="pageNum">
+    </li>
+  </ul>
+</nav>

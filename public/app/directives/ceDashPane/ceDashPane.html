@@ -26,8 +26,16 @@
   
   <h2>My overview</h2>
   
-  <param>
+  <p>
+    Below is a summary of all of your tickets. The numbers in brackets are local to the current page.
+  </p>
+  
+  <p>
     To show tickets of only of a specific status, click the corresponding row below. To show all again, give it another click.
+  </p>
+  
+  <p>
+    <em>NOTE: All filters only work on the current page</em>
   </p>
   
   <div class="relative">
@@ -37,23 +45,23 @@
       <tbody>
         <tr ng-click="setFilter('Open')">
           <td class="left" ng-class="{'purple': filter == 'Open' }">Open</td>
-          <td class="center purple">{{ aggregated.open || 0 }}</td>
+          <td class="center purple">{{ getStatus('open') }}</td>
         </tr>
         <tr ng-click="setFilter('Closed')">
           <td class="left" ng-class="{'green': filter == 'Closed' }">Closed, not transferred</td>
-          <td class="center green">{{ aggregated.closed || 0 }}</td>
+          <td class="center green">{{ getStatus('closed') }}</td>
         </tr>
         <tr ng-click="setFilter('ClosedTransferred')">
           <td class="left" ng-class="{'black-ish': filter == 'ClosedTransferred' }">Closed, transferred</td>
-          <td class="center black-ish">{{ aggregated.closedTransferred || 0 }}</td>
+          <td class="center black-ish">{{ getStatus('closedTransferred') }}</td>
         </tr>
         <tr ng-click="setFilter('Pending')">
           <td class="left" ng-class="{'beige': filter == 'Pending' }">Pending</td>
-          <td class="center beige">{{ aggregated.pending || 0 }}</td>
+          <td class="center beige">{{ getStatus('pending') }}</td>
         </tr>
         <tr>
           <td class="left">Total</td>
-          <td class="center">{{ aggregated.total || 0 }}</td>
+          <td class="center">{{ getStatus('total') }}</td>
         </tr>
       </tbody>
       

@@ -9,6 +9,7 @@
 @import 'date_picker';
 @import 'welcome';
 @import 'loading';
+@import 'paginator';
 
 @import '../app/app';
 
@@ -184,6 +185,11 @@ label {
   display: block;
 }
 
+.offset-bottom {
+  margin-bottom: 8px;
+  display: block;
+}
+
 .float-container {
   overflow: auto;
 }
@@ -211,6 +217,9 @@ label {
 }
 .purple {
   background-color: $purple;
+}
+.purple-dark {
+  background-color: $purple-dark;
 }
 .beige {
   background-color: $beige;

@@ -83,4 +83,4 @@ LEFT JOIN [dbo].[Person] AS [Q]
 ON [A].[personId] = [Q].[personId]
 
 WHERE [A].{ where_clause } { other }
-ORDER BY [A].[ticketDate] DESC
+ORDER BY [A].[ticketDate] DESC, [A].[ticketId] DESC

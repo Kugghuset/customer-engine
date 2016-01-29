@@ -55,6 +55,13 @@ function ensureHasProps(ticket, user) {
 function findBy(paramName, other, top, offset) {
   if (!other) { other = ''; }
   
+  console.log('\n\n');
+  
+  console.log(top);
+  console.log(offset);
+  
+  console.log('\n\n');
+  
   var query = sql.fromFile('./sql/ticket.findBy.sql')
   .replace(util.literalRegExp('{ where_clause }', 'gi'), '[{paramName}] = @{paramName}')
   .replace(util.literalRegExp('{paramName}', 'gi'), paramName)
@@ -375,15 +382,20 @@ exports.remove = function (ticketId) {
 
 /**
  * Gets all tickets belonging to the user with *userId*
- * from the offset to the top
+ * from the page to the top
  * 
  * @param {String} userId
  * @param {Number} top
- * @param {Number} offset
+ * @param {Number} page
  * @return {Promise} -> {Array} (Ticket)
  */
-exports.paginate = function (userId, top, offset) {
+exports.paginate = function (userId, top, page) {
   return new Promise(function (resolve, reject) {
+    
+    // Ensure it's not below 1
+    if (!page || page < 1) { page = 1; }
+    
+    var offset = (page - 1) * top;
     
     sql.execute({
       query: findBy('userId', undefined, top, offset),

@@ -2,12 +2,13 @@
 'use strict'
 
 angular.module('ticketyApp')
-.directive('cePaginator', ['Utils', function (Utils) {
+.directive('cePaginator', ['$timeout', 'Utils', function ($timeout, Utils) {
   return {
     templateUrl: 'directives/cePaginator/cePaginator.html',
     restrict : 'EA',
     scope: {
-      ticketCount: '='
+      ticketCount: '=',
+      state: '='
     },
     link: function (scope, element, attrs) {
       
@@ -18,13 +19,28 @@ angular.module('ticketyApp')
         
         var i = 0;
         
-        while(i++ < count) {
+        var _count = (count/20) % 1 === 0
+          ? count/20
+          : Math.floor(count/20) + 1;
+        
+        while(i++ < _count) {
           scope.pages.push(i);
         }
         
       }
       
-      setPages(50);
+      scope.setPage = function (pageNum) {
+        
+        if (!scope.state) { scope.state = {}; }
+        
+        scope.state.currentPage = pageNum;
+      }
+      
+      scope.$watch('ticketCount', function (ticketCount, oldCount) {
+        setPages(ticketCount);
+      })
+      
+      setPages(scope.ticketCount);
       
     }
   }

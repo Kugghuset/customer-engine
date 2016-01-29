@@ -12,12 +12,13 @@
   
   <ce-card-area child-class="vertical-fill fixed-right">
     
-    <ce-loading is-loading="isLoading"></ce-loading>
-    
     <ce-card-area-header title="My tickets" collection="tickets" ></ce-card-area-header>
     
-    <ce-paginator></ce-paginator>
+    <ce-paginator state="state" ticket-count="statusTickets.length"></ce-paginator>
     
     <ce-ticket-card class="col-card" ticket="ticket" ng-show="showTicket(ticket, tickFilter)" ng-repeat="ticket in tickets | alphaSort:['ticketDate','ticketId']:true"></ce-ticket-card>
+    
+    <ce-loading is-loading="isLoading || ticketsLoading"></ce-loading>
+    
   </ce-card-area>
 </section>

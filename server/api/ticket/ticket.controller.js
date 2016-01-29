@@ -117,9 +117,9 @@ exports.remove = function (req, res) {
   })
 }
 
-// ROUTE: GET 'api/tickets/user/:id/:top/:offset
+// ROUTE: GET 'api/tickets/user/:id/:top/:page
 exports.paginate = function (req, res) {
-  Ticket.paginate(req.params.id, req.params.top, req.params.offset)
+  Ticket.paginate(req.params.id, req.params.top, req.params.page)
   .then(function (tickets) {
     res.status(200).json(tickets);
   })

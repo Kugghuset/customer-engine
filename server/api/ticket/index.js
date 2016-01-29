@@ -15,7 +15,7 @@ router.delete('/:id', auth.isAuthenticated(), controller.remove);
 router.get('/customer/:id', auth.isAuthenticated(), controller.findByCustomerId);
 router.get('/user/:id', auth.isAuthenticated(), controller.findByUserId);
 router.get('/user/:id/fresh', auth.isAuthenticated(), controller.getFreshByUserId);
-router.get('/user/:id/:top/:offset', auth.isAuthenticated(), controller.paginate);
+router.get('/user/:id/:top/:page', auth.isAuthenticated(), controller.paginate);
 router.get('/user/:id/status', auth.isAuthenticated(), controller.statusTickets);
 
 module.exports = router;

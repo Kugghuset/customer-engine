@@ -161,11 +161,27 @@ angular.module('ticketyApp')
       });
     },
     
-    getByUserId: function (userId) {
+    /**
+     * @param {String} userId
+     * @param {Number} top - defaults to 0, length number of items to get
+     * @param {Number} page - defaults to 0, the relative page num to the number of items to get
+     */
+    getByUserId: function (userId, top, page) {
       return $q(function (resolve, reject) {
-        $http.get('/api/tickets/user/:id/10/10'.replace(':id', userId))
+        
+        if (!top) {
+          // it doesn't matter, as the query will contain all tickets
+          page = 0;
+        }
+        
+        $http.get(
+          '/api/tickets/user/:id/:top/:page'
+          .replace(':id', userId)
+          .replace(':top', top)
+          .replace(':page', page)
+        )
         .success(resolve)
-        ['catch'](reject);
+        .error(reject);
       });
     },
     

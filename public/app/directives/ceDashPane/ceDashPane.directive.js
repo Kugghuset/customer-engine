@@ -39,7 +39,7 @@ angular.module('ticketyApp')
             .map(function (v, k) { return [ _.camelCase(k), v.length ] })
             .zipObject()
             .value()
-        , { total: tickets.length });
+        , { total: scope.statusTickets.length });
       }
       
       scope.setFilter = function (filter) {

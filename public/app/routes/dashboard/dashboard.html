@@ -12,9 +12,9 @@
   
   <ce-card-area child-class="vertical-fill fixed-right">
     
-    <ce-card-area-header title="My tickets" collection="tickets" ></ce-card-area-header>
-    
     <ce-paginator state="state" ticket-count="statusTickets.length"></ce-paginator>
+    
+    <ce-card-area-header title="My tickets" collection="tickets" ></ce-card-area-header>
     
     <ce-ticket-card class="col-card" ticket="ticket" ng-show="showTicket(ticket, tickFilter)" ng-repeat="ticket in tickets | alphaSort:['ticketDate','ticketId']:true"></ce-ticket-card>
     

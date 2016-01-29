@@ -8,9 +8,14 @@ angular.module('ticketyApp')
     restrict : 'EA',
     transclude: true,
     scope:  {
-      childClass: '@'
+      childClass: '@',
+      childNgClass: '='
     },
     link: function (scope, element, attrs) {
+      
+      scope.$watch('childNgClass', function (a) {
+        console.log(a);
+      })
       
     }
   }

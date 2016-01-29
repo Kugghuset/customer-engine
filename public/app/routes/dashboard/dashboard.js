@@ -142,10 +142,6 @@ angular.module('ticketyApp')
     getTickets(Auth.getCurrentUser().userId, false, currentPage);
   });
   
-  // $scope.$watch('ticketsLoading', function (loading) {
-  //   if (!loading) { $scope.ticketsLoading = true; }
-  // }, true)
-  
 }]);
 
 })();

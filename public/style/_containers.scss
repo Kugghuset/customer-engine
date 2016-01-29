@@ -38,16 +38,19 @@
   position: absolute;
   right: 20px;
   overflow-y: auto;
-  width: calc(100% - 470px);
+  width: calc(100% - 420px);
   padding-left: 90px;
   &.create {
-    width: calc(100% - 520px);
+    width: calc(100% - 450px);
+  }
+  &.paginated {
+    width: calc(100% - 470px);
   }
 }
  
 @include breakpoint(break-m) {
   .fixed-left, .fixed-right {
-    &, &.create, &.customer-create {
+    &, &.create, &.customer-create, &.paginated {
       position: static;
       height: auto;
       width: 100%;

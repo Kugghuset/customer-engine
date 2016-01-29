@@ -10,7 +10,7 @@
     
   </aside>
   
-  <ce-card-area child-class="vertical-fill fixed-right" child-ng-class="{'paginated': !!statusTickets.length}">
+  <ce-card-area child-class="vertical-fill fixed-right" child-ng-class="{'paginated': statusTickets.length > 20}">
     
     <ce-paginator state="state" ticket-count="statusTickets.length"></ce-paginator>
     

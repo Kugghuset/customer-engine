@@ -28,7 +28,7 @@
     </section>
   </aside>
   
-  <ce-card-area child-class="vertical-fill fixed-right create" child-ng-class="{'paginated': !!state.customerCount}">
+  <ce-card-area child-class="vertical-fill fixed-right create" child-ng-class="{'paginated': state.customerCount > 20}">
     
     <ce-paginator state="state" ticket-count="state.customerCount"></ce-paginator>
     

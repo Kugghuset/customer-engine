@@ -12,7 +12,7 @@
     <ce-ticket-create user="auth.getCurrentUser()" state="state" ticket="ticket" related-tickets="relatedTickets" loading-tickets="loadingTickets" customer-id="customerId" ticket-id="currentTicketId"></ce-ticket-create>
   </aside>
 
-  <ce-card-area child-class="vertical-fill fixed-right create" child-ng-class="{'paginated': !!relatedTickets.length}">
+  <ce-card-area child-class="vertical-fill fixed-right create" child-ng-class="{'paginated': relatedTickets.length > 20}">
     
     <ce-paginator state="state" ticket-count="relatedTickets.length"></ce-paginator>
     

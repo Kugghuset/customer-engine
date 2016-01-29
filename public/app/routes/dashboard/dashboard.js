@@ -21,7 +21,7 @@ angular.module('ticketyApp')
   
   $scope.state = {
     currentPage: 1
-  }
+  };
   
   function getTickets(userId, loading, pageNum) {
     $scope.isLoading = _.isUndefined(loading) ? true : loading;

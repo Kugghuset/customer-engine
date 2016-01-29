@@ -12,7 +12,8 @@ angular.module('ticketyApp')
       relatedTickets: '=',
       user: '=',
       ticketId: '=',
-      loadingTickets: '='
+      loadingTickets: '=',
+      state: '='
     },
     link: function (scope, element, attrs) {
       
@@ -388,9 +389,12 @@ angular.module('ticketyApp')
        * 
        * @param {String} customerId
        */
-      function getRelatedTickets(customerId) {
+      function getRelatedTickets(customerId, currentPage) {
         scope.loadingTickets = true;
-        Ticket.getByCustomerId(customerId)
+        
+        if (_.isUndefined(currentPage)) { currentPage = 1; }
+        
+        Ticket.getByCustomerId(customerId, 20, currentPage)
         .then(function (tickets) {
           scope.loadingTickets = false;
           scope.relatedTickets = tickets;
@@ -502,6 +506,15 @@ angular.module('ticketyApp')
         if (scope.ticket) { scope.ticket.user = user; }
       });
       
+      scope.$watch('state.currentPage', function (currentPage, prevPage) {
+        // Return if it's the same
+        if (currentPage === prevPage) { return; }
+        
+        if (!scope.ticket && !scope.ticket.customer) { return; }
+        
+        getRelatedTickets(scope.ticket.customer.customerId, currentPage);
+      });
+      
       getCategories();
       getDepartments();
       getProducts();
@@ -525,6 +538,7 @@ angular.module('ticketyApp')
       });
       
     }
+    
   };
 }]);
 

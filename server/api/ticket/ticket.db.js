@@ -55,20 +55,13 @@ function ensureHasProps(ticket, user) {
 function findBy(paramName, other, top, offset) {
   if (!other) { other = ''; }
   
-  console.log('\n\n');
-  
-  console.log(top);
-  console.log(offset);
-  
-  console.log('\n\n');
-  
   var query = sql.fromFile('./sql/ticket.findBy.sql')
   .replace(util.literalRegExp('{ where_clause }', 'gi'), '[{paramName}] = @{paramName}')
   .replace(util.literalRegExp('{paramName}', 'gi'), paramName)
   .replace(util.literalRegExp('{ other }', 'gi'), other);
   
   // Allows for pagination.
-  return !!top
+  return !_.isUndefined(top)
     ? query + ['\nOFFSET', (offset || 0), 'ROWS', 'FETCH NEXT', top, 'ROWS ONLY'].join(' ')
     : query;
 }
@@ -301,10 +294,16 @@ exports.findById = function (ticketId) {
   });
 }
 
-exports.findByCustomerId = function (customerId) {
+exports.findByCustomerId = function (customerId, top, page) {
   return new Promise(function (resolve, reject) {
+    
+    // Ensure it's not below 1
+    if (page < 1) { page = 1; }
+    
+    var offset = (page - 1) * top;
+    
     sql.execute({
-      query: findBy('customerId'),
+      query: findBy('customerId', undefined, top, offset),
       params: {
         customerId: {
           type: sql.BIGINT,
@@ -393,7 +392,7 @@ exports.paginate = function (userId, top, page) {
   return new Promise(function (resolve, reject) {
     
     // Ensure it's not below 1
-    if (!page || page < 1) { page = 1; }
+    if (page < 1) { page = 1; }
     
     var offset = (page - 1) * top;
     

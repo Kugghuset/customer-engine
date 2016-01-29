@@ -13,10 +13,6 @@ angular.module('ticketyApp')
     },
     link: function (scope, element, attrs) {
       
-      scope.$watch('childNgClass', function (a) {
-        console.log(a);
-      })
-      
     }
   }
 });

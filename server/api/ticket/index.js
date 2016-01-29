@@ -13,6 +13,7 @@ router.put('/status/', auth.isAuthenticated(), controller.updateStatus);
 router.get('/:id', auth.isAuthenticated(), controller.findById);
 router.delete('/:id', auth.isAuthenticated(), controller.remove);
 router.get('/customer/:id', auth.isAuthenticated(), controller.findByCustomerId);
+router.get('/customer/:id/:top/:page', auth.isAuthenticated(), controller.findByCustomerId);
 router.get('/user/:id', auth.isAuthenticated(), controller.findByUserId);
 router.get('/user/:id/fresh', auth.isAuthenticated(), controller.getFreshByUserId);
 router.get('/user/:id/:top/:page', auth.isAuthenticated(), controller.paginate);

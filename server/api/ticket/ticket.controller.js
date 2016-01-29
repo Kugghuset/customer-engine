@@ -72,7 +72,7 @@ exports.findById = function (req, res) {
  * ROUTE: GET '/api/tickets/customer/:id'
  */
 exports.findByCustomerId = function (req, res) {
-  Ticket.findByCustomerId(req.params.id)
+  Ticket.findByCustomerId(req.params.id, req.params.top, req.params.page)
   .then(function (tickets) {
     res.status(200).json(tickets);
   })

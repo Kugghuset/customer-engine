@@ -9,6 +9,7 @@
   font-family: BebasNeue, "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: $font-size-l;
   overflow: auto;
+  
   h2 {
     text-align: center;
   }
@@ -64,4 +65,17 @@
     }
   }
   
+}
+
+.create {
+  .paginator {
+    left: 530px;
+  }
+}
+@include breakpoint(break-m) {
+  .create {
+    .paginator {
+      left: 0;
+    }
+  }
 }

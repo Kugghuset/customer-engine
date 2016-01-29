@@ -43,6 +43,9 @@
   &.create {
     width: calc(100% - 450px);
   }
+  &.paginated.create {
+    width: calc(100% - 520px);
+  }
   &.paginated {
     width: calc(100% - 470px);
   }
@@ -50,7 +53,7 @@
  
 @include breakpoint(break-m) {
   .fixed-left, .fixed-right {
-    &, &.create, &.customer-create, &.paginated {
+    &, &.create, &.customer-create, &.paginated, &.paginated.create {
       position: static;
       height: auto;
       width: 100%;

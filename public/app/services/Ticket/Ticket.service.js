@@ -100,9 +100,18 @@ angular.module('ticketyApp')
       });
     },
     
-    getByCustomerId: function (customerId) {
+    getByCustomerId: function (customerId, top, page) {
       return $q(function (resolve, reject) {
-        $http.get('/api/tickets/customer/' + customerId)
+        
+        $http.get( _.isUndefined(top)
+          ? '/api/tickets/customer/:id'
+            .replace(':id', customerId)
+            
+          : '/api/tickets/customer/:id/:top/:page'
+            .replace(':id', customerId)
+            .replace(':top', top)
+            .replace(':page', page)
+          )
         .success(resolve)
         .error(reject);
       });
@@ -171,6 +180,7 @@ angular.module('ticketyApp')
         
         if (!top) {
           // it doesn't matter, as the query will contain all tickets
+          top = 0;
           page = 0;
         }
         

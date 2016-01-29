@@ -32,7 +32,7 @@
     
     <ce-paginator state="state" ticket-count="state.customerCount"></ce-paginator>
     
-    <ce-card-area-header title="Related customers" data-placeholder="Filter the customers" collection="customers"></ce-card-area-header>
+    <ce-card-area-header title="Related customers" data-placeholder="Filter customers on the current page" collection="customers"></ce-card-area-header>
     
     <ce-customer-card ng-click="editCustomer(customer)" on-delete="deleteCustomer" on-confirm="confirmDelete" ng-show="showCustomer(customer, custFilter)" class="col-card" customer="customer" ng-repeat="customer in customers | alphaSort:['orgName', 'orgNr', 'customerNumber']"></ce-customer-card>
     

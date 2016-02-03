@@ -144,7 +144,12 @@ angular.module('ticketyApp')
       user && user.name,
       _.some([
         user.name != $scope.original.name,
-        user.email && user.email != $scope.original.email
+        user.email && user.email != $scope.original.email,
+        _.some([
+          user.department && !$scope.original.department,
+          !user.department && $scope.original.department,
+          user.department && $scope.original.department && user.department.departmentName != $scope.original.department.departmentName
+        ])
       ])
     ]);
   }

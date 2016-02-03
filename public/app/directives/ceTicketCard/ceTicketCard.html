@@ -3,9 +3,9 @@
   <header>
     <h2>
       <a ng-hide="isReadonly" href="" ui-sref="main.create_ticket({ticketId: ticket.ticketId})">
-        {{ ticket.customer.orgName || 'Ticket ' + ticket.ticketId }}
+        {{ !!ticket.customer.orgName ? ticket.customer.orgName + ' (' + ticket.customer.customerNumber + ')' : 'Ticket ' + ticket.ticketId }}
       </a>
-      <span ng-show="isReadonly">{{ ticket.customer.orgName || 'Ticket ID: ' + ticket.ticketId }}</span>
+      <span ng-show="isReadonly">{{ !!ticket.customer.orgName ? ticket.customer.orgName + ' (' + ticket.customer.customerNumber + ')' : 'Ticket ' + ticket.ticketId }}</span>
     </h2>
     <ce-status-select on-status-changed="onStatusChanged" status="ticket.status"></ce-status-select>
   </header>

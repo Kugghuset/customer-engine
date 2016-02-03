@@ -42,6 +42,7 @@
   
     <span class="fill-by-label">
       <input type="text"
+        ce-text-append="ticket.customer.customerNumber"
         ng-model="ticket.customer.orgName"
         ng-class="{'padded-right': (loadingCustomers || noResults && ticket.customer), 'ng-invalid': !customerIsValid()}"
         placeholder="Search for customer"
@@ -74,14 +75,6 @@
     <span class="fill-by-label">
       <input type="text" ng-model="ticket.person.name" placeholder="Name">
     </span>
-      
-    <!--<span class="fill-by-label">
-      <input type="text" ng-class="{'padded-right': personNameLoading}" ng-model="ticket.person.name" placeholder="Name" uib-typeahead="person as person.name for person in getContacts(ticket.customer.customerId, $viewValue, 'name')"
-        typeahead-loading="personNameLoading" typeahead-no-results="noNameResults" typeahead-on-select="ticket.person = $item" class="pane-dropdown">
-      <i ng-show="personNameLoading" class="glyphicon glyphicon-refresh" title="Looking for people matching the phone number"></i>
-      <i ng-show="noNameResults && ticket.person.name" class="glyphicon glyphicon-exclamation-sign" title="No results found"></i>
-    </span>-->
-  
   </div>
   
   <div class="pane-row">
@@ -92,23 +85,12 @@
     <span class="fill-by-label">
       <!-- Is connected to country -->
       <input class="block" type="text" ng-model="ticket.person.tel" ng-intl-tel-input ce-intl-data country="ticket.country">
-      
-      <!--<input type="text" ng-class="{'padded-right': personTelLoading}" ng-intl-tel-input ng-model="ticket.person.tel" placeholder="Phone number" uib-typeahead="person as person.tel for person in getContacts(ticket.customer.customerId, $viewValue, 'tel')"
-        typeahead-loading="personTelLoading" typeahead-no-results="noTelResults" typeahead-on-select="ticket.person = $item" class="pane-dropdown block">
-      <i ng-show="personTelLoading" class="glyphicon glyphicon-refresh" title="Looking for people matching the phone number"></i>
-      <i ng-show="noTelResults && ticket.person.tel" class="glyphicon glyphicon-exclamation-sign" title="No results found"></i>-->
     </span>
   
     <label for="">Alt. phone</label>
     
     <span class="fill-by-label">
       <input class="block" type="text" ng-model="ticket.person.altTel" ng-intl-tel-input>
-    
-      <!--<input type="text" ng-class="{'padded-right': personAltTelLoading}" ng-intl-tel-input ng-model="ticket.person.altTel" placeholder="Alt. phone number" uib-typeahead="person as person.altTel for person in getContacts(ticket.customer.customerId, $viewValue, 'altTel')"
-        typeahead-loading="personAltTelLoading" typeahead-no-results="noAltTelResults" typeahead-on-select="ticket.person = $item" class="pane-dropdown block">
-      <i ng-show="personAltTelLoading" class="glyphicon glyphicon-refresh" title="Looking for people matching the alt. phone  number"></i>
-      <i ng-show="noAltTelResults && ticket.person.altTel" class="glyphicon glyphicon-exclamation-sign" title="No results found"></i>-->
-    
     </span>
   </div>
   
@@ -119,13 +101,6 @@
   
     <span class="fill-by-label">
       <input type="email" ng-model="ticket.person.email" placeholder="Email address">
-    </span>
-      
-    <!--<span class="fill-by-label">
-      <input type="text" ng-class="{'padded-right': personEmailLoading}" ng-model="ticket.person.email" placeholder="Email address" uib-typeahead="person as person.email for person in getContacts(ticket.customer.customerId, $viewValue, 'email')"
-        typeahead-loading="personEmailLoading" typeahead-no-results="noEmailResults" typeahead-on-select="ticket.person = $item" class="pane-dropdown">
-      <i ng-show="personEmailLoading" class="glyphicon glyphicon-refresh" title="Looking for people matching the phone number"></i>
-      <i ng-show="noEmailResults && ticket.person.email" class="glyphicon glyphicon-exclamation-sign" title="No results found"></i>-->
     </span>
   
   </div>
@@ -159,11 +134,6 @@
       <input type="text" ng-model="ticket.country" uib-typeahead="country as matched(country, country) for country in countries | filter:$viewValue | limitTo:12"
       placeholder="Type country name">
     </span>
-  
-    <div>
-  
-  
-    </div>
   
   </div>
   
@@ -254,7 +224,6 @@
   
   </div>
   
-  
   <div class="pane-row">
     <!-- Status -->
     
@@ -321,7 +290,6 @@
     <!--<button ng-click="goBack(ticket)" class="pane-button purple pull-right offset-right">Back to dashboard</button>-->
   </div>
   
-  <!--<div>&nbsp;</div>-->
   <br>
   
 </section>

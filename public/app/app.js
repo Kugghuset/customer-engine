@@ -47,7 +47,7 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, ngIntlTelInputProvi
     // Add authorization token to headers
     request: function (config) {
       config.headers = config.headers || {};
-
+      
       config.headers.Authorization = 'Bearer ' + $cookies.get('token') || '';
       return config;
     },

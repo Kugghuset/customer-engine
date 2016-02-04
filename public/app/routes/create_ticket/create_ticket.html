@@ -9,12 +9,12 @@
   </a>
   
   <aside class="pane vertical-fill fixed-left create">
-    <ce-ticket-create user="auth.getCurrentUser()" state="state" ticket="ticket" related-tickets="relatedTickets" loading-tickets="loadingTickets" customer-id="customerId" ticket-id="currentTicketId"></ce-ticket-create>
+    <ce-ticket-create user="auth.getCurrentUser()" state="state" ticket="ticket" related-tickets="relatedTickets" related-ticket-count="relatedTicketCount" loading-tickets="loadingTickets" customer-id="customerId" ticket-id="currentTicketId"></ce-ticket-create>
   </aside>
 
-  <ce-card-area child-class="vertical-fill fixed-right create" child-ng-class="{'paginated': relatedTickets.length > 20}">
+  <ce-card-area child-class="vertical-fill fixed-right create" child-ng-class="{'paginated': relatedTicketCount > 20}">
     
-    <ce-paginator state="state" ticket-count="relatedTickets.length"></ce-paginator>
+    <ce-paginator state="state" ticket-count="relatedTicketCount"></ce-paginator>
     
     <ce-card-area-header title="Related tickets" collection="relatedTickets" ></ce-card-area-header>
     

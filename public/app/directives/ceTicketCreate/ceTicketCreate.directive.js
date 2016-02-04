@@ -10,6 +10,7 @@ angular.module('ticketyApp')
     scope: {
       ticket: '=',
       relatedTickets: '=',
+      relatedTicketCount: '=',
       user: '=',
       ticketId: '=',
       loadingTickets: '=',
@@ -17,7 +18,6 @@ angular.module('ticketyApp')
     },
     link: function (scope, element, attrs) {
       
-      var saveOnDestroy = true;
       var hasUpdates = false;
       
       scope.loadingCurrent = false;
@@ -310,8 +310,9 @@ angular.module('ticketyApp')
        */
       scope.openCreateCustomerForNew = function () {
         $timeout(function () {
+          
           // Don't open the modal again.
-          if (scope.customerModalIsOpen) { return; }
+          if (scope.customerModalIsOpen || scope.$$destroyed) { return; }
           
           var customer = scope.ticket.customer || {};
           
@@ -359,7 +360,10 @@ angular.module('ticketyApp')
           delete current.customerNumber;
         }
         
-        return Customer.getFuzzy(val);
+        // If there's text in the query, don't bother with checking all
+        return /[a-ö]/gi.test(val)
+          ? Customer.getFuzzyBy(val, 'orgName')
+          : Customer.getFuzzy(val);
       }
       
       /**
@@ -395,9 +399,10 @@ angular.module('ticketyApp')
         if (_.isUndefined(currentPage)) { currentPage = 1; }
         
         Ticket.getByCustomerId(customerId, 20, currentPage)
-        .then(function (tickets) {
+        .then(function (data) {
           scope.loadingTickets = false;
-          scope.relatedTickets = tickets;
+          scope.relatedTickets = data[0];
+          scope.relatedTicketCount = data[1];
         })
         ['catch'](function (err) {
           scope.loadingTickets = false;
@@ -518,6 +523,33 @@ angular.module('ticketyApp')
       getCategories();
       getDepartments();
       getProducts();
+      
+      var lastLoading;
+      /**
+       * Sets scope.loadingCustomers to false after 5 seconds
+       * 
+       * @param {Date} time
+       */
+      function handleLoading(isLoading, time) {
+        
+        if (!isLoading) { return; }
+        
+        lastLoading = time;
+        
+        $timeout(function () {
+          if (scope.loadingCustomers && time === lastLoading) {
+            scope.loadingCustomers = false;
+          }
+        }, 5000);
+      }
+      
+      /**
+       * Sometimes it keeps "loading" after the user has choosen.
+       */
+      scope.$watch('loadingCustomers', function (loading, prevLoading) {
+        
+        handleLoading(loading, new Date());
+      })
       
       scope.$on('$destroy', function (event) {
         

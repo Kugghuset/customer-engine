@@ -52,7 +52,7 @@ function ensureHasProps(ticket, user) {
  * @param {Number} offset
  * @return {String}
  */
-function findBy(paramName, other, top, offset) {
+function findBy(paramName, other, top, offset, multiple) {
   if (!other) { other = ''; }
   
   var query = sql.fromFile('./sql/ticket.findBy.sql')
@@ -61,9 +61,15 @@ function findBy(paramName, other, top, offset) {
   .replace(util.literalRegExp('{ other }', 'gi'), other);
   
   // Allows for pagination.
-  return !_.isUndefined(top)
-    ? query + ['\nOFFSET', (offset || 0), 'ROWS', 'FETCH NEXT', top, 'ROWS ONLY'].join(' ')
-    : query;
+  return _.isUndefined(top)
+    ? query
+    : [
+        query,
+        ['OFFSET', (offset || 0), 'ROWS', 'FETCH NEXT', top, 'ROWS ONLY'].join(' '),
+        (!!multiple ? 'SELECT COUNT(*) FROM [dbo].[Ticket] WHERE { where_clause }' : '')
+          .replace(util.literalRegExp('{ where_clause }', 'gi'), '[{paramName}] = @{paramName}')
+          .replace(util.literalRegExp('{paramName}', 'gi'), paramName)
+      ].join('\n');
 }
 
 /**
@@ -303,16 +309,24 @@ exports.findByCustomerId = function (customerId, top, page) {
     var offset = (page - 1) * top;
     
     sql.execute({
-      query: findBy('customerId', undefined, top, offset),
+      query: findBy('customerId', undefined, top, offset, !!top),
       params: {
         customerId: {
           type: sql.BIGINT,
           val: customerId
         }
-      }
+      },
+      multiple: !!top
     })
-    .then(function (tickets) {
-      resolve(util.objectify(tickets));
+    .then(function (data) {
+      // count is on data[1][0]['']
+      resolve(
+        !!top
+          ? [util.objectify(data[0]), data[1][0]['']]
+          : util.objectify(data)
+      );
+      
+      resolve();
     })
     .catch(function (err) {
       reject(err);

@@ -18,7 +18,6 @@ angular.module('ticketyApp')
     },
     link: function (scope, element, attrs) {
       
-      var saveOnDestroy = true;
       var hasUpdates = false;
       
       scope.loadingCurrent = false;
@@ -311,8 +310,9 @@ angular.module('ticketyApp')
        */
       scope.openCreateCustomerForNew = function () {
         $timeout(function () {
+          
           // Don't open the modal again.
-          if (scope.customerModalIsOpen) { return; }
+          if (scope.customerModalIsOpen || scope.$$destroyed) { return; }
           
           var customer = scope.ticket.customer || {};
           

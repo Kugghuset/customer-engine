@@ -10,6 +10,7 @@ angular.module('ticketyApp')
     scope: {
       ticket: '=',
       relatedTickets: '=',
+      relatedTicketCount: '=',
       user: '=',
       ticketId: '=',
       loadingTickets: '=',
@@ -395,9 +396,10 @@ angular.module('ticketyApp')
         if (_.isUndefined(currentPage)) { currentPage = 1; }
         
         Ticket.getByCustomerId(customerId, 20, currentPage)
-        .then(function (tickets) {
+        .then(function (data) {
           scope.loadingTickets = false;
-          scope.relatedTickets = tickets;
+          scope.relatedTickets = data[0];
+          scope.relatedTicketCount = data[1];
         })
         ['catch'](function (err) {
           scope.loadingTickets = false;

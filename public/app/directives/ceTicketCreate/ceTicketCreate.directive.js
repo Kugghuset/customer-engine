@@ -360,7 +360,10 @@ angular.module('ticketyApp')
           delete current.customerNumber;
         }
         
-        return Customer.getFuzzy(val);
+        // If there's text in the query, don't bother with checking all
+        return /[a-ö]/gi.test(val)
+          ? Customer.getFuzzyBy(val, 'orgName')
+          : Customer.getFuzzy(val);
       }
       
       /**
@@ -520,6 +523,33 @@ angular.module('ticketyApp')
       getCategories();
       getDepartments();
       getProducts();
+      
+      var lastLoading;
+      /**
+       * Sets scope.loadingCustomers to false after 5 seconds
+       * 
+       * @param {Date} time
+       */
+      function handleLoading(isLoading, time) {
+        
+        if (!isLoading) { return; }
+        
+        lastLoading = time;
+        
+        $timeout(function () {
+          if (scope.loadingCustomers && time === lastLoading) {
+            scope.loadingCustomers = false;
+          }
+        }, 5000);
+      }
+      
+      /**
+       * Sometimes it keeps "loading" after the user has choosen.
+       */
+      scope.$watch('loadingCustomers', function (loading, prevLoading) {
+        
+        handleLoading(loading, new Date());
+      })
       
       scope.$on('$destroy', function (event) {
         

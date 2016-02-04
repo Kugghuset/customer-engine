@@ -49,6 +49,7 @@
         uib-typeahead="customer as matched(customer, 'customer') for customer in getCustomer($viewValue, ticket.customer)"
         typeahead-loading="loadingCustomers"
         typeahead-no-results="noResults"
+        typeahead-wait-ms="200"
         ng-blur="openCreateCustomerForNew()"
         class="pane-dropdown"
         typeahead-on-select="setCustomer($item)">

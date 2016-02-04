@@ -9,8 +9,15 @@
       <label class="font-size-ms">Org. number</label>
       
       <span class="fill-by-label">
-        <input type="text" ng-class="{'padded-right': orgNrLoadingLocations}" ng-model="customer.orgNr" placeholder="Org. number" uib-typeahead="cust as cust.orgNr for cust in getCustomer($viewValue, 'orgNr')"
-          typeahead-loading="orgNrLoadingLocations" typeahead-on-select="onSelected($item, $model, $label)" class="pane-dropdown">
+        <input type="text"
+          ng-class="{'padded-right': orgNrLoadingLocations}"
+          ng-model="customer.orgNr"
+          placeholder="Org. number"
+          uib-typeahead="cust as cust.orgNr for cust in getCustomer($viewValue, 'orgNr')"
+          typeahead-loading="orgNrLoadingLocations"
+          typeahead-on-select="onSelected($item, $model, $label)"
+          typeahead-wait-ms="200"
+          class="pane-dropdown">
         <i ng-show="orgNrLoadingLocations" class="glyphicon glyphicon-refresh" title="Looking for customers matching the org. number"></i>
       </span>
 
@@ -21,8 +28,15 @@
       <label class="font-size-ms">Customer number</label>
       
       <span class="fill-by-label">
-        <input type="text" ng-class="{'padded-right': customerNumberLoadingLocations}" ng-model="customer.customerNumber" placeholder="Customer number" uib-typeahead="cust as cust.customerNumber for cust in getCustomer($viewValue, 'customerNumber')"
-          typeahead-loading="customerNumberLoadingLocations" typeahead-on-select="onSelected($item, $model, $label)" class="pane-dropdown">
+        <input type="text"
+          ng-class="{'padded-right': customerNumberLoadingLocations}"
+          ng-model="customer.customerNumber"
+          placeholder="Customer number"
+          uib-typeahead="cust as cust.customerNumber for cust in getCustomer($viewValue, 'customerNumber')"
+          typeahead-loading="customerNumberLoadingLocations"
+          typeahead-on-select="onSelected($item, $model, $label)"
+          typeahead-wait-ms="200"
+          class="pane-dropdown">
         <i ng-show="customerNumberLoadingLocations" class="glyphicon glyphicon-refresh" title="Looking for customers matching the customer number"></i>
       </span>
 
@@ -32,8 +46,15 @@
       <label class="font-size-ms">Customer name</label>
         
       <span class="fill-by-label">
-        <input type="text" ng-class="{'padded-right': orgNameLoadingLocations}" ng-model="customer.orgName" placeholder="Customer name" uib-typeahead="cust as cust.orgName for cust in getCustomer($viewValue, 'orgName')"
-          typeahead-loading="orgNameLoadingLocations" typeahead-on-select="onSelected($item, $model, $label)" class="pane-dropdown">
+        <input type="text"
+          ng-class="{'padded-right': orgNameLoadingLocations}"
+          ng-model="customer.orgName"
+          placeholder="Customer name"
+          uib-typeahead="cust as cust.orgName for cust in getCustomer($viewValue, 'orgName')"
+          typeahead-loading="orgNameLoadingLocations"
+          typeahead-on-select="onSelected($item, $model, $label)"
+          typeahead-wait-ms="200"
+          class="pane-dropdown">
         <i ng-show="orgNameLoadingLocations" class="glyphicon glyphicon-refresh" title="Looking for customers matching the customer name"></i>
       </span>
 

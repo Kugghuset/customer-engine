@@ -17,12 +17,8 @@ END
 CREATE TABLE [dbo].[TempNPS] (
     [rawNpsDate] varchar(256) NULL -- will be converted later on
   , [npsTel] varchar(256) NULL
-  , [ticketId] bigint NULL
-  , [queue] varchar(256) NULL
-  , [team] varchar(256) NULL
   , [npsScore] varchar(256) NULL
   , [npsComment] varchar(max) NULL
-  , [npsFollowUp] varchar(max) NULL
 )
 
 -- filepath i set in JavaScript
@@ -53,17 +49,13 @@ INSERT INTO [Tickety].[dbo].[NPS] (
     [npsDate]
   , [npsTel]
   , [npsScore]
-  , [ticketId]
   , [npsComment]
-  , [npsFollowUp]
 )
 SELECT
     [npsDate]
   , [npsTel]
   , [npsScore]
-  , [ticketId]
   , [npsComment]
-  , [npsFollowUp]
 FROM (
     MERGE [Tickety].[dbo].[NPS] AS [Target]
     USING [dbo].[TempNPS] AS [Source]
@@ -75,15 +67,11 @@ FROM (
     WHEN MATCHED AND (
         [Target].[npsScore] != [Source].[npsScore]
      OR [Target].[npsComment] != [Source].[npsComment]
-     OR [Target].[npsFollowUp] != [Source].[npsFollowUp]
-     OR [Target].[ticketId] != [Source].[ticketId]
      OR [Target].[isLocal] = 1
     )
     THEN UPDATE SET
         [Target].[npsScore] = [Source].[npsScore]
       , [Target].[npsComment] = [Source].[npsComment]
-      , [Target].[npsFollowUp] = [Source].[npsFollowUp]
-      , [Target].[ticketId] = [Source].[ticketId]
       , [Target].[isLocal] = NULL
       , [Target].[dateChanged] = GETUTCDATE()
 
@@ -93,16 +81,12 @@ FROM (
           , [npsTel]
           , [npsScore]
           , [npsComment]
-          , [npsFollowUp]
-          , [ticketId]
         )
         VALUES (
             [Source].[npsDate]
           , [Source].[npsTel]
           , [Source].[npsScore]
           , [Source].[npsComment]
-          , [Source].[npsFollowUp]
-          , [Source].[ticketId]
         )
 
     OUTPUT $action AS [Action], [Source].*

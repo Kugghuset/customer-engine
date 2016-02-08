@@ -72,14 +72,32 @@ function bulkImport(files, readFiles) {
   // The file to perform the bulk import on.
   var currentFile = files[readFiles.length];
   
+  var isOld;
+  
+  var _file = fs.readFileSync(currentFile, 'utf8');
+  if (_.isString(_file)) {
+    // The old files are have four fields, thus three semicolons.
+    isOld = _file.split('\r\n')[0].replace(/[^;]/gi, '').length === 3;
+  } else {
+    isOld = false;
+  }
+  
+  var bulkFile = isOld
+    ? './sql/nps.bulkImport_old.sql'
+    : './sql/nps.bulkImport.sql';
+  
   sql.execute({
     query: sql
-      .fromFile('./sql/nps.bulkImport.sql')
+      .fromFile(bulkFile)
       .replace('{ filepath }', currentFile)
   }).then(function () {
     // continue recursively
     return bulkImport(files, readFiles.concat([currentFile]));
   }).catch(function (err) {
+    
+    console.log(currentFile);
+    console.log(err);
+    
     // Assumme the file simply shouldn't be imported, continue recursively
     return bulkImport(files, readFiles.concat([currentFile]));
   });

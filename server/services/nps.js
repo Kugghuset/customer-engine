@@ -27,9 +27,9 @@ function getLastWeek() {
         , 'gi'), [
           '[ticketDate] < @upperDateLimit',
           'AND [A].[ticketDate] > @lowerDateLimit',
-          'AND NOT EXISTS(SELECT * FROM [dbo].[NPS]',
-                          'WHERE REPLACE([dbo].[NPS].[npsTel], \'+\', \'\') = [Q].[tel]',
-                          'AND [dbo].[NPS].[npsDate] > @threeMontshAgo)'
+          'AND NOT EXISTS(SELECT * FROM [dbo].[NPSSurveyResult]',
+                          'WHERE REPLACE([dbo].[NPSSurveyResult].[npsTel], \'+\', \'\') = [Q].[tel]',
+                          'AND [dbo].[NPSSurveyResult].[npsDate] > @threeMontshAgo)'
         ].join(' '));
     
     sql.execute({
@@ -74,9 +74,9 @@ function getNonQuarantined() {
         , 'gi'), [
           '[ticketDate] < @upperDateLimit',
           'AND [A].[ticketDate] > @lowerDateLimit',
-          'AND NOT EXISTS(SELECT * FROM [dbo].[NPS]',
-                          'WHERE REPLACE([dbo].[NPS].[npsTel], \'+\', \'\') = [Q].[tel]',
-                          'AND [dbo].[NPS].[npsDate] > @threeMontshAgo)'
+          'AND NOT EXISTS(SELECT * FROM [dbo].[NPSSurveyResult]',
+                          'WHERE REPLACE([dbo].[NPSSurveyResult].[npsTel], \'+\', \'\') = [Q].[tel]',
+                          'AND [dbo].[NPSSurveyResult].[npsDate] > @threeMontshAgo)'
         ].join(' '));
     
     sql.execute({

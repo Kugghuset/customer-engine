@@ -1,10 +1,10 @@
 /*
-Creates the NPS table
+Creates the NPSSurveyResult table
 */
 
-IF (OBJECT_ID('NPS', 'U') IS NULL)
+IF (OBJECT_ID('NPSSurveyResult', 'U') IS NULL)
 BEGIN
-  CREATE TABLE [dbo].[NPS] (
+  CREATE TABLE [dbo].[NPSSurveyResult] (
     [npsId] bigint IDENTITY(1, 1) PRIMARY  KEY NOT NULL,
     [npsTel] varchar(256) NULL,
     [npsDate] datetime2 NULL,
@@ -20,15 +20,15 @@ END
 ELSE
   IF NOT EXISTS(SELECT * FROM sys.columns
                 WHERE Name = N'npsFollowUp'
-                AND OBJECT_ID = OBJECT_ID(N'NPS'))
+                AND OBJECT_ID = OBJECT_ID(N'NPSSurveyResult'))
   BEGIN
-    ALTER TABLE [dbo].[NPS]
+    ALTER TABLE [dbo].[NPSSurveyResult]
     ADD [npsFollowUp] varchar(max) NULL
   END
   IF NOT EXISTS(SELECT * FROM sys.columns
                 WHERE Name = N'ticketId'
-                AND OBJECT_ID = OBJECT_ID(N'NPS'))
+                AND OBJECT_ID = OBJECT_ID(N'NPSSurveyResult'))
   BEGIN
-    ALTER TABLE [dbo].[NPS]
+    ALTER TABLE [dbo].[NPSSurveyResult]
     ADD [ticketId]  biginT NULL
   END

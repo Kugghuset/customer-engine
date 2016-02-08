@@ -2,7 +2,7 @@
 Inserts a NPS object into the table
 */
 
-INSERT INTO [dbo].[NPS] (
+INSERT INTO [dbo].[NPSSurveyResult] (
   [npsTel],
   [npsDate],
   [npsScore],
@@ -25,5 +25,5 @@ SELECT TOP 1
   [npsComment],
   [dateCreated],
   [dateChanged]
-FROM [dbo].[NPS]
+FROM [dbo].[NPSSurveyResult]
 ORDER BY [npsId] DESC

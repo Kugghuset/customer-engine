@@ -49,7 +49,7 @@ SET [npsDate] = CASE
   ELSE ''
 END
 
-INSERT INTO [Tickety].[dbo].[NPS] (
+INSERT INTO [Tickety].[dbo].[NPSSurveyResult] (
     [npsDate]
   , [npsTel]
   , [npsScore]
@@ -65,7 +65,7 @@ SELECT
   , [npsComment]
   , [npsFollowUp]
 FROM (
-    MERGE [Tickety].[dbo].[NPS] AS [Target]
+    MERGE [Tickety].[dbo].[NPSSurveyResult] AS [Target]
     USING [dbo].[TempNPS] AS [Source]
     ON
         -- Match on the npsTel and the date only of the npsDate

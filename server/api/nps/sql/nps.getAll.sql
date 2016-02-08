@@ -10,4 +10,4 @@ SELECT
   [npsComment],
   [dateCreated],
   [dateChanged]
-FROM [dbo].[NPS]
+FROM [dbo].[NPSSurveyResult]

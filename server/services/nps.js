@@ -14,7 +14,8 @@ var schedule = require('./schedule');
 
 /**
  * Finds all tickets which where set to have their ticketDate last week
- * and their person.tel hasn't been texted the in three months.
+ * and their person.tel hasn't been texted the in three months
+ * or are set as do not contact.
  * 
  * @return {Promise} -> {Array}
  */
@@ -28,9 +29,12 @@ function getLastWeek() {
           '[ticketDate] < @upperDateLimit',
           'AND [A].[ticketDate] > @lowerDateLimit',
           'AND NOT EXISTS(SELECT * FROM [dbo].[NPSSurveyResult]',
-                          'WHERE REPLACE([dbo].[NPSSurveyResult].[npsTel], \'+\', \'\') = [Q].[tel]',
-                          'AND [dbo].[NPSSurveyResult].[npsDate] > @threeMontshAgo)'
+                          'WHERE (REPLACE([dbo].[NPSSurveyResult].[npsTel], \'+\', \'\') = [Q].[tel]',
+                          'AND [dbo].[NPSSurveyResult].[npsDate] > @threeMonthsAgo)',
+                          'OR [dbo].[NPSSurveyResult].[doNotContact] = 1)'
         ].join(' '));
+    
+    console.log(query);
     
     sql.execute({
       query: query,
@@ -45,7 +49,7 @@ function getLastWeek() {
             type: sql.DATETIME2,
             val: moment().subtract(1, 'weeks').startOf('week').toDate()
           },
-          threeMontshAgo: {
+          threeMonthsAgo: {
             type: sql.DATETIME2,
             val: moment().subtract(3, 'months').toDate()
           }
@@ -76,7 +80,7 @@ function getNonQuarantined() {
           'AND [A].[ticketDate] > @lowerDateLimit',
           'AND NOT EXISTS(SELECT * FROM [dbo].[NPSSurveyResult]',
                           'WHERE REPLACE([dbo].[NPSSurveyResult].[npsTel], \'+\', \'\') = [Q].[tel]',
-                          'AND [dbo].[NPSSurveyResult].[npsDate] > @threeMontshAgo)'
+                          'AND [dbo].[NPSSurveyResult].[npsDate] > @threeMonthsAgo)'
         ].join(' '));
     
     sql.execute({
@@ -92,7 +96,7 @@ function getNonQuarantined() {
             type: sql.DATETIME2,
             val: moment().subtract(3, 'months').add(1, 'days').toDate()
           },
-          threeMontshAgo: {
+          threeMonthsAgo: {
             type: sql.DATETIME2,
             val: moment().subtract(3, 'months').toDate()
           }

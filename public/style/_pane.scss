@@ -86,6 +86,7 @@
       border: 2px solid $white;
       border-collapse: collapse;
       outline: none;
+      white-space: normal;
       @include hover-shadow;
       
       &:hover {

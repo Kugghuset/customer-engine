@@ -138,10 +138,20 @@
   
   </div>
   
+  <br>
+  
   <div class="pane-row">
     <!-- Categories -->
   
     <label for="" class="top-label">Category</label>
+    
+    <span class="fill-by-label">
+      <input type="text"
+        ng-model="categoryQuery"
+        uib-typeahead="category as relationalCategories(category) for category in queryCategories | filter:$viewValue | limitTo:12"
+        typeahead-on-select="setCategory($item, $model, $label, $event)"
+        placeholder="Search for categories">
+    </span>
     
     <span class="fill-by-label">
       <span uib-dropdown uib-keyboard-nav>

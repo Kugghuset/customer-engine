@@ -1,3 +1,4 @@
+/* global moment */
 (function () {
 
 angular.module('ticketyApp')
@@ -21,6 +22,8 @@ angular.module('ticketyApp')
       var hasUpdates = false;
       
       scope.loadingCurrent = false;
+      scope.queryCategories = [];
+      scope.categoryQuery = '';
       
       scope.romeOptions = {
         max: moment().endOf('day')
@@ -213,6 +216,36 @@ angular.module('ticketyApp')
       }
       
       /**
+       * Returns *category*.text, which would be the various levels of categories.
+       * 
+       * Example output: 'Information > Kundinformation'
+       * 
+       * @param {Object} category
+       * @return {String}
+       */
+      scope.relationalCategories = function (category) {
+        return !!category
+          ? category.text
+          : '';
+      }
+      
+      /**
+       * Sets the category properties to the various objects in catObj
+       * 
+       * @param {Object} item
+       * @param {Object} $model
+       */
+      scope.setCategory = function (item, $model, $label, $event) {
+        if (scope.ticket && scope.categories) {
+          scope.ticket.category = Category.findById(scope.categories, 'categoryId', item.categoryId);
+          scope.ticket.subcategory = Category.findById(scope.subcategories, 'subcategoryId', item.subcategoryId);
+          scope.ticket.descriptor = Category.findById(scope.descriptors, 'descriptorId', item.descriptorId);
+        }
+        
+        scope.categoryQuery = '';
+      }
+      
+      /**
        * Returns a boolean value for whether the ticket is allowed to be saved or not.
        * This is determined by whether there is a company or not.
        * 
@@ -239,6 +272,9 @@ angular.module('ticketyApp')
           scope.categories = data.categories;
           scope.subcategories = data.subcategories;
           scope.descriptors = data.descriptors;
+          
+          scope.queryCategories = Category.queryCategories(data);
+          
         })
         ['catch'](function (err) {
           Notification.error('Something went wrong with fetching the categories, please refresh the page.')

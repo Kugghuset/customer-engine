@@ -13,6 +13,7 @@ BEGIN
     [npsFollowUp] varchar(max) NULL,
     [ticketId]  biginT NULL,
     [isLocal] bit NULL,
+    [doNotContact] bit NULL,
     [dateCreated] datetime2 DEFAULT GETUTCDATE() NULL,
     [dateChanged] datetime2 DEFAULT GETUTCDATE() NULL
   )
@@ -31,4 +32,11 @@ ELSE
   BEGIN
     ALTER TABLE [dbo].[NPSSurveyResult]
     ADD [ticketId]  biginT NULL
+  END
+  IF NOT EXISTS(SELECT * FROM sys.columns
+                WHERE Name = N'doNotContact'
+                AND OBJECT_ID = OBJECT_ID(N'NPSSurveyResult'))
+  BEGIN
+    ALTER TABLE [dbo].[NPSSurveyResult]
+    ADD [doNotContact] bit NULL
   END

@@ -150,6 +150,7 @@
         ng-model="categoryQuery"
         uib-typeahead="category as relationalCategories(category) for category in queryCategories | filter:$viewValue | limitTo:12"
         typeahead-on-select="setCategory($item, $model, $label, $event)"
+        title="Search the various levels of categories."
         placeholder="Search for categories">
     </span>
     

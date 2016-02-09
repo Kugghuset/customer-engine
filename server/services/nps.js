@@ -14,7 +14,8 @@ var schedule = require('./schedule');
 
 /**
  * Finds all tickets which where set to have their ticketDate last week
- * and their person.tel hasn't been texted the in three months.
+ * and their person.tel hasn't been texted the in three months
+ * or are set as do not contact.
  * 
  * @return {Promise} -> {Array}
  */

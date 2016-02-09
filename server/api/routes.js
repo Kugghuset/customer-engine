@@ -33,4 +33,5 @@ module.exports = function (app, logger) {
   app.use('/api/products', require('./product/index'));
   app.use('/api/persons', require('./person/index'));
   app.use('/api/nps', require('./nps/index'));
+  app.use('/api/role', require('./role/index'));
 };

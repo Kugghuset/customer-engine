@@ -9,6 +9,7 @@ BEGIN
     [email] varchar(256) UNIQUE NOT NULL,
     [password] varchar(256) NULL,
     [name] varchar(256) NULL,
+    [role] tinyint DEFAULT 1 NULL,
     [lastLoggedin] datetime2 DEFAULT GETUTCDATE() NULL,
     [dateCreated] datetime2 DEFAULT GETUTCDATE() NULL,
     [dateChanged] datetime2 DEFAULT GETUTCDATE() NULL
@@ -40,3 +41,12 @@ ELSE
       ALTER TABLE [dbo].[User]
       ADD [lastLoggedin] datetime2 DEFAULT GETUTCDATE() NULL
   END
+  
+  IF NOT EXISTS(SELECT * FROM sys.columns
+                WHERE Name = N'role'
+                AND Object_ID = Object_ID(N'User'))
+  BEGIN
+      ALTER TABLE [dbo].[User]
+      ADD [role] tinyint DEFAULT 1 NULL
+  END
+  

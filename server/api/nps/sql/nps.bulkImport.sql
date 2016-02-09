@@ -73,11 +73,22 @@ FROM (
     AND CAST([Target].[npsDate] AS date) = CAST([Source].[npsDate] AS date)
     
     WHEN MATCHED AND (
-        [Target].[npsScore] != [Source].[npsScore]
-     OR [Target].[npsComment] != [Source].[npsComment]
-     OR [Target].[npsFollowUp] != [Source].[npsFollowUp]
-     OR [Target].[ticketId] != [Source].[ticketId]
-     OR [Target].[isLocal] = 1
+        (
+            [Target].[npsScore] != [Source].[npsScore]
+        OR  ([Target].[npsScore] IS NULL AND [Source].[npsScore] IS NOT NULL)
+        )
+     OR (
+            [Target].[npsComment] != [Source].[npsComment]
+        OR  ([Target].[npsComment] IS NULL AND [Source].[npsComment] IS NOT NULL)
+        )
+     OR (
+            [Target].[npsFollowUp] != [Source].[npsFollowUp]
+        OR  ([Target].[npsFollowUp] IS NULL AND [Source].[npsFollowUp] IS NOT NULL)
+        )
+     OR (
+          [Target].[ticketId] != [Source].[ticketId]
+       OR ([Target].[ticketId] IS NULL AND [Source].[ticketId] IS NOT NULL)
+        )
     )
     THEN UPDATE SET
         [Target].[npsScore] = [Source].[npsScore]

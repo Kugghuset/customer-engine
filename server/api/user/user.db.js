@@ -172,6 +172,10 @@ exports.update = function (user, userId) {
           type: sql.BIGINT,
           val: user.department ? user.department.departmentId : user.departmentId
         },
+        role: {
+          type: sql.TINYINT,
+          val: user.role
+        },
         userId: {
           type: sql.BIGINT,
           val: userId

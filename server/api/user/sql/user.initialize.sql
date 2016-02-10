@@ -48,5 +48,10 @@ ELSE
   BEGIN
       ALTER TABLE [dbo].[User]
       ADD [role] tinyint DEFAULT 1 NULL
+      
+      EXEC('
+        UPDATE [dbo].[User]
+        SET [role] = 1
+      ')
   END
   

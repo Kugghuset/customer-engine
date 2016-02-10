@@ -11,15 +11,20 @@ var util = require('../../utils/utils');
 var customerFilePath = path.resolve('./server/assets/customers/customers.csv');
 
 function intialize() {
-  return sql.execute({
-    query: sql.fromFile('./sql/customer.initialize.sql')
-  })
-  .then(function (result) {
-    console.log('Customer table all set up.');
-  })
-  .catch(function (err) {
-    console.log('Couldn\'t set up Customer table.');
-    console.error(err);
+  return new Promise(function (resolve, reject) {
+    
+    sql.execute({
+      query: sql.fromFile('./sql/customer.initialize.sql')
+    })
+    .then(function (result) {
+      console.log('Customer table all set up.');
+      resolve(result)
+    })
+    .catch(function (err) {
+      console.log('Couldn\'t set up Customer table.');
+      console.error(err);
+      reject(err);
+    });
   });
 }
 
@@ -247,8 +252,8 @@ function merge() {
 
 exports.merge = merge;
 
-intialize();
-bulkImport()
+intialize()
+.then(bulkImport)
 .then(merge)
 .then(function () {
   console.log('Customer merge finished');

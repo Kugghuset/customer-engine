@@ -15,10 +15,11 @@ END
 ELSE
   UPDATE [dbo].[User]
   SET
-    [dbo].[User].[email] = @email,
-    [dbo].[User].[name] = @name,
-    [dbo].[User].[departmentId] = @departmentId,
-    [dbo].[User].[dateChanged] = GETUTCDATE()
+      [dbo].[User].[email] = @email
+    , [dbo].[User].[name] = @name
+    , [dbo].[User].[departmentId] = @departmentId
+    , [dbo].[User].[role] = @role
+    , [dbo].[User].[dateChanged] = GETUTCDATE()
   
   WHERE [userId] = @userId
   

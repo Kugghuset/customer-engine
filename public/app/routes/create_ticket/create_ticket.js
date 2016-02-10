@@ -10,7 +10,8 @@ angular.module('ticketyApp')
     title: 'Ticket'
   });
 }])
-.controller('CreateTicketCtrl', ['$scope', '$timeout', '$stateParams', '$location', 'Auth', 'Ticket', function ($scope, $timeout, $stateParams, $location, Auth, Ticket) {
+.controller('CreateTicketCtrl', ['$rootScope', '$scope', '$timeout', '$stateParams', '$location', 'Auth', 'Ticket',
+function ($rootScope, $scope, $timeout, $stateParams, $location, Auth, Ticket) {
   
   $scope.currentTicketId = $stateParams.ticketId;
   
@@ -27,6 +28,13 @@ angular.module('ticketyApp')
   $scope.$watch('auth.getCurrentUser()', function (user) {
     $scope.user = user;
   });
+  
+  $scope.$watch('currentTicketId', function (ticketId, oldTicketId) {
+    if (!_.isUndefined(ticketId) && !_.isUndefined(oldTicketId)) {
+      $rootScope.title = 'Ticket ' + ticketId
+      $location.replace();
+    }
+  })
   
 }]);
 

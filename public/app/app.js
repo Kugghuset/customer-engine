@@ -62,7 +62,7 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, ngIntlTelInputProvi
     }
   }
 }])
-.run(['$rootScope', '$location', '$state', 'Auth', function ($rootScope, $location, $state, Auth) {
+.run(['$rootScope', '$location', '$state', 'StateHandler', 'Auth', function ($rootScope, $location, $state, StateHandler, Auth) {
   var inRequest = false;
 
   Auth.isLoggedInAsync()
@@ -73,23 +73,19 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, ngIntlTelInputProvi
   });
 
   $rootScope.$on('$stateChangeStart', function (event, next, params) {
-    if (Auth.isLoggedIn()) {
-      // User is logged in
-      if (next.name === 'main.login') {
-        if (event) { event.preventDefault(); }
-        $state.transitionTo('main.dashboard');
-      }
-    } else {
-      // User not logged in
-      if (next.name !== 'main.login') {
-        if (event) { event.preventDefault(); }
-        $state.transitionTo('main.login');
-      }
-    }
+    
+    // Logic moved to StateHandler service
+    StateHandler.stateChangeStart(event, next, params, inRequest);
+    
+  });
+  
+  $rootScope.$on("$stateChangeCancel", function (event, next, params) {
+    inRequest = false;
   });
 
-  $rootScope.$on('$stateChangeSuccess', function (event, net, params) {
-
+  $rootScope.$on('$stateChangeSuccess', function (event, next, params) {
+    inRequest = false
+    $rootScope.title = next.title;
    window.scrollTo(0,0);
   });
 }]);

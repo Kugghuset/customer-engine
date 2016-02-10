@@ -54,6 +54,7 @@ function bulkImport(files, readFiles) {
         return fs.statSync(path.resolve(npsFolderpath, filename)).isFile();
       })
       .map(function (filename) { return path.resolve(npsFolderpath, filename); })
+      .orderBy(function (filename) { return filename; })
       .value();
     
     readFiles = [];

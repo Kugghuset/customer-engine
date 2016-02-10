@@ -2,7 +2,7 @@
 <html ng-app="ticketyApp">
 <head>
   <meta charset="UTF-8">
-  <title>Tickety</title>
+  <title ng-bind="'Tickety | ' + title"></title>
   
   <meta name="viewport" content="width=device-width, initial-scale=1">
   
@@ -42,7 +42,7 @@
   <script src="app/app.js"></script>
   <script src="app/routes/main.js"></script>
   <script src="app/routes/login/login.js"></script>
-  <script src="app/routes/home/home.js"></script>
+  <!--<script src="app/routes/admin/admin.js"></script>-->
   <script src="app/routes/dashboard/dashboard.js"></script>
   <script src="app/routes/create_ticket/create_ticket.js"></script>
   <script src="app/routes/manage_customer/manage_customer.js"></script>
@@ -56,6 +56,7 @@
   <script src="app/services/Product/Product.service.js"></script>
   <script src="app/services/Utils/Utils.service.js"></script>
   <script src="app/services/Person/Person.service.js"></script>
+  <script src="app/services/StateHandler/StateHandler.service.js"></script>
   
   <script src="app/directives/ceTicketCreate/ceTicketCreate.directive.js"></script>
   <script src="app/directives/ceTicketList/ceTicketList.directive.js"></script>

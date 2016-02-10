@@ -38,17 +38,21 @@ angular.module('ticketyApp')
      * 
      * If there is a token, it runs getMe to populate it.
      * 
+     * @param {Boolean} resolveUser
      * @return {Promise} -> {Boolean}
      */
-    isLoggedInAsync: function () {
+    isLoggedInAsync: function (resolveUser) {
       return $q(function (resolve, reject) {
         if ($cookies.get('token')) {
           // Enough for transition to progress
-          resolve(true);
+          if (!resolveUser) {
+            resolve(true);
+          }
           
           // Still, populate the user
           getMe().then(function (user) {
             _user = user;
+            resolve(_user);
           })
           ['catch'](function (err) { });
         } else {

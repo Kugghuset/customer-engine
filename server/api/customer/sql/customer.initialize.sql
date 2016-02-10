@@ -35,20 +35,13 @@ ELSE
     ALTER TABLE [dbo].[Customer]
     ADD [isMerged] bit DEFAULT 1 NULL
     
-  END
-  
-  -- If [isMerged] didn't exist, there won't by any rows where isMerged = 1
-  -- This statement must be separate from the above statement as it otherwise won't find [isMerged]
-  IF NOT EXISTS(SELECT *
-                FROM [dbo].[Customer]
-                WHERE [isMerged] = 1)
-  BEGIN
-  
-    UPDATE [dbo].[Customer]
-    SET [isMerged] = CASE
-      WHEN [isLocal] = 1 THEN 0
-      ELSE 1
-    END
+    EXEC('
+      UPDATE [dbo].[Customer]
+      SET [isMerged] = CASE
+        WHEN [isLocal] = 1 THEN 0
+        ELSE 1
+      END
+    ')
     
   END
 

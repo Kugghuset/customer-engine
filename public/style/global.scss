@@ -10,8 +10,13 @@
 @import 'welcome';
 @import 'loading';
 @import 'paginator';
+@import 'admin';
 
 @import '../app/app';
+
+html, body {
+  font-family: 'Open Sans', sans-serif;
+}
 
 *, *:after, *:before {
   box-sizing: border-box;

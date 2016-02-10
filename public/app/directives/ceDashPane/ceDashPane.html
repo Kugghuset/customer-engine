@@ -82,6 +82,10 @@
   
   <a class="pane-button" href="" ui-sref="main.customer">Manage customers</a>
   
+  <br>
+  
+  <a class="pane-button" ng-if="auth.getCurrentUser().role >= 10" href="" ui-sref="main.admin">Admin page</a>
+  
 </section>
 
 <ce-modal-user open-modal="openModal"></ce-modal-user>

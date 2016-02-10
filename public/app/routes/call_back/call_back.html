@@ -1,0 +1,47 @@
+<table>
+  
+  <thead>
+    <th>Ticket no</th>
+    <th>Customer Name</th>
+    <th>Mobile number</th>
+    <th>Call category 1</th>
+    <th>Call category 2</th>
+    <th>Call category 3</th>
+    <th>Date for SMS send out</th>
+    <th>NPS score</th>
+    <th>NPS comment</th>
+    <th>Name for call back</th>
+    <th>Status on call</th>
+    <th>Date for call</th>
+    <th>Reason to promote 1</th>
+    <th>Reason to promote 2</th>
+    <th>Reason to detract 1</th>
+    <th>Reason to detract 2</th>
+    <th>Potential follow up action</th>
+    <th>Other comments</th>
+  </thead>
+  
+  <tbody>
+    <tr ng-repeat="ticket in npsTickets | alphaSort:['ticketDate', 'ticketId']">
+      <td>{{ ticket.ticketId }}</td>
+      <td>{{ ticket.customer.orgName }}</td>
+      <td>{{ ticket.person.tel }}</td>
+      <td>{{ ticket.category.categoryName }}</td>
+      <td>{{ ticket.subcategory.subcategoryName }}</td>
+      <td>{{ ticket.descriptor.descriptorName }}</td>
+      <td>{{ ticket.nps.npsDate | date: 'YYYY-MM-DD' }}</td>
+      <td>
+        <input type="text" placeholder="Search agents">
+      </td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td><textarea name="§§" id="" cols="30" rows="10"></textarea></td>
+      <td><textarea name="" id="" cols="30" rows="10"></textarea></td>
+    </tr>
+  </tbody>
+  
+</table>

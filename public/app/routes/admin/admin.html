@@ -10,6 +10,20 @@
   
   <aside class="pane vertical-fill fixed-left">
     
+    <h1>Admin page</h1>
+    
+    <nav class="admin-menu">
+      <ul>
+        <li ng-class="{'active': (state === 'main.admin.call_back')}"><a href="" ui-sref="main.admin.call_back">Manage call backs</a></li>
+      </ul>
+    </nav>
+    
   </aside>
+  
+  <ce-card-area child-class="vertical-fill fixed-right">
+    
+    <div ui-view></div>
+    
+  </ce-card-area>
   
 </section>

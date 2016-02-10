@@ -511,7 +511,8 @@ angular.module('ticketyApp')
             $state.go($state.current.name, { ticketId: t.ticketId }, { location: true, notify: false })
             .then(function (item) {
               // Replace the last history item with this route
-              $location.replace();
+              scope.ticketId = t.ticketId;
+              // replace moved to parent scope
             })
           }
         })

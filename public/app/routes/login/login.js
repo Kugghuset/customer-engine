@@ -6,7 +6,8 @@ angular.module('ticketyApp')
   $stateProvider.state('main.login', {
     url: '/login',
     templateUrl: 'routes/login/login.html',
-    controller: 'LoginCtrl'
+    controller: 'LoginCtrl',
+    title: 'Hello, agent'
   });
 }])
 .controller('LoginCtrl', ['$scope', '$stateParams', '$location', 'Auth', 'Ticket', function ($scope, $stateParams, $location, Auth, Ticket) {

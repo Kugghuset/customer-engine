@@ -7,7 +7,7 @@ angular.module('ticketyApp')
     url: '/customer',
     templateUrl: 'routes/manage_customer/manage_customer.html',
     controller: 'CustomerCtrl',
-    title: 'Customer'
+    title: 'Manage customers'
   });
 }])
 .controller('CustomerCtrl', ['$scope', '$timeout', 'Auth', 'Customer', 'Notification', function ($scope, $timeout, Auth, Customer, Notification) {

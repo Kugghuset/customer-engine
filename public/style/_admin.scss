@@ -32,3 +32,41 @@
     }
   }
 }
+
+.call-back-table {
+  width: 100%;
+  margin-top: 10px;
+  
+  
+  thead tr {
+    background-color: $purple-light;
+    color: $white;
+    
+    th {
+      padding: 10px 10px;
+      border-collapse: collapse;
+      border: 1px solid $gray-dark;
+    }
+  }
+  
+  tbody {
+    tr {
+      background-color: $gray;
+      cursor: pointer;
+      &:hover {
+        background-color: darken($color: $gray, $amount: 10%);
+      }
+    }
+    tr:nth-of-type(2n) {
+      background-color: $gray-light;
+      &:hover {
+        background-color: darken($color: $gray-light, $amount: 10%);
+      }
+    }
+    td {
+      padding: 5px 10px;
+      border-collapse: collapse;
+      border: 1px solid $gray-dark;
+    }
+  }
+}

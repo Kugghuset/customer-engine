@@ -2,7 +2,7 @@
 
   <ce-paginator state="state" ticket-count="ticketCount"></ce-paginator>
 
-  <ce-call-back-grid tickets="npsTickets"></ce-call-back-grid>
+  <ce-call-back-grid ng-hide="isLoading" tickets="npsTickets"></ce-call-back-grid>
 
   <ce-loading is-loading="isLoading"></ce-loading>
 

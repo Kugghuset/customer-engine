@@ -1,0 +1,33 @@
+<table class="call-back-table">
+  
+  <thead>
+    <th>Ticket number</th>
+    <th>Customer name</th>
+    <th>Mobile number</th>
+    <th>Call category 1</th>
+    <th>Call category 2</th>
+    <th>Call category 3</th>
+    <th>Date for SMS send out</th>
+    <th>NPS score</th>
+    <th>NPS comment</th>
+    <th>Assigned agent</th>
+  </thead>
+  
+  <tbody>
+    <tr ng-repeat="ticket in tickets | alphaSort:['ticketDate', 'ticketId']" ng-click="openModal(ticket)">
+      <td>{{ ticket.ticketId }}</td>
+      <td>{{ ticket.customer.orgName }}</td>
+      <td>{{ (ticket.person.tel || ticket.nps.npsTel) | phoneNumber:ticket.country.short }}</td>
+      <td>{{ ticket.category.categoryName }}</td>
+      <td>{{ ticket.subcategory.subcategoryName }}</td>
+      <td>{{ ticket.descriptor.descriptorName }}</td>
+      <td>{{ ticket.nps.npsDate | date:'yyyy-MM-dd' }}</td>
+      <td>{{ isFinite(ticket.nps.npsScore) ? 'No score' : ticket.nps.npsScore }}</td>
+      <td><p ng-repeat="line in splitComments(ticket.nps.npsComment, '\t') track by $index">{{ line }}</p></td>
+      <td>{{ ticket.agent.name || '-' }}</td>
+    </tr>
+  </tbody>
+  
+</table>
+
+<ce-modal-call-back nps-ticket="currentTicket" open-modal="openModal"></ce-modal-call-back>

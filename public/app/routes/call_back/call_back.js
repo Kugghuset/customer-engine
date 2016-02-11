@@ -37,7 +37,6 @@ function ($scope, $timeout, Ticket) {
       $scope.npsTickets = data.tickets;
       $scope.ticketCount = data.ticketCount;
       $scope.isLoading = false;
-      console.log(data);
     })
     ['catch'](function (err) {
       $scope.isLoading = false;

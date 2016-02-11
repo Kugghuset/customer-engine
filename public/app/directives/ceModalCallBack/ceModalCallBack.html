@@ -1,0 +1,62 @@
+<div class="pane">
+
+  <h1>Manage call back</h1>
+
+  <form novalidate>
+    
+    <div>
+      <label>Ticket nunmber</label>
+      <span>{{ ticket.ticketId }}</span>
+    </div>
+    
+    <div>
+      <label>Customer name</label>
+      <span>{{ ticket.customer.orgName }}</span>
+    </div>
+    
+    <div>
+      <label>Mobile number</label>
+      <span>{{ (ticket.person.tel || ticket.nps.npsTel) | phoneNumber:ticket.country.short }}</span>
+    </div>
+    
+    <div>
+      <label>Call category 1</label>
+      <span>{{ ticket.category.categoryName || 'No category chosen' }}</span>
+    </div>
+    
+    <div ng-show="ticket.subcategory.subcategoryName">
+      <label>Call category 2</label>
+      <span>{{ ticket.subcategory.subcategoryName }}</span>
+    </div>
+    
+    <div ng-show="!!ticket.descriptor.descriptorName">
+      <label>Call category 3</label>
+      <span>{{ ticket.descriptor.descriptorName }}</span>
+    </div>
+    
+    <div>
+      <label>Date for SMS send out</label>
+      <span>{{ ticket.nps.npsDate | date:'yyyy-MM-dd' }}</span>
+    </div>
+    
+    <div>
+      <label>NPS score</label>
+      <span>{{ isFinite(ticket.nps.npsScore) ? 'No score' : ticket.nps.npsScore }}</span>
+    </div>
+    
+    <div ng-show="!!ticket.nps.npsComment">
+      <label class="text-top">NPS comment</label>
+      <span><p ng-repeat="line in splitComments(ticket.nps.npsComment) track by $index">{{ line }}</p></span>
+    </div>
+    
+  </form>
+
+  <div class="float-container">
+
+    <button ng-click="save()" class="pane-button green pull-right offset-right">Save</button>
+
+    <button ng-click="cancel()" class="pane-button red pull-right offset-right">Cancel</button>
+
+  </div>
+
+</div>

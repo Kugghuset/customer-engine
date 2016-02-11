@@ -3,8 +3,8 @@ Finds tickets which has been sent NPS SMS.
 */
 
 -- Declare in JavaScript
--- DECLARE @offset int
--- DECLARE @top int
+-- DECLARE @offset int = 0
+-- DECLARE @top int = 20
 
 SELECT
     [A].[ticketId]
@@ -48,6 +48,7 @@ SELECT
   , [NPS].[npsTel] AS [nps.npsTel]
   , [NPS].[npsScore] AS [nps.npsScore]
   , [NPS].[npsComment] AS [nps.npsComment]
+  , [NPS].[npsDate] AS [nps.npsDate]
   , [NPS].[npsFollowUp] AS [nps.npsFollowUp]
   , [NPS].[doNotContact] AS [nps.doNotContact]
 FROM [dbo].[Ticket] AS [A]
@@ -94,6 +95,7 @@ ON [A].[personId] = [Q].[personId]
 
 INNER JOIN [dbo].[NPSSurveyResult] AS [NPS]
 ON [A].[ticketId] = [NPS].[ticketId]
+  WHERE [npsScore] IS NOT NULL
 
 ORDER BY [A].[ticketDate] DESC, [A].[ticketId] DESC
 OFFSET @offset ROWS FETCH NEXT @top ROWS ONLY
@@ -102,3 +104,4 @@ SELECT COUNT(*)
 FROM [dbo].[Ticket] AS [A]
 INNER JOIN [dbo].[NPSSurveyResult] AS [NPS]
 ON [A].[ticketId] = [NPS].[ticketId]
+  WHERE [npsScore] IS NOT NULL

@@ -271,6 +271,32 @@ angular.module('ticketyApp')
       existing = existing.concat(newTickets);
       
       return existing;
+    },
+    
+    /**
+     * Returns a promise of all nps tickets based on *filter* and *value*
+     * if both are defined, otherswise gets all nps tickets.
+     * 
+     * @param {String} filter
+     * @param {String} value
+     * @return {Promise} -> {Array}
+     */
+    getNpsTickets: function (top, page, filter, value) {
+      return $q(function (resolve, reject) {
+        
+        // Check both filter and value are defined
+        if (!_.every([ filter, value ])) {
+          // If either one or none is defined, set both to undefined
+          filter = undefined;
+          value = undefined;
+        }
+        var _url = _.filter([ '/api/tickets/nps', filter, value, top, page ]).join('/')
+        
+        $http.get(_url)
+        .success(resolve)
+        .error(reject);
+        
+      });
     }
     
   }

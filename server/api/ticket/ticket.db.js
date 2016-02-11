@@ -447,6 +447,51 @@ exports.statusTickets = function (userId) {
 }
 
 /**
+ * Returns a promise of all nps tickets matchiNG *filter* and *value*
+ * if defined, otherwise returns all nps tickets.
+ * 
+ * nps tickets are tickets which are tied to nps results.
+ * 
+ * @param {String} filter
+ * @param {String} value
+ * @param {Promise} -> {Object}
+ */
+exports.findNps = function (top, page, filter, value) {
+  return new Promise(function (resolve, reject) {
+    
+    // Ensure there's a top
+    if (top < 1 || _.isUndefined(top)) { top = 20; }
+    // Ensure there's a page
+    if (page < 1 || _.isUndefined(page)) { page = 1; }
+    
+    var offset = (page - 1) * top;
+    
+    var query = sql.fromFile('./sql/ticket.findNps.sql');
+    
+    sql.execute({
+      query: query,
+      params: {
+        top: {
+          type: sql.BIGINT,
+          val: top
+        },
+        offset: {
+          type: sql.BIGINT,
+          val: offset
+        }
+      },
+      multiple: true
+    })
+    .then(function (tickets) {
+      
+      resolve({ tickets: util.objectify(_.first(tickets)), ticketCount: tickets[1][0][''] });
+    })
+    .catch(reject);
+    
+  });
+}
+
+/**
  * Returns the filecontents of the SQL file matching *filename*.
  * NOTE: *filename* should be only the name of the file,
  * E.G. 'ticket.findBy.sql' or 'ticket.update.sql'

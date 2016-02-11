@@ -7,6 +7,7 @@ var fs = require('fs');
 var path = require('path');
 var iconv = require('iconv-lite');
 var chalk = require('chalk');
+var os = require('os');
 
 var npsFilePath = path.resolve('./server/assets/nps/total_nps_score.csv');
 
@@ -59,6 +60,11 @@ function bulkImport(files, readFiles) {
     
     readFiles = [];
   }
+  
+  if (os.homedir() === 'C:\\Users\\drklu') {
+    return console.log('Not bulk importing as this is on Kris\'s computer.');
+  }
+
   
   // Return early if there are no files
   if (!files || !files.length) {

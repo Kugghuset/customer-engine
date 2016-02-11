@@ -142,3 +142,20 @@ exports.statusTickets = function (req, res) {
   })
   
 }
+
+/**
+ * NOTE: [/:filter/:value] may not be there
+ * 
+ * ROUTE: GET '/api/tickets/nps[/:filter/:value]'
+ */
+exports.findNps = function (req, res) {
+  
+  Ticket.findNps(req.params.top, req.params.page, req.params.filter, req.params.value)
+  .then(function (tickets) {
+    res.status(200).json(tickets);
+  })
+  .catch(function (err) {
+    utils.handleError(res, err);
+  })
+  
+}

@@ -13,51 +13,49 @@ angular.module('ticketyApp')
 .controller('CallBackCtrl', ['$scope', '$timeout', 'Ticket',
 function ($scope, $timeout, Ticket) {
   
-  $scope.npsTickets = [ {} ];
+  $scope.npsTickets = [];
+  $scope.ticketCount = 0;
+  $scope.isLoading = true;
+  $scope.state = {
+    currentPage: 1
+  };
   
-  $scope.callStatuses = [
-    'Not called',
-    'Call completed',
-    'Call back later',
-    'No reply - called several times',
-    'Customer don\'t want to talk'
-  ];
+  /**
+   * Gets the npsTickets from DB.
+   */
+  function getNpsTickets(pageNum, loading) {
+    $scope.isLoading = _.isUndefined(loading)
+      ? true
+      : loading;
+    
+    pageNum = _.isUndefined(pageNum)
+      ? 1
+      : pageNum;
+    
+    Ticket.getNpsTickets(20, pageNum)
+    .then(function (data) {
+      $scope.npsTickets = data.tickets;
+      $scope.ticketCount = data.ticketCount;
+      $scope.isLoading = false;
+      console.log(data);
+    })
+    ['catch'](function (err) {
+      $scope.isLoading = false;
+      console.log(err);
+    });
+  }
   
-  $scope.promoteReasons = [
-    'Problem resolved instantly',
-    'Problem solved within reasonable time',
-    'Problem was resolved permanently',
-    'Few problems - things generally works well',
-    'Few/no transfers',
-    'Feedback when problem was resolved',
-    'Easy to get through / Short waiting time',
-    'Friendly & professional agent',
-    'High knowledge level of agent',
-    'Good language capabability of agent',
-    'Agent understood my problem',
-    'No specific reason given',
-    'Customer don\'t want to talk',
-    'NPS score based on contact with someone else than Bambora Support',
-    'Product or system related reason (e.g. HW/SW, reports)'
-  ];
+  /**
+   * Watch for changes in current page
+   */
+  $scope.$watch('state.currentPage', function (currentPage, prevPage) {
+    // return early if they are the same
+    if (currentPage === prevPage) { return; }
+    
+    getNpsTickets(currentPage, true)
+  });
   
-  $scope.detractReasons = [
-    'No / Poor solution to problem',
-    'Long time to solve the problem',
-    'The same problem keeps on coming back / Customer had to call back multiple times on the same issue',
-    'Many problems overall - things don\'t work well',
-    'Customer was transferred around multiple times',
-    'No feedback when/if problem was resolved',
-    'Hard to get through / Long waiting time',
-    'Unfriendly / Unprofessional agent',
-    'Low knowledge level of agent',
-    'Poor language capabability of agent',
-    'Agent did not understand my problem',
-    'No specific reason given',
-    'Customer don\'t want to talk',
-    'NPS score based on contact with someone else than Bambora Support',
-    'Product or system related reason (e.g. HW/SW, reports, server downtime)'
-  ];
+  getNpsTickets($scope.currentPage);
   
 }]);
 

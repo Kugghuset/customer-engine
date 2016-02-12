@@ -14,7 +14,7 @@
   </thead>
   
   <tbody>
-    <tr ng-repeat="ticket in tickets | alphaSort:['ticketDate', 'ticketId']" ng-click="openModal(ticket)">
+    <tr ng-repeat="ticket in tickets | alphaSort:['ticketDate', 'ticketId']" ng-click="currentTicket = ticket; openModal(ticket)">
       <td>{{ ticket.ticketId }}</td>
       <td>{{ ticket.customer.orgName }}</td>
       <td>{{ (ticket.person.tel || ticket.nps.npsTel) | phoneNumber:ticket.country.short }}</td>

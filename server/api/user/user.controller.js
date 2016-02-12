@@ -165,3 +165,20 @@ exports.setPassword = function (req, res) {
     
   });
 }
+
+/**
+ * Gets all users
+ * 
+ * ROUTE: GET '/api/users/'
+ */
+exports.get = function (req, res) {
+  
+  User.getAll()
+  .then(function (users) {
+    res.status(200).json(users);
+  })
+  .catch(function (err) {
+    utils.handleError(res, err);
+  })
+  
+}

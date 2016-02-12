@@ -10,8 +10,8 @@ angular.module('ticketyApp')
     title: 'Admin | Call back'
   });
 }])
-.controller('CallBackCtrl', ['$scope', '$timeout', 'Ticket',
-function ($scope, $timeout, Ticket) {
+.controller('CallBackCtrl', ['$scope', '$timeout', 'Ticket', 'Notification',
+function ($scope, $timeout, Ticket, Notification) {
   
   $scope.npsTickets = [];
   $scope.ticketCount = 0;
@@ -41,6 +41,7 @@ function ($scope, $timeout, Ticket) {
     ['catch'](function (err) {
       $scope.isLoading = false;
       console.log(err);
+      Notification.error('Couldn\'t get tickets from DB, refresh the page.')
     });
   }
   

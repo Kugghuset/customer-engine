@@ -2,21 +2,21 @@
 'use strict'
 
 angular.module('ticketyApp')
-.directive('ceModalCallBack', ['$uibModal', '$timeout', function ($uibModal, $timeout) {
+.directive('ceModalCallBack', ['$uibModal', '$timeout', 'Auth', 'Notification', function ($uibModal, $timeout, Auth, Notification) {
   return {
     template: '<div></div>',
     restrict : 'EA',
     scope: {
       openModal: '=',
       modalIsOpen: '=',
-      npsTicket: '='
+      npsTicket: '=',
+      users: '='
     },
     link: function (scope, element, attrs, ctrl) {
       
       var modalInstance;
       
       scope.openModal = function (ticket) {
-        console.log(ticket);
         
         if (scope.modalIsOpen) {
           // Only one instance can be open.
@@ -34,6 +34,13 @@ angular.module('ticketyApp')
           resolve: {
             ticket: function () {
               return ticket;
+            },
+            users: function () {
+              if (scope.users && scope.users.length) {
+                return scope.users;
+              } else {
+                return Auth.getAll();
+              }
             }
           }
         });
@@ -60,13 +67,28 @@ angular.module('ticketyApp')
     }
   }
 }])
-.controller('ConfirmModalInstanceCtrl', ['$scope', '$uibModalInstance', 'ticket',
-  function ($scope, $uibModalInstance, ticket) {
+.controller('ConfirmModalInstanceCtrl', ['$scope', '$uibModalInstance', 'CallBack', 'ticket', 'users',
+  function ($scope, $uibModalInstance, CallBack, ticket, users) {
   
   $scope.ticket = ticket;
+  $scope.users = users;
   
   $scope.save = function () {
-    $uibModalInstance.close(true);
+    
+    if (!ticket || !ticket.callBack) { return $uibModalInstance.close({}); }
+    
+    var callBackObj = _.assign({}, ticket.callBack, {
+      ticketId: ticket.ticketId,
+      userId: ticket.callBack.userId
+    });
+    
+    CallBack.set(callBackObj.callBackId, callBackObj)
+    .then(function (ticket) {
+      $uibModalInstance.close(ticket);
+    })
+    ['catch'](function (err) {
+      $uibModalInstance.dismiss(false);
+    });
   };
   
   $scope.cancel = function () {

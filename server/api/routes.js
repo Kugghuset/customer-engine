@@ -34,4 +34,5 @@ module.exports = function (app, logger) {
   app.use('/api/persons', require('./person/index'));
   app.use('/api/nps', require('./nps/index'));
   app.use('/api/role', require('./role/index'));
+  app.use('/api/callBacks', require('./callBack/index'));
 };

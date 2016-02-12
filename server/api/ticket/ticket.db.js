@@ -486,7 +486,10 @@ exports.findNps = function (top, page, filter, value) {
       
       resolve({ tickets: util.objectify(_.first(tickets)), ticketCount: tickets[1][0][''] });
     })
-    .catch(reject);
+    .catch(function (err) {
+      console.log(err);
+      reject(err);
+    });
     
   });
 }

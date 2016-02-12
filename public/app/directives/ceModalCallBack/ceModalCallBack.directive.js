@@ -46,8 +46,10 @@ angular.module('ticketyApp')
         });
         
         // Set the confirm result
-        modalInstance.result.then(function (res) {
+        modalInstance.result.then(function (_ticket) {
           $timeout(function () {
+            ticket = ghettoMerge(ticket, _ticket, '$$hashKey')
+            Notification.success('Ticket number :id saved.'.replace(':id', ticket.ticketId))
             scope.modalIsOpen = false;
           });
         })
@@ -57,6 +59,20 @@ angular.module('ticketyApp')
           });
         });
       };
+      
+      /**
+       * @param {Object} oldObj
+       * @param {Object} newObj
+       * @param {String|Array} skip
+       * @return {Object}
+       */
+      function ghettoMerge(oldObj, newObj, skip) {
+        _.forEach(_.omit(newObj, skip), function (value, key) {
+          oldObj[key] = value;
+        });
+        
+        return oldObj;
+      }
       
       scope.$on('$destroy', function (event) {
         if (modalInstance) {
@@ -70,16 +86,19 @@ angular.module('ticketyApp')
 .controller('ConfirmModalInstanceCtrl', ['$scope', '$uibModalInstance', 'CallBack', 'ticket', 'users',
   function ($scope, $uibModalInstance, CallBack, ticket, users) {
   
-  $scope.ticket = ticket;
+  $scope.ticket = angular.copy(ticket);
   $scope.users = users;
   
+  /**
+   * Saves and closes the 
+   */
   $scope.save = function () {
     
-    if (!ticket || !ticket.callBack) { return $uibModalInstance.close({}); }
+    if (!$scope.ticket || !$scope.ticket.callBack) { return $uibModalInstance.close({}); }
     
-    var callBackObj = _.assign({}, ticket.callBack, {
-      ticketId: ticket.ticketId,
-      userId: ticket.callBack.userId
+    var callBackObj = _.assign({}, $scope.ticket.callBack, {
+      ticketId: $scope.ticket.ticketId,
+      userId: $scope.ticket.callBack.userId
     });
     
     CallBack.set(callBackObj.callBackId, callBackObj)

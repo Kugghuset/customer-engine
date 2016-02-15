@@ -10,6 +10,7 @@ BEGIN
     , [userId]
     , [callBackDate]
     , [callBackStatus]
+    , [agentName]
     , [reasonToPromote1]
     , [reasonToPromote2]
     , [reasonToDetract1]
@@ -21,7 +22,11 @@ BEGIN
       @ticketId
     , @userId
     , @callBackDate
-    , @callBackStatus
+    , CASE
+        WHEN @callBackStatus IS NOT NULL THEN @callBackStatus
+        ELSE 'Not called'
+      END
+    , @agentName
     , @reasonToPromote1
     , @reasonToPromote2
     , @reasonToDetract1
@@ -38,7 +43,11 @@ ELSE
   SET   [ticketId] = @ticketId
       , [userId] = @userId
       , [callBackDate] = @callBackDate
-      , [callBackStatus] = @callBackStatus
+      , [callBackStatus] = CASE
+          WHEN @callBackStatus IS NOT NULL THEN @callBackStatus
+          ELSE 'Not called'
+        END
+      , [agentName] = @agentName
       , [reasonToPromote1] = @reasonToPromote1
       , [reasonToPromote2] = @reasonToPromote2
       , [reasonToDetract1] = @reasonToDetract1

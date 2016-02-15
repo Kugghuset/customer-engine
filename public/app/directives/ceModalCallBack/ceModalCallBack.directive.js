@@ -83,8 +83,8 @@ angular.module('ticketyApp')
     }
   }
 }])
-.controller('ConfirmModalInstanceCtrl', ['$scope', '$uibModalInstance', 'CallBack', 'ticket', 'users',
-  function ($scope, $uibModalInstance, CallBack, ticket, users) {
+.controller('ConfirmModalInstanceCtrl', ['$scope', '$uibModalInstance', 'CallBack', 'Notification', 'ticket', 'users',
+  function ($scope, $uibModalInstance, CallBack, Notification, ticket, users) {
   
   $scope.ticket = angular.copy(ticket);
   $scope.users = users;
@@ -114,6 +114,61 @@ angular.module('ticketyApp')
     $uibModalInstance.dismiss(false);
   }
   
+  $scope.handleAgentChanged = function (event, agentName, user) {
+    
+    console.log(agentName, user.name);
+    console.log(agentName === user.name);
+    console.log('----');
+    
+    if (event && event.keyCode === 13) {
+      $scope.setUser(agentName);
+    }
+  }
+  
+  /**
+   * Return true or false for whether *agentName*
+   * matches either *user*.name or *user*.email.
+   * 
+   * @param {String} agentName
+   * @param {Object} user
+   * @return {Boolean}
+   */
+  function agentIsUser(agentName, user) {
+    return (!!agentName && user && (user.name || user.email) === agentName);
+  }
+  
+  /**
+   * Sets the user object and agentName to user (and user.name).
+   * 
+   * @param {Object} input§
+   */
+  $scope.setUser = function (input) {
+    var user;
+    var agentName;
+    if (_.isString(input)) {
+      agentName = input;
+    } else {
+      user = input;
+      agentName = !!user
+        ? user.name || user.email
+        : user;
+    }
+    
+    if (agentIsUser(agentName, _.get($scope.ticket, 'callBack.user'))) {
+      return;
+    }
+    
+    if ($scope.ticket) {
+      // Assign the callBack object to itself and the new data
+      $scope.ticket.callBack = _.assign({}, $scope.ticket.callBack, {
+        user: user,
+        agentName: agentName
+      });
+    } else {
+      Notification.error('Cannot assign user to non-existant ticket.');
+    }
+  }
+  
   /**
    * Splits the comment on new lines after converting \\n to \n.
    * 
@@ -128,6 +183,26 @@ angular.module('ticketyApp')
       ? []
       : comment.replace(/\\n/g, '\n').split(new RegExp(splitter));
   };
+  
+  $scope.statuses = CallBack.getStatuses();
+  $scope.promoteReasons = CallBack.getStatuses();
+  $scope.detractReasons = CallBack.getDetractReasons();
+  
+  /**
+   * Watch for changes in callBack.agentName and set the user if it's changed.
+   */
+  $scope.$watch('ticket.callBack.agentName', function (agentName, oldName) {
+    if (agentName === oldName) { return; }
+    
+    if (!agentName) {
+      $scope.setUser(undefined);
+    } else if (!!$scope.ticket.callBack.user && agentName === $scope.ticket.callBack.user.name) {
+      return;
+    } else {
+      $scope.setUser(agentName);
+    }
+    
+  });
   
 }]);
 

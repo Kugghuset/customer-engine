@@ -52,18 +52,80 @@
     <div>
       <label>Assigned agent</label>
       
-      <span uib-dropdown uib-keyboard-nav>
-        <button id="simple-btn-keyboard-nav" type="button" class="pane-button" uib-dropdown-toggle>
-          {{ ticket.callBack.user.name || 'Assign agent' }} <span class="caret"></span>
-        </button>
-        <ul class="uib-dropdown-menu pane-dropdown" role="menu" aria-labelledby="simple-btn-keyboard-nav">
-          <!-- Links need an href for Boostrap UI to work with keyboard navigation -->
-          <li role="menuitem"><a href="" ng-click="ticket.callBack.user = undefind">Assign user</a></li>
-          <li class="divider"></li>
-          <li role="menuitem" ng-repeat="user in users">
-            <a href="" ng-click="ticket.callBack.user = user">{{ user.name || user.userId }}</a>
-          </li>
-        </ul>
+      <span class="fill-by-label">
+        <span class="fill-by-label">
+        <input type="text"
+          ng-model="ticket.callBack.agentName"
+          uib-typeahead="user as (user.name || user.email) for user in users | filter:$viewValue | limitTo:12"
+          typeahead-on-select="setUser($item)"
+          title="Search the various agents."
+          ng-change="handleAgent(ticket.callBack.agentName, ticket.callBack.user)"
+          placeholder="Search for agents">
+      </span>
+      
+        <span uib-dropdown uib-keyboard-nav>
+          <button id="simple-btn-keyboard-nav" type="button" class="pane-button" uib-dropdown-toggle>
+            <i ng-show="ticket.callBack.user.userId" class="glyphicon glyphicon-user"></i> {{ ticket.callBack.agentName || ticket.callBack.user.name || ticket.callBack.user.email || 'Assign agent' }} <span class="caret"></span>
+          </button>
+          <ul class="uib-dropdown-menu pane-dropdown" role="menu" aria-labelledby="simple-btn-keyboard-nav">
+            <!-- Links need an href for Boostrap UI to work with keyboard navigation -->
+            <li role="menuitem"><a href="" ng-click="ticket.callBack.user = undefind; ticket.callBack.agentName = ''">None</a></li>
+            <li class="divider"></li>
+            <li role="menuitem" ng-repeat="user in users">
+              <a href="" ng-click="setUser(user)">{{ user.name || user.userId }}</a>
+            </li>
+          </ul>
+        </span>
+      </span>
+      
+    </div>
+    
+    <div>
+      <label>Status</label>
+      
+      <span class="fill-by-label">
+        <span uib-dropdown uib-keyboard-nav>
+          <button id="simple-btn-keyboard-nav" type="button" class="pane-button" uib-dropdown-toggle>
+            {{ ticket.callBack.callBackStatus || 'Not called' }} <span class="caret"></span>
+          </button>
+          <ul class="uib-dropdown-menu pane-dropdown" role="menu" aria-labelledby="simple-btn-keyboard-nav">
+            <!-- Links need an href for Boostrap UI to work with keyboard navigation -->
+            <li role="menuitem" ng-repeat="status in statuses track by $index">
+              <a href="" ng-click="ticket.callBack.callBackStatus = status">{{ status }}</a>
+            </li>
+          </ul>
+        </span>
+      </span>
+      
+    </div>
+    
+    <div>
+      <label>Reason to promote 1</label>
+      
+      <span class="fill-by-label">
+        <span class="fill-by-label">
+        <input type="text"
+          ng-model="ticket.callBack.agentName"
+          uib-typeahead="user as (user.name || user.email) for user in users | filter:$viewValue | limitTo:12"
+          typeahead-on-select="setUser($item)"
+          title="Search the various agents."
+          ng-change="handleAgent(ticket.callBack.agentName, ticket.callBack.user)"
+          placeholder="Search for agents">
+      </span>
+      
+        <span uib-dropdown uib-keyboard-nav>
+          <button id="simple-btn-keyboard-nav" type="button" class="pane-button" uib-dropdown-toggle>
+            {{ ticket.callBack.reasonToPromote1 || 'Reason to promote 1' }} <span class="caret"></span>
+          </button>
+          <ul class="uib-dropdown-menu pane-dropdown" role="menu" aria-labelledby="simple-btn-keyboard-nav">
+            <!-- Links need an href for Boostrap UI to work with keyboard navigation -->
+            <li role="menuitem"><a href="" ng-click="ticket.callBack.reasonToPromote1 = undefind">None</a></li>
+            <li class="divider"></li>
+            <li role="menuitem" ng-repeat="reson in promoteReasons track by $index">
+              <a href="" ng-click="ticket.callBack.reasonToPromote1 = reason">{{ reason }}</a>
+            </li>
+          </ul>
+        </span>
       </span>
       
     </div>

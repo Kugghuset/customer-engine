@@ -9,8 +9,9 @@
     <th>Call category 3</th>
     <th>Date for SMS send out</th>
     <th>NPS score</th>
-    <th>NPS comment</th>
+    <!--<th>NPS comment</th>-->
     <th>Assigned agent</th>
+    <th>Status</th>
   </thead>
   
   <tbody>
@@ -18,13 +19,14 @@
       <td>{{ ticket.ticketId }}</td>
       <td>{{ ticket.customer.orgName }}</td>
       <td>{{ (ticket.person.tel || ticket.nps.npsTel) | phoneNumber:ticket.country.short }}</td>
-      <td>{{ ticket.category.categoryName }}</td>
-      <td>{{ ticket.subcategory.subcategoryName }}</td>
-      <td>{{ ticket.descriptor.descriptorName }}</td>
+      <td>{{ ticket.category.categoryName || '-' }}</td>
+      <td>{{ ticket.subcategory.subcategoryName || '-' }}</td>
+      <td>{{ ticket.descriptor.descriptorName || '-' }}</td>
       <td>{{ ticket.nps.npsDate | date:'yyyy-MM-dd' }}</td>
       <td>{{ isFinite(ticket.nps.npsScore) ? 'No score' : ticket.nps.npsScore }}</td>
-      <td><p ng-repeat="line in splitComments(ticket.nps.npsComment, '\t') track by $index">{{ line }}</p></td>
-      <td>{{ ticket.callBack.user.name || ticket.callBack.user.userId || '-' }}</td>
+      <!--<td><p ng-repeat="line in splitComments(ticket.nps.npsComment, '\t') track by $index">{{ line }}</p></td>-->
+      <td><i ng-show="ticket.callBack.user.userId" class="glyphicon glyphicon-user"></i> {{ ticket.callBack.agentName || ticket.callBack.user.name || ticket.callBack.user.email || '-' }}</span></td>
+      <td>{{ ticket.callBack.callBackStatus || 'Not called' }}</td>
     </tr>
   </tbody>
   

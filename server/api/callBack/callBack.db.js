@@ -49,6 +49,10 @@ exports.set = function (id, callBackObj) {
             ? callBackObj.user.userId
             : callBackObj.userId
         },
+        agentName: {
+          type: sql.VARCHAR(255),
+          val: callBackObj.agentName
+        },
         callBackDate: {
           type: sql.DATETIME2,
           val: callBackObj.callBackdate

@@ -59,7 +59,7 @@ SELECT
   , [CB].[reasonToPromote2] AS [callBack.reasonToPromote2]
   , [CB].[reasonToDetract1] AS [callBack.reasonToDetract1]
   , [CB].[reasonToDetract2] AS [callBack.reasonToDetract2]
-  , [CB].[callbackFollowUpAction] AS [callBack.callbackFollowUpAction]
+  , [CB].[callBackFollowUpAction] AS [callBack.callBackFollowUpAction]
   , [CB].[callBackComment] AS [callBack.callBackComment]
   , [CB].[ticketId] AS [callBack.ticketId]
   , [U2].[email] AS [callBack.user.userId]

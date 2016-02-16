@@ -16,9 +16,6 @@ angular.module('ticketyApp')
      */
     set: function (callBackId, callBackObj) {
       return $q(function (resolve, reject) {
-        
-        console.log(callBackObj);
-        
         $http.put('/api/callBacks/:id'.replace(':id', (!!callBackId ? callBackId : '')), callBackObj)
         .success(resolve)
         .error(reject);

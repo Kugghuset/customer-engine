@@ -29,6 +29,7 @@ angular.module('ticketyApp')
         
         modalInstance = $uibModal.open({
           animation: true,
+          size: 'lg',
           templateUrl: 'directives/ceModalCallBack/ceModalCallBack.html',
           controller: 'ConfirmModalInstanceCtrl',
           resolve: {
@@ -116,10 +117,6 @@ angular.module('ticketyApp')
   
   $scope.handleAgentChanged = function (event, agentName, user) {
     
-    console.log(agentName, user.name);
-    console.log(agentName === user.name);
-    console.log('----');
-    
     if (event && event.keyCode === 13) {
       $scope.setUser(agentName);
     }
@@ -185,7 +182,7 @@ angular.module('ticketyApp')
   };
   
   $scope.statuses = CallBack.getStatuses();
-  $scope.promoteReasons = CallBack.getStatuses();
+  $scope.promoteReasons = CallBack.getPromoteReasons();
   $scope.detractReasons = CallBack.getDetractReasons();
   
   /**

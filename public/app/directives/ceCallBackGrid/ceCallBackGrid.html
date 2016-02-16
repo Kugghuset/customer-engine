@@ -9,9 +9,15 @@
     <th>Call category 3</th>
     <th>Date for SMS send out</th>
     <th>NPS score</th>
-    <!--<th>NPS comment</th>-->
+    <th>NPS comment</th>
     <th>Assigned agent</th>
     <th>Status</th>
+    <th>Reason to promote 1</th>
+    <th>Reason to promote 2</th>
+    <th>Reason to detract 1</th>
+    <th>Reason to detract 2</th>
+    <th>Potential follow up action</th>
+    <th>Other comments</th>
   </thead>
   
   <tbody>
@@ -24,9 +30,15 @@
       <td>{{ ticket.descriptor.descriptorName || '-' }}</td>
       <td>{{ ticket.nps.npsDate | date:'yyyy-MM-dd' }}</td>
       <td>{{ isFinite(ticket.nps.npsScore) ? 'No score' : ticket.nps.npsScore }}</td>
-      <!--<td><p ng-repeat="line in splitComments(ticket.nps.npsComment, '\t') track by $index">{{ line }}</p></td>-->
+      <td><p ng-repeat="line in splitComments(ticket.nps.npsComment, '\t') track by $index">{{ line }}</p></td>
       <td><i ng-show="ticket.callBack.user.userId" class="glyphicon glyphicon-user"></i> {{ ticket.callBack.agentName || ticket.callBack.user.name || ticket.callBack.user.email || '-' }}</span></td>
       <td>{{ ticket.callBack.callBackStatus || 'Not called' }}</td>
+      <td>{{ ticket.callBack.reasonToPromote1 }}</td>
+      <td>{{ ticket.callBack.reasonToPromote2 }}</td>
+      <td>{{ ticket.callBack.reasonToDetract1 }}</td>
+      <td>{{ ticket.callBack.reasonToDetract2 }}</td>
+      <td>{{ ticket.callBack.callBackFollowUpAction }}</td>
+      <td>{{ ticket.callBack.callBackComment }}</td>
     </tr>
   </tbody>
   

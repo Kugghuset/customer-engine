@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="bower_components/angular-ui-notification/dist/angular-ui-notification.min.css">
   <link rel="stylesheet" href="bower_components/intl-tel-input/build/css/intlTelInput.css">
   <link rel="stylesheet" href="bower_components/rome/dist/rome.min.css">
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,700' rel='stylesheet' type='text/css'>
   <!--end-file:vendor.min.css-->
   <link rel="stylesheet" href="css/global.min.css">
   
@@ -42,10 +43,11 @@
   <script src="app/app.js"></script>
   <script src="app/routes/main.js"></script>
   <script src="app/routes/login/login.js"></script>
-  <!--<script src="app/routes/admin/admin.js"></script>-->
+  <script src="app/routes/admin/admin.js"></script>
   <script src="app/routes/dashboard/dashboard.js"></script>
   <script src="app/routes/create_ticket/create_ticket.js"></script>
   <script src="app/routes/manage_customer/manage_customer.js"></script>
+  <script src="app/routes/call_back/call_back.js"></script>
   
   <script src="app/services/Auth/Auth.service.js"></script>
   <script src="app/services/Customer/Customer.service.js"></script>
@@ -57,6 +59,7 @@
   <script src="app/services/Utils/Utils.service.js"></script>
   <script src="app/services/Person/Person.service.js"></script>
   <script src="app/services/StateHandler/StateHandler.service.js"></script>
+  <script src="app/services/CallBack/CallBack.service.js"></script>
   
   <script src="app/directives/ceTicketCreate/ceTicketCreate.directive.js"></script>
   <script src="app/directives/ceTicketList/ceTicketList.directive.js"></script>
@@ -75,11 +78,13 @@
   <script src="app/directives/ceModalPerson/ceModalPerson.directive.js"></script>
   <script src="app/directives/ceModalConfirm/ceModalConfirm.directive.js"></script>
   <script src="app/directives/ceModalSummary/ceModalSummary.directive.js"></script>
+  <script src="app/directives/ceModalCallBack/ceModalCallBack.directive.js"></script>
   <script src="app/directives/ceUserCircle/ceUserCircle.directive.js"></script>
   <script src="app/directives/ceCardAreaHeader/ceCardAreaHeader.directive.js"></script>
   <script src="app/directives/ceLoading/ceLoading.directive.js"></script>
   <script src="app/directives/cePaginator/cePaginator.directive.js"></script>
   <script src="app/directives/ceTextAppend/ceTextAppend.directive.js"></script>
+  <script src="app/directives/ceCallBackGrid/ceCallBackGrid.directive.js"></script>
   
   <script src="app/filters/split.filter.js"></script>
   <script src="app/filters/timerDiff.filter.js"></script>

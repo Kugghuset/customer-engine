@@ -252,5 +252,24 @@ exports.setPassword = function (userId, currentPass, password) {
   }.bind(this));
 }
 
+/**
+ * Gets all users
+ * 
+ * @return {Promise} -> {Array}
+ */
+exports.getAll = function () {
+  return new Promise(function (resolve, reject) {
+    
+    sql.execute({
+      query: sql.fromFile('./sql/user.getAll.sql')
+    })
+    .then(function (users) {
+      resolve(util.objectify(users));
+    })
+    .catch(reject);
+    
+  });
+}
+
 // Initialize the table
 intialize();

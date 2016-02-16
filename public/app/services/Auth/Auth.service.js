@@ -140,6 +140,19 @@ angular.module('ticketyApp')
         .success(resolve)
         .error(reject);
       });
+    },
+    
+    /**
+     * Gets all users from DB.
+     * 
+     * @return {Promise} -> {Array}
+     */
+    getAll: function () {
+      return $q(function (resolve, reject) {
+        $http.get('api/users/')
+        .success(resolve)
+        .error(reject);
+      });
     }
   }
 }]);

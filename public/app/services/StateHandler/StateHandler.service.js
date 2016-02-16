@@ -50,8 +50,15 @@ angular.module('ticketyApp')
       case 'main.admin':
         
         // Only admins and above are allowed
-        if (user && user.role >= 10) { return; }
+        if (user && user.role >= 10) {
+          // Only for now, forward to call_back
+          if (event) { event.preventDefault(); }
+          $state.transitionTo('main.admin.call_back');
+          
+          return;
+        }
         if (event) { event.preventDefault(); }
+        
         break;
       
       default:

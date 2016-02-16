@@ -1,18 +1,11 @@
 /*
-Sets the lastLoggedIn to now and selects the user.
+Gets all users from DB.
 */
 
--- Update lastLoggedIn
-UPDATE [dbo].[User]
-SET [dbo].[User].[lastLoggedIn] = GETUTCDATE()
-WHERE [dbo].[User].[userId] = @userId
-
--- Select user on new
 SELECT
     [U].[userId]
   , [U].[email]
   , [U].[name]
-  , [U].[password]
   , [U].[lastLoggedIn]
   , [D].[departmentId] AS [department.departmentId]
   , [D].[departmentName] AS [department.departmentName]
@@ -29,4 +22,4 @@ ON [U].[departmentId] = [D].[departmentId]
 LEFT JOIN [dbo].[Role] AS [R]
 ON [U].[role] = [R].[role]
 
-WHERE [U].[userId] = @userId
+ORDER BY [U].[name], [U].[email]

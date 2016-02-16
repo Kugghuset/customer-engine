@@ -31,8 +31,6 @@ exports.login = function (req, res) {
   // No user, so we can't login.
   if (!req.body) { return utils.handleError(res, new Error('No user provided')); }
   
-  
-  
   //Authenticate user with submitted email and password
   User.auth(req.body.email, req.body.password)
   .then(function (user) {
@@ -166,4 +164,21 @@ exports.setPassword = function (req, res) {
     }
     
   });
+}
+
+/**
+ * Gets all users
+ * 
+ * ROUTE: GET '/api/users/'
+ */
+exports.get = function (req, res) {
+  
+  User.getAll()
+  .then(function (users) {
+    res.status(200).json(users);
+  })
+  .catch(function (err) {
+    utils.handleError(res, err);
+  })
+  
 }

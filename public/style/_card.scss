@@ -53,6 +53,9 @@
       text-transform: uppercase;
       a {
         line-height: $font-size-l;
+        &:active {
+          color: lighten($color: $black, $amount: 50%);
+        }
       }
     }
     ce-status-select {

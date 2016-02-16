@@ -1,0 +1,213 @@
+<div class="pane">
+
+  <h1>Manage call back</h1>
+
+  <form novalidate>
+    
+    <div>
+      <label>Ticket nunmber</label>
+      <span>{{ ticket.ticketId }}</span>
+    </div>
+    
+    <div>
+      <label>Customer name</label>
+      <span>{{ ticket.customer.orgName }}</span>
+    </div>
+    
+    <div>
+      <label>Mobile number</label>
+      <span>{{ (ticket.person.tel || ticket.nps.npsTel) | phoneNumber:ticket.country.short }}</span>
+    </div>
+    
+    <div>
+      <label>Call category 1</label>
+      <span>{{ ticket.category.categoryName || 'No category chosen' }}</span>
+    </div>
+    
+    <div ng-show="ticket.subcategory.subcategoryName">
+      <label>Call category 2</label>
+      <span>{{ ticket.subcategory.subcategoryName }}</span>
+    </div>
+    
+    <div ng-show="!!ticket.descriptor.descriptorName">
+      <label>Call category 3</label>
+      <span>{{ ticket.descriptor.descriptorName }}</span>
+    </div>
+    
+    <div>
+      <label>Date for SMS send out</label>
+      <span>{{ ticket.nps.npsDate | date:'yyyy-MM-dd' }}</span>
+    </div>
+    
+    <div>
+      <label>NPS score</label>
+      <span>{{ isFinite(ticket.nps.npsScore) ? 'No score' : ticket.nps.npsScore }}</span>
+    </div>
+    
+    <div ng-show="!!ticket.nps.npsComment">
+      <label class="text-top">NPS comment</label>
+      <span><div ng-repeat="line in splitComments(ticket.nps.npsComment) track by $index">{{ line }}</div></span>
+    </div>
+    
+    <div>
+      <label>Assigned agent</label>
+      
+      <span class="fill-by-label">
+        <span class="fill-by-label">
+        <input type="text"
+          ng-model="ticket.callBack.agentName"
+          uib-typeahead="user as (user.name || user.email) for user in users | filter:$viewValue | limitTo:12"
+          typeahead-on-select="setUser($item)"
+          title="Search the various agents."
+          ng-change="handleAgent(ticket.callBack.agentName, ticket.callBack.user)"
+          placeholder="Search for agents">
+      </span>
+      
+        <span uib-dropdown uib-keyboard-nav>
+          <button id="simple-btn-keyboard-nav" type="button" class="pane-button" uib-dropdown-toggle>
+            <i ng-show="ticket.callBack.user.userId" class="glyphicon glyphicon-user"></i> {{ ticket.callBack.agentName || ticket.callBack.user.name || ticket.callBack.user.email || 'Assign agent' }} <span class="caret"></span>
+          </button>
+          <ul class="uib-dropdown-menu pane-dropdown" role="menu" aria-labelledby="simple-btn-keyboard-nav">
+            <!-- Links need an href for Boostrap UI to work with keyboard navigation -->
+            <li role="menuitem"><a href="" ng-click="ticket.callBack.user = undefind; ticket.callBack.agentName = ''">None</a></li>
+            <li class="divider"></li>
+            <li role="menuitem" ng-repeat="user in users">
+              <a href="" ng-click="setUser(user)">{{ user.name || user.userId }}</a>
+            </li>
+          </ul>
+        </span>
+      </span>
+      
+    </div>
+    
+    <div>
+      <label>Status</label>
+      
+      <span class="fill-by-label">
+        <span uib-dropdown uib-keyboard-nav>
+          <button id="simple-btn-keyboard-nav" type="button" class="pane-button" uib-dropdown-toggle>
+            {{ ticket.callBack.callBackStatus || 'Not called' }} <span class="caret"></span>
+          </button>
+          <ul class="uib-dropdown-menu pane-dropdown" role="menu" aria-labelledby="simple-btn-keyboard-nav">
+            <!-- Links need an href for Boostrap UI to work with keyboard navigation -->
+            <li role="menuitem" ng-repeat="status in statuses track by $index">
+              <a href="" ng-click="ticket.callBack.callBackStatus = status">{{ status }}</a>
+            </li>
+          </ul>
+        </span>
+      </span>
+      
+    </div>
+    
+    <div>
+      <label>Reason to promote 1</label>
+      
+      <span class="fill-by-label">
+        
+        <span uib-dropdown uib-keyboard-nav>
+          <button id="simple-btn-keyboard-nav" type="button" class="pane-button" uib-dropdown-toggle>
+            {{ ticket.callBack.reasonToPromote1 || 'Reason to promote 1' }} <span class="caret"></span>
+          </button>
+          <ul class="uib-dropdown-menu pane-dropdown" role="menu" aria-labelledby="simple-btn-keyboard-nav">
+            <!-- Links need an href for Boostrap UI to work with keyboard navigation -->
+            <li role="menuitem"><a href="" ng-click="ticket.callBack.reasonToPromote1 = undefind">None</a></li>
+            <li class="divider"></li>
+            <li role="menuitem" ng-repeat="reason in promoteReasons track by $index">
+              <a href="" ng-click="ticket.callBack.reasonToPromote1 = reason">{{ reason }}</a>
+            </li>
+          </ul>
+        </span>
+      </span>
+      
+    </div>
+    
+    <div>
+      <label>Reason to promote 2</label>
+      
+      <span class="fill-by-label">
+        
+        <span uib-dropdown uib-keyboard-nav>
+          <button id="simple-btn-keyboard-nav" type="button" class="pane-button" uib-dropdown-toggle>
+            {{ ticket.callBack.reasonToPromote2 || 'Reason to promote 2' }} <span class="caret"></span>
+          </button>
+          <ul class="uib-dropdown-menu pane-dropdown" role="menu" aria-labelledby="simple-btn-keyboard-nav">
+            <!-- Links need an href for Boostrap UI to work with keyboard navigation -->
+            <li role="menuitem"><a href="" ng-click="ticket.callBack.reasonToPromote2 = undefind">None</a></li>
+            <li class="divider"></li>
+            <li role="menuitem" ng-repeat="reason in promoteReasons track by $index">
+              <a href="" ng-click="ticket.callBack.reasonToPromote2 = reason">{{ reason }}</a>
+            </li>
+          </ul>
+        </span>
+      </span>
+    </div>
+    
+    <div>
+      <label>Reason to detract 1</label>
+      
+      <span class="fill-by-label">
+        
+        <span uib-dropdown uib-keyboard-nav>
+          <button id="simple-btn-keyboard-nav" type="button" class="pane-button" uib-dropdown-toggle>
+            {{ ticket.callBack.reasonToDetract1 || 'Reason to detract 1' }} <span class="caret"></span>
+          </button>
+          <ul class="uib-dropdown-menu pane-dropdown" role="menu" aria-labelledby="simple-btn-keyboard-nav">
+            <!-- Links need an href for Boostrap UI to work with keyboard navigation -->
+            <li role="menuitem"><a href="" ng-click="ticket.callBack.reasonToDetract1 = undefind">None</a></li>
+            <li class="divider"></li>
+            <li role="menuitem" ng-repeat="reason in detractReasons track by $index">
+              <a href="" ng-click="ticket.callBack.reasonToDetract1 = reason">{{ reason }}</a>
+            </li>
+          </ul>
+        </span>
+      </span>
+    </div>
+    
+    <div>
+      <label>Reason to detract 2</label>
+      
+      <span class="fill-by-label">
+        
+        <span uib-dropdown uib-keyboard-nav>
+          <button id="simple-btn-keyboard-nav" type="button" class="pane-button" uib-dropdown-toggle>
+            {{ ticket.callBack.reasonToDetract2 || 'Reason to detract 2' }} <span class="caret"></span>
+          </button>
+          <ul class="uib-dropdown-menu pane-dropdown" role="menu" aria-labelledby="simple-btn-keyboard-nav">
+            <!-- Links need an href for Boostrap UI to work with keyboard navigation -->
+            <li role="menuitem"><a href="" ng-click="ticket.callBack.reasonToDetract2 = undefind">None</a></li>
+            <li class="divider"></li>
+            <li role="menuitem" ng-repeat="reason in detractReasons track by $index">
+              <a href="" ng-click="ticket.callBack.reasonToDetract2 = reason">{{ reason }}</a>
+            </li>
+          </ul>
+        </span>
+      </span>
+    </div>
+    
+    <div>
+      <label class="text-top">Potential follow up action</label>
+      
+      <span class="fill-by-label">
+        <textarea ng-model="ticket.callBack.callBackFollowUpAction" class="animated-textarea" msd-elastic="\n" cols="30" rows="3" placeholder="Potential follow up action."></textarea>
+      </span>
+    </div>
+    
+    <div>
+      <label class="text-top">Other comments</label>
+      
+      <span class="fill-by-label">
+        <textarea ng-model="ticket.callBack.callBackComment" class="animated-textarea" msd-elastic="\n" cols="30" rows="3" placeholder="Potential follow up action."></textarea>
+      </span>
+    </div>
+    
+  </form>
+
+  <div class="float-container">
+
+    <button ng-click="save()" class="pane-button green pull-right offset-right">Save</button>
+
+    <button ng-click="cancel()" class="pane-button red pull-right offset-right">Cancel</button>
+
+  </div>
+
+</div>

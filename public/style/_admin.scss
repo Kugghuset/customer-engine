@@ -1,0 +1,72 @@
+.admin-menu {
+  font-size: $font-size-ml;
+  font-family: $bebas;
+  ul {
+    padding: 0;
+    margin: 0 -30px;
+    li {
+      background-color: $purple-dark;
+      list-style: none;
+      a {
+        color: $white;
+        width: 100%;
+        padding: 10px 30px;
+        display: inline-block;
+      }
+      
+      &.active {
+        background: $purple;
+        &:hover {
+          background-color: lighten($purple, 20%);
+        }
+        &:active {
+          background-color: lighten($purple, 10%);
+        }
+      }
+      &:hover:not(.active) {
+        background-color: lighten($purple-dark, 20%);
+      }
+      &:active:not(.active) {
+        background-color: lighten($purple-dark, 10%);
+      }
+    }
+  }
+}
+
+.call-back-table {
+  width: 100%;
+  margin-top: 10px;
+  
+  
+  thead tr {
+    background-color: $purple-light;
+    color: $white;
+    
+    th {
+      padding: 10px 10px;
+      border-collapse: collapse;
+      border: 1px solid $gray-dark;
+    }
+  }
+  
+  tbody {
+    tr {
+      background-color: $gray;
+      cursor: pointer;
+      &:hover {
+        background-color: darken($color: $gray, $amount: 10%);
+      }
+    }
+    tr:nth-of-type(2n) {
+      background-color: $gray-light;
+      &:hover {
+        background-color: darken($color: $gray-light, $amount: 10%);
+      }
+    }
+    td {
+      padding: 5px 10px;
+      border-collapse: collapse;
+      border: 1px solid $gray-dark;
+    }
+  }
+}

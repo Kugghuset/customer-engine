@@ -43,6 +43,15 @@
     </div>
 
     <br>
+    
+    <div ng-show="user.role === 10">
+      <label for="">Role</label>
+      <span><i class="glyphicon glyphicon-star-empty"></i> Admin</span>
+    </div>
+    <div ng-show="user.role === 100">
+      <label for="">Role</label>
+      <span><i class="glyphicon glyphicon-heart-empty"></i> God</span>
+    </div>
 
     <div class="float-container">
       
@@ -51,8 +60,6 @@
         <span ng-show="loadingUser" class="welcome-spinner"><i class="glyphicon glyphicon-refresh"></i></span>
       </button>
       
-      <!--<button ng-click="cancel()" class="pane-button red pull-right offset-right">Cancel</button>-->
-
     </div>
 
   </form>

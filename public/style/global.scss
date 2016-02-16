@@ -10,8 +10,13 @@
 @import 'welcome';
 @import 'loading';
 @import 'paginator';
+@import 'admin';
 
 @import '../app/app';
+
+html, body {
+  font-family: 'Open Sans', sans-serif;
+}
 
 *, *:after, *:before {
   box-sizing: border-box;
@@ -60,6 +65,11 @@ h1, h2, h3, h4, h5, h6 {
   .glyphicon {
     position: absolute;
     top: 15px;
+    right: 10px;
+  }
+  .pane-button .glyphicon {
+    top: 0;
+    position: relative;
     right: 10px;
   }
   .padded-right {
@@ -168,6 +178,10 @@ label {
 .top-label {
   vertical-align: top !important;
   padding-top: 12px;
+}
+
+.text-top {
+  vertical-align: top !important;
 }
 
 .offset-left {

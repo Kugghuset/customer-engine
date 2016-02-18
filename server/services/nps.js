@@ -13,57 +13,6 @@ var NPS = require('../api/nps/nps.db');
 var schedule = require('./schedule');
 
 /**
- * Finds all tickets which where set to have their ticketDate last week
- * and their person.tel hasn't been texted the in three months
- * or are set as do not contact.
- * 
- * @return {Promise} -> {Array}
- */
-function getLastWeek() {
-  return new Promise(function (resolve, reject) {
-    
-    var query = Ticket.rawSqlFile('ticket.findBy.sql')
-      .replace(new RegExp(
-        utils.escapeRegex('{ where_clause }') + '.*'
-        , 'gi'), [
-          '[ticketDate] < @upperDateLimit',
-          'AND [A].[ticketDate] > @lowerDateLimit',
-          'AND NOT EXISTS(SELECT * FROM [dbo].[NPSSurveyResult]',
-                          'WHERE (REPLACE([dbo].[NPSSurveyResult].[npsTel], \'+\', \'\') = [Q].[tel]',
-                          'AND [dbo].[NPSSurveyResult].[npsDate] > @threeMonthsAgo)',
-                          'OR [dbo].[NPSSurveyResult].[doNotContact] = 1)'
-        ].join(' '));
-    
-    console.log(query);
-    
-    sql.execute({
-      query: query,
-      params: Ticket.ticketParams(
-        Ticket.ensureHasProps({}, {}),
-        {
-          upperDateLimit: {
-            type: sql.DATETIME2,
-            val: moment().subtract(1, 'weeks').endOf('week').toDate()
-          },
-          lowerDateLimit: {
-            type: sql.DATETIME2,
-            val: moment().subtract(1, 'weeks').startOf('week').toDate()
-          },
-          threeMonthsAgo: {
-            type: sql.DATETIME2,
-            val: moment().subtract(3, 'months').toDate()
-          }
-        }
-      )
-    })
-    .then(function (tickets) {
-      resolve(utils.objectify(tickets));
-    })
-    .catch(reject);
-  });
-}
-
-/**
  * Finds all tickets which where set to have their ticketDate before three months (minus one day)
  * and their person.tel hasn't been texted the in three months.
  * 
@@ -72,17 +21,7 @@ function getLastWeek() {
 function getNonQuarantined() {
   return new Promise(function (resolve, reject) {
     
-    var query = Ticket.rawSqlFile('ticket.findBy.sql')
-      .replace(new RegExp(
-        utils.escapeRegex('{ where_clause }') + '.*'
-        , 'gi'), [
-          '[ticketDate] < @upperDateLimit',
-          'AND [A].[ticketDate] > @lowerDateLimit',
-          'AND NOT EXISTS(SELECT * FROM [dbo].[NPSSurveyResult]',
-                          'WHERE REPLACE([dbo].[NPSSurveyResult].[npsTel], \'+\', \'\') = [Q].[tel]',
-                          'AND [dbo].[NPSSurveyResult].[npsDate] > @threeMonthsAgo)'
-        ].join(' '));
-    
+    var query = Ticket.rawSqlFile('ticket.findReceivers.sql')
     sql.execute({
       query: query,
       params: Ticket.ticketParams(
@@ -90,11 +29,11 @@ function getNonQuarantined() {
         {
           upperDateLimit: {
             type: sql.DATETIME2,
-            val: moment().subtract(1, 'weeks').endOf('week').toDate()
+            val: moment().subtract(1, 'weeks').endOf('isoweek').toDate()
           },
           lowerDateLimit: {
             type: sql.DATETIME2,
-            val: moment().subtract(3, 'months').add(1, 'days').toDate()
+            val: moment().subtract(1, 'weeks').startOf('isoweek').toDate()
           },
           threeMonthsAgo: {
             type: sql.DATETIME2,
@@ -124,9 +63,10 @@ function filterUnique(tickets) {
           // Filter out any tickets lacking tels
           return ticket.person && ticket.person.tel;
         })
+        .orderBy(function (ticket) { return [ ticket.person.tel, -ticket.ticketId ]; })
         .uniq(function (ticket) {
           // Remove any duplicate tels
-          return ticket.person.tel
+          return ticket.person.tel;
         })
         .value()
       )

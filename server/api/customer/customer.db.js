@@ -5,6 +5,7 @@ var sql = require('seriate');
 var Promise = require('bluebird');
 var path = require('path');
 var fs = require('fs');
+var os = require('os');
 
 var util = require('../../utils/utils');
 
@@ -245,6 +246,15 @@ function bulkImport() {
  * @return {Promise} -> undefined
  */
 function merge() {
+  
+  
+  if (os.homedir() === 'C:\\Users\\drklu') {
+    return new Promise(function (resolve, reject) {
+      console.log('Not bulk importing as this is on Kris\'s computer.');
+      resolve();
+    });
+  }
+  
   return sql.execute({
     query: sql.fromFile('./sql/customer.merge.sql')
   });

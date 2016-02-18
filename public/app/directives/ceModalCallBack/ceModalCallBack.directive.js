@@ -31,7 +31,7 @@ angular.module('ticketyApp')
           animation: true,
           size: 'lg',
           templateUrl: 'directives/ceModalCallBack/ceModalCallBack.html',
-          controller: 'ConfirmModalInstanceCtrl',
+          controller: 'CallBackModalInstanceCtrl',
           resolve: {
             ticket: function () {
               return ticket;
@@ -84,7 +84,7 @@ angular.module('ticketyApp')
     }
   }
 }])
-.controller('ConfirmModalInstanceCtrl', ['$scope', '$uibModalInstance', 'CallBack', 'Notification', 'ticket', 'users',
+.controller('CallBackModalInstanceCtrl', ['$scope', '$uibModalInstance', 'CallBack', 'Notification', 'ticket', 'users',
   function ($scope, $uibModalInstance, CallBack, Notification, ticket, users) {
   
   $scope.ticket = angular.copy(ticket);

@@ -39,91 +39,6 @@ exports.getAll = function () {
 };
 
 /**
- * Imports all files into DB.
- * 
- * @param {String} basePath
- * @param {Array} files Do not set, set recursively!
- * @param {Array} readFiles Do not set, set recursively!
- * @return {Promise}
- */
-function bulkImport(basePath, files, readFiles) {
-  
-  // First time check
-  if (!files) {
-    
-    var statObj = fs.existsSync(basePath)
-      ? fs.statSync(basePath)
-      : undefined;
-      
-    // The folder either doesn't exist, or it's not a folder
-    // Early return if either is true
-    if (!statObj || statObj.isFile()) { return; }
-    
-    // Get all files
-    files = _.chain(fs.readdirSync(basePath))
-      .filter(function (filename) {
-        return fs.statSync(path.resolve(basePath, filename)).isFile();
-      })
-      .map(function (filename) { return path.resolve(basePath, filename); })
-      .orderBy(function (filename) { return filename; })
-      .value();
-    
-    readFiles = [];
-  }
-  
-  // if (os.homedir() === 'C:\\Users\\drklu') {
-  //   return console.log('Not bulk importing as this is on Kris\'s computer.');
-  // }
-
-  
-  // Return early if there are no files
-  if (!files || !files.length) {
-    return console.log('No NPS score files found, no bulk import.');
-  }
-  
-  // We're all set here
-  if (readFiles.length === files.length) {
-    return console.log('Bulk import of NPS data finished.');
-  }
-  
-  // The file to perform the bulk import on.
-  var currentFile = files[readFiles.length];
-  
-  var npsFileType;
-  
-  var _file = fs.readFileSync(currentFile, 'utf8');
-  
-  // if (_.isString(_file) &6)
-  
-  if (_.isString(_file)) {
-    // The old files are have four fields, thus three semicolons.
-    npsFileType = _file.split('\r\n')[0].replace(/[^;]/gi, '').length === 3;
-  } else {
-    npsFileType = false;
-  }
-  
-  var bulkFile = npsFileTyupe
-    ? './sql/nps.bulkImport_old.sql'
-    : './sql/nps.bulkImport.sql';
-  
-  sql.execute({
-    query: sql
-      .fromFile(bulkFile)
-      .replace('{ filepath }', currentFile)
-  }).then(function () {
-    // continue recursively
-    return bulkImport(files, readFiles.concat([currentFile]));
-  }).catch(function (err) {
-    
-    console.log(currentFile);
-    console.log(err);
-    
-    // Assumme the file simply shouldn't be imported, continue recursively
-    return bulkImport(files, readFiles.concat([currentFile]));
-  });
-}
-
-/**
  * Inserts the *nps* object into the db.
  * 
  * @param {Object} nps
@@ -172,18 +87,105 @@ exports.insert = function (_nps) {
 }
 
 /**
- * Imports the file at *_path* into the DB.
+ * Imports all files into DB.
  * 
- * @param {String} _path
- * @return {Promsie}
+ * @param {String} basePath
+ * @param {Array} files Do not set, set recursively!
+ * @param {Array} readFiles Do not set, set recursively!
+ * @return {Promise}
  */
-exports.importTab = function (_path) {
-  return new Promise(function (resolve, reject) {
+function bulkImport(basePath, files, readFiles) {
+  
+  // First time check
+  if (!files) {
     
+    var statObj = fs.existsSync(basePath)
+      ? fs.statSync(basePath)
+      : undefined;
+      
+    // The folder either doesn't exist, or it's not a folder
+    // Early return if either is true
+    if (!statObj || statObj.isFile()) {
+      return new Promise(function (resolve) { resolve(); });
+    }
     
+    // Get all files
+    files = _.chain(fs.readdirSync(basePath))
+      .filter(function (filename) {
+        var lstat = fs.statSync(path.resolve(basePath, filename))
+        return !!lstat
+          ? lstat.isFile()
+          : false;
+      })
+      .map(function (filename) { return path.resolve(basePath, filename); })
+      .orderBy(function (filename) { return filename; })
+      .value();
     
+    readFiles = [];
+  }
+  
+  // if (os.homedir() === 'C:\\Users\\drklu') {
+  //   console.log('Not bulk importing as this is on Kris\'s computer.');
+  //   return new Promise(function (resolve) { resolve(); });
+  // }
+
+  // Return early if there are no files
+  if (!files || !files.length) {
+    console.log('No NPS score files found, no bulk import.');
+    return new Promise(function (resolve) { resolve(); });
+  }
+  
+  // We're all set here
+  if (readFiles.length === files.length) {
+    console.log('Bulk import of NPS data finished.');
+    return new Promise(function (resolve) { resolve(readFiles); });
+  }
+  
+  // The file to perform the bulk import on.
+  var currentFile = files[readFiles.length];
+  
+  var _file = fs.readFileSync(currentFile, 'utf8');
+  
+  var bulkFile;
+  
+  if (_.isString(_file)) {
+    
+    if (/\t/.test(_file)) {
+      // Use the new file type
+      bulkFile = './sql/nps.bulkImport.sql'
+    } else if (_file.split('\r\n')[0].replace(/[^;]/gi, '').length === 3) {
+      // Use the oldest file type
+      bulkFile = './sql/nps.dep.bulkImport_old.sql'
+    } else {
+      // Use the semi old file type
+      bulkFile = './sql/nps.dep.bulkImport.sql';
+    }
+    
+  } else {
+    // Return early as _file cannot be used
+    return bulkImport(basePath, files, readFiles.concat([currentFile]));
+  }
+  
+  return sql.execute({
+    query: sql
+      .fromFile(bulkFile)
+      .replace('{ filepath }', currentFile)
+  })
+  .then(function () {
+    // continue recursively
+    return bulkImport(basePath, files, readFiles.concat([currentFile]));
+  })
+  .catch(function (err) {
+    
+    console.log(currentFile);
+    console.log(err);
+    
+    // Assumme the file simply shouldn't be imported, continue recursively
+    return bulkImport(basePath, files, readFiles.concat([currentFile]));
   });
 }
+
+exports.bulkImport = bulkImport;
 
 // Temporary outcommenting of bulkimport
 initialize()

@@ -325,6 +325,23 @@ function watchFolder(folder) {
     ? folder
     : _baseFolder;
   
+  if (!folder || !fs.existsSync(folder)) {
+    console.log(
+      chalk.red(
+        'Could not start filer watcher for {folder} as it does not exist.'
+          .replace('{folder}', folder)
+      )
+    );
+    return;
+  }
+  
+  console.log(
+    chalk.green(
+      'Watching folder {folder} for changes.'
+        .replace('{folder}', folder)
+    )
+  );
+  
   fs.watch(folder, function (event, filename) {
     
     // Return if the filename is falsy

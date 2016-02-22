@@ -4,6 +4,7 @@ var _ = require('lodash');
 var Promise = require('bluebird');
 var chalk = require('chalk');
 var later = require('later');
+var moment = require('moment');
 
 var schedule = {
   npsFns: [],
@@ -80,6 +81,8 @@ schedule.addToMergeSchedule = function (fn) {
  * Calls all functions in schedule.npsFns
  */
 schedule.callnpsFns = function () {
+  
+  console.log('[{timestamp}] Calling NPS schedule functions.'.replace('{timestamp}', moment().format('YYYY-MM-DD HH:mm SSSS ZZ')));
   
   _.forEach(this.npsFns, function (fn) {
     // call the function if it's actually a function

@@ -81,7 +81,24 @@ function filterUnique(tickets) {
  * @return {Promise} -> {Array}
  */
 function getReceivers() {
-  return getNonQuarantined().then(filterUnique);
+  return new Promise(function (resolve, reject) {
+    getNonQuarantined().then(filterUnique)
+    .then(function (data) {
+      
+      console.log(
+        '[{timestamp}] Found {num} recipients for NPS messages.'
+        .replace('{timestamp}', moment().format('YYYY-MM-DD HH:mm SSSS ZZ'))
+        .replace('{num}', data.length)
+      );
+      
+      resolve(data);
+    })
+    .catch(function (err) {
+      console.log('[{timestamp}] The following error occured.'.replace('{timestamp}', moment().format('YYYY-MM-DD HH:mm SSSS ZZ')));
+      console.log(err);
+      reject(err);
+    })
+  });
 }
 
 /**
@@ -159,6 +176,7 @@ function npsUrl(ticket) {
  * @return {Promise} -> {Array}
  */
 function getAndSend() {
+  console.log('[{timestamp}] Getting and sending NPS messages.'.replace('{timestamp}', moment().format('YYYY-MM-DD HH:mm SSSS ZZ')));
   return getReceivers()
   .then(sendMessages);
 }

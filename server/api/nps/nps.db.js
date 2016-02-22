@@ -9,6 +9,8 @@ var iconv = require('iconv-lite');
 var chalk = require('chalk');
 var os = require('os');
 
+var deprecated = require('./nps.db.deprecated');
+
 var npsFilePath = path.resolve('./server/assets/nps/total_nps_score.csv');
 
 var npsFolderpath = path.resolve('./server/assets/nps');
@@ -36,13 +38,21 @@ exports.getAll = function () {
   });
 };
 
-function bulkImport(files, readFiles) {
+/**
+ * Imports all files into DB.
+ * 
+ * @param {String} basePath
+ * @param {Array} files Do not set, set recursively!
+ * @param {Array} readFiles Do not set, set recursively!
+ * @return {Promise}
+ */
+function bulkImport(basePath, files, readFiles) {
   
   // First time check
   if (!files) {
     
-    var statObj = fs.existsSync(npsFolderpath)
-      ? fs.statSync(npsFolderpath)
+    var statObj = fs.existsSync(basePath)
+      ? fs.statSync(basePath)
       : undefined;
       
     // The folder either doesn't exist, or it's not a folder
@@ -50,20 +60,20 @@ function bulkImport(files, readFiles) {
     if (!statObj || statObj.isFile()) { return; }
     
     // Get all files
-    files = _.chain(fs.readdirSync(npsFolderpath))
+    files = _.chain(fs.readdirSync(basePath))
       .filter(function (filename) {
-        return fs.statSync(path.resolve(npsFolderpath, filename)).isFile();
+        return fs.statSync(path.resolve(basePath, filename)).isFile();
       })
-      .map(function (filename) { return path.resolve(npsFolderpath, filename); })
+      .map(function (filename) { return path.resolve(basePath, filename); })
       .orderBy(function (filename) { return filename; })
       .value();
     
     readFiles = [];
   }
   
-  if (os.homedir() === 'C:\\Users\\drklu') {
-    return console.log('Not bulk importing as this is on Kris\'s computer.');
-  }
+  // if (os.homedir() === 'C:\\Users\\drklu') {
+  //   return console.log('Not bulk importing as this is on Kris\'s computer.');
+  // }
 
   
   // Return early if there are no files
@@ -79,17 +89,20 @@ function bulkImport(files, readFiles) {
   // The file to perform the bulk import on.
   var currentFile = files[readFiles.length];
   
-  var isOld;
+  var npsFileType;
   
   var _file = fs.readFileSync(currentFile, 'utf8');
+  
+  // if (_.isString(_file) &6)
+  
   if (_.isString(_file)) {
     // The old files are have four fields, thus three semicolons.
-    isOld = _file.split('\r\n')[0].replace(/[^;]/gi, '').length === 3;
+    npsFileType = _file.split('\r\n')[0].replace(/[^;]/gi, '').length === 3;
   } else {
-    isOld = false;
+    npsFileType = false;
   }
   
-  var bulkFile = isOld
+  var bulkFile = npsFileTyupe
     ? './sql/nps.bulkImport_old.sql'
     : './sql/nps.bulkImport.sql';
   
@@ -158,6 +171,20 @@ exports.insert = function (_nps) {
   
 }
 
+/**
+ * Imports the file at *_path* into the DB.
+ * 
+ * @param {String} _path
+ * @return {Promsie}
+ */
+exports.importTab = function (_path) {
+  return new Promise(function (resolve, reject) {
+    
+    
+    
+  });
+}
+
 // Temporary outcommenting of bulkimport
 initialize()
-// .then(bulkImport);
+// .then(deprecated.bulkImport);

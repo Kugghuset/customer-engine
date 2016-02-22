@@ -32,7 +32,7 @@ FROM '{ filepath }'
 WITH
 (
     FIRSTROW = 2 -- Skip the column name row
-  , FIELDTERMINATOR = '\t'
+  , FIELDTERMINATOR = ';'
   , ROWTERMINATOR = '\n'
   , DATAFILETYPE = 'widechar' -- This part is super important for åäö
   , CODEPAGE = 'RAW' -- Supposedly this one too
@@ -42,7 +42,7 @@ WITH
 ALTER TABLE [dbo].[TempNPS]
 ADD [npsDate] datetime2 NULL
 
--- Convert the dates
+-- -- Convert the dates
 UPDATE [dbo].[TempNPS]
 SET [npsDate] = CASE
   WHEN [rawNpsDate] IS NOT NULL THEN CONVERT(datetime2, [rawNpsDate], 103)
@@ -122,6 +122,6 @@ FROM (
 
 
 -- Drop the temp table
--- DROP TABLE [dbo].[TempNPS]
+DROP TABLE [dbo].[TempNPS]
 
 COMMIT TRAN

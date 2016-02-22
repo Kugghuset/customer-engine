@@ -11,7 +11,6 @@ var logger = require('./utils/logger.util')
 
 var app = express();
 
-
 // Setup the database.
 sql.setDefaultConfig(config.db);
 
@@ -30,6 +29,8 @@ function serve() {
     logger.stream.write('App listening on port ' + port);
   });
 }
+
+var xlsxService = require('./services/xlsx').watchFolder(config.baseFolder);
 
 // Serve the app
 serve();

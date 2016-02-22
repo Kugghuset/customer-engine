@@ -28,5 +28,6 @@ module.exports = {
   },
   secrets: {
     session: 'sssshhharedSecret'
-  }
+  },
+  baseFolder: userConfig.baseFolder || ''
 };

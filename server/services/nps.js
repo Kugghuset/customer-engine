@@ -64,7 +64,7 @@ function filterUnique(tickets) {
           return ticket.person && ticket.person.tel;
         })
         .orderBy(function (ticket) { return [ ticket.person.tel, -ticket.ticketId ]; })
-        .uniq(function (ticket) {
+        .uniqBy(function (ticket) {
           // Remove any duplicate tels
           return ticket.person.tel;
         })

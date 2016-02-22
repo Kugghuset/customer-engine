@@ -30,7 +30,7 @@ function serve() {
   });
 }
 
-var xlsxService = require('./services/xlsx');
+var xlsxService = require('./services/xlsx').watchFolder(config.baseFolder);
 
 // Serve the app
 serve();

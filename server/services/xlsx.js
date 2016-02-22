@@ -238,7 +238,12 @@ function convertAllFiles(files) {
           }
           
           // Try get the lstat object
-          var lstat = fs.statSync(path.resolve(_baseFolder, file));
+          var lstat = _.attempt(function () { return fs.statSync(path.resolve(_baseFolder, file)); });
+          
+          // Catch potential errors
+          if (_.isError(lstat)) {
+            return;
+          }
           
           // If lstat is defined, return whether it's a file or not, otherwise return false
           return !!lstat
@@ -270,7 +275,79 @@ function convertAllFiles(files) {
   });
 }
 
+var filePool = {};
+
+/**
+ * Wait's for *ms* ms, and then, if nothing has changed, runs convertAllFiles(...).
+ * 
+ * @param {String} folder
+ * @param {Number} ms Defaults to 500
+ */
+function poolChanges(folder, ms) {
+  
+  var changed = { path: folder };
+  
+  ms = (!_.isUndefined(ms))
+    ? ms
+    : 500;
+  
+  filePool[folder] = changed;
+  
+  setTimeout(function () {
+    
+    if (!filePool[folder]) {
+     // Something might've gone wrong.
+      return poolChanges(folder);
+    }
+    
+    if (filePool[folder] === changed) {
+      
+      console.log(
+        'Running convertAllFiles(...) at {time}'
+        .replace('{time}', moment().format('YYYY-MM-DD HH:mm'))
+      );
+      
+      convertAllFiles();
+      
+    }
+  }, ms);
+  
+}
+
+/**
+ * Watches a folder, and when changed, runs poolChanges(...)
+ * 
+ * @param {String} folder The folder to watch, defaults to *_baseFolder*
+ */
+function watchFolder(folder) {
+  
+  folder = !_.isUndefined(folder)
+    ? folder
+    : _baseFolder;
+  
+  fs.watch(folder, function (event, filename) {
+    
+    // Return if the filename is falsy
+    if (!filename) { return; }
+    
+    // Get an lstat object to check whether it actually was a file
+    var lstat = _.attempt(function () { return fs.statSync(path.resolve(folder, filename)); })
+    
+    // Something went wrong when watchin, return early
+    if (_.isError(lstat)) {
+      return;
+    }
+    
+    // If it's a file, run pool changes
+    if (lstat && lstat.isFile()) {
+      poolChanges(folder);
+    }
+  });
+  
+}
+
 module.exports = {
   xlsToCsv: xlsToTab,
-  convertAllFiles: convertAllFiles
+  convertAllFiles: convertAllFiles,
+  watchFolder: watchFolder
 }

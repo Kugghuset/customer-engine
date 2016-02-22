@@ -16,10 +16,22 @@ var schedule = require('./schedule');
  * Finds all tickets which where set to have their ticketDate before three months (minus one day)
  * and their person.tel hasn't been texted the in three months.
  * 
+ * @param {Number} numberOfWeeks Defaults to 1
  * @return {Promise} -> {Array}
  */
-function getNonQuarantined() {
+function getNonQuarantined(numberOfWeeks) {
   return new Promise(function (resolve, reject) {
+    
+    numberOfWeeks = !_.isUndefined(numberOfWeeks)
+      ? numberOfWeeks
+      : 1;
+    
+    console.log(
+      '[{timestamp}] Getting finding callees between the dates: {date1} and {date2}'
+        .replace('{timestamp}', moment().format('YYYY-MM-DD HH:mm SSSS ZZ'))
+        .replace('{date1}', moment().subtract(numberOfWeeks, 'weeks').startOf('isoweek').format('YYYY-MM-DD HH:mm'))
+        .replace('{date2}', moment().subtract(numberOfWeeks, 'weeks').endOf('isoweek').format('YYYY-MM-DD HH:mm'))
+      );
     
     var query = Ticket.rawSqlFile('ticket.findReceivers.sql')
     sql.execute({
@@ -29,11 +41,11 @@ function getNonQuarantined() {
         {
           upperDateLimit: {
             type: sql.DATETIME2,
-            val: moment().subtract(1, 'weeks').endOf('isoweek').toDate()
+            val: moment().subtract(numberOfWeeks, 'weeks').endOf('isoweek').toDate()
           },
           lowerDateLimit: {
             type: sql.DATETIME2,
-            val: moment().subtract(1, 'weeks').startOf('isoweek').toDate()
+            val: moment().subtract(numberOfWeeks, 'weeks').startOf('isoweek').toDate()
           },
           threeMonthsAgo: {
             type: sql.DATETIME2,
@@ -78,11 +90,18 @@ function filterUnique(tickets) {
  * which have been created since the current quarantine started (minus one day)
  * and haven't been texted in three months.
  * 
+ * @param {Number} numberOfWeeks Defaults to 1
  * @return {Promise} -> {Array}
  */
-function getReceivers() {
+function getReceivers(numberOfWeeks) {
+  
+  numberOfWeeks = !_.isUndefined(numberOfWeeks)
+    ? numberOfWeeks
+    : 1;
+  
   return new Promise(function (resolve, reject) {
-    getNonQuarantined().then(filterUnique)
+    getNonQuarantined(numberOfWeeks)
+    .then(filterUnique)
     .then(function (data) {
       
       console.log(
@@ -116,6 +135,13 @@ function sendMessages(tickets, sentTickets) {
   // Check for finished
   if (!tickets || tickets.length == sentTickets.length) {
     return new Promise(function (resolve, reject) {
+      
+      console.log(
+        '[{timestamp}] Stored {num} entries to NPSSurveyResults table.'
+        .replace('{timestamp}', moment().format('YYYY-MM-DD HH:mm SSSS ZZ'))
+        .replace('{num}', sentTickets.length)
+      );
+      
       resolve(sentTickets)
     });
   }
@@ -173,11 +199,17 @@ function npsUrl(ticket) {
  * Finds all tickets created last week with tels which havenn't been sent out the last three months
  * and sends the sms to them.
  * 
+ * @param {Number} numberOfWeeks Defaults to 1
  * @return {Promise} -> {Array}
  */
-function getAndSend() {
+function getAndSend(numberOfWeeks) {
+  
+  numberOfWeeks = !_.isUndefined(numberOfWeeks)
+    ? numberOfWeeks
+    : 1;
+  
   console.log('[{timestamp}] Getting and sending NPS messages.'.replace('{timestamp}', moment().format('YYYY-MM-DD HH:mm SSSS ZZ')));
-  return getReceivers()
+  return getReceivers(numberOfWeeks)
   .then(sendMessages);
 }
 

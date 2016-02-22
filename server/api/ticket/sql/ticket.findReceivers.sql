@@ -9,6 +9,7 @@ Finds tickets by somethign and joins it. The something is determined by a where_
 SELECT
   MAX([A].[ticketId]) AS [ticketId]
   , MAX([A].[ticketDate]) AS [ticketDate]
+  , MAX([D].[departmentName]) AS [department.departmentName]
   , [Q].[tel] AS [person.tel]
 FROM [dbo].[Ticket] AS [A]
 
@@ -23,6 +24,10 @@ ON [A].[userId] = [U].[userId]
 -- Joins the person, which includes contact info
 LEFT JOIN [dbo].[Person] AS [Q]
 ON [A].[personId] = [Q].[personId]
+
+-- Joins the departmentId
+LEFT JOIN [dbo].[Department] AS [D]
+ON [A].[departmentId] = [D].[departmentId]
 
 WHERE [A].[ticketDate] < @upperDateLimit
   AND [A].[ticketDate] > @lowerDateLimit

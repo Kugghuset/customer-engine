@@ -158,5 +158,6 @@ exports.insert = function (_nps) {
   
 }
 
+// Temporary outcommenting of bulkimport
 initialize()
-.then(bulkImport);
+// .then(bulkImport);

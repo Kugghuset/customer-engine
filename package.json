@@ -4,7 +4,7 @@
   "description": "A tiny, light customer support app",
   "main": "server/app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "watch": "node watch_files.js"
   },
   "repository": {
     "type": "git",
@@ -38,6 +38,7 @@
     "later": "^1.2.0",
     "lodash": "4.3.0",
     "morgan": "^1.6.1",
+    "multer": "^1.1.0",
     "request": "^2.67.0",
     "seriate": "^0.5.3",
     "winston": "^2.1.0",

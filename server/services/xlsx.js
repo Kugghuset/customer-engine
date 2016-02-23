@@ -363,8 +363,38 @@ function watchFolder(folder) {
   
 }
 
+/**
+ * Returns the name of the original file
+ * 
+ * @param {String} filename The now modified file 
+ * @return {String}
+ */
+function getOriginalFilename(filename) {
+  
+  // Try get the original filename
+  var original = _.attempt(function () { return filename.match(/ \((.+)\)\.[a-z]+$/i)[1] + path.extname(filename); });
+  
+  return (!!original && !_.isError(original))
+    ? original
+    : filename;
+  
+}
+
 module.exports = {
   xlsToCsv: xlsToTab,
   convertAllFiles: convertAllFiles,
-  watchFolder: watchFolder
+  watchFolder: watchFolder,
+  getOriginalFilename: getOriginalFilename,
+  folders: {
+    /** The base folder. */
+    base: _baseFolder,
+    /** The folder being watched for changes, same as .base. */
+    input: _inputFolder,
+    /** The folder from which files which are just to be imported. */
+    output: _outputFolder,
+    /** The folder from which files have been imported. */
+    finished: _finishedFolder,
+    /** The folder with the original files.*/
+    processed: _processedFolder
+  }
 }

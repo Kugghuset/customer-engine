@@ -10,6 +10,7 @@ angular.module('ticketyApp', [
   'LocalForageModule',
   'ngCacheBuster',
   'monospaced.elastic',
+  'ngFileUpload',
   'templates'
 ])
 .config(['$stateProvider', '$urlRouterProvider', '$httpProvider', 'ngIntlTelInputProvider', '$localForageProvider', 'httpRequestInterceptorCacheBusterProvider', 'NotificationProvider',
@@ -47,6 +48,8 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, ngIntlTelInputProvi
     // Add authorization token to headers
     request: function (config) {
       config.headers = config.headers || {};
+      
+      console.log(config.headers);
       
       config.headers.Authorization = 'Bearer ' + $cookies.get('token') || '';
       return config;

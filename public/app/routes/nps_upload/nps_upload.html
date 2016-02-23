@@ -1,0 +1,36 @@
+<ce-card-area child-class="vertical-fill fixed-right" child-ng-class="{'paginated': ticketCount > 20}">
+  
+  <section ng-hide="isLoading">
+      
+      <!--<form name="uploadForm" ng-submit="upload(uploadForm)">-->
+        <div class="pane-button no-select clickable"
+          ngf-select="addFiles()"
+          ngf-multiple="true"
+          ng-model="fileContainer.newFiles">Select files</div>
+        <div class="pane-button no-select clickable" ng-click="upload()">Upload files</div>
+      <!--</form>-->
+      
+      <pre>{{ fileContainer | json }}</pre>
+      
+      <ul class="upload-list">
+        <li ng-repeat="file in fileContainer.uploadFiles track by $index | alphaSort:'name'">
+          {{ file.name || 'NO' }}
+          <i class="glyphicon glyphicon-remove" ng-click="removeFromUpload(file)"></i>
+        </li>
+      </ul>
+    
+  </section>
+  
+  <section ng-hide="isLoading">
+    
+    <ul class="file-list">
+      <li ng-repeat="file in files track by $index | alphaSort:'name'">
+        {{ file.name || file }}
+      </li>
+    </ul>
+    
+  </section>
+  
+  <ce-loading is-loading="isLoading"></ce-loading>
+
+</ce-card-area>

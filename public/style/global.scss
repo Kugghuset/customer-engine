@@ -11,6 +11,7 @@
 @import 'loading';
 @import 'paginator';
 @import 'admin';
+@import 'upload';
 
 @import '../app/app';
 
@@ -262,4 +263,8 @@ label {
 
 .clickable {
   cursor: pointer;
+}
+
+.no-select {
+  @include user-select(none);
 }

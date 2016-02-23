@@ -122,6 +122,6 @@ FROM (
 
 
 -- Drop the temp table
--- DROP TABLE [dbo].[TempNPS]
+DROP TABLE [dbo].[TempNPS]
 
 COMMIT TRAN

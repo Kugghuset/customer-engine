@@ -15,6 +15,9 @@ function ($scope, $timeout, Notification, NPS) {
   
   $scope.fileContainer = {};
   
+  /**
+   * @param {Bolean} setLoading Defaults to true
+   */
   function getFiles(setLoading) {
     $scope.isLoading = !_.isUndefined(setLoading)
       ? setLoading
@@ -23,7 +26,6 @@ function ($scope, $timeout, Notification, NPS) {
     NPS.get()
     .then(function (files) {
       $scope.files = files;
-      console.log(files);
       $scope.isLoading = false;
     })
     ['catch'](function (err) {

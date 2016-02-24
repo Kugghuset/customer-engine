@@ -1,0 +1,63 @@
+
+<ce-card-area child-class="vertical-fill fixed-right upload-container" child-ng-class="{'paginated': ticketCount > 20}">
+  
+  <section class="upload-area left">
+    
+    <h1>Upload files</h1>
+    
+    <button class="pane-button no-select clickable"
+      ngf-select="addFiles()"
+      ngf-multiple="true"
+      ng-model="fileContainer.newFiles"
+      ng-disabled="isUploading"
+      ng-class="{'is-loading': isUploading}" >
+      Select files
+    </button>
+    
+    <br>
+    
+    <p ng-hide="fileContainer.uploadFiles.length">
+      No files chosen
+    </p>
+      
+    <ul>
+      <li ng-repeat="file in fileContainer.uploadFiles track by $index | alphaSort:'name'">
+        {{ file.name || 'NO' }}
+        <i class="glyphicon glyphicon-remove clickable" ng-click="removeFromUpload(file)"></i>
+      </li>
+    </ul>
+    
+    <p>This page will allow you to upload the NPS data files.</p>
+    
+    <p>Note: <em>only</em> <b>.xls</b> files are currently supported, and if the file is of incorrect format (I.E. incorrect number of columns and/or incorrect column types), the system won't read it.</p>
+    
+    <button ng-show="fileContainer.uploadFiles.length"
+      class="pane-button no-select clickable"
+      ng-click="upload()"
+      ng-class="{'is-loading': isUploading}" >
+      Upload files
+      <span ng-show="isUploading" class="welcome-spinner"><i class="glyphicon glyphicon-refresh"></i></span>
+    </button>
+    
+  </section>
+  
+  <section class="upload-area right" ng-hide="isLoading">
+    
+    <h1>Files</h1>
+    
+    <br>
+    
+    <p>Files already uploaded and managed.</p>
+    
+    <ul class="offset-top">
+      <li ng-repeat="file in files track by $index | alphaSort:'name'">
+        {{ file.name || file }}
+      </li>
+      
+    </ul>
+    
+  </section>
+  
+  <ce-loading is-loading="isLoading"></ce-loading>
+
+</ce-card-area>

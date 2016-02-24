@@ -19,6 +19,8 @@ var _outputFolder = path.resolve(_baseFolder, 'output');
 var _finishedFolder = path.resolve(_baseFolder, 'imported_processed');
 var _processedFolder = path.resolve(_baseFolder, 'imported_originals');
 
+var tempDisableWatch = false;
+
 /**
  * @param {String} _path
  * @param {Object} options
@@ -211,6 +213,49 @@ function moveImported(files) {
 }
 
 /**
+ * Returns an array of all files in the folder.
+ * 
+ * @param {String} folder Name of the folder
+ * @return {Array}
+ */
+function getFilesIn(folder) {
+  
+  var statObj = fs.existsSync(folder)
+      ? fs.statSync(folder)
+      : undefined;
+    
+    // Either the folder doesn't exist, or it's not a folder
+    if (!statObj || statObj.isFile()) {
+      return undefined;
+    }
+
+    // Get all files in the folder
+    return _.chain(fs.readdirSync(folder))
+      .map(function (file) { return file; })
+      .filter(function (file) {
+        
+        //  Only .xls files are allowed
+        if (!/\.xls$/i.test(file)) {
+          return false;
+        }
+        
+        // Try get the lstat object
+        var lstat = _.attempt(function () { return fs.statSync(path.resolve(folder, file)); });
+        
+        // Catch potential errors
+        if (_.isError(lstat)) {
+          return;
+        }
+        
+        // If lstat is defined, return whether it's a file or not, otherwise return false
+        return !!lstat
+          ? lstat.isFile()
+          : false;
+      })
+      .value();
+}
+
+/**
  * @param {Array} files
  */
 function convertAllFiles(files) {
@@ -218,39 +263,12 @@ function convertAllFiles(files) {
     
     if (!files) {
       
-      var statObj = fs.existsSync(_baseFolder)
-        ? fs.statSync(_baseFolder)
-        : undefined;
+      files = getFilesIn(_baseFolder)
       
-      // Either the folder doesn't exist, or it's not a folder
-      if (!statObj || statObj.isFile()) {
+      if (!files) {
         return new Promise(function (resolve, reject) { resolve(); });
       }
-
-      // Get all files in the folder
-      files = _.chain(fs.readdirSync(_baseFolder))
-        .map(function (file) { return file; })
-        .filter(function (file) {
-          
-          //  Only .xls files are allowed
-          if (!/\.xls$/i.test(file)) {
-            return false;
-          }
-          
-          // Try get the lstat object
-          var lstat = _.attempt(function () { return fs.statSync(path.resolve(_baseFolder, file)); });
-          
-          // Catch potential errors
-          if (_.isError(lstat)) {
-            return;
-          }
-          
-          // If lstat is defined, return whether it's a file or not, otherwise return false
-          return !!lstat
-            ? lstat.isFile()
-            : false;
-        })
-        .value();
+      
     }
     
     // Iterate and over and move all files.
@@ -258,7 +276,7 @@ function convertAllFiles(files) {
       return xlsToTab(file);
     });
     
-    NPS.bulkImport(_baseFolder, tabFiles, [])
+    NPS.bulkImport(_outputFolder, tabFiles, [])
     .then(function (res) {
       
       moveImported(tabFiles);
@@ -267,14 +285,47 @@ function convertAllFiles(files) {
         console.log('{length} NPS result files imported!'.replace('{length}', tabFiles.length));
       }
       
+      return resolve();
+      
     })
     .catch(function (err) {
       console.log(err);
+      return reject(err);
     });
     
   });
 }
 
+/**
+ * @param {String|Array} files Either the foldername or the array of filenames
+ * @return {Promise}
+ */
+function manualConvert(files) {
+  
+  return new Promise(function (resolve, reject) {
+    
+    var _files;
+    
+    // It's probably a folder name
+    if (_.isString(files)) {
+      _files = getFilesIn(files);
+    } else if (_.isArray(files)) {
+      _files = files;
+    }
+    
+    // No files
+    if (!_files) {
+      return resolve()
+    }
+    
+    convertAllFiles(_files)
+    .then(resolve)
+    .catch(reject);
+    
+  });
+}
+
+// Used in poolChanges(...)
 var filePool = {};
 
 /**
@@ -344,6 +395,8 @@ function watchFolder(folder) {
   
   fs.watch(folder, function (event, filename) {
     
+    if (tempDisableWatch);
+    
     // Return if the filename is falsy
     if (!filename) { return; }
     
@@ -380,11 +433,28 @@ function getOriginalFilename(filename) {
   
 }
 
+/**
+ * Sets tempDisableWatch to *isDisabled*.
+ * 
+ * @param {Boolean} isDisabled
+ */
+function setWatchIsDisabled(isDisabled) {
+  tempDisableWatch = isDisabled;
+  console.log(
+    isDisabled
+      ? 'Watcher temporarily disabled'
+      : 'Watcher running again.'
+  );
+}
+
 module.exports = {
   xlsToCsv: xlsToTab,
   convertAllFiles: convertAllFiles,
   watchFolder: watchFolder,
   getOriginalFilename: getOriginalFilename,
+  getFilesIn: getFilesIn,
+  manualConvert: manualConvert,
+  setWatchIsDisabled: setWatchIsDisabled,
   folders: {
     /** The base folder. */
     base: _baseFolder,

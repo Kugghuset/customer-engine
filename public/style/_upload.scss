@@ -1,0 +1,52 @@
+.upload-container {
+  // padding-top: 115px;
+}
+
+.upload-area {
+  width: 400px;
+  max-width: 100%;
+  padding: 10px;
+  float: left;
+  position: relative;
+  
+  * {
+    float: none;
+    text-align: left;
+  }
+  
+  .offset-top {
+    margin-top: 20px;
+  }
+  
+  .pane-button {
+    max-width: 150px;
+    text-align: center;
+  }
+  
+  ul {
+    list-style: none;
+    text-align: left;
+    padding: 0;
+    margin: 0;
+    font-size: $font-size-m;
+    padding: $size-m 0;
+    li {
+      width: 100%;
+      padding: $size-s 30px $size-s $size-s;
+      background-color: $purple-light;
+      color: $white;
+      &:hover {
+        background: darken($color: $purple-light, $amount: 10%);
+      }
+      &:not(:last-of-type) {
+        margin-bottom: $size-xs;
+      }
+      i {
+        float: right;
+        &:hover {
+          color: darken($color: $white, $amount: 10%);
+        }
+      }
+    }
+  }
+}

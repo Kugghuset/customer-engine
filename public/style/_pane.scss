@@ -130,14 +130,6 @@
     text-decoration: none;
   }
   
-  @include all-states {
-    &[disabled="disabled"] {
-      color: $black-ish;
-      background-color: $gray;
-      box-shadow: none;
-    }
-  }
-  
   &.is-loading {
     box-shadow: inset 0px 0px 1px 5000px rgba($color: $white, $alpha: 0.5);
     color: $gray-light;

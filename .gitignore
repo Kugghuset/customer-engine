@@ -4,6 +4,7 @@
 userConfig.js
 **/assets/customers/
 **/assets/nps/
+**/assets/uploads/
 **/public/css/**/*.css
 **/iisnode
 **/*.map

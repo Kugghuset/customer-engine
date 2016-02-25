@@ -2,21 +2,19 @@
 Inserts a NPS object into the table
 */
 
-INSERT INTO [dbo].[NPSSurveyResult] (
+INSERT INTO [dbo].[NpsQuarantine] (
   [npsTel],
   [npsDate],
   [npsScore],
   [npsComment],
-  [isLocal],
-  [doNotContact]
+  [isLocal]
 )
 VALUES (
   @npsTel,
   @npsDate,
   @npsScore,
   @npsComment,
-  @isLocal,
-  @doNotContact
+  @isLocal
 )
 
 SELECT TOP 1
@@ -26,7 +24,6 @@ SELECT TOP 1
   [npsScore],
   [npsComment],
   [dateCreated],
-  [dateChanged],
-  [doNotContact]
-FROM [dbo].[NPSSurveyResult]
+  [dateChanged]
+FROM [dbo].[NpsQuarantine]
 ORDER BY [npsId] DESC

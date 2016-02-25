@@ -58,7 +58,15 @@ SELECT
   , [npsComment]
 FROM (
     MERGE [Tickety].[dbo].[NPSSurveyResult] AS [Target]
-    USING [dbo].[TempNPS] AS [Source]
+    USING (
+      SELECT 
+        CAST([npsDate] AS date) AS [npsdate]
+      , [npsTel] AS [npsTel]
+      , MAX([npsScore]) AS [npsScore]
+      , MAX([npsComment]) AS [npsComment]
+      FROM [dbo].[TempNPS]
+      GROUP BY [npsTel], CAST([npsDate] AS date)
+    ) AS [Source]
     ON
         -- Match on the npsTel and the date only of the npsDate
         [Target].[npsTel] = [Source].[npsTel]

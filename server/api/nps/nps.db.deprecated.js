@@ -37,10 +37,6 @@ function bulkImport(files, readFiles) {
     
     readFiles = [];
   }
-  
-  if (os.homedir() === 'C:\\Users\\drklu') {
-    return console.log('Not bulk importing as this is on Kris\'s computer.');
-  }
 
   
   // Return early if there are no files
@@ -67,8 +63,8 @@ function bulkImport(files, readFiles) {
   }
   
   var bulkFile = isOld
-    ? './sql/nps.bulkImport_old.sql'
-    : './sql/nps.bulkImport.sql';
+    ? './sql/nps.dep.bulkImport_old.sql'
+    : './sql/nps.dep.bulkImport.sql';
   
   sql.execute({
     query: sql

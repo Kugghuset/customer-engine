@@ -35,20 +35,9 @@ WHERE [A].[ticketDate] < @upperDateLimit
   AND [Q].[tel] != ''
   AND NOT EXISTS(SELECT *
          FROM [dbo].[NPSSurveyResult]
-         WHERE 1=1
-          AND (
-            REPLACE([dbo].[NPSSurveyResult].[npsTel], '+', '') = [Q].[tel]
-            AND [dbo].[NPSSurveyResult].[npsDate] > @threeMonthsAgo
-          )
-          OR [dbo].[NPSSurveyResult].[doNotContact] = 1)
-  AND NOT EXISTS(SELECT *
-          FROM [dbo].[NpsQuarantine]
-          WHERE 1=1
-            AND (
-              REPLACE([dbo].[NpsQuarantine].[npsTel], '+', '') = [Q].[tel]
-              AND [dbo].[NpsQuarantine].[npsDate] > @threeMonthsAgo
-            )
-          OR [dbo].[NpsQuarantine].[doNotContact] = 1)
+         WHERE REPLACE([dbo].[NPSSurveyResult].[npsTel], '+', '') = [Q].[tel]
+          AND [dbo].[NPSSurveyResult].[npsDate] > @threeMonthsAgo
+          AND [dbo].[NPSSurveyResult].[doNotContact] = 1)
 
 GROUP BY [Q].[tel]
 ORDER BY MIN([A].[ticketDate]) DESC, MIN([A].[ticketId]) DESC

@@ -10,7 +10,6 @@ var utils = require('../utils/utils');
 var config = require('../config/config');
 var Ticket = require('../api/ticket/ticket.db');
 var NPS = require('../api/nps/nps.db');
-var NpsQuarantine = require('../api/npsQuarantine/npsQuarantine.db');
 var schedule = require('./schedule');
 
 /**
@@ -28,7 +27,7 @@ function getNonQuarantined(numberOfWeeks) {
       : 1;
     
     console.log(
-      '[{timestamp}] Finding callees between the dates: {date1} and {date2}'
+      '[{timestamp}] Getting finding callees between the dates: {date1} and {date2}'
         .replace('{timestamp}', moment().format('YYYY-MM-DD HH:mm SSSS ZZ'))
         .replace('{date1}', moment().subtract(numberOfWeeks, 'weeks').startOf('isoweek').format('YYYY-MM-DD HH:mm'))
         .replace('{date2}', moment().subtract(numberOfWeeks, 'weeks').endOf('isoweek').format('YYYY-MM-DD HH:mm'))
@@ -165,7 +164,7 @@ function sendMessages(tickets, sentTickets) {
   .then(function (result) {
     
     // Insert to db
-    NpsQuarantine.insert(currentTicket)
+    NPS.insert(currentTicket)
     .then(function (ticket) {
       // Recursion!
       return sendMessages(tickets, sentTickets.concat([currentTicket]));

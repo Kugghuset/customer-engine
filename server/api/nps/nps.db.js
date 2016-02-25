@@ -77,10 +77,6 @@ exports.insert = function (_nps) {
         type: sql.VARCHAR,
         val: nps.npsComment
       },
-      doNotContact: {
-        type: sql.BIT,
-        val: nps.doNotContact
-      },
       isLocal: {
         type: sql.BIT,
         val: _.isUndefined(nps.isLocal) ? true : nps.isLocal
@@ -128,6 +124,11 @@ function bulkImport(basePath, files, readFiles) {
     readFiles = [];
   }
   
+  // if (os.homedir() === 'C:\\Users\\drklu') {
+  //   console.log('Not bulk importing as this is on Kris\'s computer.');
+  //   return new Promise(function (resolve) { resolve(); });
+  // }
+
   // Return early if there are no files
   if (!files || !files.length) {
     console.log('No NPS score files found, no bulk import.');
@@ -165,17 +166,10 @@ function bulkImport(basePath, files, readFiles) {
     return bulkImport(basePath, files, readFiles.concat([currentFile]));
   }
   
-  var query = !/\.dep\./i.test(bulkFile)
-    ? sql
+  return sql.execute({
+    query: sql
       .fromFile(bulkFile)
       .replace('{ filepath }', currentFile)
-    : sql
-      .fromFile(bulkFile)
-      .replace("';'", "'\t'")
-      .replace('{ filepath }', currentFile);
-  
-  return sql.execute({
-    query: query
   })
   .then(function () {
     // continue recursively

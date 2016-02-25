@@ -7,16 +7,14 @@ INSERT INTO [dbo].[NPSSurveyResult] (
   [npsDate],
   [npsScore],
   [npsComment],
-  [isLocal],
-  [doNotContact]
+  [isLocal]
 )
 VALUES (
   @npsTel,
   @npsDate,
   @npsScore,
   @npsComment,
-  @isLocal,
-  @doNotContact
+  @isLocal
 )
 
 SELECT TOP 1
@@ -26,7 +24,6 @@ SELECT TOP 1
   [npsScore],
   [npsComment],
   [dateCreated],
-  [dateChanged],
-  [doNotContact]
+  [dateChanged]
 FROM [dbo].[NPSSurveyResult]
 ORDER BY [npsId] DESC

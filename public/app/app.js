@@ -49,8 +49,6 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, ngIntlTelInputProvi
     request: function (config) {
       config.headers = config.headers || {};
       
-      console.log(config.headers);
-      
       config.headers.Authorization = 'Bearer ' + $cookies.get('token') || '';
       return config;
     },

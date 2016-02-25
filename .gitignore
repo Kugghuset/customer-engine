@@ -10,3 +10,4 @@ userConfig.js
 **/*.map
 **/dist
 **/public/index.html
+**/nps_base/

@@ -8,20 +8,25 @@ angular.module('ticketyApp')
     restrict : 'EA',
     scope: {
       ticketCount: '=',
+      pageSize: '=',
       state: '='
     },
     link: function (scope, element, attrs) {
       
       scope.pages = [];
       
+      scope.pageSize = !_.isUndefined(scope.pageSize)
+        ? scope.pageSize
+        : 20;
+      
       function setPages(count) {
         scope.pages = [];
         
         var i = 0;
         
-        var _count = (count/20) % 1 === 0
-          ? count/20
-          : Math.floor(count/20) + 1;
+        var _count = (count/scope.pageSize) % 1 === 0
+          ? count/scope.pageSize
+          : Math.floor(count/scope.pageSize) + 1;
         
         while(i++ < _count) {
           scope.pages.push(i);

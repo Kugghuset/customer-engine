@@ -89,10 +89,9 @@ function ($uibModal, $timeout, Auth, CallBack, Notification) {
     }
   }
 }])
-.controller('CallBackModalInstanceCtrl', ['$scope', '$uibModalInstance', 'CallBack', 'Notification', 'ticket', 'users', 'statuses', 'reasonsToPromote', 'reasonsToDetract',
-  function ($scope, $uibModalInstance, CallBack, Notification, ticket, users, statuses, reasonsToPromote, reasonsToDetract) {
-  
-  console.log(ticket);
+.controller('CallBackModalInstanceCtrl',
+['$scope', '$uibModalInstance', 'CallBack', 'Notification', 'ticket', 'users', 'statuses', 'reasonsToPromote', 'reasonsToDetract',
+function ($scope, $uibModalInstance, CallBack, Notification, ticket, users, statuses, reasonsToPromote, reasonsToDetract) {
   
   $scope.ticket = angular.copy(ticket);
   $scope.users = users;

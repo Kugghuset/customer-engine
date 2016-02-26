@@ -32,7 +32,7 @@ function ($scope, $timeout, Ticket, Notification) {
       ? 1
       : pageNum;
     
-    Ticket.getNpsTickets(20, pageNum)
+    Ticket.getNpsTickets(50, pageNum)
     .then(function (data) {
       $scope.npsTickets = data.tickets;
       $scope.ticketCount = data.ticketCount;

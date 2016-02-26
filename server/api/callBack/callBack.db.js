@@ -84,13 +84,20 @@ exports.set = function (id, callBackObj) {
         callBackComment: {
           type: sql.VARCHAR,
           val: callBackObj.callBackComment
+        },
+        isClosed: {
+          type: sql.BIT,
+          val: callBackObj.isClosed || 0
         }
       }
     })
     .then(function (tickets) {
       resolve(util.objectify(_.first(tickets)));
     })
-    .catch(reject);
+    .catch(function (err) {
+      console.log(err);
+      reject(err);
+    });
   });
 }
 

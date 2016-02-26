@@ -91,7 +91,7 @@
           <ul class="uib-dropdown-menu pane-dropdown" role="menu" aria-labelledby="simple-btn-keyboard-nav">
             <!-- Links need an href for Boostrap UI to work with keyboard navigation -->
             <li role="menuitem" ng-repeat="status in statuses track by $index">
-              <a href="" ng-click="ticket.callBack.callBackStatus = status">{{ status }}</a>
+              <a href="" ng-click="setCallBackStatus(status)">{{ status.callBackStatusName }}</a>
             </li>
           </ul>
         </span>
@@ -113,7 +113,7 @@
             <li role="menuitem"><a href="" ng-click="ticket.callBack.reasonToPromote1 = undefind">None</a></li>
             <li class="divider"></li>
             <li role="menuitem" ng-repeat="reason in promoteReasons track by $index">
-              <a href="" ng-click="ticket.callBack.reasonToPromote1 = reason">{{ reason }}</a>
+              <a href="" ng-click="setReasonToPromote(reason, 1)">{{ reason.reasonToPromoteName }}</a>
             </li>
           </ul>
         </span>
@@ -135,7 +135,7 @@
             <li role="menuitem"><a href="" ng-click="ticket.callBack.reasonToPromote2 = undefind">None</a></li>
             <li class="divider"></li>
             <li role="menuitem" ng-repeat="reason in promoteReasons track by $index">
-              <a href="" ng-click="ticket.callBack.reasonToPromote2 = reason">{{ reason }}</a>
+              <a href="" ng-click="setReasonToPromote(reason, 2)">{{ reason.reasonToPromoteName }}</a>
             </li>
           </ul>
         </span>
@@ -156,7 +156,7 @@
             <li role="menuitem"><a href="" ng-click="ticket.callBack.reasonToDetract1 = undefind">None</a></li>
             <li class="divider"></li>
             <li role="menuitem" ng-repeat="reason in detractReasons track by $index">
-              <a href="" ng-click="ticket.callBack.reasonToDetract1 = reason">{{ reason }}</a>
+              <a href="" ng-click="setReasonToDetract(reason, 1)">{{ reason.reasonToDetractName }}</a>
             </li>
           </ul>
         </span>
@@ -177,7 +177,7 @@
             <li role="menuitem"><a href="" ng-click="ticket.callBack.reasonToDetract2 = undefind">None</a></li>
             <li class="divider"></li>
             <li role="menuitem" ng-repeat="reason in detractReasons track by $index">
-              <a href="" ng-click="ticket.callBack.reasonToDetract2 = reason">{{ reason }}</a>
+              <a href="" ng-click="setReasonToDetract(reason, 2)">{{ reason.reasonToDetractName }}</a>
             </li>
           </ul>
         </span>
@@ -198,6 +198,13 @@
       <span class="fill-by-label">
         <textarea ng-model="ticket.callBack.callBackComment" class="animated-textarea" msd-elastic="\n" cols="30" rows="3" placeholder="Potential follow up action."></textarea>
       </span>
+    </div>
+    
+    <div>
+      <label class="checkbox-label">
+        <input type="checkbox" ng-model="ticket.callBack.isClosed" ng-click="manualClose = ticket.callBack.isClosed">
+        <i class="offset-left" ></i> Call back is completed
+      </label>
     </div>
     
   </form>

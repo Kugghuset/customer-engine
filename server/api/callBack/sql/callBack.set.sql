@@ -17,6 +17,7 @@ BEGIN
     , [reasonToDetract2]
     , [callBackFollowUpAction]
     , [callBackComment]
+    , [isClosed]
   )
   VALUES (
       @ticketId
@@ -33,6 +34,7 @@ BEGIN
     , @reasonToDetract2
     , @callBackFollowUpAction
     , @callBackComment
+    , @isClosed
   )
   
   SELECT @callBackId = MAX(callBackId) FROM [dbo].[CallBack]
@@ -54,5 +56,6 @@ ELSE
       , [reasonToDetract2] = @reasonToDetract2
       , [callBackFollowUpAction] = @callBackFollowUpAction
       , [callBackComment] = @callBackComment
+      , [isClosed] = @isClosed
       , [dateUpdated] = GETUTCDATE()
   WHERE [callBackId] = @callBackId

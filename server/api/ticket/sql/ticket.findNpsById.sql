@@ -61,6 +61,7 @@ SELECT
   , [CB].[reasonToDetract2] AS [callBack.reasonToDetract2]
   , [CB].[callBackFollowUpAction] AS [callBack.callBackFollowUpAction]
   , [CB].[callBackComment] AS [callBack.callBackComment]
+  , [CB].[isClosed] AS [callBack.isClosed]
   , [CB].[ticketId] AS [callBack.ticketId]
   , [U2].[email] AS [callBack.user.userId]
   , [U2].[name] AS [callBack.user.name]

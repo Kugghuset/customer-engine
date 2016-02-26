@@ -37,4 +37,7 @@ module.exports = function (app, logger) {
   app.use('/api/role', require('./role/index'));
   app.use('/api/callBacks', require('./callBack/index'));
   app.use('/api/files', require('./file/index'));
+  app.use('/api/reasonToPromote', require('./reasonToPromote/index'));
+  app.use('/api/reasonToDetract', require('./reasonToDetract/index'));
+  app.use('/api/callBackStatus', require('./callBackStatus/index'));
 };

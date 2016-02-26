@@ -4,6 +4,7 @@
 angular.module('ticketyApp')
 .factory('Auth', ['$rootScope', '$http', '$q', '$cookies', '$state', function ($rootScope, $http, $q, $cookies, $state) {
   var _user;
+  var _users;
   
   /**
    * Watches the variable *_user* for changes.
@@ -149,8 +150,17 @@ angular.module('ticketyApp')
      */
     getAll: function () {
       return $q(function (resolve, reject) {
+        
+        // Use cached users if _users is defined
+        if (_users) {
+          return resolve(_users);
+        }
+        
         $http.get('api/users/')
-        .success(resolve)
+        .success(function (data) {
+          _users = data;
+          resolve(data);
+        })
         .error(reject);
       });
     }

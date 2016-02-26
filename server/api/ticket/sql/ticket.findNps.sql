@@ -126,4 +126,7 @@ SELECT COUNT(*)
 FROM [dbo].[Ticket] AS [A]
 INNER JOIN [dbo].[NPSSurveyResult] AS [NPS]
 ON [A].[ticketId] = [NPS].[ticketId]
+
+LEFT JOIN [dbo].[CallBack] AS [CB]
+ON [A].[ticketId] = [CB].[ticketId]
   WHERE [npsScore] IS NOT NULL

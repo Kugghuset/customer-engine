@@ -11,23 +11,42 @@
         color: $white;
         width: 100%;
         padding: 10px 30px;
-        display: inline-block;
-      }
-      
-      &.active {
-        background: $purple;
-        &:hover {
-          background-color: lighten($purple, 20%);
+        display: block;
+        &.active {
+          background: $purple;
+          &:hover {
+            background-color: lighten($purple, 20%);
+          }
+          &:active {
+            background-color: lighten($purple, 10%);
+          }
         }
-        &:active {
-          background-color: lighten($purple, 10%);
+        &:hover:not(.active) {
+          background-color: lighten($purple-dark, 20%);
         }
-      }
-      &:hover:not(.active) {
-        background-color: lighten($purple-dark, 20%);
-      }
-      &:active:not(.active) {
-        background-color: lighten($purple-dark, 10%);
+        &:active:not(.active) {
+          background-color: lighten($purple-dark, 10%);
+        }
+        
+        &:not(:first-child) {
+          padding-left: 50px;
+          &.active {
+            background: $purple-light;
+            &:hover {
+              background-color: lighten($purple-light, 20%);
+            }
+            &:active {
+              background-color: lighten($purple-light, 10%);
+            }
+          }
+          &:hover:not(.active) {
+            background-color: lighten($purple-dark, 20%);
+          }
+          &:active:not(.active) {
+            background-color: lighten($purple-dark, 10%);
+          }
+        }
+        
       }
     }
   }

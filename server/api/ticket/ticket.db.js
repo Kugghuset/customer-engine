@@ -447,6 +447,34 @@ exports.statusTickets = function (userId) {
 }
 
 /**
+ * Gets the SQL type and val of *val*,
+ * in the format Seriate wants.
+ * 
+ * Example output: { type: [sql.BIGINT], val: 27861523 }
+ * 
+ * @param {Any} val
+ * @return {Object}
+ */
+function getTypeAndVal(val) {
+  
+  var _type;
+  
+  if (_.isDate(val)) {
+    _type = sql.DATETIME2;
+  } else if (_.isNumber(val)) {
+    _type = sql.BIGINT;
+  } else {
+    _type = sql.VARCHAR;
+  }
+   
+  return {
+    type: _type,
+    val: val
+  };
+  
+}
+
+/**
  * Returns a promise of all nps tickets matchiNG *filter* and *value*
  * if defined, otherwise returns all nps tickets.
  * 
@@ -468,18 +496,29 @@ exports.findNps = function (top, page, filter, value) {
     
     var query = sql.fromFile('./sql/ticket.findNps.sql');
     
+    var params = {
+      top: {
+        type: sql.BIGINT,
+        val: top
+      },
+      offset: {
+        type: sql.BIGINT,
+        val: offset
+      }
+    };
+    
+    if (filter) {
+      params[filter] = getTypeAndVal(value);
+      
+      query = query.replace(/(WHERE \[.+)/gi, '$1 AND [CB].[' + filter + '] = @' + filter)
+      
+      console.log(query);
+      
+    }
+    
     sql.execute({
       query: query,
-      params: {
-        top: {
-          type: sql.BIGINT,
-          val: top
-        },
-        offset: {
-          type: sql.BIGINT,
-          val: offset
-        }
-      },
+      params: params,
       multiple: true
     })
     .then(function (tickets) {

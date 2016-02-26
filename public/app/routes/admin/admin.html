@@ -14,8 +14,14 @@
     
     <nav class="admin-menu">
       <ul>
-        <li ng-class="{'active': (state === 'main.admin.call_back')}"><a href="" ui-sref="main.admin.call_back">Manage call backs</a></li>
-        <li ng-class="{'active': (state === 'main.admin.nps_upload')}"><a href="" ui-sref="main.admin.nps_upload">Upload NPS files</a></li>
+        <li>
+          <a href="" ui-sref="main.admin.call_back" ui-sref-active="active">Manage call backs</a>
+          <a href="" ui-sref="main.admin.call_back({isClosed: false})" ui-sref-active="active" ng-show="state === 'main.admin.call_back'">Tickets for call backs</a>
+          <a href="" ui-sref="main.admin.call_back({isClosed: true})" ui-sref-active="active"  ng-show="state === 'main.admin.call_back'">Call back completed</a>
+        </li>
+        <li>
+          <a href="" ui-sref="main.admin.nps_upload" ui-sref-active="active">Upload NPS files</a>
+        </li>
       </ul>
     </nav>
     

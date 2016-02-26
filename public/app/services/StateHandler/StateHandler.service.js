@@ -53,7 +53,7 @@ angular.module('ticketyApp')
         if (user && user.role >= 10) {
           // Only for now, forward to call_back
           if (event) { event.preventDefault(); }
-          $state.transitionTo('main.admin.call_back');
+          $state.transitionTo('main.admin.call_back', {isClosed: false}, {inherit: false});
           
           return;
         }

@@ -23,7 +23,7 @@
   </thead>
   
   <tbody>
-    <tr ng-repeat="ticket in tickets | alphaSort:getSort()" ng-click="openModal(ticket)">
+    <tr ng-hide="shouldHide(ticket)" ng-repeat="ticket in tickets | alphaSort:getSort()" ng-click="openModal(ticket)">
       <td>{{ ticket.ticketId }}</td>
       <td>{{ ticket.customer.orgName }}</td>
       <td>{{ (ticket.person.tel || ticket.nps.npsTel) | phoneNumber:ticket.country.short }}</td>

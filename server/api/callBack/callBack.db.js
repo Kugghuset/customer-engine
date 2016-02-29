@@ -85,6 +85,10 @@ exports.set = function (id, callBackObj) {
           type: sql.VARCHAR,
           val: callBackObj.callBackComment
         },
+        dateClosed: {
+          type: sql.DATETIME2,
+          val: callBackObj.dateClosed
+        },
         isClosed: {
           type: sql.BIT,
           val: callBackObj.isClosed || 0

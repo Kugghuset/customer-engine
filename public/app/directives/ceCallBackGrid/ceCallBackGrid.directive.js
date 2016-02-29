@@ -2,7 +2,7 @@
 'use strict'
 
 angular.module('ticketyApp')
-.directive('ceCallBackGrid', ['Ticket', 'Auth', function (Ticket, Auth) {
+.directive('ceCallBackGrid', ['$location', 'Ticket', 'Auth', function ($location, Ticket, Auth) {
   return {
     templateUrl: 'directives/ceCallBackGrid/ceCallBackGrid.html',
     restrict: 'EA',
@@ -24,6 +24,17 @@ angular.module('ticketyApp')
         return !_.isString(comment)
           ? []
           : comment.replace(/\\n/g, '\n').split(new RegExp(splitter));
+      };
+      
+      /**
+       * Gets the sort array for using the alpha sort module.
+       * 
+       * @return {Array}
+       */
+      scope.getSort = function () {
+        return /false/.test(($location.search() || {}).isClosed)
+          ? ['ticketDate', 'ticketId']
+          : ['callBack.dateClosed', 'ticketId'];
       };
       
     }

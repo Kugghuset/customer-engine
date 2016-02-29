@@ -463,6 +463,9 @@ function getTypeAndVal(val) {
     _type = sql.DATETIME2;
   } else if (_.isNumber(val)) {
     _type = sql.BIGINT;
+  } else if (/^(true|false)$/.test(val)) {
+    val = util.parseBool(val);
+    _type = sql.BIT;
   } else {
     _type = sql.VARCHAR;
   }
@@ -508,12 +511,20 @@ exports.findNps = function (top, page, filter, value) {
     };
     
     if (filter) {
+      // Add the filter to the params objcet
       params[filter] = getTypeAndVal(value);
       
-      query = query.replace(/(WHERE \[.+)/gi, '$1 AND [CB].[' + filter + '] = @' + filter)
-      
-      console.log(query);
-      
+      // Alter the query to actually use the filters
+      if (params[filter].val === false) {
+        // Add the filter at [CB].[_filter_] = @_filter_ and negate its NULL values
+        query = query
+          .replace(/(WHERE \[.+)/gi, '$1 AND ([CB].[' + filter + '] = @' + filter + ' OR [CB].[' + filter + '] IS NULL)')
+      } else {
+        // Add the filter at [CB].[_filter_] = @_filter_ and then order by dateClosed desc
+        query = query
+          .replace(/(WHERE \[.+)/gi, '$1 AND [CB].[' + filter + '] = @' + filter)
+          .replace(/(ORDER BY )(\[.+,)/gi, '$1[CB].[dateClosed] DESC,');
+      }
     }
     
     sql.execute({
@@ -522,7 +533,6 @@ exports.findNps = function (top, page, filter, value) {
       multiple: true
     })
     .then(function (tickets) {
-      
       resolve({ tickets: util.objectify(_.first(tickets)), ticketCount: tickets[1][0][''] });
     })
     .catch(function (err) {

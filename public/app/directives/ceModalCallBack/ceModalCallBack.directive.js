@@ -228,6 +228,18 @@ function ($scope, $uibModalInstance, CallBack, Notification, ticket, users, stat
     $scope.ticket.callBack['reasonToDetract' + num] = reason.reasonToDetractName;
   }
   
+  /**
+   * Watch for changes in the isCLosed status, and set dateClosed
+   */
+  $scope.$watch('ticket.callBack.isClosed', function (isClosed, oldIsClosed) {
+    // Set the dateClosed either to now, if the status changed to closed, 
+    // or undefined if it's open.
+    if (oldIsClosed != isClosed) {
+      $scope.ticket.callBack.dateClosed = $scope.ticket.callBack.isClosed
+        ? new Date()
+        : undefined;
+    }
+  })
   
   /**
    * Watch for changes in callBack.agentName and set the user if it's changed.

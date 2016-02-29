@@ -63,6 +63,7 @@ SELECT
   , [CB].[callBackComment] AS [callBack.callBackComment]
   , [CB].[isClosed] AS [callBack.isClosed]
   , [CB].[ticketId] AS [callBack.ticketId]
+  , [CB].[dateClosed] AS [callBack.dateClosed]
   , [U2].[email] AS [callBack.user.userId]
   , [U2].[name] AS [callBack.user.name]
 FROM [dbo].[Ticket] AS [A]

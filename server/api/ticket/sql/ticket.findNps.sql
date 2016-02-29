@@ -62,6 +62,7 @@ SELECT
   , [CB].[callBackFollowUpAction] AS [callBack.callBackFollowUpAction]
   , [CB].[callBackComment] AS [callBack.callBackComment]
   , [CB].[isClosed] AS [callBack.isClosed]
+  , [CB].[dateClosed] AS [callBack.dateClosed]
   , [CB].[ticketId] AS [callBack.ticketId]
   , [U2].[email] AS [callBack.user.userId]
   , [U2].[email] AS [callBack.user.email]

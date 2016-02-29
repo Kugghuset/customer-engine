@@ -194,6 +194,20 @@ function getPage(url, options) {
   });
 }
 
+/**
+ * Converts somewhat boolean values and strings such as 'false'.
+ * 
+ * @param {Any} input
+ * @return {Boolean}
+ */
+function parseBool(input) {
+  if (_.isUndefined(input)) { return undefined; }
+  if (_.isBoolean(input)) { return input; }
+  if (_.isString(input)) { return input != 'false'; }
+  
+  return !!input;
+}
+
 module.exports = {
   objectify: objectify,
   handleError: handleError,
@@ -203,5 +217,6 @@ module.exports = {
   removeModules: removeModules,
   cacheBustFiles: cacheBustFiles,
   getAllModuleNames: getAllModuleNames,
-  getPage: getPage
+  getPage: getPage,
+  parseBool: parseBool
 };

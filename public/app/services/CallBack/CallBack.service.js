@@ -4,6 +4,9 @@
 angular.module('ticketyApp')
 .factory('CallBack', ['$q', '$http', function ($q, $http) {
   
+  var _statuses;
+  var _reasonsToPromote;
+  var _reasonsToDetract;
   
   return {
     
@@ -23,68 +26,72 @@ angular.module('ticketyApp')
     },
     
     /**
-     * Returns an array of 
+     * Returns a promise of an array of call back statuses.
+     * If there's a cached version, it is returned, otherwise the server is requested.
      * 
-     * @return {Array}
+     * @return {Promise} -> {Array}
      */
     getStatuses: function () {
-      return [
-        'Not called',
-        'Call completed',
-        'Call back later',
-        'No reply - called several times',
-        'Customer don\'t want to talk'
-      ];
+      return $q(function (resolve, reject) {
+        
+        // Return cached version if it exists.
+        if (_statuses) {
+          return resolve(_statuses);
+        }
+        
+        $http.get('/api/callBackStatus')
+        .success(function (data) {
+          _statuses = data;
+          resolve(data);
+        })
+        .error(reject);
+      });
     },
     
     /**
-     * Returns an array of reasons to promote.
+     * Returns a promise of an array of reasons to promote.
+     * If there's a cached version, it is returned, otherwise the server is requested.
      * 
-     * @return {Array}
+     * @return {Promise} -> {Array}
      */
-    getPromoteReasons: function () {
-      return [
-        'Problem resolved instantly',
-        'Problem solved within reasonable time',
-        'Problem was resolved permanently',
-        'Few problems - things generally works well',
-        'Few/no transfers',
-        'Feedback when problem was resolved',
-        'Easy to get through / Short waiting time',
-        'Friendly & professional agent',
-        'High knowledge level of agent',
-        'Good language capabability of agent',
-        'Agent understood my problem',
-        'No specific reason given',
-        'Customer don\'t want to talk',
-        'NPS score based on contact with someone else than Bambora Support',
-        'Product or system related reason (e.g. HW/SW, reports)'
-      ];
+    getReasonsToPromote: function () {
+      return $q(function (resolve, reject) {
+        
+        // Return cached version if it exists.
+        if (_reasonsToPromote) {
+          return resolve(_reasonsToPromote);
+        }
+        
+        $http.get('/api/reasonToPromote')
+        .success(function (data) {
+          _reasonsToPromote = data;
+          resolve(data);
+        })
+        .error(reject);
+      });
     },
     
     /**
-     * Returns an array of reasons to detract
+     * Returns a promise of an array of reasons to detract.
+     * If there's a cached version, it is returned, otherwise the server is requested.
      * 
-     * @return {Array}
+     * @return {Promise} -> {Array}
      */
-    getDetractReasons: function () {
-      return [
-        'No / Poor solution to problem',
-        'Long time to solve the problem',
-        'The same problem keeps on coming back / Customer had to call back multiple times on the same issue',
-        'Many problems overall - things don\'t work well',
-        'Customer was transferred around multiple times',
-        'No feedback when/if problem was resolved',
-        'Hard to get through / Long waiting time',
-        'Unfriendly / Unprofessional agent',
-        'Low knowledge level of agent',
-        'Poor language capabability of agent',
-        'Agent did not understand my problem',
-        'No specific reason given',
-        'Customer don\'t want to talk',
-        'NPS score based on contact with someone else than Bambora Support',
-        'Product or system related reason (e.g. HW/SW, reports, server downtime)'
-      ];
+    getReasonsToDetract: function () {
+      return $q(function (resolve, reject) {
+        
+        // Return cached version if it exists.
+        if (_reasonsToDetract) {
+          return resolve(_reasonsToDetract);
+        }
+        
+        $http.get('/api/reasonToDetract')
+        .success(function (data) {
+          _reasonsToDetract = data;
+          resolve(data);
+        })
+        .error(reject);
+      });
     }
     
   };

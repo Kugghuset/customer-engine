@@ -6,51 +6,61 @@
     
     <div>
       <label>Ticket nunmber</label>
-      <span>{{ ticket.ticketId }}</span>
+      <span class="fill-by-label">{{ ticket.ticketId }}</span>
     </div>
     
     <div>
       <label>Customer name</label>
-      <span>{{ ticket.customer.orgName }}</span>
+      <span class="fill-by-label">{{ ticket.customer.orgName }}</span>
     </div>
     
     <div>
       <label>Mobile number</label>
-      <span>{{ (ticket.person.tel || ticket.nps.npsTel) | phoneNumber:ticket.country.short }}</span>
+      <span class="fill-by-label">{{ (ticket.person.tel || ticket.nps.npsTel) | phoneNumber:ticket.country.short }}</span>
     </div>
     
     <div>
       <label>Call category 1</label>
-      <span>{{ ticket.category.categoryName || 'No category chosen' }}</span>
+      <span class="fill-by-label">{{ ticket.category.categoryName || 'No category chosen' }}</span>
     </div>
     
     <div ng-show="ticket.subcategory.subcategoryName">
       <label>Call category 2</label>
-      <span>{{ ticket.subcategory.subcategoryName }}</span>
+      <span class="fill-by-label">{{ ticket.subcategory.subcategoryName }}</span>
     </div>
     
     <div ng-show="!!ticket.descriptor.descriptorName">
       <label>Call category 3</label>
-      <span>{{ ticket.descriptor.descriptorName }}</span>
+      <span class="fill-by-label">{{ ticket.descriptor.descriptorName }}</span>
+    </div>
+    
+    <div>
+      <label class="text-top">Initial summary</label>
+      <span class="fill-by-label"><div ng-repeat="line in splitComments(ticket.summary) track by $index">{{ line }}</div></span>
     </div>
     
     <div>
       <label>Date for SMS send out</label>
-      <span>{{ ticket.nps.npsDate | date:'yyyy-MM-dd' }}</span>
+      <span class="fill-by-label">{{ ticket.nps.npsDate | date:'yyyy-MM-dd' }}</span>
     </div>
     
     <div>
       <label>NPS score</label>
-      <span>{{ isFinite(ticket.nps.npsScore) ? 'No score' : ticket.nps.npsScore }}</span>
+      <span class="fill-by-label">{{ isFinite(ticket.nps.npsScore) ? 'No score' : ticket.nps.npsScore }}</span>
     </div>
     
     <div ng-show="!!ticket.nps.npsComment">
       <label class="text-top">NPS comment</label>
-      <span><div ng-repeat="line in splitComments(ticket.nps.npsComment) track by $index">{{ line }}</div></span>
+      <span class="fill-by-label"><div ng-repeat="line in splitComments(ticket.nps.npsComment) track by $index">{{ line }}</div></span>
     </div>
     
     <div>
-      <label>Assigned agent</label>
+      <label>Agent on ticket</label>
+      <span class="fill-by-label">{{ ticket.user.name }}</span>
+    </div>
+    
+    <div>
+      <label>Assigned agent for call back</label>
       
       <span class="fill-by-label">
         <span class="fill-by-label">
@@ -91,7 +101,7 @@
           <ul class="uib-dropdown-menu pane-dropdown" role="menu" aria-labelledby="simple-btn-keyboard-nav">
             <!-- Links need an href for Boostrap UI to work with keyboard navigation -->
             <li role="menuitem" ng-repeat="status in statuses track by $index">
-              <a href="" ng-click="ticket.callBack.callBackStatus = status">{{ status }}</a>
+              <a href="" ng-click="setCallBackStatus(status)">{{ status.callBackStatusName }}</a>
             </li>
           </ul>
         </span>
@@ -113,7 +123,7 @@
             <li role="menuitem"><a href="" ng-click="ticket.callBack.reasonToPromote1 = undefind">None</a></li>
             <li class="divider"></li>
             <li role="menuitem" ng-repeat="reason in promoteReasons track by $index">
-              <a href="" ng-click="ticket.callBack.reasonToPromote1 = reason">{{ reason }}</a>
+              <a href="" ng-click="setReasonToPromote(reason, 1)">{{ reason.reasonToPromoteName }}</a>
             </li>
           </ul>
         </span>
@@ -135,7 +145,7 @@
             <li role="menuitem"><a href="" ng-click="ticket.callBack.reasonToPromote2 = undefind">None</a></li>
             <li class="divider"></li>
             <li role="menuitem" ng-repeat="reason in promoteReasons track by $index">
-              <a href="" ng-click="ticket.callBack.reasonToPromote2 = reason">{{ reason }}</a>
+              <a href="" ng-click="setReasonToPromote(reason, 2)">{{ reason.reasonToPromoteName }}</a>
             </li>
           </ul>
         </span>
@@ -156,7 +166,7 @@
             <li role="menuitem"><a href="" ng-click="ticket.callBack.reasonToDetract1 = undefind">None</a></li>
             <li class="divider"></li>
             <li role="menuitem" ng-repeat="reason in detractReasons track by $index">
-              <a href="" ng-click="ticket.callBack.reasonToDetract1 = reason">{{ reason }}</a>
+              <a href="" ng-click="setReasonToDetract(reason, 1)">{{ reason.reasonToDetractName }}</a>
             </li>
           </ul>
         </span>
@@ -177,7 +187,7 @@
             <li role="menuitem"><a href="" ng-click="ticket.callBack.reasonToDetract2 = undefind">None</a></li>
             <li class="divider"></li>
             <li role="menuitem" ng-repeat="reason in detractReasons track by $index">
-              <a href="" ng-click="ticket.callBack.reasonToDetract2 = reason">{{ reason }}</a>
+              <a href="" ng-click="setReasonToDetract(reason, 2)">{{ reason.reasonToDetractName }}</a>
             </li>
           </ul>
         </span>
@@ -193,11 +203,18 @@
     </div>
     
     <div>
-      <label class="text-top">Other comments</label>
+      <label class="text-top">Short call back description</label>
       
       <span class="fill-by-label">
         <textarea ng-model="ticket.callBack.callBackComment" class="animated-textarea" msd-elastic="\n" cols="30" rows="3" placeholder="Potential follow up action."></textarea>
       </span>
+    </div>
+    
+    <div>
+      <label class="checkbox-label">
+        <input type="checkbox" ng-model="ticket.callBack.isClosed" ng-click="manualClose = ticket.callBack.isClosed">
+        <i class="offset-left" ></i> Call back is completed
+      </label>
     </div>
     
   </form>

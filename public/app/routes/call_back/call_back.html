@@ -1,6 +1,6 @@
 <ce-card-area child-class="vertical-fill fixed-right" child-ng-class="{'paginated': ticketCount > 20}">
 
-  <ce-paginator state="state" ticket-count="ticketCount"></ce-paginator>
+  <ce-paginator state="state" ticket-count="ticketCount" page-size="50"></ce-paginator>
 
   <ce-call-back-grid ng-hide="isLoading" tickets="npsTickets"></ce-call-back-grid>
 

@@ -61,6 +61,8 @@ SELECT
   , [CB].[reasonToDetract2] AS [callBack.reasonToDetract2]
   , [CB].[callBackFollowUpAction] AS [callBack.callBackFollowUpAction]
   , [CB].[callBackComment] AS [callBack.callBackComment]
+  , [CB].[isClosed] AS [callBack.isClosed]
+  , [CB].[dateClosed] AS [callBack.dateClosed]
   , [CB].[ticketId] AS [callBack.ticketId]
   , [U2].[email] AS [callBack.user.userId]
   , [U2].[email] AS [callBack.user.email]
@@ -125,4 +127,7 @@ SELECT COUNT(*)
 FROM [dbo].[Ticket] AS [A]
 INNER JOIN [dbo].[NPSSurveyResult] AS [NPS]
 ON [A].[ticketId] = [NPS].[ticketId]
+
+LEFT JOIN [dbo].[CallBack] AS [CB]
+ON [A].[ticketId] = [CB].[ticketId]
   WHERE [npsScore] IS NOT NULL

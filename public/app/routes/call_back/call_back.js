@@ -4,14 +4,14 @@
 angular.module('ticketyApp')
 .config(['$stateProvider', function ($stateProvider) {
   $stateProvider.state('main.admin.call_back', {
-    url: '/call-back',
+    url: '/call-back?isClosed',
     templateUrl: 'routes/call_back/call_back.html',
     controller: 'CallBackCtrl',
     title: 'Admin | Call back'
   });
 }])
-.controller('CallBackCtrl', ['$scope', '$timeout', 'Ticket', 'Notification',
-function ($scope, $timeout, Ticket, Notification) {
+.controller('CallBackCtrl', ['$scope', '$timeout', '$location', 'Ticket', 'Notification',
+function ($scope, $timeout, $location, Ticket, Notification) {
   
   $scope.npsTickets = [];
   $scope.ticketCount = 0;
@@ -23,16 +23,20 @@ function ($scope, $timeout, Ticket, Notification) {
   /**
    * Gets the npsTickets from DB.
    */
-  function getNpsTickets(pageNum, loading) {
+  function getNpsTickets(pageNum, isClosed, loading) {
     $scope.isLoading = _.isUndefined(loading)
       ? true
       : loading;
+    
+    isClosed = _.isUndefined(isClosed)
+      ? false
+      : isClosed;
     
     pageNum = _.isUndefined(pageNum)
       ? 1
       : pageNum;
     
-    Ticket.getNpsTickets(20, pageNum)
+    Ticket.getNpsTickets(50, pageNum, 'isClosed', isClosed)
     .then(function (data) {
       $scope.npsTickets = data.tickets;
       $scope.ticketCount = data.ticketCount;
@@ -52,10 +56,10 @@ function ($scope, $timeout, Ticket, Notification) {
     // return early if they are the same
     if (currentPage === prevPage) { return; }
     
-    getNpsTickets(currentPage, true)
+    getNpsTickets(currentPage, $location.search().isClosed, true)
   });
   
-  getNpsTickets($scope.currentPage);
+  getNpsTickets($scope.currentPage, $location.search().isClosed);
   
 }]);
 

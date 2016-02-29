@@ -17,6 +17,8 @@ BEGIN
     , [reasonToDetract2] varchar(255) NULL
     , [callBackFollowUpAction] varchar(MAX) NULL
     , [callBackComment] varchar(MAX) NULL
+    , [isClosed] bit NULL DEFAULT 0
+    , [dateClosed] datetime2 NULL
     , [dateCreated] datetime2 DEFAULT GETUTCDATE() NULL
     , [dateUpdated] datetime2 DEFAULT GETUTCDATE() NULL
   )
@@ -47,4 +49,18 @@ ELSE
     ADD [agentName] varchar(255) NULL
   END
   
+  IF NOT EXISTS(SELECT * FROM sys.columns
+                WHERE Name = N'isClosed'
+                AND Object_ID = Object_ID(N'CallBack'))
+  BEGIN
+    ALTER TABLE [dbo].[CallBack]
+    ADD [isClosed] bit NULL DEFAULT 0
+  END
   
+  IF NOT EXISTS(SELECT * FROM sys.columns
+                WHERE Name = N'dateClosed'
+                AND Object_ID = Object_ID(N'CallBack'))
+  BEGIN
+    ALTER TABLE [dbo].[CallBack]
+    ADD [dateClosed] datetime2 NULL
+  END

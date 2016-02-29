@@ -447,6 +447,37 @@ exports.statusTickets = function (userId) {
 }
 
 /**
+ * Gets the SQL type and val of *val*,
+ * in the format Seriate wants.
+ * 
+ * Example output: { type: [sql.BIGINT], val: 27861523 }
+ * 
+ * @param {Any} val
+ * @return {Object}
+ */
+function getTypeAndVal(val) {
+  
+  var _type;
+  
+  if (_.isDate(val)) {
+    _type = sql.DATETIME2;
+  } else if (_.isNumber(val)) {
+    _type = sql.BIGINT;
+  } else if (/^(true|false)$/.test(val)) {
+    val = util.parseBool(val);
+    _type = sql.BIT;
+  } else {
+    _type = sql.VARCHAR;
+  }
+   
+  return {
+    type: _type,
+    val: val
+  };
+  
+}
+
+/**
  * Returns a promise of all nps tickets matchiNG *filter* and *value*
  * if defined, otherwise returns all nps tickets.
  * 
@@ -468,22 +499,40 @@ exports.findNps = function (top, page, filter, value) {
     
     var query = sql.fromFile('./sql/ticket.findNps.sql');
     
+    var params = {
+      top: {
+        type: sql.BIGINT,
+        val: top
+      },
+      offset: {
+        type: sql.BIGINT,
+        val: offset
+      }
+    };
+    
+    if (filter) {
+      // Add the filter to the params objcet
+      params[filter] = getTypeAndVal(value);
+      
+      // Alter the query to actually use the filters
+      if (params[filter].val === false) {
+        // Add the filter at [CB].[_filter_] = @_filter_ and negate its NULL values
+        query = query
+          .replace(/(WHERE \[.+)/gi, '$1 AND ([CB].[' + filter + '] = @' + filter + ' OR [CB].[' + filter + '] IS NULL)')
+      } else {
+        // Add the filter at [CB].[_filter_] = @_filter_ and then order by dateClosed desc
+        query = query
+          .replace(/(WHERE \[.+)/gi, '$1 AND [CB].[' + filter + '] = @' + filter)
+          .replace(/(ORDER BY )(\[.+,)/gi, '$1[CB].[dateClosed] DESC,');
+      }
+    }
+    
     sql.execute({
       query: query,
-      params: {
-        top: {
-          type: sql.BIGINT,
-          val: top
-        },
-        offset: {
-          type: sql.BIGINT,
-          val: offset
-        }
-      },
+      params: params,
       multiple: true
     })
     .then(function (tickets) {
-      
       resolve({ tickets: util.objectify(_.first(tickets)), ticketCount: tickets[1][0][''] });
     })
     .catch(function (err) {

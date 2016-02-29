@@ -2,7 +2,9 @@
 'use strict'
 
 angular.module('ticketyApp')
-.directive('ceModalCallBack', ['$uibModal', '$timeout', 'Auth', 'Notification', function ($uibModal, $timeout, Auth, Notification) {
+.directive('ceModalCallBack',
+['$uibModal', '$timeout', 'Auth', 'CallBack', 'Notification',
+function ($uibModal, $timeout, Auth, CallBack, Notification) {
   return {
     template: '<div></div>',
     restrict : 'EA',
@@ -42,7 +44,10 @@ angular.module('ticketyApp')
               } else {
                 return Auth.getAll();
               }
-            }
+            },
+            statuses: CallBack.getStatuses,
+            reasonsToPromote: CallBack.getReasonsToPromote,
+            reasonsToDetract: CallBack.getReasonsToDetract
           }
         });
         
@@ -84,11 +89,18 @@ angular.module('ticketyApp')
     }
   }
 }])
-.controller('CallBackModalInstanceCtrl', ['$scope', '$uibModalInstance', 'CallBack', 'Notification', 'ticket', 'users',
-  function ($scope, $uibModalInstance, CallBack, Notification, ticket, users) {
+.controller('CallBackModalInstanceCtrl',
+['$scope', '$uibModalInstance', 'CallBack', 'Notification', 'ticket', 'users', 'statuses', 'reasonsToPromote', 'reasonsToDetract',
+function ($scope, $uibModalInstance, CallBack, Notification, ticket, users, statuses, reasonsToPromote, reasonsToDetract) {
   
   $scope.ticket = angular.copy(ticket);
   $scope.users = users;
+  
+  $scope.statuses = statuses;
+  $scope.promoteReasons = reasonsToPromote;
+  $scope.detractReasons = reasonsToDetract;
+  
+  $scope.manualClose;
   
   /**
    * Saves and closes the 
@@ -181,9 +193,53 @@ angular.module('ticketyApp')
       : comment.replace(/\\n/g, '\n').split(new RegExp(splitter));
   };
   
-  $scope.statuses = CallBack.getStatuses();
-  $scope.promoteReasons = CallBack.getPromoteReasons();
-  $scope.detractReasons = CallBack.getDetractReasons();
+  /**
+   * Sets the call back status of the ticket.
+   * Will also set isClosed, see comment in code.
+   * 
+   * @param {Object} status
+   */
+  $scope.setCallBackStatus = function (status) {
+    
+    // Set callBack.isClosed either to true if status.shouldClose is true,
+    // or to status.shouldClose if manualClose isn't truthy.
+    if (status.shouldClose) {
+      $scope.ticket.callBack.isClosed = true;
+    } else if (!$scope.manualClose) {
+      $scope.ticket.callBack.isClosed = status.shouldClose;
+    }
+    
+    $scope.ticket.callBack.callBackStatus = status.callBackStatusName;
+  }
+  
+  /**
+   * @param {Object} reason
+   * @param {Number} num Should be either 1 or 2.
+   */
+  $scope.setReasonToPromote = function (reason, num) {
+    $scope.ticket.callBack['reasonToPromote' + num] = reason.reasonToPromoteName;
+  }
+  
+  /**
+   * @param {Object} reason
+   * @param {Number} num Should be either 1 or 2.
+   */
+  $scope.setReasonToDetract = function (reason, num) {
+    $scope.ticket.callBack['reasonToDetract' + num] = reason.reasonToDetractName;
+  }
+  
+  /**
+   * Watch for changes in the isCLosed status, and set dateClosed
+   */
+  $scope.$watch('ticket.callBack.isClosed', function (isClosed, oldIsClosed) {
+    // Set the dateClosed either to now, if the status changed to closed, 
+    // or undefined if it's open.
+    if (oldIsClosed != isClosed) {
+      $scope.ticket.callBack.dateClosed = $scope.ticket.callBack.isClosed
+        ? new Date()
+        : undefined;
+    }
+  })
   
   /**
    * Watch for changes in callBack.agentName and set the user if it's changed.

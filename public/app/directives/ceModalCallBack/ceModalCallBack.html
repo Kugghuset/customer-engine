@@ -6,47 +6,52 @@
     
     <div>
       <label>Ticket nunmber</label>
-      <span>{{ ticket.ticketId }}</span>
+      <span class="fill-by-label">{{ ticket.ticketId }}</span>
     </div>
     
     <div>
       <label>Customer name</label>
-      <span>{{ ticket.customer.orgName }}</span>
+      <span class="fill-by-label">{{ ticket.customer.orgName }}</span>
     </div>
     
     <div>
       <label>Mobile number</label>
-      <span>{{ (ticket.person.tel || ticket.nps.npsTel) | phoneNumber:ticket.country.short }}</span>
+      <span class="fill-by-label">{{ (ticket.person.tel || ticket.nps.npsTel) | phoneNumber:ticket.country.short }}</span>
     </div>
     
     <div>
       <label>Call category 1</label>
-      <span>{{ ticket.category.categoryName || 'No category chosen' }}</span>
+      <span class="fill-by-label">{{ ticket.category.categoryName || 'No category chosen' }}</span>
     </div>
     
     <div ng-show="ticket.subcategory.subcategoryName">
       <label>Call category 2</label>
-      <span>{{ ticket.subcategory.subcategoryName }}</span>
+      <span class="fill-by-label">{{ ticket.subcategory.subcategoryName }}</span>
     </div>
     
     <div ng-show="!!ticket.descriptor.descriptorName">
       <label>Call category 3</label>
-      <span>{{ ticket.descriptor.descriptorName }}</span>
+      <span class="fill-by-label">{{ ticket.descriptor.descriptorName }}</span>
+    </div>
+    
+    <div>
+      <label class="text-top">Initial summary</label>
+      <span class="fill-by-label"><div ng-repeat="line in splitComments(ticket.summary) track by $index">{{ line }}</div></span>
     </div>
     
     <div>
       <label>Date for SMS send out</label>
-      <span>{{ ticket.nps.npsDate | date:'yyyy-MM-dd' }}</span>
+      <span class="fill-by-label">{{ ticket.nps.npsDate | date:'yyyy-MM-dd' }}</span>
     </div>
     
     <div>
       <label>NPS score</label>
-      <span>{{ isFinite(ticket.nps.npsScore) ? 'No score' : ticket.nps.npsScore }}</span>
+      <span class="fill-by-label">{{ isFinite(ticket.nps.npsScore) ? 'No score' : ticket.nps.npsScore }}</span>
     </div>
     
     <div ng-show="!!ticket.nps.npsComment">
       <label class="text-top">NPS comment</label>
-      <span><div ng-repeat="line in splitComments(ticket.nps.npsComment) track by $index">{{ line }}</div></span>
+      <span class="fill-by-label"><div ng-repeat="line in splitComments(ticket.nps.npsComment) track by $index">{{ line }}</div></span>
     </div>
     
     <div>

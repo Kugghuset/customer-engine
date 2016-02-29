@@ -7,6 +7,7 @@
     <th>Call category 1</th>
     <th>Call category 2</th>
     <th>Call category 3</th>
+    <th>Initial summary</th>
     <th>Date for SMS send out</th>
     <th>NPS score</th>
     <th>NPS comment</th>
@@ -29,6 +30,7 @@
       <td>{{ ticket.category.categoryName || '-' }}</td>
       <td>{{ ticket.subcategory.subcategoryName || '-' }}</td>
       <td>{{ ticket.descriptor.descriptorName || '-' }}</td>
+      <td><p ng-repeat="line in splitComments(ticket.summary, '\t') track by $index">{{ line }}</p></td>
       <td>{{ ticket.nps.npsDate | date:'yyyy-MM-dd' }}</td>
       <td>{{ isFinite(ticket.nps.npsScore) ? 'No score' : ticket.nps.npsScore }}</td>
       <td><p ng-repeat="line in splitComments(ticket.nps.npsComment, '\t') track by $index">{{ line }}</p></td>

@@ -2,9 +2,9 @@
 Finds tickets by somethign and joins it. The something is determined by a where_clause set in JavaScript
 */
 
-  --DECLARE @upperDateLimit DATETIME2 = '2016-02-14'
-  --DECLARE @lowerDateLimit DATETIME2 = '2016-02-7'
-  --DECLARE @threeMonthsAgo DATETIME2 = '2015-10-18'
+-- DECLARE @upperDateLimit DATETIME2 = '2016-02-28'
+-- DECLARE @lowerDateLimit DATETIME2 = '2016-02-22'
+-- DECLARE @threeMonthsAgo DATETIME2 = '2015-10-18'
 
 SELECT
   MAX([A].[ticketId]) AS [ticketId]
@@ -35,20 +35,21 @@ WHERE [A].[ticketDate] < @upperDateLimit
   AND [Q].[tel] != ''
   AND NOT EXISTS(SELECT *
          FROM [dbo].[NPSSurveyResult]
-         WHERE 1=1
-          AND (
+         WHERE
             REPLACE([dbo].[NPSSurveyResult].[npsTel], '+', '') = [Q].[tel]
-            AND [dbo].[NPSSurveyResult].[npsDate] > @threeMonthsAgo
-          )
-          OR [dbo].[NPSSurveyResult].[doNotContact] = 1)
+            AND (
+				[dbo].[NPSSurveyResult].[npsDate] > @threeMonthsAgo
+				OR [dbo].[NPSSurveyResult].[doNotContact] = 1)
+			)
   AND NOT EXISTS(SELECT *
           FROM [dbo].[NpsQuarantine]
-          WHERE 1=1
-            AND (
+          WHERE
               REPLACE([dbo].[NpsQuarantine].[npsTel], '+', '') = [Q].[tel]
-              AND [dbo].[NpsQuarantine].[npsDate] > @threeMonthsAgo
-            )
-          OR [dbo].[NpsQuarantine].[doNotContact] = 1)
+              AND (
+				[dbo].[NpsQuarantine].[npsDate] > @threeMonthsAgo
+				OR [dbo].[NpsQuarantine].[doNotContact] = 1)
+			  )
 
 GROUP BY [Q].[tel]
+
 ORDER BY MIN([A].[ticketDate]) DESC, MIN([A].[ticketId]) DESC

@@ -44,10 +44,10 @@ var node;
 gulp.task('server', function () {
   // Restarts node if it's running
   if (node) { node.kill(); }
-  
+
   // Run the node command on the main (given in package.json) or app.js
   node = spawn('node', [(p_json.main || 'app.js')], { stdio: 'inherit' });
-  
+
   // An error occured
   node.on('close', function (code) {
     if (code === 8) {
@@ -61,7 +61,7 @@ gulp.task('reload', ['build'], function () {
   livereload.reload();
 });
 
-// Runs --assume-unchagned on userConfig.js 
+// Runs --assume-unchagned on userConfig.js
 gulp.task('assume-unchanged', function () {
   if (shell.which('git')) {
     console.log(
@@ -88,7 +88,7 @@ gulp.task('sass', function () {
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest('./public/css'))
     .on('unpipe', function (src) {
-      
+
       // Reloads if livereload is running
       livereload.changed('./public/css/global.css');
     });
@@ -101,53 +101,53 @@ gulp.task('templates', function () {
 })
 
 gulp.task('minify', function (cb) {
-  
+
   /**
    * TODO: BOWER CSS DEPS
-   * 
+   *
    * CURRENTLY DOES NOT WORK AS EXPECTED DUE TO BOWER DEPENDENCIES
    * TRYING TO ACCESS FILES WHICH AREN'T LOCATED WHERE THEY SHOULD BE.
-   * 
+   *
    */
-  
+
   // Get the file contents of index.html
   var indexFile = fs.readFileSync(path.resolve('./public/app.html'), 'utf8');
-  
+
   var filenames = [
     // 'vendor.min.css', // outcommented as there are issues with file paths in the css
     'vendor.min.js',
     'app.min.js'
   ];
-  
+
   /**
    * Recursively iterates over items in *_files*
    * and calls *cb* when the iteration is finished.
-   * 
+   *
    * @param {Array} _files
    * @param {Function} cb
    * @param {Array} finishedFiles - set recursively, do not set.
    */
   function _forEvery(_files, cb, finishedFiles) {
-    
+
     if (!finishedFiles) { finishedFiles = []; }
     if (finishedFiles.length === _files.length || !_files) {
       // Call the callback
       if (cb) { cb(); }
       return;
     }
-    
+
     var filename = _files[finishedFiles.length];
     finishedFiles.push(filename);
-    
+
     // Itereate over the result of getModulesFromIndex
     var files = _.map(utils.getModulesFromIndex(indexFile, filename), function (item) {
       return ['./public/', item].join('');
     });
-    
+
     if (/vendor\.min\.js/.test(filename)) {
-      
+
       indexFile = utils.removeModules(indexFile, filename);
-      
+
       gulp.src(files)
         .pipe(sourcemaps.init())
           .pipe(concat(filename))
@@ -156,15 +156,15 @@ gulp.task('minify', function (cb) {
         .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest('public/dist'))
         .on('unpipe', function (src) {
-          
+
           // Recursion!!
           return _forEvery(_files, cb, finishedFiles);
         });
-      
+
     } else if (/\.js$/i.test(filename)) {
-      
+
       indexFile = utils.removeModules(indexFile, filename);
-      
+
       gulp.src(files)
         .pipe(sourcemaps.init())
           .pipe(concat(filename))
@@ -173,16 +173,16 @@ gulp.task('minify', function (cb) {
         .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest('public/dist'))
         .on('unpipe', function (src) {
-          
+
           // Recursion!!
           return _forEvery(_files, cb, finishedFiles);
         });
-      
+
     } else if (/\.css/i.test(filename)) {
 
       indexFile = utils.removeModules(indexFile, filename);
       // indexFile = utils.cacheBustFiles(indexFile, filename);
-      
+
       gulp.src(files)
         .pipe(sourcemaps.init())
           .pipe(concat(filename))
@@ -192,13 +192,13 @@ gulp.task('minify', function (cb) {
         // indexFile = utils.cacheBustFiles(indexFile, _.map(files, function (file) {
         //     return file.replace('./public/', '');
         //   }));
-          
+
           // Recursion!!
           return _forEvery(_files, cb, finishedFiles);
         });
     }
   }
-  
+
   // Asynchronous foreach loop
   _forEvery(filenames, function () {
     fs.writeFileSync('./public/index.html', indexFile);
@@ -211,18 +211,18 @@ gulp.task('minify', function (cb) {
 gulp.task('db-setup', function (cb) {
   // Setup the database.
   sql.setDefaultConfig(config.db);
-  
+
   // Require all API files
-  
+
   var apiPath = path.resolve('./server/api');
   _.forEach(fs.readdirSync(apiPath), function (folderName) {
-    
+
     if (!fs.statSync(path.resolve(apiPath, folderName)).isFile()) {
-      
+
       var _module = path.resolve(apiPath, folderName)
         .replace(__dirname, '.')
         .replace(/[\/\\]/g, '/');
-      
+
       _.attempt(function () { require(_module); /* required only for for the initialize functions to run. */ })
     }
   });
@@ -242,18 +242,18 @@ gulp.task('watch', function () {
 
 // Cachebusts all files
 gulp.task('cachebust', ['minify'], function () {
-  
+
   var fileName = fs.existsSync(path.resolve('./public/index.html'))
     ? path.resolve('./public/index.html')
     : path.resolve('./public/app.html');
-  
+
   var indexFile = fs.readFileSync(fileName, 'utf8');
-  
+
   indexFile = utils.cacheBustFiles(
     indexFile,
     utils.getAllModuleNames(indexFile)
   );
-  
+
   // Create the index file
   fs.writeFileSync('./public/index.html', indexFile);
 });
@@ -265,6 +265,8 @@ gulp.task('open', ['build'], function () {
 
 // Builds the application
 gulp.task('build', ['sass', 'templates', 'minify', 'cachebust', 'db-setup']);
+
+gulp.task('build-assets', ['sass', 'templates', 'minify', 'cachebust']);
 
 gulp.task('default', ['livereload-listen', 'build', 'server', 'watch', 'open']);
 

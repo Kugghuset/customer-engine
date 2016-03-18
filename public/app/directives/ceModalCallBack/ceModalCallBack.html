@@ -3,65 +3,70 @@
   <h1>Manage call back</h1>
 
   <form novalidate>
-    
+
     <div>
       <label>Ticket nunmber</label>
       <span class="fill-by-label">{{ ticket.ticketId }}</span>
     </div>
-    
+
     <div>
       <label>Customer name</label>
       <span class="fill-by-label">{{ ticket.customer.orgName }}</span>
     </div>
-    
+
+    <div>
+      <label>Org. Number</label>
+      <span class="fill-by-label">{{ ticket.customer.orgNr }}</span>
+    </div>
+
     <div>
       <label>Mobile number</label>
       <span class="fill-by-label">{{ (ticket.person.tel || ticket.nps.npsTel) | phoneNumber:ticket.country.short }}</span>
     </div>
-    
+
     <div>
       <label>Call category 1</label>
       <span class="fill-by-label">{{ ticket.category.categoryName || 'No category chosen' }}</span>
     </div>
-    
+
     <div ng-show="ticket.subcategory.subcategoryName">
       <label>Call category 2</label>
       <span class="fill-by-label">{{ ticket.subcategory.subcategoryName }}</span>
     </div>
-    
+
     <div ng-show="!!ticket.descriptor.descriptorName">
       <label>Call category 3</label>
       <span class="fill-by-label">{{ ticket.descriptor.descriptorName }}</span>
     </div>
-    
+
     <div>
       <label class="text-top">Initial summary</label>
       <span class="fill-by-label"><div ng-repeat="line in splitComments(ticket.summary) track by $index">{{ line }}</div></span>
     </div>
-    
+
     <div>
       <label>Date for SMS send out</label>
       <span class="fill-by-label">{{ ticket.nps.npsDate | date:'yyyy-MM-dd' }}</span>
     </div>
-    
+
     <div>
       <label>NPS score</label>
       <span class="fill-by-label">{{ isFinite(ticket.nps.npsScore) ? 'No score' : ticket.nps.npsScore }}</span>
     </div>
-    
+
     <div ng-show="!!ticket.nps.npsComment">
       <label class="text-top">NPS comment</label>
       <span class="fill-by-label"><div ng-repeat="line in splitComments(ticket.nps.npsComment) track by $index">{{ line }}</div></span>
     </div>
-    
+
     <div>
       <label>Agent on ticket</label>
       <span class="fill-by-label">{{ ticket.user.name }}</span>
     </div>
-    
+
     <div>
       <label>Assigned agent for call back</label>
-      
+
       <span class="fill-by-label">
         <span class="fill-by-label">
         <input type="text"
@@ -72,7 +77,7 @@
           ng-change="handleAgent(ticket.callBack.agentName, ticket.callBack.user)"
           placeholder="Search for agents">
       </span>
-      
+
         <span uib-dropdown uib-keyboard-nav>
           <button id="simple-btn-keyboard-nav" type="button" class="pane-button" uib-dropdown-toggle>
             <i ng-show="ticket.callBack.user.userId" class="glyphicon glyphicon-user"></i> {{ ticket.callBack.agentName || ticket.callBack.user.name || ticket.callBack.user.email || 'Assign agent' }} <span class="caret"></span>
@@ -87,12 +92,12 @@
           </ul>
         </span>
       </span>
-      
+
     </div>
-    
+
     <div>
       <label>Status</label>
-      
+
       <span class="fill-by-label">
         <span uib-dropdown uib-keyboard-nav>
           <button id="simple-btn-keyboard-nav" type="button" class="pane-button" uib-dropdown-toggle>
@@ -106,14 +111,14 @@
           </ul>
         </span>
       </span>
-      
+
     </div>
-    
+
     <div>
       <label>Reason to promote 1</label>
-      
+
       <span class="fill-by-label">
-        
+
         <span uib-dropdown uib-keyboard-nav>
           <button id="simple-btn-keyboard-nav" type="button" class="pane-button" uib-dropdown-toggle>
             {{ ticket.callBack.reasonToPromote1 || 'Reason to promote 1' }} <span class="caret"></span>
@@ -128,14 +133,14 @@
           </ul>
         </span>
       </span>
-      
+
     </div>
-    
+
     <div>
       <label>Reason to promote 2</label>
-      
+
       <span class="fill-by-label">
-        
+
         <span uib-dropdown uib-keyboard-nav>
           <button id="simple-btn-keyboard-nav" type="button" class="pane-button" uib-dropdown-toggle>
             {{ ticket.callBack.reasonToPromote2 || 'Reason to promote 2' }} <span class="caret"></span>
@@ -151,12 +156,12 @@
         </span>
       </span>
     </div>
-    
+
     <div>
       <label>Reason to detract 1</label>
-      
+
       <span class="fill-by-label">
-        
+
         <span uib-dropdown uib-keyboard-nav>
           <button id="simple-btn-keyboard-nav" type="button" class="pane-button" uib-dropdown-toggle>
             {{ ticket.callBack.reasonToDetract1 || 'Reason to detract 1' }} <span class="caret"></span>
@@ -172,12 +177,12 @@
         </span>
       </span>
     </div>
-    
+
     <div>
       <label>Reason to detract 2</label>
-      
+
       <span class="fill-by-label">
-        
+
         <span uib-dropdown uib-keyboard-nav>
           <button id="simple-btn-keyboard-nav" type="button" class="pane-button" uib-dropdown-toggle>
             {{ ticket.callBack.reasonToDetract2 || 'Reason to detract 2' }} <span class="caret"></span>
@@ -193,30 +198,30 @@
         </span>
       </span>
     </div>
-    
+
     <div>
       <label class="text-top">Potential follow up action</label>
-      
+
       <span class="fill-by-label">
         <textarea ng-model="ticket.callBack.callBackFollowUpAction" class="animated-textarea" msd-elastic="\n" cols="30" rows="3" placeholder="Potential follow up action."></textarea>
       </span>
     </div>
-    
+
     <div>
       <label class="text-top">Short call back description</label>
-      
+
       <span class="fill-by-label">
         <textarea ng-model="ticket.callBack.callBackComment" class="animated-textarea" msd-elastic="\n" cols="30" rows="3" placeholder="Potential follow up action."></textarea>
       </span>
     </div>
-    
+
     <div>
       <label class="checkbox-label">
         <input type="checkbox" ng-model="ticket.callBack.isClosed" ng-click="manualClose = ticket.callBack.isClosed">
         <i class="offset-left" ></i> Call back is completed
       </label>
     </div>
-    
+
   </form>
 
   <div class="float-container">

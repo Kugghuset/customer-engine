@@ -11,3 +11,4 @@ userConfig.js
 **/dist
 **/public/index.html
 **/nps_base/
+.env

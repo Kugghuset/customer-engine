@@ -27,7 +27,7 @@
         &:active:not(.active) {
           background-color: lighten($purple-dark, 10%);
         }
-        
+
         &:not(:first-child) {
           padding-left: 50px;
           &.active {
@@ -46,7 +46,7 @@
             background-color: lighten($purple-dark, 10%);
           }
         }
-        
+
       }
     }
   }
@@ -55,19 +55,18 @@
 .call-back-table {
   width: 100%;
   margin-top: 10px;
-  
-  
+
   thead tr {
     background-color: $purple-light;
     color: $white;
-    
+
     th {
       padding: 10px 10px;
       border-collapse: collapse;
       border: 1px solid $gray-dark;
     }
   }
-  
+
   tbody {
     tr {
       background-color: $gray;

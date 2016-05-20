@@ -16,24 +16,24 @@ var schedule = require('./schedule');
 /**
  * Finds all tickets which where set to have their ticketDate before three months (minus one day)
  * and their person.tel hasn't been texted the in three months.
- * 
+ *
  * @param {Number} numberOfWeeks Defaults to 1
  * @return {Promise} -> {Array}
  */
 function getNonQuarantined(numberOfWeeks) {
   return new Promise(function (resolve, reject) {
-    
+
     numberOfWeeks = !_.isUndefined(numberOfWeeks)
       ? numberOfWeeks
       : 1;
-    
+
     console.log(
       '[{timestamp}] Finding callees between the dates: {date1} and {date2}'
         .replace('{timestamp}', moment().format('YYYY-MM-DD HH:mm SSSS ZZ'))
         .replace('{date1}', moment().subtract(numberOfWeeks, 'weeks').startOf('isoweek').format('YYYY-MM-DD HH:mm'))
         .replace('{date2}', moment().subtract(numberOfWeeks, 'weeks').endOf('isoweek').format('YYYY-MM-DD HH:mm'))
       );
-    
+
     var query = Ticket.rawSqlFile('ticket.findReceivers.sql')
     sql.execute({
       query: query,
@@ -64,7 +64,7 @@ function getNonQuarantined(numberOfWeeks) {
 
 /**
  * Filters out tickets lacking person.tel and duplice person.tels.
- * 
+ *
  * @param {Array} tickets
  * @return {Promise} -> {Array}
  */
@@ -90,27 +90,27 @@ function filterUnique(tickets) {
  * Gets all numbers (without duplicates)
  * which have been created since the current quarantine started (minus one day)
  * and haven't been texted in three months.
- * 
+ *
  * @param {Number} numberOfWeeks Defaults to 1
  * @return {Promise} -> {Array}
  */
 function getReceivers(numberOfWeeks) {
-  
+
   numberOfWeeks = !_.isUndefined(numberOfWeeks)
     ? numberOfWeeks
     : 1;
-  
+
   return new Promise(function (resolve, reject) {
     getNonQuarantined(numberOfWeeks)
     .then(filterUnique)
     .then(function (data) {
-      
+
       console.log(
         '[{timestamp}] Found {num} recipients for NPS messages.'
         .replace('{timestamp}', moment().format('YYYY-MM-DD HH:mm SSSS ZZ'))
         .replace('{num}', data.length)
       );
-      
+
       resolve(data);
     })
     .catch(function (err) {
@@ -123,32 +123,32 @@ function getReceivers(numberOfWeeks) {
 
 /**
  * // Sends the messages and inputs it to the db.
- * 
+ *
  * @param {Array} tickets
  * @param {Array} sentTickets - Set recursively, do not set.
  * @return {Promise} -> {Array}
  */
 function sendMessages(tickets, sentTickets) {
-  
+
   // initiate sentTickets
   if (!sentTickets) { sentTickets = []; }
-  
+
   // Check for finished
   if (!tickets || tickets.length == sentTickets.length) {
     return new Promise(function (resolve, reject) {
-      
+
       console.log(
         '[{timestamp}] Stored {num} entries to NPSSurveyResults table.'
         .replace('{timestamp}', moment().format('YYYY-MM-DD HH:mm SSSS ZZ'))
         .replace('{num}', sentTickets.length)
       );
-      
+
       resolve(sentTickets)
     });
   }
-  
+
   var currentTicket = tickets[sentTickets.length];
-  
+
   return (function () {
     if (config.nps.sendSms) {
       // Actually send the sms if config is set to send
@@ -163,7 +163,7 @@ function sendMessages(tickets, sentTickets) {
     }
   })()
   .then(function (result) {
-    
+
     // Insert to db
     NpsQuarantine.insert(currentTicket)
     .then(function (ticket) {
@@ -181,7 +181,7 @@ function sendMessages(tickets, sentTickets) {
 
 /**
  * Returns the URL needed to make nps requests
- * 
+ *
  * @param {Object} ticket
  * @return {String}
  */
@@ -199,19 +199,116 @@ function npsUrl(ticket) {
 /**
  * Finds all tickets created last week with tels which havenn't been sent out the last three months
  * and sends the sms to them.
- * 
+ *
  * @param {Number} numberOfWeeks Defaults to 1
  * @return {Promise} -> {Array}
  */
 function getAndSend(numberOfWeeks) {
-  
+
   numberOfWeeks = !_.isUndefined(numberOfWeeks)
     ? numberOfWeeks
     : 1;
-  
+
   console.log('[{timestamp}] Getting and sending NPS messages.'.replace('{timestamp}', moment().format('YYYY-MM-DD HH:mm SSSS ZZ')));
   return getReceivers(numberOfWeeks)
   .then(sendMessages);
+}
+
+/**
+ * @param {Array} tels
+ * @param {Array} finished
+ * @return {Promise}
+ */
+function quarantineTels(tickets, finished) {
+  if (!finished) { finished = []; }
+
+  if (tickets.length === finished.length) {
+    return Promise.resolve(finished);
+  }
+
+  var currentTicket = tickets[finished.length];
+
+  return NpsQuarantine.insert(currentTicket)
+  .then(function (item) {
+    return quarantineTels(tickets, finished.concat([currentTicket]));
+  })
+  .catch(function (err) {
+    console.log(err);
+    return quarantineTels(tickets, finished.concat([undefined]));
+  });
+}
+
+function sendSurway(numberOfWeeks) {
+  numberOfWeeks = !_.isUndefined(numberOfWeeks)
+    ? numberOfWeeks
+    : 0;
+
+  var params = {
+      upperDateLimit: {
+        type: sql.DATETIME2,
+        val: moment().subtract(numberOfWeeks, 'weeks').endOf('isoweek').toDate()
+      },
+      lowerDateLimit: {
+        type: sql.DATETIME2,
+        val: moment().subtract(numberOfWeeks, 'weeks').startOf('isoweek').toDate()
+      },
+      threeMonthsAgo: {
+        type: sql.DATETIME2,
+        val: moment().subtract(3, 'months').toDate()
+      }
+    };
+
+  var _tickets;
+
+  return sql.execute({
+    query: sql.fromFile('./sql/nps.findSurwayTickets.sql'),
+    params: params,
+  })
+  .then(function (tickets) {
+    _tickets = tickets;
+
+    var _url = config.surway.base_url + (
+        /\/$/.test(config.surway.base_url)
+          ? 'services/auth/login'
+          : '/services/auth/login'
+        );
+
+    var data = { email: config.surway.email, password: config.surway.password };
+
+    return utils.put(_url, data);
+  })
+  .then(function (userData) {
+
+    var _token = userData.token;
+
+    var data = _.map(_tickets, function (item) {
+      return [
+        item['tel'],
+        item['ticketDate'],
+        item['ticketId'],
+        item['departmentName'],
+        item['shortcode'],
+      ]
+    });
+
+    var _url = config.surway.base_url + (
+        /\/$/.test(config.surway.base_url)
+          ? 'services/upload/data'
+          : '/services/upload/data'
+        );
+
+    return utils.post(_url, data, { Authorization: 'Bearer ' + _token });
+  })
+  .then(function (res) {
+    return quarantineTels(_tickets);
+  })
+  .then(function (res) {
+    return Promise.resolve(res);
+  })
+  .catch(function (err) {
+    console.log(err);
+    return Promise.reject(err);
+  })
 }
 
 /**
@@ -224,5 +321,6 @@ function scheduleNps() {
 scheduleNps();
 
 exports.module = {
-  getAndSend: getAndSend
+  getAndSend: getAndSend,
+  sendSurway: sendSurway,
 }

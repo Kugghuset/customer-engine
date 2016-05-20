@@ -9,9 +9,9 @@ var request = require('request');
 /**
  * Returns a new object where property names
  * with dots are converted into nested objects and arrays.
- * 
+ *
  * Example: { 'prop.sub': 'value' } -> { prop: { sub: value } }
- * 
+ *
  * @param {Array|Object} sqlArray
  * @return {Array|Object}
  */
@@ -22,24 +22,24 @@ function objectify(sqlArray) {
     sqlArray = [ sqlArray ];
     isObj = true;
   }
-  
+
   var arr = _.map(sqlArray, function (sqlObj) {
     var d = new DataObjectParser();
-    
+
     // Get all values
     _.map(sqlObj, function (value, key) {
       d.set(key, value);
     });
-    
+
     return d.data();
   });
-  
+
   return isObj ? _.first(arr) : arr;
 }
 
 function handleError(res, err) {
   console.log(chalk.red(err));
-  
+
   res.status(500).send('Internal Error');
 }
 
@@ -47,7 +47,7 @@ function handleError(res, err) {
  * Escapes characters which need escaping in a RegExp.
  * This allows for passing in any string into a RegExp constructor
  * and have it seen as literal
- * 
+ *
  * @param {String} text
  * @return {String}
  */
@@ -58,7 +58,7 @@ function escapeRegex(text) {
 /**
  * Returns an escaped RegExp object as the literal string *text*.
  * Flags are optional, but can be provided.
- * 
+ *
  * @param {String} text
  * @param {String} flags - optional
  * @return {Object} - RegExp object
@@ -91,16 +91,16 @@ function regexSrcHref(flags) {
 /**
  * Returns the filenames of scripts and/or css files included between
  * a <!--file:{filename}--> and <!--end-file:{filename}--> as an array.
- * 
+ *
  * If there either is none or *filename* cannot be found, an empty array is returned.
- * 
+ *
  * @param {String} fileContents
  * @param {String} filename
  * @return {Array}
  */
 function getModulesFromIndex(fileContents, filename) {
   var utils = this;
-  
+
   try {
     return _.chain(
       _.first(fileContents.match(
@@ -110,7 +110,7 @@ function getModulesFromIndex(fileContents, filename) {
         return line.replace(regexSrcHref(), '$2').replace(/\s/g, '');
       })
       .filter(function (line) {
-        // Filter out lines 
+        // Filter out lines
         return !/<!--(end-)?file:/gi.test(line);
       })
       .filter() // Filter out potentially empty lines
@@ -123,7 +123,7 @@ function getModulesFromIndex(fileContents, filename) {
 /**
  * Removes all modules inside a <!--file:*filename*--> block
  * in the fileContents and returns the cleaned version.
- * 
+ *
  * @param {String} fileContents
  * @param {String} filename
  * @return {String}
@@ -137,27 +137,27 @@ function removeModules(fileContents, filename) {
 /**
  * Cachebusts the files by appending
  * a query to the filenames lik ?cachebuster={Date.now()}
- * 
+ *
  * @param {String} fileContents
  * @param {Array|String} urls
  * @return {String}
  */
 function cacheBustFiles(fileContent, urls) {
-  
+
   if (!_.isArray(urls)) { urls = [ urls ]; }
-  
+
   var fc = fileContent;
-  
+
   _.forEach(urls, function (url) {
     fc = fc.replace(url, url + '?cachebuster=' + Date.now())
   });
-  
+
   return fc;
 }
 
 /**
  * Returns an array of all filenames linked in *fileContent*.
- * 
+ *
  * @param {String} fileContent
  * @return {Array}
  */
@@ -170,7 +170,7 @@ function getAllModuleNames(fileContent) {
 /**
  * Makes a GET request to *url*
  * and returns a promise of the body as a string.
- * 
+ *
  * @param {String} url - URI to request
  * @param {Object} options - optional, options object
  */
@@ -178,9 +178,9 @@ function getPage(url, options) {
   return new Promise(function (resolve, reject) {
     // *options* must be an object
     if (!_.isObject(options)) { options = {}; }
-    
+
     console.log('Making a GET request to ' + url);
-    
+
     request.get({
       uri: url,
       encoding: options.encoding || null,
@@ -196,7 +196,7 @@ function getPage(url, options) {
 
 /**
  * Converts somewhat boolean values and strings such as 'false'.
- * 
+ *
  * @param {Any} input
  * @return {Boolean}
  */
@@ -204,8 +204,44 @@ function parseBool(input) {
   if (_.isUndefined(input)) { return undefined; }
   if (_.isBoolean(input)) { return input; }
   if (_.isString(input)) { return input != 'false'; }
-  
+
   return !!input;
+}
+
+function post(url, data, headers) {
+  return new Promise(function (resolve, reject) {
+    request.post({
+      uri: url,
+      body: data,
+      json: true,
+      headers: _.assign({}, {
+        'Connection': 'keep-alive'
+      }, headers)
+    }, function (err, res, body) {
+      // Handle errors
+      if (err) { return reject(err); }
+
+      resolve(body);
+    });
+  });
+}
+
+function put(url, data, headers) {
+  return new Promise(function (resolve, reject) {
+    request.put({
+      uri: url,
+      body: data,
+      json: true,
+      headers: _.assign({}, {
+        'Connection': 'keep-alive'
+      }, headers)
+    }, function (err, res, body) {
+      // Handle errors
+      if (err) { return reject(err); }
+
+      resolve(body);
+    });
+  });
 }
 
 module.exports = {
@@ -218,5 +254,7 @@ module.exports = {
   cacheBustFiles: cacheBustFiles,
   getAllModuleNames: getAllModuleNames,
   getPage: getPage,
-  parseBool: parseBool
+  parseBool: parseBool,
+  post: post,
+  put: put,
 };

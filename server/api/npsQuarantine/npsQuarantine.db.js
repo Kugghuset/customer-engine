@@ -31,30 +31,32 @@ function initialize() {
 
 /**
  * Inserts a record into the db.
- * 
+ *
  * @param {Object} npsQuarantine NpsQuarantine or Ticket object from DB
  * @return {Promise} -> {Object} NpsQuarantine object
  */
 function insert(npsQuarantine) {
-  
+
   var _npsQuarantine = !('ticketId' in npsQuarantine)
     ? npsQuarantine
     : {
-      npsTel: npsQuarantine.person.tel.replace(/(^[^+])/, '+$1'),
+      npsTel: (
+        _.get(npsQuarantine, 'person.tel') || _.get(npsQuarantine, 'tel')
+      ).replace(/(^[^+])/, '+$1'),
       npsDate: new Date(),
       isLocal: true
     };
-  
+
   return sql.execute({
     query: sql.fromFile('./sql/npsQuarantine.insert.sql'),
     params: {
       npsTel: {
         type: sql.VARCHAR(256),
-        val: _npsQuarantine.npsTel
+        val: _npsQuarantine.npsTel,
       },
       npsDate: {
         type: sql.DATETIME2,
-        val: _npsQuarantine.npsDate
+        val: _npsQuarantine.npsDate,
       },
       npsScore: {
         type: sql.SMALLINT,

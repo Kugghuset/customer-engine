@@ -64,7 +64,7 @@ function sendSurway(numberOfWeeks) {
       },
       lowerDateLimit: {
         type: sql.DATETIME2,
-        val: moment().subtract(numberOfWeeks, 'weeks').startOf('day').toDate(),
+        val: moment().subtract(numberOfWeeks + 1, 'weeks').startOf('day').toDate(),
       },
       threeMonthsAgo: {
         type: sql.DATETIME2,
@@ -95,22 +95,24 @@ function sendSurway(numberOfWeeks) {
 
     var _token = userData.token;
 
-    var data = _.map(_tickets, function (item) {
-      return [
-        item['tel'],
-        item['ticketDate'],
-        item['ticketId'],
-        item['departmentName'],
-        item['shortcode'],
-      ]
-    });
+    var data = _.chain(_tickets)
+      .map(function (item) {
+        return [
+          item['tel'],
+          item['ticketDate'],
+          item['ticketId'],
+          item['departmentName'],
+          item['shortcode'],
+        ]
+      })
+      .value();
   
     var _url = config.surway.base_url + (
         /\/$/.test(config.surway.base_url)
           ? 'services/upload/data'
           : '/services/upload/data'
         );
-
+    
     return utils.post(_url, data, { Authorization: 'Bearer ' + _token });
   })
   .then(function (res) {

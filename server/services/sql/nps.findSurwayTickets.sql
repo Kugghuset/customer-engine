@@ -34,8 +34,6 @@ WHERE [A].[ticketDate] < @upperDateLimit
   AND [A].[ticketDate] > @lowerDateLimit
   AND [Q].[tel] IS NOT NULL
   AND [Q].[tel] != ''
-  /* Currently only supports norwegian numbers */
-  AND [Q].[tel] LIKE '47%'
   AND NOT EXISTS(SELECT *
          FROM [dbo].[NPSSurveyResult]
          WHERE

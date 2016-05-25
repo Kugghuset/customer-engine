@@ -81,5 +81,10 @@ module.exports = {
   secrets: {
     session: process.env.APP_SECRET || userConfig.appSecret || 'sssshhharedSecret'
   },
-  baseFolder: fixBackslashes(process.env.BASE_FOLDER) || userConfig.baseFolder || ''
+  baseFolder: fixBackslashes(process.env.BASE_FOLDER) || userConfig.baseFolder || '',
+  surway: {
+    base_url: process.env.SURWAY_URL,
+    email: process.env.SURWAY_EMAIL,
+    password:  process.env.SURWAY_PASSWORD,
+  }
 };

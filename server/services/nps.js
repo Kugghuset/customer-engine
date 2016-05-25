@@ -290,7 +290,7 @@ function sendSurway(numberOfWeeks) {
         item['shortcode'],
       ]
     });
-
+  
     var _url = config.surway.base_url + (
         /\/$/.test(config.surway.base_url)
           ? 'services/upload/data'

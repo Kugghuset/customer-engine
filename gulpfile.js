@@ -268,7 +268,7 @@ gulp.task('build', ['sass', 'templates', 'minify', 'cachebust', 'db-setup']);
 
 gulp.task('build-assets', ['sass', 'templates', 'minify', 'cachebust']);
 
-gulp.task('default', ['livereload-listen', 'build', 'server', 'watch', 'open']);
+gulp.task('default', ['livereload-listen', 'build', 'server', 'watch']);
 
 process.on('exit', function () {
   if (node) { node.kill(); }

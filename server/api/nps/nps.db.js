@@ -40,14 +40,14 @@ exports.getAll = function () {
 
 /**
  * Inserts the *nps* object into the db.
- * 
+ *
  * @param {Object} nps
  * @return {Promise} -> {Object}
  */
 exports.insert = function (_nps) {
-  
+
   var nps;
-  
+
   if ('ticketId' in _nps) {
     nps = {
       npsTel: _nps.person.tel.replace(/(^[^+])/, '+$1'),
@@ -57,7 +57,7 @@ exports.insert = function (_nps) {
   } else {
     nps = _nps;
   }
-  
+
   return sql.execute({
     query: sql.fromFile('./sql/nps.insert.sql'),
     params: {
@@ -87,32 +87,32 @@ exports.insert = function (_nps) {
       }
     }
   })
-  
+
 }
 
 /**
  * Imports all files into DB.
- * 
+ *
  * @param {String} basePath
  * @param {Array} files Do not set, set recursively!
  * @param {Array} readFiles Do not set, set recursively!
  * @return {Promise}
  */
 function bulkImport(basePath, files, readFiles) {
-  
+
   // First time check
   if (!files) {
-    
+
     var statObj = fs.existsSync(basePath)
       ? fs.statSync(basePath)
       : undefined;
-      
+
     // The folder either doesn't exist, or it's not a folder
     // Early return if either is true
     if (!statObj || statObj.isFile()) {
       return new Promise(function (resolve) { resolve(); });
     }
-    
+
     // Get all files
     files = _.chain(fs.readdirSync(basePath))
       .filter(function (filename) {
@@ -124,31 +124,38 @@ function bulkImport(basePath, files, readFiles) {
       .map(function (filename) { return path.resolve(basePath, filename); })
       .orderBy(function (filename) { return filename; })
       .value();
-    
+
     readFiles = [];
   }
-  
+
   // Return early if there are no files
   if (!files || !files.length) {
     console.log('No NPS score files found, no bulk import.');
     return new Promise(function (resolve) { resolve(); });
   }
-  
+
   // We're all set here
   if (readFiles.length === files.length) {
     console.log('Bulk import of NPS data finished.');
     return new Promise(function (resolve) { resolve(readFiles); });
   }
-  
+
   // The file to perform the bulk import on.
   var currentFile = files[readFiles.length];
-  
+
   var _file = fs.readFileSync(currentFile, 'utf8');
-  
+
   var bulkFile;
-  
+
+  /**
+   * TODO: Handle data from Surway
+   *  - Allow ticketIds to be non-IDs (mainly from Zendesk)
+   *  - Make dates less harsch
+   *  - Move to a mssql based bulk import
+   */
+
   if (_.isString(_file)) {
-    
+
     if (/\t/.test(_file)) {
       // Use the new file type
       bulkFile = './sql/nps.bulkImport.sql'
@@ -159,12 +166,12 @@ function bulkImport(basePath, files, readFiles) {
       // Use the semi old file type
       bulkFile = './sql/nps.dep.bulkImport.sql';
     }
-    
+
   } else {
     // Return early as _file cannot be used
     return bulkImport(basePath, files, readFiles.concat([currentFile]));
   }
-  
+
   var query = !/\.dep\./i.test(bulkFile)
     ? sql
       .fromFile(bulkFile)
@@ -173,7 +180,7 @@ function bulkImport(basePath, files, readFiles) {
       .fromFile(bulkFile)
       .replace("';'", "'\t'")
       .replace('{ filepath }', currentFile);
-  
+
   return sql.execute({
     query: query
   })
@@ -182,10 +189,10 @@ function bulkImport(basePath, files, readFiles) {
     return bulkImport(basePath, files, readFiles.concat([currentFile]));
   })
   .catch(function (err) {
-    
+
     console.log(currentFile);
     console.log(err);
-    
+
     // Assumme the file simply shouldn't be imported, continue recursively
     return bulkImport(basePath, files, readFiles.concat([currentFile]));
   });

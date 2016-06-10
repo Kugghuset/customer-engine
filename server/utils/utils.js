@@ -6,6 +6,8 @@ var chalk = require('chalk');
 var DataObjectParser = require('dataobject-parser')
 var request = require('request');
 
+var logger = require('./logger.util');
+
 /**
  * Returns a new object where property names
  * with dots are converted into nested objects and arrays.
@@ -244,6 +246,13 @@ function put(url, data, headers) {
   });
 }
 
+/**
+ * @param {String} message String to loG
+ */
+function log(message) {
+  logger.stream.write(message);
+}
+
 module.exports = {
   objectify: objectify,
   handleError: handleError,
@@ -257,4 +266,5 @@ module.exports = {
   parseBool: parseBool,
   post: post,
   put: put,
+  log: log,
 };

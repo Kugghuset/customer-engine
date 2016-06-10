@@ -21,17 +21,17 @@ function initialize() {
 }
 
 exports.getAll = function () {
-  return sql.execute({  
+  return sql.execute({
     query: sql.fromFile('./sql/callBack.getAll.sql')
   });
 };
 
 exports.set = function (id, callBackObj) {
   return new Promise(function (resolve, reject) {
-    
+
     var query = sql.fromFile('./sql/callBack.set.sql')
       .concat(Ticket.rawSqlFile('ticket.findNpsById.sql'));
-    
+
     sql.execute({
       query: query,
       params: {
@@ -40,7 +40,7 @@ exports.set = function (id, callBackObj) {
           val: id || callBackObj.callBackId || null
         },
         ticketId: {
-          type: sql.BIGINT,
+          type: sql.VARCHAR(255),
           val: callBackObj.ticketId
         },
         userId: {

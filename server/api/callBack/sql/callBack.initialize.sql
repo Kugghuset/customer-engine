@@ -6,7 +6,7 @@ IF (Object_ID('CallBack', 'U') IS NULL)
 BEGIN
   CREATE TABLE [dbo].[CallBack] (
       [callBackId] bigint IDENTITY(1, 1) PRIMARY KEY NOT NULL
-    , [ticketId] bigint NULL
+    , [ticketId] varchar(255) NULL
     , [userId] bigint NULL
     , [agentName] varchar(255) NULL -- Doesn't have to be a user
     , [callBackDate] datetime2 NULL
@@ -24,7 +24,7 @@ BEGIN
   )
 END
 ELSE
-  
+
   IF NOT EXISTS(SELECT * FROM sys.columns
                 WHERE Name = N'dateCreated'
                 AND Object_ID = Object_ID(N'CallBack'))
@@ -32,7 +32,7 @@ ELSE
     ALTER TABLE [dbo].[CallBack]
     ADD [dateCreated] datetime2 DEFAULT GETUTCDATE() NULL
   END
-  
+
   IF NOT EXISTS(SELECT * FROM sys.columns
                 WHERE Name = N'dateUpdated'
                 AND Object_ID = Object_ID(N'CallBack'))
@@ -40,7 +40,7 @@ ELSE
     ALTER TABLE [dbo].[CallBack]
     ADD [dateUpdated] datetime2 DEFAULT GETUTCDATE() NULL
   END
-  
+
   IF NOT EXISTS(SELECT * FROM sys.columns
                 WHERE Name = N'agentName'
                 AND Object_ID = Object_ID(N'CallBack'))
@@ -48,7 +48,7 @@ ELSE
     ALTER TABLE [dbo].[CallBack]
     ADD [agentName] varchar(255) NULL
   END
-  
+
   IF NOT EXISTS(SELECT * FROM sys.columns
                 WHERE Name = N'isClosed'
                 AND Object_ID = Object_ID(N'CallBack'))
@@ -56,11 +56,21 @@ ELSE
     ALTER TABLE [dbo].[CallBack]
     ADD [isClosed] bit NULL DEFAULT 0
   END
-  
+
   IF NOT EXISTS(SELECT * FROM sys.columns
                 WHERE Name = N'dateClosed'
                 AND Object_ID = Object_ID(N'CallBack'))
   BEGIN
     ALTER TABLE [dbo].[CallBack]
     ADD [dateClosed] datetime2 NULL
+  END
+
+  -- Alter the type of the ticketId column
+  IF EXISTS(SELECT * FROM INFORMATION_SCHEMA.COLUMNS
+            WHERE TABLE_NAME = N'CallBack'
+              AND COLUMN_NAME = N'ticketId'
+              AND DATA_TYPE = N'bigint')
+  BEGIN
+    ALTER TABLE [dbo].[CallBack]
+    ALTER COLUMN [ticketId] VarChar(256) NULL
   END

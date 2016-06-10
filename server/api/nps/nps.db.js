@@ -10,6 +10,7 @@ var chalk = require('chalk');
 var os = require('os');
 
 var deprecated = require('./nps.db.deprecated');
+var npsBulkImport = require('./nps.bulkImport');
 
 var npsFilePath = path.resolve('./server/assets/nps/total_nps_score.csv');
 
@@ -99,6 +100,8 @@ exports.insert = function (_nps) {
  * @return {Promise}
  */
 function bulkImport(basePath, files, readFiles) {
+
+  return npsBulkImport.import(basePath);
 
   // First time check
   if (!files) {

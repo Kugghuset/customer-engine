@@ -103,8 +103,7 @@ function writeProcessedFile(_data) {
     fs.mkdirSync(_outputFolder);
   }
 
-  // Encode to iso-8859-1 as SQL Server cannot handle UTF8
-  var encodedData = iconv.encode(_data.output, 'iso-8859-1');
+  var encodedData = iconv.encode(_data.output, 'utf8');
   // Write the created file
   fs.writeFileSync(_data.outputName, encodedData);
   console.log('Processed file is moved to {filename}'.replace('{filename}', _data.outputName));

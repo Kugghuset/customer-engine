@@ -14,11 +14,29 @@ var config = require('./../../config/config');
 var Connection = mssql.Connection;
 
 // Connection to db
-const __connection = {
+var __connection = {
   context: new Connection(config.db),
   conn: undefined,
   lastError: undefined,
 };
+
+/**
+ * Array of columns of which to be used when bulk importing
+ * to the NPSSurveyResult table
+ *
+ * @type {Array}
+ */
+var __columns = [
+  { name: 'npsDate', type: mssql.DateTime2, nullable: true, default: null },
+  { name: 'npsTel', type: mssql.VarChar(256), nullable: true, default: null },
+  { name: 'ticketId', type: mssql.BigInt, nullable: true, default: null },
+  { name: 'queue', type: mssql.VarChar(256), nullable: true, default: null },
+  { name: 'team', type: mssql.VarChar(256), nullable: true, default: null },
+  { name: 'npsScore', type: mssql.SmallInt, nullable: true, default: null },
+  { name: 'npsComment', type: mssql.VarChar(mssql.MAX), nullable: true, default: null },
+  { name: 'npsFollowUp', type: mssql.VarChar(mssql.MAX), nullable: true, default: null },
+  { name: 'zendeskId', type: mssql.VarChar(255), nullable: true, default: null },
+];
 
 /**
  * Listens for the closed event and sets __connection.conn to undefined.
@@ -67,26 +85,164 @@ function getSqlConnection() {
   });
 }
 
+/**
+ * @param {String} tableName Name of the temp table to use
+ * @param {{}[]} columns Array of column objects to use
+ * @param {[][]} collection Array of arrays containing
+ * @param {String[]} skippables Array of column names to skip, (for the columns field)
+ * @return {Object} new mssql.Table
+ */
+function generateTable(tableName, columns, collection, skippables) {
+  var _table = new mssql.Table(tableName);
+  // Set table creation to true, to ensure the table is created if it doesn't exist,
+  // which it shouldn't do
+  _table.create = true;
+
+  // Add all the columns to the table
+  _.forEach(columns, function (col, i) {
+      _table.columns.add(col.name, col.type, _.omit(col, ['name', 'type']));
+  });
+
+  // Get the index of the ticketId and zendeskId to use for eigther assigning the ticketId or zendeskId
+  var _indexOfTicketId = _.findIndex(columns, function (col) { return col.name === 'ticketId'; });
+  var _indexOfZendeskId = _.findIndex(columns, function (col) { return col.name === 'zendeskId'; });
+
+  // Add all rows
+  _.forEach(collection, function (item) {
+    var _data = _.map(columns, function (col, i) {
+      // Get the value
+      var _value;
+
+      if (col.name === 'ticketId') {
+        _value = /^[0-9]+$/.test(item[i])
+          ? item[i]
+          : null;
+      } else if (col.name === 'zendeskId') {
+        return null;
+      } else {
+      _value = item[i];
+      }
+
+      // Get the type from the array
+      var _type = col.type.type || col.type;
+
+      // If any of thse are true, a null value will be returned
+      var _criteria = [
+        (_value || '').toString() === 'NaN',
+        _value === 'NaN',
+        _.isUndefined(_value),
+        /Int/.test(_type) && isNaN(_value),
+        /\@sip3\.uni\-tel\.dk$/.test(_value),
+        _.isEmpty(_value),
+      ];
+
+      // Tedious doesn't seem to like undefined values when parsing Integers
+      if (_.some(_criteria)) {
+        // The value is eitehr NaN or undefined,
+        // which is better handled as null
+        return null;
+      } else if (col.name === 'npsTel') {
+        // npsTels should start with a plus
+        return /^\+/.test(_value)
+          ? _value
+          : '+' + _value;
+      } else if (/Int/.test(_type)) {
+        return parseInt(_value);
+      } else if (/Date/.test(_type)) {
+        return new Date(_value);
+      } else {
+        return _value;
+      }
+    });
+
+    // Only actually add rows with data, though this seems to never really happeN
+    if (_.some(_data)) {
+      // var skippableIndexes = _.map(skippables, function (name) { return _.findIndex(columns, { name: name }) });
+      _table.rows.add.apply(_table.rows, _data);
+    }
+  });
+
+  // Filter out the empty rows
+  _table.rows = _.filter(_table.rows, function (row) { return _.some(row) && row[0]; })
+
+  return _table;
+}
+
+/**
+ * Merges the table at *tableName* into NPSSurveyResult.
+ *
+ * @param {String} tableName Name of the table to merge from
+ * @return {Promise}
+ */
+function mergeAndDropTempTable(tableName) {
+  return new Promise(function (resolve, reject) {
+      sql.execute({
+        query: sql.fromFile('./sql/nps.mergeAndDropTempTable.sql').replace(/\{tablename\}/ig, tableName),
+      })
+      .then(resolve)
+      .catch(reject);
+  });
+}
+
 /*****************
  * EXPORTS BELOW:
  *****************/
 
 /**
+ * Bulk imports a single file
+ *
+ * @param {String} filename Name of the file, should be complete
+ * @return {Promise}
+ */
+function singleImport(filename) {
+  return new Promise(function (resolve, reject) {
+    // Check the file contents
+    var _file = fs.readFileSync(filename, 'utf8');
+
+    // If the file isn't a string, I.E. wasn't read, skip it and carry on.
+    if (!_.isString(_file)) {
+      return reject(new Error('File missing'));
+    }
+
+    // Get the collection
+    var _collection = _.chain(_file.split(/\r\n/))
+      // Slice out the header row
+      .thru(function (rows) { return rows.slice(1); })
+      // Split all rows by tabs
+      .map(function (row) { return row.split('\t'); })
+      .filter(_.some)
+      .value();
+
+    var skippables = ['queue', 'team'];
+
+    var _tableName = 'Temp_NPSSurveyResult';
+
+    // Generate the table
+    var _table = generateTable(_tableName, __columns, _collection);
+
+    // Get the SQL connection to the DB
+    return getSqlConnection()
+    .then(function (connection) {
+      var _request = new mssql.Request(connection);
+
+      return _request.bulk(_table);
+    })
+    // After bulk import, merge the two tables and drop  the temp table
+    .then(function () { return mergeAndDropTempTable(_tableName); })
+    .then(resolve)
+    .catch(reject);
+  });
+}
+
+/**
+ * Bulk imports a complete folder of files.
+ *
  * @param {String} basePath The path from where to read the files
  * @param {String[]} files Array of filenames to bulk import. Do not set, set recursively!
  * @param {String[]} readFiles Do not set, set recursively!
  * @return {Promise}
  */
 function bulkImport(basePath, files, readFiles) {
-
-
-
-  /**
-   * TODO:  MOVE FILES AFTER THIS!!!
-   */
-
-
-
   // First time setup
   if (_.isUndefined(files)) {
     var statObj = fs.existsSync(basePath)
@@ -126,107 +282,13 @@ function bulkImport(basePath, files, readFiles) {
     return Promise.resolve();
   }
 
-  // Get the filename to perform bulk import on.
+    // Get the filename to perform bulk import on.
   var currentFile = files[readFiles.length];
 
-  // Check the file contents
-  var _file = fs.readFileSync(currentFile, 'utf8');
 
-  var bulkFile;
-
-  // If the file isn't a string, I.E. wasn't read, skip it and carry on.
-  if (!_.isString(_file)) {
-    return bulkImport(basePath, files, readFiles.concat([currentFile]));
-  }
-
-  // Get the collection
-  var _collection = _.chain(_file.split(/\r\n|\n/))
-    // Slice out the header row
-    .thru(function (rows) { return rows.slice(1); })
-    // Split all rows by tabs
-    .map(function (row) { return row.split('\t'); })
-    .filter(_.some)
-    .value();
-
-  // Get the table
-  var _table = new mssql.Table('NPSSurveyResult');
-
-  // Set table creation to true, to ensure the table is created if it doesn't exist,
-  // which it shouldn't do
-  _table.create = true;
-
-  var _columns = [
-    { name: 'npsDate', type: mssql.DateTime2, nullable: true, default: null },
-    { name: 'npsTel', type: mssql.VarChar(256), nullable: true, default: null },
-    { name: 'ticketId', type: mssql.VarChar(256), nullable: true, default: null },
-    { name: 'queue', type: mssql.VarChar(256), nullable: true, default: null },
-    { name: 'team', type: mssql.VarChar(256), nullable: true, default: null },
-    { name: 'npsScore', type: mssql.SmallInt, nullable: true, default: null },
-    { name: 'npsComment', type: mssql.VarChar(mssql.MAX), nullable: true, default: null },
-    { name: 'npsFollowUp', type: mssql.VarChar(mssql.MAX), nullable: true, default: null },
-  ];
-
-  var skippables = ['queue', 'team'];
-
-  // Add all the columns to the table
-  _.forEach(_columns, function (col, i) {
-    // Skip the queue, as it's not actually part of the NPSSurveyResult table
-    if (!~skippables.indexOf(col.name)) {
-      _table.columns.add(col.name, col.type, _.omit(col, ['name', 'type']));
-    }
-  });
-
-  // Add all rows
-  _.forEach(_collection, function (item) {
-    var _data = _.map(_columns, function (col, i) {
-      // Get the value
-      var _value = item[i];
-
-      var _type = col.type.type || col.type;
-
-      // If any of thse are true, a null value will be returned
-      var _criteria = [
-          (_value || '').toString() === 'NaN',
-          _value === 'NaN',
-          _.isUndefined(_value),
-          /Int/.test(_type) && isNaN(_value)
-        ];
-
-      // Tedious doesn't seem to like undefined values when parsing Integers
-      if (_.some(_criteria)) {
-        // The value is eitehr NaN or undefined,
-        // which is better handled as null
-        return null;
-      } else if (col.name === 'npsTel') {
-        // npsTels should start with a plus
-        return /^\+/.test(_value)
-          ? _value
-          : '+' + _value;
-      } else if (/Int/.test(_type)) {
-        return parseInt(_value);
-      } else if (/Date/.test(_type)) {
-        return new Date(_value);
-      } else if (_value === '') {
-        return null;
-      } else {
-        return _value;
-      }
-    });
-
-    var skippableIndexes = _.map(skippables, function (name) { return _.findIndex(_columns, { name: name }) });
-
-    // Then add all rows except the queue row.
-    _table.rows.add.apply(_table.rows, _.filter(_data, function (val, i) { return !~skippableIndexes.indexOf(i); }));
-  });
-
-  // Get the SQL connection to the DB
-  return getSqlConnection()
-  .then(function (connection) {
-    var _request = new mssql.Request(connection);
-
-    return _request.bulk(_table);
-  })
+  return singleImport(currentFile)
   .then(function (data) {
+    utils.log('Bulk import successful of file: {file}'.replace('{file}', currentFile));
     // Continue recursively
     return bulkImport(basePath, files, readFiles.concat([currentFile]));
   })
@@ -241,4 +303,5 @@ function bulkImport(basePath, files, readFiles) {
 
 module.exports = {
   import: bulkImport,
+  importOne: singleImport,
 }

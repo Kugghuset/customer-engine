@@ -109,15 +109,15 @@ LEFT JOIN [dbo].[Person] AS [Q]
 ON [A].[personId] = [Q].[personId]
 
 LEFT JOIN [dbo].[CallBack] AS [CB]
-ON CAST([A].[ticketId] AS VarChar(2551)) = [CB].[ticketId]
+ON [A].[ticketId] = [CB].[ticketId]
 
 LEFT JOIN [dbo].[User] AS [U2]
 ON [CB].[userId] = [U2].[userId]
 
 -- Inner join on NPSSurveyResult, which only gets those where there's an npsScore
 LEFT JOIN [dbo].[NPSSurveyResult] AS [NPS]
-ON CAST([A].[ticketId] AS VarChar(2551)) = [NPS].[ticketId]
+ON [A].[ticketId] = [NPS].[ticketId]
 
-WHERE CAST([A].[ticketId] AS VarChar(2551)) = @ticketId
+WHERE [A].[ticketId] = @ticketId
   AND [NPS].[npsScore] IS NOT NULL
 ORDER BY [A].[ticketDate] DESC, [A].[ticketId] DESC

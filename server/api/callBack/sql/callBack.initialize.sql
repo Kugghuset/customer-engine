@@ -6,7 +6,7 @@ IF (Object_ID('CallBack', 'U') IS NULL)
 BEGIN
   CREATE TABLE [dbo].[CallBack] (
       [callBackId] bigint IDENTITY(1, 1) PRIMARY KEY NOT NULL
-    , [ticketId] varchar(255) NULL
+    , [ticketId] bigint NULL
     , [userId] bigint NULL
     , [agentName] varchar(255) NULL -- Doesn't have to be a user
     , [callBackDate] datetime2 NULL
@@ -63,14 +63,4 @@ ELSE
   BEGIN
     ALTER TABLE [dbo].[CallBack]
     ADD [dateClosed] datetime2 NULL
-  END
-
-  -- Alter the type of the ticketId column
-  IF EXISTS(SELECT * FROM INFORMATION_SCHEMA.COLUMNS
-            WHERE TABLE_NAME = N'CallBack'
-              AND COLUMN_NAME = N'ticketId'
-              AND DATA_TYPE = N'bigint')
-  BEGIN
-    ALTER TABLE [dbo].[CallBack]
-    ALTER COLUMN [ticketId] VarChar(256) NULL
   END

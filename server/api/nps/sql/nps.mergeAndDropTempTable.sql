@@ -1,59 +1,13 @@
-
-/*
-Inserts the npss in bulk from the file provided in the file.
-*/
-
 SET XACT_ABORT ON
 
 BEGIN TRAN
 
--- Drop the TempNPS if it exists
-IF (Object_ID('TempNPS', 'U') IS NOT NULL)
-BEGIN
-    DROP TABLE [dbo].[TempNPS]
-END
-
--- Create temp table
-CREATE TABLE [dbo].[TempNPS] (
-    [rawNpsDate] varchar(256) NULL -- will be converted later on
-  , [npsTel] varchar(256) NULL
-  , [ticketId] bigint NULL
-  , [queue] varchar(256) NULL
-  , [team] varchar(256) NULL
-  , [npsScore] varchar(256) NULL
-  , [npsComment] varchar(max) NULL
-  , [npsFollowUp] varchar(max) NULL
-)
-
--- filepath i set in JavaScript
-BULK
-INSERT [dbo].[TempNPS]
-FROM '{ filepath }'
-WITH
-(
-    FIRSTROW = 2 -- Skip the column name row
-  , FIELDTERMINATOR = ';'
-  , ROWTERMINATOR = '\n'
-  , DATAFILETYPE = 'widechar' -- This part is super important for åäö
-  , CODEPAGE = 'RAW' -- Supposedly this one too
-)
-
--- Add the response field
-ALTER TABLE [dbo].[TempNPS]
-ADD [npsDate] datetime2 NULL
-
--- -- Convert the dates
-UPDATE [dbo].[TempNPS]
-SET [npsDate] = CASE
-  WHEN [rawNpsDate] IS NOT NULL THEN CONVERT(datetime2, [rawNpsDate], 103)
-  ELSE ''
-END
-
-INSERT INTO [Tickety].[dbo].[NPSSurveyResult] (
+INSERT INTO [dbo].[NPSSurveyResult] (
     [npsDate]
   , [npsTel]
   , [npsScore]
   , [ticketId]
+  , [zendeskId]
   , [npsComment]
   , [npsFollowUp]
 )
@@ -62,24 +16,26 @@ SELECT
   , [npsTel]
   , [npsScore]
   , [ticketId]
+  , [zendeskId]
   , [npsComment]
   , [npsFollowUp]
 FROM (
-    MERGE [Tickety].[dbo].[NPSSurveyResult] AS [Target]
-    USING (
-      SELECT
-        CAST([npsDate] AS date) AS [npsdate]
+  MERGE [dbo].[NPSSurveyResult] AS [Target]
+  USING (
+    SELECT
+        CAST([npsDate] AS Date)  AS [npsDate]
       , [npsTel] AS [npsTel]
       , MAX([npsScore]) AS [npsScore]
       , MIN([ticketId]) AS [ticketId]
+      , MIN([zendeskId]) AS [zendeskId]
       , MAX([npsComment]) AS [npsComment]
       , MAX([npsFollowUp]) AS [npsFollowUp]
-      FROM [dbo].[TempNPS]
-      GROUP BY [npsTel], CAST([npsDate] AS date)
-	) AS [Source]
-    ON
-        -- Match on the npsTel and the date only of the npsDate
-        [Target].[npsTel] = [Source].[npsTel]
+    FROM [dbo].[{tablename}]
+    GROUP BY [npsTel], CAST([npsDate] AS date)
+  ) AS [Source]
+  ON
+      -- Match on npsTel and the date part of npsDate
+      [Target].[npsTel] = [Source].[npsTel]
     AND CAST([Target].[npsDate] AS date) = CAST([Source].[npsDate] AS date)
 
     WHEN MATCHED AND (
@@ -99,12 +55,17 @@ FROM (
           [Target].[ticketId] != [Source].[ticketId]
        OR ([Target].[ticketId] IS NULL AND [Source].[ticketId] IS NOT NULL)
         )
+     OR (
+          [Target].[zendeskId] != [Source].[zendeskId]
+       OR ([Target].[zendeskId] IS NULL AND [Source].[zendeskId] IS NOT NULL)
+        )
     )
     THEN UPDATE SET
         [Target].[npsScore] = [Source].[npsScore]
       , [Target].[npsComment] = [Source].[npsComment]
       , [Target].[npsFollowUp] = [Source].[npsFollowUp]
       , [Target].[ticketId] = [Source].[ticketId]
+      , [Target].[zendeskId] = [Source].[zendeskId]
       , [Target].[isLocal] = NULL
       , [Target].[dateChanged] = GETUTCDATE()
 
@@ -116,6 +77,7 @@ FROM (
           , [npsComment]
           , [npsFollowUp]
           , [ticketId]
+          , [zendeskId]
         )
         VALUES (
             [Source].[npsDate]
@@ -124,14 +86,14 @@ FROM (
           , [Source].[npsComment]
           , [Source].[npsFollowUp]
           , [Source].[ticketId]
+          , [Source].[zendeskId]
         )
 
     OUTPUT $action AS [Action], [Source].*
 )    AS [MergeOutput]
  WHERE [MergeOutput].[Action] = NULL
 
-
 -- Drop the temp table
-DROP TABLE [dbo].[TempNPS]
+DROP TABLE [dbo].[{tablename}]
 
 COMMIT TRAN

@@ -150,13 +150,6 @@ function bulkImport(basePath, files, readFiles) {
 
   var bulkFile;
 
-  /**
-   * TODO: Handle data from Surway
-   *  - Allow ticketIds to be non-IDs (mainly from Zendesk)
-   *  - Make dates less harsch
-   *  - Move to a mssql based bulk import
-   */
-
   if (_.isString(_file)) {
 
     if (/\t/.test(_file)) {

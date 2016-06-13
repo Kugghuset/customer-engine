@@ -40,7 +40,7 @@ exports.set = function (id, callBackObj) {
           val: id || callBackObj.callBackId || null
         },
         ticketId: {
-          type: sql.VARCHAR(255),
+          type: sql.BIGINT,
           val: callBackObj.ticketId
         },
         userId: {

@@ -117,7 +117,7 @@ ON [CB].[userId] = [U2].[userId]
 
 -- Inner join on NPSSurveyResult, which only gets those where there's an npsScore
 INNER JOIN [dbo].[NPSSurveyResult] AS [NPS]
-ON CAST([A].[ticketId] AS VarChar) = [NPS].[ticketId]
+ON [A].[ticketId] = [NPS].[ticketId]
   WHERE [npsScore] IS NOT NULL
 
 ORDER BY [A].[ticketDate] DESC, [A].[ticketId] DESC
@@ -126,7 +126,7 @@ OFFSET @offset ROWS FETCH NEXT @top ROWS ONLY
 SELECT COUNT(*)
 FROM [dbo].[Ticket] AS [A]
 INNER JOIN [dbo].[NPSSurveyResult] AS [NPS]
-ON CAST([A].[ticketId] AS VarChar) = [NPS].[ticketId]
+ON [A].[ticketId] = [NPS].[ticketId]
 
 LEFT JOIN [dbo].[CallBack] AS [CB]
 ON [A].[ticketId] = [CB].[ticketId]

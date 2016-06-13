@@ -54,4 +54,3 @@ WHERE [A].[ticketDate] < @upperDateLimit
 GROUP BY [Q].[tel]
 
 ORDER BY MIN([A].[ticketDate]) DESC, MIN([A].[ticketId]) DESC
-

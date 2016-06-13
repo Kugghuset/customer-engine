@@ -10,6 +10,7 @@ var chalk = require('chalk');
 var os = require('os');
 
 var deprecated = require('./nps.db.deprecated');
+var npsBulkImport = require('./nps.bulkImport');
 
 var npsFilePath = path.resolve('./server/assets/nps/total_nps_score.csv');
 
@@ -100,6 +101,8 @@ exports.insert = function (_nps) {
  */
 function bulkImport(basePath, files, readFiles) {
 
+  return npsBulkImport.import(basePath);
+
   // First time check
   if (!files) {
 
@@ -146,13 +149,6 @@ function bulkImport(basePath, files, readFiles) {
   var _file = fs.readFileSync(currentFile, 'utf8');
 
   var bulkFile;
-
-  /**
-   * TODO: Handle data from Surway
-   *  - Allow ticketIds to be non-IDs (mainly from Zendesk)
-   *  - Make dates less harsch
-   *  - Move to a mssql based bulk import
-   */
 
   if (_.isString(_file)) {
 

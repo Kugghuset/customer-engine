@@ -24,7 +24,7 @@ BEGIN
   )
 END
 ELSE
-  
+
   IF NOT EXISTS(SELECT * FROM sys.columns
                 WHERE Name = N'dateCreated'
                 AND Object_ID = Object_ID(N'CallBack'))
@@ -32,7 +32,7 @@ ELSE
     ALTER TABLE [dbo].[CallBack]
     ADD [dateCreated] datetime2 DEFAULT GETUTCDATE() NULL
   END
-  
+
   IF NOT EXISTS(SELECT * FROM sys.columns
                 WHERE Name = N'dateUpdated'
                 AND Object_ID = Object_ID(N'CallBack'))
@@ -40,7 +40,7 @@ ELSE
     ALTER TABLE [dbo].[CallBack]
     ADD [dateUpdated] datetime2 DEFAULT GETUTCDATE() NULL
   END
-  
+
   IF NOT EXISTS(SELECT * FROM sys.columns
                 WHERE Name = N'agentName'
                 AND Object_ID = Object_ID(N'CallBack'))
@@ -48,7 +48,7 @@ ELSE
     ALTER TABLE [dbo].[CallBack]
     ADD [agentName] varchar(255) NULL
   END
-  
+
   IF NOT EXISTS(SELECT * FROM sys.columns
                 WHERE Name = N'isClosed'
                 AND Object_ID = Object_ID(N'CallBack'))
@@ -56,7 +56,7 @@ ELSE
     ALTER TABLE [dbo].[CallBack]
     ADD [isClosed] bit NULL DEFAULT 0
   END
-  
+
   IF NOT EXISTS(SELECT * FROM sys.columns
                 WHERE Name = N'dateClosed'
                 AND Object_ID = Object_ID(N'CallBack'))

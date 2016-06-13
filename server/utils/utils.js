@@ -6,6 +6,8 @@ var chalk = require('chalk');
 var DataObjectParser = require('dataobject-parser')
 var request = require('request');
 
+var logger = require('./logger.util');
+
 /**
  * Returns a new object where property names
  * with dots are converted into nested objects and arrays.
@@ -244,6 +246,35 @@ function put(url, data, headers) {
   });
 }
 
+/**
+ * @param {String} message String to loG
+ */
+function log(message) {
+  logger.stream.write(message);
+}
+
+/**
+ * @param {Any} message The message to print
+ * @param {Number} verticalPadding Vertical padding as number of '\n', if 0 then none.
+ * @param {Boolean} asIs Should *message* be printed as is? Defaults to false
+ */
+function print (message, verticalPadding, asIs) {
+  if (_.isUndefined(verticalPadding)) { verticalPadding = 0; }
+  if (_.isUndefined(asIs)) { asIs = false; }
+
+  if (!!verticalPadding) { log(_.times(verticalPadding, function () { return '\n'; }).join('')); }
+  if (_.some([
+    _.isError(message),
+    _.isString(message),
+    _.isNumber(message),
+    _.isUndefined(message),
+  ])) { asIs = true; }
+  log(
+    !!asIs ? message : JSON.stringify(message, null, 4)
+  );
+  if (!!verticalPadding) { log(_.times(verticalPadding, function () { return '\n'; }).join('')); }
+}
+
 module.exports = {
   objectify: objectify,
   handleError: handleError,
@@ -257,4 +288,6 @@ module.exports = {
   parseBool: parseBool,
   post: post,
   put: put,
+  log: log,
+  print: print,
 };

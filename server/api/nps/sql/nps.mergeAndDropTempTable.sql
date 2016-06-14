@@ -10,6 +10,8 @@ INSERT INTO [dbo].[NPSSurveyResult] (
   , [zendeskId]
   , [npsComment]
   , [npsFollowUp]
+  , [serviceName]
+  , [shortcode]
 )
 SELECT
     [npsDate]
@@ -19,6 +21,8 @@ SELECT
   , [zendeskId]
   , [npsComment]
   , [npsFollowUp]
+  , [serviceName]
+  , [shortcode]
 FROM (
   MERGE [dbo].[NPSSurveyResult] AS [Target]
   USING (
@@ -30,6 +34,8 @@ FROM (
       , MIN([zendeskId]) AS [zendeskId]
       , MAX([npsComment]) AS [npsComment]
       , MAX([npsFollowUp]) AS [npsFollowUp]
+      , MAX([serviceName]) AS [serviceName]
+      , MAX([shortcode]) AS [shortcode]
     FROM [dbo].[{tablename}]
     GROUP BY [npsTel], CAST([npsDate] AS date)
   ) AS [Source]
@@ -66,6 +72,8 @@ FROM (
       , [Target].[npsFollowUp] = [Source].[npsFollowUp]
       , [Target].[ticketId] = [Source].[ticketId]
       , [Target].[zendeskId] = [Source].[zendeskId]
+      , [Target].[serviceName] = [Source].[serviceName]
+      , [Target].[shortcode] = [Source].[shortcode]
       , [Target].[isLocal] = NULL
       , [Target].[dateChanged] = GETUTCDATE()
 
@@ -78,6 +86,8 @@ FROM (
           , [npsFollowUp]
           , [ticketId]
           , [zendeskId]
+          , [serviceName]
+          , [shortcode]
         )
         VALUES (
             [Source].[npsDate]
@@ -87,6 +97,8 @@ FROM (
           , [Source].[npsFollowUp]
           , [Source].[ticketId]
           , [Source].[zendeskId]
+          , [Source].[serviceName]
+          , [Source].[shortcode]
         )
 
     OUTPUT $action AS [Action], [Source].*

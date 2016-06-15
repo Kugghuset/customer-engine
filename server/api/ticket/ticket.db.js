@@ -497,7 +497,7 @@ exports.findNps = function (top, page, filter, value, options) {
 
     var offset = (page - 1) * top;
 
-    var opts = _.pick(options, ['userId', 'isClosed', 'groupingCountry']);
+    var opts = _.pick(options, ['userId', 'customerId', 'isClosed', 'groupingCountry']);
 
     // Set isCLosed to true, false or undefined (undefined if it's neither);
     opts.isClosed = /^true$/i.test(opts.isClosed)
@@ -519,6 +519,10 @@ exports.findNps = function (top, page, filter, value, options) {
         type: sql.BIGINT,
         val: opts.userId,
       },
+      customerId: {
+        type: sql.BIGINT,
+        val: opts.customerId,
+      },
       isClosed: {
         type: sql.BIT,
         val: opts.isClosed,
@@ -531,6 +535,7 @@ exports.findNps = function (top, page, filter, value, options) {
 
     var definitions = {
       userId: '[U2].[userId] = @userId',
+      customerId: '[A].[customerId] = @customerId',
       /**
        * FIX THIS FOR NULL VALUES
        */

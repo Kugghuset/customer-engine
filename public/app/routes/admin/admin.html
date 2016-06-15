@@ -23,6 +23,28 @@
             <h3>Filter call backs</h3>
 
             <div class="pane-row">
+              <!-- Customer -->
+
+              <label for="">Customer</label>
+
+              <span class="fill-by-label">
+                <input type="text"
+                  ce-text-append="filterOptions.customer.customerNumber"
+                  ng-model="filterOptions.customer.orgName"
+                  placeholder="Search for customer to filter by"
+                  uib-typeahead="customer as matched(customer, 'customer') for customer in getCustomer($viewValue, filterOptions.customer)"
+                  typeahead-loading="loadingCustomers"
+                  typeahead-no-results="noResults"
+                  typeahead-wait-ms="200"
+                  class="pane-dropdown"
+                  typeahead-on-select="set('customer', $item)">
+                <i ng-show="loadingCustomers" class="glyphicon glyphicon-refresh" title="Looking for matching customers"></i>
+                <i ng-show="noResults && filterOptions.customer" class="glyphicon glyphicon-exclamation-sign" title="No results found"></i>
+              </span>
+
+            </div>
+
+            <div class="pane-row">
               <!-- User -->
 
               <label for="">User</label>
@@ -58,7 +80,7 @@
                     <li role="menuitem"><a href="" ng-click="filterOptions.country = undefind">All countries</a></li>
                     <li class="divider"></li>
                     <li role="menuitem" ng-repeat="country in countries">
-                      <a href="" ng-click="setCountry(country)">{{ country.name || 'value' }}</a>
+                      <a href="" ng-click="set('country', country)">{{ country.name || 'value' }}</a>
                     </li>
                   </ul>
                 </span>

@@ -43,7 +43,7 @@ function quarantineTels(tickets, finished) {
     return quarantineTels(tickets, finished.concat([currentTicket]));
   })
   .catch(function (err) {
-    console.log(err);
+    utils.log(err);
     return quarantineTels(tickets, finished.concat([undefined]));
   });
 }
@@ -122,7 +122,7 @@ function sendSurway(numberOfWeeks) {
     return Promise.resolve(res);
   })
   .catch(function (err) {
-    console.log(err);
+    utils.log(err);
     return Promise.reject(err);
   })
 }

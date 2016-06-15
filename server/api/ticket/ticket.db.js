@@ -12,11 +12,11 @@ function initialize() {
     query: sql.fromFile('./sql/ticket.initialize.sql')
   })
     .then(function (result) {
-      console.log('Ticket table all set up.');
+      util.log('Ticket table all set up.');
     })
     .catch(function (err) {
-      console.log('Couldn\'t set up Ticket table.');
-      console.error(err);
+      util.log('Couldn\'t set up Ticket table.');
+      util.log(err);
     });
 }
 
@@ -199,7 +199,7 @@ exports.create = function (ticket, user) {
         resolve(_.first(util.objectify(ticket)));
       })
       .catch(function (err) {
-        console.log(err);
+        util.log(err);
         reject(err);
       });
   });
@@ -580,7 +580,7 @@ exports.findNps = function (top, page, filter, value, options) {
         resolve({ tickets: util.objectify(_.first(tickets)), ticketCount: tickets[1][0][''] });
       })
       .catch(function (err) {
-        console.log(err);
+        util.log(err);
         reject(err);
       });
 

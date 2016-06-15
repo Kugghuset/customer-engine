@@ -18,12 +18,12 @@ function intialize() {
       query: sql.fromFile('./sql/customer.initialize.sql')
     })
     .then(function (result) {
-      console.log('Customer table all set up.');
+      util.log('Customer table all set up.');
       resolve(result)
     })
     .catch(function (err) {
-      console.log('Couldn\'t set up Customer table.');
-      console.error(err);
+      util.log('Couldn\'t set up Customer table.');
+      util.log(err);
       reject(err);
     });
   });
@@ -250,7 +250,7 @@ function merge() {
 
   if (os.homedir() === 'C:\\Users\\drklu') {
     return new Promise(function (resolve, reject) {
-      console.log('Not bulk importing as this is on Kris\'s computer.');
+      util.log('Not bulk importing as this is on Kris\'s computer.');
       resolve();
     });
   }
@@ -266,9 +266,9 @@ intialize()
 // .then(bulkImport)
 // .then(merge)
 // .then(function () {
-//   console.log('Customer merge finished');
+//   util.log('Customer merge finished');
 // })
 // .catch(function (err) {
-//   console.log('Something went wrong with merging customers from BamboraDW.');
-//   console.log(err);
+//   util.log('Something went wrong with merging customers from BamboraDW.');
+//   util.log(err);
 // })

@@ -11,11 +11,11 @@ function initialize() {
     query: sql.fromFile('./sql/reasonToDetract.initialize.sql')
   })
   .then(function (result) {
-    console.log('ReasonToDetract table all set up.');
+    util.log('ReasonToDetract table all set up.');
   })
   .catch(function (err) {
-    console.log('Couldn\'t set up ReasonToDetract table.');
-    console.error(err);
+    util.log('Couldn\'t set up ReasonToDetract table.');
+    util.log(err);
   });
 }
 

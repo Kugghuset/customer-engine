@@ -13,6 +13,8 @@ var fs = require('fs');
 var NPS = require('../api/nps/nps.db');
 var config = require('../config/config');
 
+var util = require('./../utils/utils');
+
 var _baseFolder = config.baseFolder || path.resolve('C:\\Users\\drklu\\Dropbox (Personal)\\base');
 var _inputFolder = path.resolve(_baseFolder);
 var _outputFolder = path.resolve(_baseFolder, 'output');
@@ -44,7 +46,7 @@ function readXlsFile(_path, options) {
   // Check if the file exists. and return early if it doesn't.
   if (!fs.existsSync(_path)) {
 
-    console.log('No workbook at {filepath} found.'.replace('{filepath}', _path));
+    util.log('No workbook at {filepath} found.'.replace('{filepath}', _path));
 
     return undefined;
   }
@@ -59,7 +61,7 @@ function readXlsFile(_path, options) {
   // workbook will be an error if the file wasn't found.
   if (_.isError(_workbook)) {
 
-    console.log('No workbook at {filepath} found.'.replace('{filepath}', _path));
+    util.log('No workbook at {filepath} found.'.replace('{filepath}', _path));
 
     // Return early
     return;
@@ -91,14 +93,14 @@ function writeProcessedFile(_data) {
 
   // Return early if the file doesn't exist.
   if (!_data) {
-    console.log('Returning early as there is no file to read.');
+    util.log('Returning early as there is no file to read.');
 
     return;
   }
 
   if (!fs.existsSync(_outputFolder)) {
 
-    console.log('Creating folder: {path}'.replace('{path}', _outputFolder));
+    util.log('Creating folder: {path}'.replace('{path}', _outputFolder));
 
     fs.mkdirSync(_outputFolder);
   }
@@ -106,7 +108,7 @@ function writeProcessedFile(_data) {
   var encodedData = iconv.encode(_data.output, 'utf8');
   // Write the created file
   fs.writeFileSync(_data.outputName, encodedData);
-  console.log('Processed file is moved to {filename}'.replace('{filename}', _data.outputName));
+  util.log('Processed file is moved to {filename}'.replace('{filename}', _data.outputName));
 
   return _data.outputName;
 
@@ -121,7 +123,7 @@ function moveProcessedFile(_path, options) {
 
   if (!fs.existsSync(_path)) {
 
-    console.log('Returning early as there is no file at {path}.'.replace('{path}', _path));
+    util.log('Returning early as there is no file at {path}.'.replace('{path}', _path));
 
     return;
   }
@@ -129,7 +131,7 @@ function moveProcessedFile(_path, options) {
   // Create the folder if it doesn't exist
   if (!fs.existsSync(_processedFolder)) {
 
-    console.log('Creating folder: {path}'.replace('{path}', _processedFolder));
+    util.log('Creating folder: {path}'.replace('{path}', _processedFolder));
 
     fs.mkdirSync(_processedFolder);
   }
@@ -140,7 +142,7 @@ function moveProcessedFile(_path, options) {
   // Move the read file to the _processedFolder.
   var _processedName = path.resolve(_processedFolder, _options.name + path.extname(_path));
   fs.renameSync(_path, _processedName);
-  console.log('{filename} saved!'.replace('{filename}', _processedName));
+  util.log('{filename} saved!'.replace('{filename}', _processedName));
 
   return _processedName;
 
@@ -187,7 +189,7 @@ function moveImported(files) {
   // Create the folder if it doesn't exist
   if (!fs.existsSync(_finishedFolder)) {
 
-    console.log('Creating folder: {path}'.replace('{path}', _finishedFolder));
+    util.log('Creating folder: {path}'.replace('{path}', _finishedFolder));
 
     fs.mkdirSync(_finishedFolder);
   }
@@ -200,7 +202,7 @@ function moveImported(files) {
 
     fs.renameSync(originalFile, outputFilename);
 
-    console.log(
+    util.log(
       'Sucessfully moved {original} to {output}'
       .replace('{original}', originalFile)
       .replace('{output}', outputFilename)
@@ -281,14 +283,14 @@ function convertAllFiles(files) {
       moveImported(tabFiles);
 
       if (tabFiles && tabFiles.length) {
-        console.log('{length} NPS result files imported!'.replace('{length}', tabFiles.length));
+        util.log('{length} NPS result files imported!'.replace('{length}', tabFiles.length));
       }
 
       return resolve();
 
     })
     .catch(function (err) {
-      console.log(err);
+      util.log(err);
       return reject(err);
     });
 
@@ -352,7 +354,7 @@ function poolChanges(folder, ms) {
 
     if (filePool[folder] === changed) {
 
-      console.log(
+      util.log(
         'Running convertAllFiles(...) at {time}'
         .replace('{time}', moment().format('YYYY-MM-DD HH:mm'))
       );
@@ -376,7 +378,7 @@ function watchFolder(folder) {
     : _baseFolder;
 
   if (!folder || !fs.existsSync(folder)) {
-    console.log(
+    util.log(
       chalk.red(
         'Could not start filer watcher for {folder} as it does not exist.'
           .replace('{folder}', folder)
@@ -385,7 +387,7 @@ function watchFolder(folder) {
     return;
   }
 
-  console.log(
+  util.log(
     chalk.green(
       'Watching folder {folder} for changes.'
         .replace('{folder}', folder)
@@ -439,7 +441,7 @@ function getOriginalFilename(filename) {
  */
 function setWatchIsDisabled(isDisabled) {
   tempDisableWatch = isDisabled;
-  console.log(
+  util.log(
     isDisabled
       ? 'Watcher temporarily disabled'
       : 'Watcher running again.'

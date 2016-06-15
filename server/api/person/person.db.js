@@ -11,11 +11,11 @@ function intialize() {
     query: sql.fromFile('./sql/person.initialize.sql')
   })
   .then(function (result) {
-    console.log('Person table all set up.');
+    util.log('Person table all set up.');
   })
   .catch(function (err) {
-    console.log('Couldn\'t set up Person table.');
-    console.error(err);
+    util.log('Couldn\'t set up Person table.');
+    util.log(err);
   });
 }
 
@@ -23,7 +23,7 @@ function intialize() {
 /**
  * Fuzzy searches for values matching *query*.
  * (name, email, tel, altTel)
- * 
+ *
  * @param {String} query
  * @return {Promise} -> {Array} (Person)
  */
@@ -41,13 +41,13 @@ exports.getFuzzy = function (query) {
 
 /**
  * Fuzzy searches the column at *colName* for values matching *query*.
- * 
+ *
  * @param {String} query
  * @param {String} colName
  * @return {Promise} -> {Array} (Person)
  */
 exports.getFuzzyBy = function (query, colName, customerId) {
-  
+
   return new Promise(function (resolve, reject) {
     return sql.execute({
       query: sql.fromFile('./sql/person.getFuzzyBy.sql').replace(util.literalRegExp('{ colName }', 'gi'), colName),
@@ -73,7 +73,7 @@ exports.getFuzzyBy = function (query, colName, customerId) {
 
 exports.create = function (_person) {
   return new Promise(function (resolve, reject) {
-    
+
     sql.execute({
       query: sql.fromFile('./sql/person.create.sql'),
       params: {
@@ -115,7 +115,7 @@ exports.create = function (_person) {
 
 exports.getById = function (personId) {
   return new Promise(function (resolve, reject) {
-    
+
     sql.execute({
       query: sql.fromFile('./sql/person.getById.sql'),
       params: {

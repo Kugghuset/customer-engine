@@ -9,6 +9,7 @@ var iconv = require('iconv-lite');
 var chalk = require('chalk');
 var os = require('os');
 
+var util = require('./../../utils/utils');
 var deprecated = require('./nps.db.deprecated');
 var npsBulkImport = require('./nps.bulkImport');
 
@@ -22,12 +23,12 @@ function initialize() {
       query: sql.fromFile('./sql/nps.initialize.sql')
     })
     .then(function (result) {
-      console.log('NPS table all set up.');
+      util.log('NPS table all set up.');
       resolve(result);
     })
     .catch(function (err) {
-      console.log('Couldn\'t set up NPS table.');
-      console.error(err);
+      util.log('Couldn\'t set up NPS table.');
+      util.log(err);
       reject(err);
     });
   });
@@ -133,13 +134,13 @@ function bulkImport(basePath, files, readFiles) {
 
   // Return early if there are no files
   if (!files || !files.length) {
-    console.log('No NPS score files found, no bulk import.');
+    util.log('No NPS score files found, no bulk import.');
     return new Promise(function (resolve) { resolve(); });
   }
 
   // We're all set here
   if (readFiles.length === files.length) {
-    console.log('Bulk import of NPS data finished.');
+    util.log('Bulk import of NPS data finished.');
     return new Promise(function (resolve) { resolve(readFiles); });
   }
 
@@ -186,8 +187,8 @@ function bulkImport(basePath, files, readFiles) {
   })
   .catch(function (err) {
 
-    console.log(currentFile);
-    console.log(err);
+    util.log(currentFile);
+    util.log(err);
 
     // Assumme the file simply shouldn't be imported, continue recursively
     return bulkImport(basePath, files, readFiles.concat([currentFile]));

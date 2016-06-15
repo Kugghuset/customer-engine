@@ -9,12 +9,12 @@ var utils = require('../../utils/utils');
  * ROUTE: PUT '/api/customers/fuzzy'
  */
 exports.fuzzyQuery = function (req, res) {
-  
+
   // Return quickly for no query
   if (!req.body.query) {
     return res.status(200).json([]);
   }
-  
+
   Customer.getFuzzy(req.body.query)
   .then(function (customers) {
     res.status(200).json(customers);
@@ -47,7 +47,7 @@ exports.create = function (req, res) {
     res.status(200).json(customer);
   })
   .catch(function (err) {
-    console.log(err);
+    utils.log(err);
     utils.handleError(res, err);
   });
 }
@@ -58,12 +58,12 @@ exports.create = function (req, res) {
 exports.merge = function (req, res) {
   Customer.merge()
   .then(function () {
-    console.log('Manual customer merge finished');
+    utils.log('Manual customer merge finished');
     res.status(200).send('OK');
   })
   .catch(function (err) {
-    console.log('Something went wrong with merging customers from BamboraDW.');
-    console.log(err);
+    utils.log('Something went wrong with merging customers from BamboraDW.');
+    utils.log(err);
     res.status(500).send('Internal Error');
   })
 }
@@ -72,7 +72,7 @@ exports.merge = function (req, res) {
  * ROUTE: GET '/api/customers/local'
  */
 exports.getLocal = function (req, res) {
-  
+
   Customer.getLocal(req.params.top, req.params.page)
   .then(function (customers) {
     res.status(200).json(customers);
@@ -80,7 +80,7 @@ exports.getLocal = function (req, res) {
   .catch(function (err) {
     utils.handleError(res, err);
   });
-  
+
 }
 
 exports.delete = function (req, res) {

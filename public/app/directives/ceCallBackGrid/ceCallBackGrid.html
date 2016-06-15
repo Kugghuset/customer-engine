@@ -2,9 +2,10 @@
 
   <thead>
     <th colspan="1">Grouping</th>
-    <th colspan="2">Ticket number</th>
+    <th colspan="1">Ticket number</th>
     <th colspan="3" style="min-width: 130px;">Date for SMS send out</th>
     <th colspan="4">Agent on ticket</th>
+    <th colspan="4">Customer</th>
     <th colspan="1">NPS score</th>
     <th colspan="4">Assigned agent for call back</th>
     <th colspan="2">Status</th>
@@ -13,9 +14,10 @@
   <tbody>
     <tr ng-hide="shouldHide(ticket)" ng-repeat="ticket in tickets | alphaSort:getSort()" ng-click="openModal(ticket)">
       <td colspan="1">{{ ticket.groupingCountry }}</td>
-      <td colspan="2">{{ ticket.ticketId }}</td>
+      <td colspan="1">{{ ticket.ticketId }}</td>
       <td colspan="3" style="min-width: 130px;">{{ ticket.nps.npsDate | date:'yyyy-MM-dd' }}</td>
       <td colspan="4">{{ ticket.user.name }}</td>
+      <td colspan="4">{{ ticket.customer.orgName }}</td>
       <td colspan="1">{{ isFinite(ticket.nps.npsScore) ? 'No score' : ticket.nps.npsScore }}</td>
       <td colspan="4"><i ng-show="ticket.callBack.user.userId" class="glyphicon glyphicon-user"></i> {{ ticket.callBack.agentName || ticket.callBack.user.name || ticket.callBack.user.email || '-' }}</span></td>
       <td colspan="2">{{ ticket.callBack.callBackStatus || 'Not called' }}</td>

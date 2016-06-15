@@ -21,32 +21,28 @@
           <div ng-show="state === 'main.admin.call_back'">
 
             <div class="pane-row">
-              <!-- Customer -->
+              <!-- User -->
 
-              <label for="">Customer</label>
+              <label for="">User</label>
 
               <span class="fill-by-label">
                 <input type="text"
-                  ce-text-append="ticket.customer.customerNumber"
-                  ng-model="ticket.customer.orgName"
-                  ng-class="{'padded-right': (loadingCustomers || noResults && ticket.customer), 'ng-invalid': !customerIsValid()}"
-                  placeholder="Search for customer"
-                  uib-typeahead="customer as matched(customer, 'customer') for customer in getCustomer($viewValue, ticket.customer)"
-                  typeahead-loading="loadingCustomers"
+                  ng-model="filterOptions.user"
+                  placeholder="Search for user to filter by"
+                  uib-typeahead="user as formatUser(user) for user in getUsers($viewValue, filterOptions.user)"
+                  typeahead-loading="loadingUsers"
                   typeahead-no-results="noResults"
-                  typeahead-wait-ms="200"
-                  ng-blur="openCreateCustomerForNew()"
                   class="pane-dropdown"
-                  typeahead-on-select="setCustomer($item)">
-                <i ng-show="loadingCustomers" class="glyphicon glyphicon-refresh" title="Looking for matching customers"></i>
-                <i ng-show="noResults && ticket.customer" class="glyphicon glyphicon-exclamation-sign" title="No results found"></i>
+                  typeahead-on-select="setUser($item)">
+                <i ng-show="loadingUsers" class="glyphicon glyphicon-refresh" title="Looking for matching users"></i>
+                <i ng-show="noResults && filterOptions.user" class="glyphicon glyphicon-exclamation-sign" title="No results found"></i>
               </span>
 
               <br>
 
             </div>
 
-            <div class="pane-button no-select">Click</div>
+            <div class="pane-button no-select" ng-click="updateFilters(filterOptions)">Filter tickets</div>
           </div>
         </li>
         <li>

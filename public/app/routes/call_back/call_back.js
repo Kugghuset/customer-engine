@@ -37,7 +37,7 @@ function ($scope, $timeout, $location, Ticket, Notification, CallBack) {
       ? 1
       : pageNum;
 
-    Ticket.getNpsTickets(50, pageNum, { isClosed: isClosed })
+    Ticket.getNpsTickets(50, pageNum, _.assign({}, options, { isClosed: isClosed }))
     .then(function (data) {
       $scope.npsTickets = data.tickets;
       $scope.ticketCount = data.ticketCount;
@@ -57,14 +57,14 @@ function ($scope, $timeout, $location, Ticket, Notification, CallBack) {
     // return early if they are the same
     if (currentPage === prevPage) { return; }
 
-    getNpsTickets(currentPage, $location.search().isClosed, true)
+    getNpsTickets(currentPage, $location.search().isClosed, CallBack.getOptions(), true)
   });
 
   $scope.$watch('callBack.getOptions()', function (options, oldOptions) {
-    console.log(options, oldOptions);
+    getNpsTickets($scope.currentPage, $location.search().isClosed, options, true);
   });
 
-  getNpsTickets($scope.currentPage, $location.search().isClosed);
+  getNpsTickets($scope.currentPage, $location.search().isClosed, CallBack.getOptions());
 
 }]);
 

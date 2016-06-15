@@ -5,7 +5,7 @@ angular.module('ticketyApp')
 .factory('Auth', ['$rootScope', '$http', '$q', '$cookies', '$state', function ($rootScope, $http, $q, $cookies, $state) {
   var _user;
   var _users;
-  
+
   /**
    * Watches the variable *_user* for changes.
    * If *newUser* is an empty object and *oldUser* is not,
@@ -18,10 +18,10 @@ angular.module('ticketyApp')
       $state.transitionTo('main.login');
     }
   });
-  
+
   /**
    * Returns a promise of the logged in user, if any.
-   * 
+   *
    * @return {Promise} -> {User} (User)
    */
   function getMe() {
@@ -31,14 +31,14 @@ angular.module('ticketyApp')
       .error(reject);
     });
   }
-  
+
   return {
     /**
      * Returns true or false for whether there is a token,
      * which probably means there is a user.
-     * 
+     *
      * If there is a token, it runs getMe to populate it.
-     * 
+     *
      * @param {Boolean} resolveUser
      * @return {Promise} -> {Boolean}
      */
@@ -49,7 +49,7 @@ angular.module('ticketyApp')
           if (!resolveUser) {
             resolve(true);
           }
-          
+
           // Still, populate the user
           getMe().then(function (user) {
             _user = user;
@@ -62,20 +62,20 @@ angular.module('ticketyApp')
         }
       });
     },
-    
+
     isLoggedIn: function () {
       return !!$cookies.get('token')
     },
-    
+
     /**
      * Gets the local user.
-     * 
+     *
      * @return {Objec} (User)
      */
     getCurrentUser: function () {
       return _user;
     },
-    
+
     /**
      * @param {Object} user (User)
      */
@@ -83,11 +83,11 @@ angular.module('ticketyApp')
       _user = user;
       return _user;
     },
-    
+
     /**
      * Logs in the user.
      * If the user doesn't exist, it will create a new one.
-     * 
+     *
      * @param {Object} user (User)
      * @return {Promise} -> {Object} (User)
      */
@@ -113,10 +113,10 @@ angular.module('ticketyApp')
       _user = {};
       $cookies.remove('token');
     },
-    
+
     /**
      * Updates the user.
-     * 
+     *
      * @param {Object} _user (User)
      * @return {Promise} -> {Object} (User)
      */
@@ -127,11 +127,11 @@ angular.module('ticketyApp')
         .error(reject);
       });
     },
-    
+
     /**
      * Updates the current user's password
      * in the DB.
-     * 
+     *
      * @param {Object} passObj
      * @return {Promise}
      */
@@ -142,20 +142,20 @@ angular.module('ticketyApp')
         .error(reject);
       });
     },
-    
+
     /**
      * Gets all users from DB.
-     * 
+     *
      * @return {Promise} -> {Array}
      */
     getAll: function () {
       return $q(function (resolve, reject) {
-        
+
         // Use cached users if _users is defined
         if (_users) {
           return resolve(_users);
         }
-        
+
         $http.get('api/users/')
         .success(function (data) {
           _users = data;
@@ -163,7 +163,18 @@ angular.module('ticketyApp')
         })
         .error(reject);
       });
-    }
+    },
+
+    getFuzzy: function (fuzzy) {
+      return $q(function (resolve, reject) {
+        // Ensure it's encoded
+        var _fuzzy = encodeURIComponent(fuzzy);
+
+        $http.get('api/users/fuzzy?fuzz=' + _fuzzy)
+        .success(resolve)
+        .catch(reject);
+      });
+    },
   }
 }]);
 

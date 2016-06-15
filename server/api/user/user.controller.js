@@ -24,27 +24,27 @@ exports.show = function (req, res) {
 
 /**
  * Returns the user, or create and returns them.
- * 
+ *
  * ROUTE: POST '/api/users/'
  */
 exports.login = function (req, res) {
   // No user, so we can't login.
   if (!req.body) { return utils.handleError(res, new Error('No user provided')); }
-  
+
   //Authenticate user with submitted email and password
   User.auth(req.body.email, req.body.password)
   .then(function (user) {
-    
+
     if (user && req.body.passwordRepeat) {
       return res.status(401).send('User already exists.');
     }
-    
+
     if (user) {
-      
+
       req.user = user;
       // Attach the token.
       auth.setTokenCookie(req, res);
-      
+
       User.updateLastLoggedIn(user)
       .then(function (user) {
         return res.status(200).json(user);
@@ -60,11 +60,11 @@ exports.login = function (req, res) {
       // No user, let's create it
       User.create(req.body)
       .then(function (user) {
-        
+
         req.user = user;
         // Attach the token.
         auth.setTokenCookie(req, res);
-        
+
         User.updateLastLoggedIn(user)
         .then(function (user) {
           user.isNew = true;
@@ -91,13 +91,13 @@ exports.login = function (req, res) {
 
 /**
  * Returns a response of 200 with the user attached as body.
- * 
+ *
  * ROUTE: GET '/api/users/me'
  */
 exports.me = function (req, res) {
   User.findById(req.user.userId)
   .then(function (user) {
-    
+
     // either if there is no last logged in or it wasn't *today*, set last logged in to now
     if (!user.lastLoggedIn || moment().diff(user.lastLoggedIn, 'days') > 0) {
       User.updateLastLoggedIn(user)
@@ -119,7 +119,7 @@ exports.me = function (req, res) {
 
 /**
  * Updates the user
- * 
+ *
  * ROUTE: PUT '/api/users/:id'
  */
 exports.update = function (req, res) {
@@ -138,10 +138,10 @@ exports.update = function (req, res) {
 
 /**
  * Sets the user password if the old match and there is a new one.
- * 
+ *
  */
 exports.setPassword = function (req, res) {
-  
+
   if (!req.body.new) {
     // Return early if no new password is provided
     return res.status(400).send('New password is required.');
@@ -149,30 +149,30 @@ exports.setPassword = function (req, res) {
     // Return early if the current password is not provided
     return res.status(400).send('Current password is required.');
   }
-  
+
   // Set the password
   User.setPassword(req.params.id, req.body.current, req.body.new)
   .then(function (_user) {
     res.status(204).send('Password changed');
   })
   .catch(function (err) {
-    
+
     if (/password/gi.test(err.message)) {
       res.status(403).send(err.message);
     } else {
       utils.handleError(res, err);
     }
-    
+
   });
 }
 
 /**
  * Gets all users
- * 
+ *
  * ROUTE: GET '/api/users/'
  */
 exports.get = function (req, res) {
-  
+
   User.getAll()
   .then(function (users) {
     res.status(200).json(users);
@@ -180,5 +180,20 @@ exports.get = function (req, res) {
   .catch(function (err) {
     utils.handleError(res, err);
   })
-  
+
+}
+
+/**
+ * Gets all users matching *fuzz*.
+ *
+ * ROUTE: GET '/api/users/fuzzy
+ */
+exports.getFuzzy = function (req, res) {
+  User.getFuzzy(req.query.fuzz)
+  .then(function (users) {
+    res.status(200).json(users);
+  })
+  .catch(function (err) {
+    utils.handleError(res, err);
+  });
 }

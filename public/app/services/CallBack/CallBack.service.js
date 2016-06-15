@@ -49,7 +49,7 @@ angular.module('ticketyApp')
   }
 
   function setOptions(options) {
-    _options = setStoredOptions(_options);
+    _options = setStoredOptions(options);
 
     return _options;
   }

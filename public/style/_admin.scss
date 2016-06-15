@@ -55,9 +55,11 @@
             background-color: lighten($purple-dark, 10%);
           }
         }
-
       }
     }
+  }
+  .pane-dropdown, .dropdown-menu {
+    left: 30px !important;
   }
 }
 

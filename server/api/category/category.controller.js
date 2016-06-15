@@ -22,15 +22,15 @@ exports.getCombined = function (req, res) {
       if (val.isFulfilled()) {
         return val.value();
       } else {
-        console.log(val.reason());
+        utils.log(val.reason());
         return [];
       }
     });
-    
+
     var categories = arr[0];
     var subcategories = _.groupBy(arr[1], 'categoryId');
     var descriptors = _.groupBy(arr[2], 'subcategoryId');
-    
+
     res.status(200).json({ categories: categories, subcategories: subcategories, descriptors: descriptors });
   })
   .catch(function (err) {

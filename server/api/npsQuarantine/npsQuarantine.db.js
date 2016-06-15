@@ -9,6 +9,8 @@ var iconv = require('iconv-lite');
 var chalk = require('chalk');
 var os = require('os');
 
+var util = require('./../../utils/utils');
+
 /**
  * @return {Promise}
  */
@@ -18,12 +20,12 @@ function initialize() {
       query: sql.fromFile('./sql/npsQuarantine.initialize.sql')
     })
     .then(function (result) {
-      console.log('NpsQuarantine table all set up.');
+      util.log('NpsQuarantine table all set up.');
       resolve(result);
     })
     .catch(function (err) {
-      console.log('Couldn\'t set up NpsQuarantine table.');
-      console.error(err);
+      util.log('Couldn\'t set up NpsQuarantine table.');
+      util.log(err);
       reject(err);
     });
   });

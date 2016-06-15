@@ -50,7 +50,7 @@ exports.login = function (req, res) {
         return res.status(200).json(user);
       })
       .catch(function (err) {
-        console.log(err);
+        utils.log(err);
         utils.handleError(res, new Error('Something went wrong when logging in.'))
       })
     } else {
@@ -71,7 +71,7 @@ exports.login = function (req, res) {
           return res.status(200).json(user);
         })
         .catch(function (err) {
-          console.log(err);
+          utils.log(err);
           utils.handleError(res, new Error('Something went wrong when logging in.'))
         });
       })

@@ -11,11 +11,11 @@ function initialize() {
     query: sql.fromFile('./sql/callBackStatus.initialize.sql')
   })
   .then(function (result) {
-    console.log('CallBackStatus table all set up.');
+    util.log('CallBackStatus table all set up.');
   })
   .catch(function (err) {
-    console.log('Couldn\'t set up CallBackStatus table.');
-    console.error(err);
+    util.log('Couldn\'t set up CallBackStatus table.');
+    util.log(err);
   });
 }
 

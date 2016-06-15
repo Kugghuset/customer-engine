@@ -9,23 +9,25 @@ var iconv = require('iconv-lite');
 var chalk = require('chalk');
 var os = require('os');
 
+var util = require('./../../utils/utils');
+
 var npsFilePath = path.resolve('./server/assets/nps/total_nps_score.csv');
 
 var npsFolderpath = path.resolve('./server/assets/nps');
 
 function bulkImport(files, readFiles) {
-  
+
   // First time check
   if (!files) {
-    
+
     var statObj = fs.existsSync(npsFolderpath)
       ? fs.statSync(npsFolderpath)
       : undefined;
-      
+
     // The folder either doesn't exist, or it's not a folder
     // Early return if either is true
     if (!statObj || statObj.isFile()) { return; }
-    
+
     // Get all files
     files = _.chain(fs.readdirSync(npsFolderpath))
       .filter(function (filename) {
@@ -34,26 +36,26 @@ function bulkImport(files, readFiles) {
       .map(function (filename) { return path.resolve(npsFolderpath, filename); })
       .orderBy(function (filename) { return filename; })
       .value();
-    
+
     readFiles = [];
   }
 
-  
+
   // Return early if there are no files
   if (!files || !files.length) {
-    return console.log('No NPS score files found, no bulk import.');
+    return util.log('No NPS score files found, no bulk import.');
   }
-  
+
   // We're all set here
   if (readFiles.length === files.length) {
-    return console.log('Bulk import of NPS data finished.');
+    return util.log('Bulk import of NPS data finished.');
   }
-  
+
   // The file to perform the bulk import on.
   var currentFile = files[readFiles.length];
-  
+
   var isOld;
-  
+
   var _file = fs.readFileSync(currentFile, 'utf8');
   if (_.isString(_file)) {
     // The old files are have four fields, thus three semicolons.
@@ -61,11 +63,11 @@ function bulkImport(files, readFiles) {
   } else {
     isOld = false;
   }
-  
+
   var bulkFile = isOld
     ? './sql/nps.dep.bulkImport_old.sql'
     : './sql/nps.dep.bulkImport.sql';
-  
+
   sql.execute({
     query: sql
       .fromFile(bulkFile)
@@ -74,10 +76,10 @@ function bulkImport(files, readFiles) {
     // continue recursively
     return bulkImport(files, readFiles.concat([currentFile]));
   }).catch(function (err) {
-    
-    console.log(currentFile);
-    console.log(err);
-    
+
+    util.log(currentFile);
+    util.log(err);
+
     // Assumme the file simply shouldn't be imported, continue recursively
     return bulkImport(files, readFiles.concat([currentFile]));
   });

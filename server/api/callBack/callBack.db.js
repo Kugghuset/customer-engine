@@ -12,11 +12,11 @@ function initialize() {
     query: sql.fromFile('./sql/callBack.initialize.sql')
   })
   .then(function (result) {
-    console.log('CallBack table all set up.');
+    util.log('CallBack table all set up.');
   })
   .catch(function (err) {
-    console.log('Couldn\'t set up CallBack table.');
-    console.error(err);
+    util.log('Couldn\'t set up CallBack table.');
+    util.log(err);
   });
 }
 
@@ -99,7 +99,7 @@ exports.set = function (id, callBackObj) {
       resolve(util.objectify(_.first(tickets)));
     })
     .catch(function (err) {
-      console.log(err);
+      util.log(err);
       reject(err);
     });
   });

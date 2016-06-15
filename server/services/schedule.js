@@ -6,6 +6,8 @@ var chalk = require('chalk');
 var later = require('later');
 var moment = require('moment');
 
+var util = require('./../utils/utils');
+
 var schedule = {
   npsFns: [],
   npsInterval: undefined,
@@ -84,7 +86,7 @@ schedule.addToMergeSchedule = function (fn) {
  */
 schedule.callnpsFns = function () {
 
-  console.log('[{timestamp}] Calling NPS schedule functions.'.replace('{timestamp}', moment().format('YYYY-MM-DD HH:mm SSSS ZZ')));
+  util.log('[{timestamp}] Calling NPS schedule functions.'.replace('{timestamp}', moment().format('YYYY-MM-DD HH:mm SSSS ZZ')));
 
   _.forEach(this.npsFns, function (fn) {
     // call the function if it's actually a function

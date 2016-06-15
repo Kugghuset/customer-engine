@@ -40,7 +40,7 @@ function objectify(sqlArray) {
 }
 
 function handleError(res, err) {
-  console.log(chalk.red(err));
+  log(chalk.red(err));
 
   res.status(500).send('Internal Error');
 }
@@ -181,7 +181,7 @@ function getPage(url, options) {
     // *options* must be an object
     if (!_.isObject(options)) { options = {}; }
 
-    console.log('Making a GET request to ' + url);
+    log('Making a GET request to ' + url);
 
     request.get({
       uri: url,
@@ -191,7 +191,7 @@ function getPage(url, options) {
       }, options.headers)
     }, function (err, res, body) {
       if (err) { reject(err); }
-      else { console.log(res.statusCode); console.log(body.toString('utf8')); resolve(body.toString('utf8')); }
+      else { log(res.statusCode); log(body.toString('utf8')); resolve(body.toString('utf8')); }
     })
   });
 }

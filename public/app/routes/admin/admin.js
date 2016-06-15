@@ -11,19 +11,19 @@ angular.module('ticketyApp')
   });
 }])
 .controller('AdminCtrl', ['$scope', '$state', 'Auth', function ($scope, $state, Auth) {
-  
+
   $scope.auth = Auth;
-  
+
   $scope.state = $state.current.name;
-  
+
   $scope.$watch(function () {
     return $state.current;
   }, function (currentState, oldState) {
-    
+
     $scope.state = currentState.name;
-    
-  })
-  
+
+  });
+
 }]);
 
 })();

@@ -7,6 +7,15 @@
     li {
       background-color: $purple-dark;
       list-style: none;
+
+      & > div {
+        color: $white;
+        width: 100%;
+        padding: 10px 30px;
+        display: block;
+        background-color: lighten($purple-dark, 10%);
+      }
+
       a {
         color: $white;
         width: 100%;

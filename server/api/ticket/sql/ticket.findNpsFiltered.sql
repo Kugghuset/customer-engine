@@ -5,6 +5,7 @@ Finds tickets which has been sent NPS SMS.
 -- Declare in JavaScript
 -- DECLARE @offset int = 0
 -- DECLARE @top int = 20
+-- DECLARE @userId bigint = 16
 
 SELECT
     [A].[ticketId]
@@ -19,13 +20,13 @@ SELECT
   , [A].[status]
   , [A].[countryShort] AS [country.short]
   , [A].[countryFull] AS [country.full]
-  , [A].[customerId] AS [customer.customerId]
   , CASE
       WHEN [NPS].[npsTel] LIKE '+45%' THEN 'DK'
       WHEN [NPS].[npsTel] LIKE '+47%' THEN 'NO'
       WHEN [NPS].[npsTel] LIKE '+358%' THEN 'FI'
       ELSE 'SE'
     END AS [groupingCountry]
+  , [A].[customerId] AS [customer.customerId]
   , [F].[customerNumber] AS [customer.customerNumber]
   , [F].[orgName] AS [customer.orgName]
   , [F].[orgNr] AS [customer.orgNr]
@@ -68,9 +69,10 @@ SELECT
   , [CB].[callBackFollowUpAction] AS [callBack.callBackFollowUpAction]
   , [CB].[callBackComment] AS [callBack.callBackComment]
   , [CB].[isClosed] AS [callBack.isClosed]
-  , [CB].[ticketId] AS [callBack.ticketId]
   , [CB].[dateClosed] AS [callBack.dateClosed]
-  , [U2].[email] AS [callBack.user.userId]
+  , [CB].[ticketId] AS [callBack.ticketId]
+  , [U2].[userId] AS [callBack.user.userId]
+  , [U2].[email] AS [callBack.user.email]
   , [U2].[name] AS [callBack.user.name]
 FROM [dbo].[Ticket] AS [A]
 
@@ -121,9 +123,23 @@ LEFT JOIN [dbo].[User] AS [U2]
 ON [CB].[userId] = [U2].[userId]
 
 -- Inner join on NPSSurveyResult, which only gets those where there's an npsScore
-LEFT JOIN [dbo].[NPSSurveyResult] AS [NPS]
+INNER JOIN [dbo].[NPSSurveyResult] AS [NPS]
+ON [A].[ticketId] = [NPS].[ticketId]
+  WHERE [npsScore] IS NOT NULL
+  {filter}
+
+ORDER BY [A].[ticketDate] DESC, [A].[ticketId] DESC
+OFFSET @offset ROWS FETCH NEXT @top ROWS ONLY
+
+SELECT COUNT(*)
+FROM [dbo].[Ticket] AS [A]
+INNER JOIN [dbo].[NPSSurveyResult] AS [NPS]
 ON [A].[ticketId] = [NPS].[ticketId]
 
-WHERE [A].[ticketId] = @ticketId
-  AND [NPS].[npsScore] IS NOT NULL
-ORDER BY [A].[ticketDate] DESC, [A].[ticketId] DESC
+LEFT JOIN [dbo].[CallBack] AS [CB]
+ON [A].[ticketId] = [CB].[ticketId]
+
+LEFT JOIN [dbo].[User] AS [U2]
+ON [CB].[userId] = [U2].[userId]
+  WHERE [npsScore] IS NOT NULL
+  {filter}

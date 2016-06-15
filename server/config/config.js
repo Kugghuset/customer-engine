@@ -6,6 +6,7 @@ var path = require('path');
 env(path.resolve(__dirname, '../../.env'));
 
 var userConfig;
+
 try {
   userConfig = require('../../userConfig');
 } catch (err) {
@@ -86,5 +87,5 @@ module.exports = {
     base_url: process.env.SURWAY_URL,
     email: process.env.SURWAY_EMAIL,
     password:  process.env.SURWAY_PASSWORD,
-  }
+  },
 };

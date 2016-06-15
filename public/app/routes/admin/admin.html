@@ -1,5 +1,5 @@
 <section class="grid">
-  
+
   <a href="" ui-sref="main.dashboard">
     <img src="assets/img/logo.png" class="logo" alt="Bambora logo">
     <!-- Add back button here!! -->
@@ -7,26 +7,56 @@
       <i class="glyphicon glyphicon-arrow-left"></i> Go back
     </span>
   </a>
-  
+
   <aside class="pane vertical-fill fixed-left">
-    
+
     <h1>Admin page</h1>
-    
+
     <nav class="admin-menu">
       <ul>
         <li>
           <a href="" ui-sref="main.admin.call_back" ui-sref-active="active">Manage call backs</a>
           <a href="" ui-sref="main.admin.call_back({isClosed: false})" ui-sref-active="active" ng-show="state === 'main.admin.call_back'">Tickets for call backs</a>
           <a href="" ui-sref="main.admin.call_back({isClosed: true})" ui-sref-active="active"  ng-show="state === 'main.admin.call_back'">Call back completed</a>
+          <div ng-show="state === 'main.admin.call_back'">
+
+            <div class="pane-row">
+              <!-- Customer -->
+
+              <label for="">Customer</label>
+
+              <span class="fill-by-label">
+                <input type="text"
+                  ce-text-append="ticket.customer.customerNumber"
+                  ng-model="ticket.customer.orgName"
+                  ng-class="{'padded-right': (loadingCustomers || noResults && ticket.customer), 'ng-invalid': !customerIsValid()}"
+                  placeholder="Search for customer"
+                  uib-typeahead="customer as matched(customer, 'customer') for customer in getCustomer($viewValue, ticket.customer)"
+                  typeahead-loading="loadingCustomers"
+                  typeahead-no-results="noResults"
+                  typeahead-wait-ms="200"
+                  ng-blur="openCreateCustomerForNew()"
+                  class="pane-dropdown"
+                  typeahead-on-select="setCustomer($item)">
+                <i ng-show="loadingCustomers" class="glyphicon glyphicon-refresh" title="Looking for matching customers"></i>
+                <i ng-show="noResults && ticket.customer" class="glyphicon glyphicon-exclamation-sign" title="No results found"></i>
+              </span>
+
+              <br>
+
+            </div>
+
+            <div class="pane-button no-select">Click</div>
+          </div>
         </li>
         <li>
           <a href="" ui-sref="main.admin.nps_upload" ui-sref-active="active">Upload NPS files</a>
         </li>
       </ul>
     </nav>
-    
+
   </aside>
-  
+
   <div ui-view></div>
 
 </section>

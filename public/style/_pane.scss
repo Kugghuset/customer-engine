@@ -2,12 +2,12 @@
   background-color: $purple-dark;
   color: $white;
   padding: $size-xl / 2;
-  
+
   @include text-inputs {
     width: calc(100% - 155px);
     max-width: 100%;
   }
-  
+
   &.gray {
     background-color: $gray-dark;
     input, .pane-button {
@@ -16,7 +16,7 @@
     }
   }
   clear: both;
-  
+
   label:not(.checkbox-label) {
     font-size: $font-size-m;
     text-transform: uppercase;
@@ -71,11 +71,11 @@
   border-radius: 0;
   background-color: $purple-light;
   & > li {
-    
+
     &.divider {
       @extend .pane-divider;
     }
-    
+
     & > a {
       background-color: inherit;
       color: $white;
@@ -88,7 +88,7 @@
       outline: none;
       white-space: normal;
       @include hover-shadow;
-      
+
       &:hover {
         color: $white;
         background-color: inherit !important;
@@ -115,6 +115,7 @@
 
 .pane-button {
   @include border-shadow;
+  cursor: pointer;
   display: block;
   position: relative;
   background-color: $purple;
@@ -129,11 +130,17 @@
     font-weight: bolder;
     text-decoration: none;
   }
-  
+
   &.is-loading {
     box-shadow: inset 0px 0px 1px 5000px rgba($color: $white, $alpha: 0.5);
     color: $gray-light;
   }
+}
+
+.pane-button-small {
+  @extend .pane-button;
+  padding: $size-s;
+  font-size: $font-size-ms;
 }
 
 .pane-button-medium {
@@ -157,7 +164,7 @@
       td {
         border-collapse: collapse;
         padding: $size-xs;
-        
+
         &.left {
           text-align: left;
         }
@@ -185,7 +192,7 @@
   }
 }
 
-  
+
 &.fill-by-label {
     .intl-tel-input {
       width: 100%;

@@ -2,6 +2,9 @@ SET XACT_ABORT ON
 
 BEGIN TRAN
 
+/****************************
+ * Merge the NPS table first
+ ****************************/
 INSERT INTO [dbo].[NPSSurveyResult] (
     [npsDate]
   , [npsTel]
@@ -102,8 +105,33 @@ FROM (
         )
 
     OUTPUT $action AS [Action], [Source].*
-)    AS [MergeOutput]
+) AS [MergeOutput]
  WHERE [MergeOutput].[Action] = NULL
+
+/****************************
+ * Insert the callback answers with a score of 7 or 8
+ ****************************/
+INSERT INTO [dbo].[CallBack] (
+    [ticketId]
+  , [callBackStatus]
+  , [isClosed]
+  , [dateClosed]
+)
+SELECT
+    [ticketId]
+  , 'No call back needed'
+  , 1
+  , GETUTCDATE()
+FROM (
+  SELECT [ticketId]
+  FROM [dbo].[{tablename}]
+  WHERE [npsScore] IN (7, 8)
+    AND [ticketId] IS NOT NULL
+    AND [ticketId] NOT IN (
+      SELECT [ticketId]
+      FROM [dbo].[CallBack]
+    )
+) AS [_data_]
 
 -- Drop the temp table
 DROP TABLE [dbo].[{tablename}]

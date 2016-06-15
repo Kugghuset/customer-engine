@@ -13,7 +13,7 @@ var customerFilePath = path.resolve('./server/assets/customers/customers.csv');
 
 function intialize() {
   return new Promise(function (resolve, reject) {
-    
+
     sql.execute({
       query: sql.fromFile('./sql/customer.initialize.sql')
     })
@@ -33,7 +33,7 @@ function intialize() {
 /**
  * Fuzzy searches for values matching *query*.
  * (orgNr, orgName, customerNumber)
- * 
+ *
  * @param {String} query
  * @return {Promise} -> {Array} (Customer)
  */
@@ -51,7 +51,7 @@ exports.getFuzzy = function (query) {
 
 /**
  * Fuzzy searches the column at *colName* for values matching *query*.
- * 
+ *
  * @param {String} query
  * @param {String} colName
  * @return {Promise} -> {Array} (Customer)
@@ -78,7 +78,7 @@ exports.getFuzzyBy = function (query, colName) {
 
 exports.create = function (_customer) {
   return new Promise(function (resolve, reject) {
-    
+
     sql.execute({
       query: sql.fromFile('./sql/customer.create.sql'),
       params: {
@@ -107,14 +107,14 @@ exports.create = function (_customer) {
 }
 
 exports.getLocal = function (top, page) {
-  
+
   var query = sql.fromFile('./sql/customer.getLocal.sql');
-  
+
     // Ensure it's not below 1
     if (page < 1) { page = 1; }
-    
+
     var offset = (page - 1) * top;
-    
+
   return new Promise(function (resolve, reject) {
     sql.execute({
       query: query.replace(util.literalRegExp('{ offset }', 'gi'),
@@ -163,7 +163,7 @@ exports.update = function (_customer) {
       if (/illegal update/i.test(err)) {
         return reject(new Error('Illegal update. Cannot update non-local customers'));
       }
-      
+
       reject(err);
     })
   });
@@ -174,7 +174,7 @@ exports.createOrUpdate = function (_customer) {
     if (!_customer) {
       return reject(new Error('No provided customer'));
     }
-    
+
     if (!_customer.customerId) {
       // New customers should be created.
       exports.create(_customer)
@@ -191,7 +191,7 @@ exports.createOrUpdate = function (_customer) {
 
 exports.delete = function (customerId) {
   return new Promise(function (resolve, reject) {
-    
+
     sql.execute({
       query: sql.fromFile('./sql/customer.delete.sql'),
       params: {
@@ -222,12 +222,12 @@ function bulkImport() {
       // No file to import.
       return resolve();
     }
-    
+
     // Get the actual path to the customers.csv file
     var _query = sql
       .fromFile('./sql/customer.bulkImport.sql')
       .replace('{ filepath }', customerFilePath);
-      
+
     return sql.execute({
       query: _query
     }).then(function (result) {
@@ -246,15 +246,15 @@ function bulkImport() {
  * @return {Promise} -> undefined
  */
 function merge() {
-  
-  
+
+
   if (os.homedir() === 'C:\\Users\\drklu') {
     return new Promise(function (resolve, reject) {
       console.log('Not bulk importing as this is on Kris\'s computer.');
       resolve();
     });
   }
-  
+
   return sql.execute({
     query: sql.fromFile('./sql/customer.merge.sql')
   });
@@ -263,12 +263,12 @@ function merge() {
 exports.merge = merge;
 
 intialize()
-.then(bulkImport)
-.then(merge)
-.then(function () {
-  console.log('Customer merge finished');
-})
-.catch(function (err) {
-  console.log('Something went wrong with merging customers from BamboraDW.');
-  console.log(err);
-})
+// .then(bulkImport)
+// .then(merge)
+// .then(function () {
+//   console.log('Customer merge finished');
+// })
+// .catch(function (err) {
+//   console.log('Something went wrong with merging customers from BamboraDW.');
+//   console.log(err);
+// })

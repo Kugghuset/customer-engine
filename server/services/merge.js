@@ -14,4 +14,4 @@ function scheduleMerge() {
   schedule.addToMergeSchedule(Customer.merge);
 }
 
-scheduleMerge();
+// scheduleMerge();

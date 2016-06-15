@@ -19,6 +19,12 @@ SELECT
   , [A].[status]
   , [A].[countryShort] AS [country.short]
   , [A].[countryFull] AS [country.full]
+  , CASE
+      WHEN [NPS].[npsTel] LIKE '+45%' THEN 'DK'
+      WHEN [NPS].[npsTel] LIKE '+47%' THEN 'NO'
+      WHEN [NPS].[npsTel] LIKE '+358%' THEN 'FI'
+      ELSE 'SE'
+    END AS [groupingCountry]
   , [A].[customerId] AS [customer.customerId]
   , [F].[customerNumber] AS [customer.customerNumber]
   , [F].[orgName] AS [customer.orgName]

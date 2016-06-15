@@ -24,12 +24,12 @@ exports.create = function (req, res) {
  * ROUTE: PUT '/api/tickets/'
  */
 exports.createOrUpdate = function (req, res) {
-  
+
   if (!req.body) {
     // return early because there's no available ticket.
     return utils.handleError(res, new Error('No ticket provided.'));
   }
-  
+
   Ticket.createOrUpdate(req.body, req.user)
   .then(function (ticket) {
     res.status(200).json(ticket);
@@ -40,12 +40,12 @@ exports.createOrUpdate = function (req, res) {
 }
 
 exports.updateStatus = function (req, res) {
-  
+
   if (!req.body) {
     // Return early because there's no available ticket.
     return utils.handleError(res, new Error('No ticket provided.'));
   }
-  
+
   Ticket.updateStatus(req.body)
   .then(function () {
     res.status(200).send('OK');
@@ -132,7 +132,7 @@ exports.paginate = function (req, res) {
  * ROUTE: GET '/api/tickets/user/:id/status'
  */
 exports.statusTickets = function (req, res) {
-  
+
   Ticket.statusTickets(req.params.id)
   .then(function (tickets) {
     res.status(200).json(tickets);
@@ -140,22 +140,22 @@ exports.statusTickets = function (req, res) {
   .catch(function (err) {
     utils.handleError(res, err);
   })
-  
+
 }
 
 /**
  * NOTE: [/:filter/:value] may not be there
- * 
+ *
  * ROUTE: GET '/api/tickets/nps[/:filter/:value]'
  */
 exports.findNps = function (req, res) {
-  
-  Ticket.findNps(req.params.top, req.params.page, req.params.filter, req.params.value)
+
+  Ticket.findNps(req.params.top, req.params.page, req.params.filter, req.params.value, req.query)
   .then(function (tickets) {
     res.status(200).json(tickets);
   })
   .catch(function (err) {
     utils.handleError(res, err);
   })
-  
+
 }

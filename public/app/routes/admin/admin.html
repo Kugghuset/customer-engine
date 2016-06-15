@@ -1,5 +1,5 @@
 <section class="grid">
-  
+
   <a href="" ui-sref="main.dashboard">
     <img src="assets/img/logo.png" class="logo" alt="Bambora logo">
     <!-- Add back button here!! -->
@@ -7,26 +7,104 @@
       <i class="glyphicon glyphicon-arrow-left"></i> Go back
     </span>
   </a>
-  
+
   <aside class="pane vertical-fill fixed-left">
-    
+
     <h1>Admin page</h1>
-    
+
     <nav class="admin-menu">
       <ul>
         <li>
           <a href="" ui-sref="main.admin.call_back" ui-sref-active="active">Manage call backs</a>
           <a href="" ui-sref="main.admin.call_back({isClosed: false})" ui-sref-active="active" ng-show="state === 'main.admin.call_back'">Tickets for call backs</a>
           <a href="" ui-sref="main.admin.call_back({isClosed: true})" ui-sref-active="active"  ng-show="state === 'main.admin.call_back'">Call back completed</a>
+          <div ng-show="state === 'main.admin.call_back'">
+
+            <h3>Filter call backs</h3>
+
+            <div class="pane-row">
+              <!-- Customer -->
+
+              <label for="">Customer</label>
+
+              <span class="fill-by-label">
+                <input type="text"
+                  ce-text-append="filterOptions.customer.customerNumber"
+                  ng-model="filterOptions.customer.orgName"
+                  placeholder="Search for customer to filter by"
+                  uib-typeahead="customer as matched(customer, 'customer') for customer in getCustomer($viewValue, filterOptions.customer)"
+                  typeahead-loading="loadingCustomers"
+                  typeahead-no-results="noResults"
+                  typeahead-wait-ms="200"
+                  class="pane-dropdown"
+                  typeahead-on-select="set('customer', $item)">
+                <i ng-show="loadingCustomers" class="glyphicon glyphicon-refresh" title="Looking for matching customers"></i>
+                <i ng-show="noResults && filterOptions.customer" class="glyphicon glyphicon-exclamation-sign" title="No results found"></i>
+              </span>
+
+            </div>
+
+            <div class="pane-row">
+              <!-- User -->
+
+              <label for="">User</label>
+
+              <span class="fill-by-label">
+                <input type="text"
+                  ng-model="filterOptions.user"
+                  placeholder="Search for user to filter by"
+                  uib-typeahead="user as formatUser(user) for user in getUsers($viewValue, filterOptions.user)"
+                  typeahead-loading="loadingUsers"
+                  typeahead-no-results="noResults"
+                  typeahead-wait-ms="200"
+                  class="pane-dropdown"
+                  typeahead-on-select="setUser($item)">
+                <i ng-show="loadingUsers" class="glyphicon glyphicon-refresh" title="Looking for matching users"></i>
+                <i ng-show="noResults && filterOptions.user" class="glyphicon glyphicon-exclamation-sign" title="No results found"></i>
+              </span>
+
+            </div>
+            <div class="pane-row">
+              <!-- Countries -->
+
+              <label for="">Country</label>
+
+              <span class="fill-by-label">
+
+                <span uib-dropdown uib-keyboard-nav>
+                  <button id="simple-btn-keyboard-nav" type="button" class="pane-button" uib-dropdown-toggle>
+                    {{ filterOptions.country.name || 'All countries' }} <span class="caret"></span>
+                  </button>
+                  <ul class="uib-dropdown-menu pane-dropdown" role="menu" aria-labelledby="simple-btn-keyboard-nav">
+                    <!-- Links need an href for Boostrap UI to work with keyboard navigation -->
+                    <li role="menuitem"><a href="" ng-click="filterOptions.country = undefind">All countries</a></li>
+                    <li class="divider"></li>
+                    <li role="menuitem" ng-repeat="country in countries">
+                      <a href="" ng-click="set('country', country)">{{ country.name || 'value' }}</a>
+                    </li>
+                  </ul>
+                </span>
+
+                <br>
+                <span>NOTE: all other countries outside of the ones listed above are listed under Sweden.</span>
+
+              </span>
+
+            </div>
+
+              <br>
+
+            <div class="pane-button no-select" ng-click="updateFilters(filterOptions)">Filter call backs</div>
+          </div>
         </li>
         <li>
           <a href="" ui-sref="main.admin.nps_upload" ui-sref-active="active">Upload NPS files</a>
         </li>
       </ul>
     </nav>
-    
+
   </aside>
-  
+
   <div ui-view></div>
 
 </section>

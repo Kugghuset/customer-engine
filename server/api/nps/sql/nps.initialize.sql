@@ -13,6 +13,8 @@ BEGIN
     , [npsFollowUp] varchar(max) NULL
     , [ticketId] bigint NULL
     , [zendeskId] varchar(255) NULL
+    , [shortcode] varchar(255) NULL
+    , [serviceName] varchar(255) NULL
     , [isLocal] bit NULL
     , [doNotContact] bit NULL
     , [dateCreated] datetime2 DEFAULT GETUTCDATE() NULL
@@ -54,4 +56,22 @@ ELSE
   BEGIN
     ALTER TABLE [dbo].[NPSSurveyResult]
     ADD [zendeskId] varchar(255) NULL
+  END
+
+  -- Add the serviceName field
+  IF NOT EXISTS(SELECT * FROM sys.columns
+                WHERE Name = N'serviceName'
+                  AND OBJECT_ID = OBJECT_ID(N'NPSSurveyResult'))
+  BEGIN
+    ALTER TABLE [dbo].[NPSSurveyResult]
+    ADD [serviceName] varchar(255) NULL
+  END
+
+  -- Add the shortcode field
+  IF NOT EXISTS(SELECT * FROM sys.columns
+                WHERE Name = N'shortcode'
+                  AND OBJECT_ID = OBJECT_ID(N'NPSSurveyResult'))
+  BEGIN
+    ALTER TABLE [dbo].[NPSSurveyResult]
+    ADD [shortcode] varchar(255) NULL
   END

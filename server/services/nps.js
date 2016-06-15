@@ -101,18 +101,18 @@ function sendSurway(numberOfWeeks) {
           item['tel'],
           item['ticketDate'],
           item['ticketId'],
-          item['departmentName'],
+          'Tickety',
           item['shortcode'],
-        ]
+        ];
       })
       .value();
-  
+
     var _url = config.surway.base_url + (
         /\/$/.test(config.surway.base_url)
           ? 'services/upload/data'
           : '/services/upload/data'
         );
-    
+
     return utils.post(_url, data, { Authorization: 'Bearer ' + _token });
   })
   .then(function (res) {

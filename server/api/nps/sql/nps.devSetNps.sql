@@ -13,17 +13,17 @@ SELECT @npsId = MIN([npsId]) FROM [tickety].[dbo].[NPSSurveyResult] WHERE [ticke
 
 WHILE (1=1)
 BEGIN
-	IF @id = @max
-		BEGIN
-			BREAK
-		END
-	ELSE
-		SELECT @id = MIN([ticketId]) FROM [tickety].[dbo].[Ticket] WHERE [ticketId] > @id
-		SELECT @npsId = MIN([npsId]) FROM [tickety].[dbo].[NPSSurveyResult] WHERE [ticketId] IS NOT NULL AND [npsId] > @npsId
+  IF @id = @max
+    BEGIN
+      BREAK
+    END
+  ELSE
+    SELECT @id = MIN([ticketId]) FROM [tickety].[dbo].[Ticket] WHERE [ticketId] > @id
+    SELECT @npsId = MIN([npsId]) FROM [tickety].[dbo].[NPSSurveyResult] WHERE [ticketId] IS NOT NULL AND [npsId] > @npsId
 
-		UPDATE [tickety].[dbo].[NPSSurveyResult]
-		SET [ticketId] = @id
-		WHERE [npsId] = @npsId
-		
-		CONTINUE
+    UPDATE [tickety].[dbo].[NPSSurveyResult]
+    SET [ticketId] = @id
+    WHERE [npsId] = @npsId
+
+    CONTINUE
 END

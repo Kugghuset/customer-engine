@@ -10,33 +10,34 @@ angular.module('ticketyApp')
     title: 'Admin | Call back'
   });
 }])
-.controller('CallBackCtrl', ['$scope', '$timeout', '$location', 'Ticket', 'Notification',
-function ($scope, $timeout, $location, Ticket, Notification) {
-  
+.controller('CallBackCtrl', ['$scope', '$timeout', '$location', 'Ticket', 'Notification', 'CallBack',
+function ($scope, $timeout, $location, Ticket, Notification, CallBack) {
+
   $scope.npsTickets = [];
   $scope.ticketCount = 0;
   $scope.isLoading = true;
   $scope.state = {
     currentPage: 1
   };
-  
+  $scope.callBack = CallBack;
+
   /**
    * Gets the npsTickets from DB.
    */
-  function getNpsTickets(pageNum, isClosed, loading) {
+  function getNpsTickets(pageNum, isClosed, options, loading) {
     $scope.isLoading = _.isUndefined(loading)
       ? true
       : loading;
-    
+
     isClosed = _.isUndefined(isClosed)
       ? false
       : isClosed;
-    
+
     pageNum = _.isUndefined(pageNum)
       ? 1
       : pageNum;
-    
-    Ticket.getNpsTickets(50, pageNum, 'isClosed', isClosed)
+
+    Ticket.getNpsTickets(50, pageNum, _.assign({}, options, { isClosed: isClosed }))
     .then(function (data) {
       $scope.npsTickets = data.tickets;
       $scope.ticketCount = data.ticketCount;
@@ -48,19 +49,23 @@ function ($scope, $timeout, $location, Ticket, Notification) {
       Notification.error('Couldn\'t get tickets from DB, refresh the page.')
     });
   }
-  
+
   /**
    * Watch for changes in current page
    */
   $scope.$watch('state.currentPage', function (currentPage, prevPage) {
     // return early if they are the same
     if (currentPage === prevPage) { return; }
-    
-    getNpsTickets(currentPage, $location.search().isClosed, true)
+
+    getNpsTickets(currentPage, $location.search().isClosed, CallBack.getOptions(), true)
   });
-  
-  getNpsTickets($scope.currentPage, $location.search().isClosed);
-  
+
+  $scope.$watch('callBack.getOptions()', function (options, oldOptions) {
+    getNpsTickets($scope.currentPage, $location.search().isClosed, options, true);
+  });
+
+  getNpsTickets($scope.currentPage, $location.search().isClosed, CallBack.getOptions());
+
 }]);
 
 })();

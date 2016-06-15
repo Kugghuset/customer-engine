@@ -30,8 +30,8 @@ var __columns = [
   { name: 'npsDate', type: mssql.DateTime2, nullable: true, default: null },
   { name: 'npsTel', type: mssql.VarChar(256), nullable: true, default: null },
   { name: 'ticketId', type: mssql.BigInt, nullable: true, default: null },
-  { name: 'queue', type: mssql.VarChar(256), nullable: true, default: null },
-  { name: 'team', type: mssql.VarChar(256), nullable: true, default: null },
+  { name: 'shortcode', type: mssql.VarChar(256), nullable: true, default: null },
+  { name: 'serviceName', type: mssql.VarChar(256), nullable: true, default: null },
   { name: 'npsScore', type: mssql.SmallInt, nullable: true, default: null },
   { name: 'npsComment', type: mssql.VarChar(mssql.MAX), nullable: true, default: null },
   { name: 'npsFollowUp', type: mssql.VarChar(mssql.MAX), nullable: true, default: null },
@@ -89,10 +89,9 @@ function getSqlConnection() {
  * @param {String} tableName Name of the temp table to use
  * @param {{}[]} columns Array of column objects to use
  * @param {[][]} collection Array of arrays containing
- * @param {String[]} skippables Array of column names to skip, (for the columns field)
  * @return {Object} new mssql.Table
  */
-function generateTable(tableName, columns, collection, skippables) {
+function generateTable(tableName, columns, collection) {
   var _table = new mssql.Table(tableName);
   // Set table creation to true, to ensure the table is created if it doesn't exist,
   // which it shouldn't do
@@ -104,8 +103,10 @@ function generateTable(tableName, columns, collection, skippables) {
   });
 
   // Get the index of the ticketId and zendeskId to use for eigther assigning the ticketId or zendeskId
+
   var _indexOfTicketId = _.findIndex(columns, function (col) { return col.name === 'ticketId'; });
   var _indexOfZendeskId = _.findIndex(columns, function (col) { return col.name === 'zendeskId'; });
+  var _indexOfServiceName = _.findIndex(columns, function (col) { return col.name === 'serviceName'; });
 
   // Add all rows
   _.forEach(collection, function (item) {
@@ -114,11 +115,13 @@ function generateTable(tableName, columns, collection, skippables) {
       var _value;
 
       if (col.name === 'ticketId') {
-        _value = /^[0-9]+$/.test(item[i])
+        _value = /^[0-9]+$/.test(item[i]) && !/zendesk/i.test(item[_indexOfServiceName])
           ? item[i]
           : null;
       } else if (col.name === 'zendeskId') {
-        return null;
+        _value = /^[0-9]+$/.test(item[_indexOfTicketId]) && /zendesk/i.test(item[_indexOfServiceName])
+          ? item[_indexOfTicketId]
+          : null;
       } else {
       _value = item[i];
       }
@@ -157,7 +160,6 @@ function generateTable(tableName, columns, collection, skippables) {
 
     // Only actually add rows with data, though this seems to never really happeN
     if (_.some(_data)) {
-      // var skippableIndexes = _.map(skippables, function (name) { return _.findIndex(columns, { name: name }) });
       _table.rows.add.apply(_table.rows, _data);
     }
   });
@@ -212,8 +214,6 @@ function singleImport(filename) {
       .map(function (row) { return row.split('\t'); })
       .filter(_.some)
       .value();
-
-    var skippables = ['queue', 'team'];
 
     var _tableName = 'Temp_NPSSurveyResult';
 

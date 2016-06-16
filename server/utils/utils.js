@@ -6,6 +6,7 @@ var chalk = require('chalk');
 var DataObjectParser = require('dataobject-parser')
 var request = require('request');
 
+var config = require('./../config/config');
 var logger = require('./logger.util');
 
 /**
@@ -275,6 +276,63 @@ function print (message, verticalPadding, asIs) {
   if (!!verticalPadding) { log(_.times(verticalPadding, function () { return '\n'; }).join('')); }
 }
 
+/**
+ * Returns the url for which to make a
+ * GET request to send the text message.
+ *
+ * @param {String} receiver Defaults to config.tel
+ * @param {String} message
+ * @param {String} sender Defaults to 'HomePlease'
+ * @return {String}
+ */
+function cellsyntUrl(receiver, message, sender) {
+  // Ensure there's a receiver
+  var _receiver = !!receiver
+    ? receiver
+    : config.tel;
+
+  // Ensure there's a sender
+  var _sender = !!sender
+    ? sender
+    : 'Tickety';
+
+  return [
+    'https://se-1.cellsynt.net/sms.php',
+    '?username=' + config.cellsynt.username,
+    '&password=' + config.cellsynt.password,
+    '&destination=' + _receiver,
+    '&originatortype=alpha',
+    '&originator=' + encodeURIComponent(_sender),
+    '&charset=UTF-8',
+    '&text=' + encodeURIComponent(message)
+  ].join('');
+}
+
+function cellsyntSMS(message) {
+  return new Promise(function (resolve, reject) {
+    if (!_.every([config.cellsynt.destination, config.cellsynt.password, config.cellsynt.username])) {
+      log('Cannot send Cellsynt message, missing config data.');
+      return resolve();
+    }
+
+    request.get({
+      uri: cellsyntUrl(config.cellsynt.destination, message),
+      encoding: null,
+      headers: {
+        'Connection': 'keep-alive'
+      },
+    }, function (err, res, body) {
+      if (err) {
+        log('An error occurred when sending an SMS via Cellsynt:')
+        log(err);
+        return reject(err);
+      }
+
+      resolve(body.toString('utf8'));
+    });
+  });
+}
+
 module.exports = {
   objectify: objectify,
   handleError: handleError,
@@ -290,4 +348,5 @@ module.exports = {
   put: put,
   log: log,
   print: print,
+  cellsyntSMS: cellsyntSMS,
 };

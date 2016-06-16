@@ -57,6 +57,11 @@ function sendSurway(numberOfWeeks) {
     ? numberOfWeeks
     : 0;
 
+  utils.log('Beginning to send NPS data to Surway from {weeks} weeks.'.replace('{weeks}', numberOfWeeks));
+
+  utils.cellsyntSMS('Beginning to send NPS data to Surway from {weeks} weeks.'.replace('{weeks}', numberOfWeeks))
+  .catch(function (err) { utils.log('Something went wrong with sending the SMS to clickatell:\n {err}'.replace('{err}', err)); });
+
   var params = {
       upperDateLimit: {
         type: sql.DATETIME2,
@@ -81,6 +86,9 @@ function sendSurway(numberOfWeeks) {
   .then(function (tickets) {
     _tickets = tickets;
 
+    utils.log('Found {num} tickets to send to Surway.'.replace('{num}', tickets.length));
+    utils.log('Logging into Surway');
+
     var _url = config.surway.base_url + (
         /\/$/.test(config.surway.base_url)
           ? 'services/auth/login'
@@ -94,6 +102,8 @@ function sendSurway(numberOfWeeks) {
   .then(function (userData) {
 
     var _token = userData.token;
+
+    utils.log('Successfully logged in into Surway');
 
     var data = _.chain(_tickets)
       .map(function (item) {
@@ -113,16 +123,30 @@ function sendSurway(numberOfWeeks) {
           : '/services/upload/data'
         );
 
+    utils.log('Sending {num} tickets to Surway'.replace('{num}', data.length))
+
     return utils.post(_url, data, { Authorization: 'Bearer ' + _token });
   })
   .then(function (res) {
+    utils.log('Successfully sent NPS messages and got the response:')
+    utils.log(res);
     return quarantineTels(_tickets);
   })
   .then(function (res) {
+    var msg = 'Finished sending NPS data to Surway.';
+    utils.log(msg)
+    utils.cellsyntSMS('Finished sending NPS data to Surway.')
+    .catch(function (err) { utils.log('Something went wrong with sending the SMS to clickatell:\n {err}'.replace('{err}', err)); });
+
     return Promise.resolve(res);
   })
   .catch(function (err) {
+    utils.log('The following error occurred when sending NPS data to Surway:')
     utils.log(err);
+
+    utils.cellsyntSMS('Error with NPS:\n{err}'.replace('{err}', err))
+    .catch(function (err) { utils.log('Seomthing went wrong with sending the SMS to clickatell:\n {err}'.replace('{err}', err)); });
+
     return Promise.reject(err);
   })
 }
@@ -131,6 +155,7 @@ function sendSurway(numberOfWeeks) {
  * Schedules getAndSend method for every thursday at 15:00.
  */
 function scheduleNps() {
+  utils.log('Adding NPS to schedule.');
   schedule.addToNPSSchedule(getAndSend);
 }
 

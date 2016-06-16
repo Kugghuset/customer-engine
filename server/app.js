@@ -25,7 +25,7 @@ require('./services/merge');
 function serve() {
   var server = app.listen(config.port, function () {
     var port = server.address().port;
-    
+
     logger.stream.write('App listening on port ' + port);
   });
 }

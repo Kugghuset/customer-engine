@@ -88,4 +88,9 @@ module.exports = {
     email: process.env.SURWAY_EMAIL,
     password:  process.env.SURWAY_PASSWORD,
   },
+  cellsynt: {
+    username: process.env.CELLSYNT_USERNAME || '',
+    password: process.env.CELLSYNT_PASSWORD || '',
+    destination: process.env.CELLSYNT_DESTINATION || '',
+  },
 };

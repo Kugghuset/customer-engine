@@ -12,16 +12,16 @@ function initialize() {
     query: sql.fromFile('./sql/reasonToPromote.initialize.sql')
   })
   .then(function (result) {
-    console.log('ReasonToPromote table all set up.');
+    util.log('ReasonToPromote table all set up.');
   })
   .catch(function (err) {
-    console.log('Couldn\'t set up ReasonToPromote table.');
-    console.error(err);
+    util.log('Couldn\'t set up ReasonToPromote table.');
+    util.log(err);
   });
 }
 
 exports.getAll = function () {
-  return sql.execute({  
+  return sql.execute({
     query: sql.fromFile('./sql/reasonToPromote.getAll.sql')
   });
 };

@@ -5,18 +5,18 @@ var Promise = require('bluebird');
 var sql = require('seriate');
 var moment = require('moment');
 
-var util = require('../../utils/utils');
+var utils = require('../../utils/utils');
 
 function initialize() {
   return sql.execute({
     query: sql.fromFile('./sql/ticket.initialize.sql')
   })
     .then(function (result) {
-      util.log('Ticket table all set up.');
+      utils.log('Ticket table all set up.');
     })
     .catch(function (err) {
-      util.log('Couldn\'t set up Ticket table.');
-      util.log(err);
+      utils.log('Couldn\'t set up Ticket table.');
+      utils.log(err);
     });
 }
 
@@ -56,9 +56,9 @@ function findBy(paramName, other, top, offset, multiple) {
   if (!other) { other = ''; }
 
   var query = sql.fromFile('./sql/ticket.findBy.sql')
-    .replace(util.literalRegExp('{ where_clause }', 'gi'), '[{paramName}] = @{paramName}')
-    .replace(util.literalRegExp('{paramName}', 'gi'), paramName)
-    .replace(util.literalRegExp('{ other }', 'gi'), other);
+    .replace(utils.literalRegExp('{ where_clause }', 'gi'), '[{paramName}] = @{paramName}')
+    .replace(utils.literalRegExp('{paramName}', 'gi'), paramName)
+    .replace(utils.literalRegExp('{ other }', 'gi'), other);
 
   // Allows for pagination.
   return _.isUndefined(top)
@@ -67,8 +67,8 @@ function findBy(paramName, other, top, offset, multiple) {
       query,
       ['OFFSET', (offset || 0), 'ROWS', 'FETCH NEXT', top, 'ROWS ONLY'].join(' '),
       (!!multiple ? 'SELECT COUNT(*) FROM [dbo].[Ticket] WHERE { where_clause }' : '')
-        .replace(util.literalRegExp('{ where_clause }', 'gi'), '[{paramName}] = @{paramName}')
-        .replace(util.literalRegExp('{paramName}', 'gi'), paramName)
+        .replace(utils.literalRegExp('{ where_clause }', 'gi'), '[{paramName}] = @{paramName}')
+        .replace(utils.literalRegExp('{paramName}', 'gi'), paramName)
     ].join('\n');
 }
 
@@ -196,10 +196,10 @@ exports.create = function (ticket, user) {
       params: ticketParams(ticket)
     })
       .then(function (ticket) {
-        resolve(_.first(util.objectify(ticket)));
+        resolve(_.first(utils.objectify(ticket)));
       })
       .catch(function (err) {
-        util.log(err);
+        utils.log(err);
         reject(err);
       });
   });
@@ -234,7 +234,7 @@ exports.update = function (ticket, user) {
       })
     })
       .then(function (ticket) {
-        resolve(_.first(util.objectify(ticket)));
+        resolve(_.first(utils.objectify(ticket)));
       })
       .catch(function (err) {
         reject(err);
@@ -292,7 +292,7 @@ exports.findById = function (ticketId) {
       }
     })
       .then(function (tickets) {
-        resolve(_.first(util.objectify(tickets)));
+        resolve(_.first(utils.objectify(tickets)));
       })
       .catch(function (err) {
         reject(err);
@@ -322,8 +322,8 @@ exports.findByCustomerId = function (customerId, top, page) {
         // count is on data[1][0]['']
         resolve(
           !!top
-            ? [util.objectify(data[0]), data[1][0]['']]
-            : util.objectify(data)
+            ? [utils.objectify(data[0]), data[1][0]['']]
+            : utils.objectify(data)
         );
 
         resolve();
@@ -346,7 +346,7 @@ exports.findByUserId = function (userId) {
       }
     })
       .then(function (tickets) {
-        resolve(util.objectify(tickets));
+        resolve(utils.objectify(tickets));
       })
       .catch(function (err) {
         reject(err);
@@ -373,7 +373,7 @@ exports.getFreshByUserId = function (userId) {
         }
       }
     }).then(function (tickets) {
-      resolve(util.objectify(tickets));
+      resolve(utils.objectify(tickets));
     })
       .catch(function (err) {
         reject(err);
@@ -420,7 +420,7 @@ exports.paginate = function (userId, top, page) {
       }
     })
       .then(function (tickets) {
-        resolve(util.objectify(tickets));
+        resolve(utils.objectify(tickets));
       })
       .catch(function (err) {
         reject(err);
@@ -464,7 +464,7 @@ function getTypeAndVal(val) {
   } else if (_.isNumber(val)) {
     _type = sql.BIGINT;
   } else if (/^(true|false)$/.test(val)) {
-    val = util.parseBool(val);
+    val = utils.parseBool(val);
     _type = sql.BIT;
   } else {
     _type = sql.VARCHAR;
@@ -575,10 +575,10 @@ exports.findNps = function (top, page, filter, value, options) {
       multiple: true
     })
       .then(function (tickets) {
-        resolve({ tickets: util.objectify(_.first(tickets)), ticketCount: tickets[1][0][''] });
+        resolve({ tickets: utils.objectify(_.first(tickets)), ticketCount: tickets[1][0][''] });
       })
       .catch(function (err) {
-        util.log(err);
+        utils.log(err);
         reject(err);
       });
 

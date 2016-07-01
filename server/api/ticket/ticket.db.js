@@ -557,16 +557,14 @@ exports.findNps = function (top, page, filter, value, options) {
         END \
         ) = @groupingCountry \
       ",
-
     }
 
     var filters = _.chain(opts)
       .map(function (val, key) { return { key: key, val: val } })
-      .filter(function (item) { return !_.isEmpty(item.val); })
+      .filter(function (item) { return !_.isUndefined(item.val) || item.val !== ''; })
       .map(function (item) { return definitions[item.key]; })
       .value()
       .join(' AND ');
-
     if (!!filters) { filters = 'AND ' + filters; }
 
     query = query.replace(/\{filter\}/g, filters);

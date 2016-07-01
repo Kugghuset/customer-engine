@@ -290,8 +290,6 @@ angular.module('ticketyApp')
           _.map(options, function (val, key) { return [encodeURIComponent(key), encodeURIComponent(val)].join('=') }).join('&'),
         ].join('?');
 
-        console.log(_url);
-
         $http.get(_url)
         .success(resolve)
         .error(reject);

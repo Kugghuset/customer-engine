@@ -35,6 +35,13 @@ SELECT
   , [SCa].[subcategoryName] AS [subcategoryName]
   , [DCa].[descriptorId] AS [desriptorId]
   , [DCa].[descriptorName] AS [descriptorName]
+  , [D].[departmentId] AS [departmentId]
+  , [D].[departmentName] AS [departmentName]
+  , [tD].[departmentId] AS [transferredDepartmentId]
+  , [tD].[departmentName] AS [transferredDepartmentName]
+  , [Pr].[productId] AS [productId]
+  , [Pr].[productName] AS [productName]
+  , [Pr].[country] AS [productCountry]
 FROM [dbo].[NPSSurveyResult] AS [NPS]
 
 LEFT JOIN [dbo].[Ticket] AS [T]
@@ -60,6 +67,15 @@ ON [SCa].[subcategoryId] = [CaB].[subcategoryId]
 
 LEFT JOIN [dbo].[Descriptor] AS [DCa]
 ON [DCa].[descriptorId] = [CaB].[descriptorId]
+
+LEFT JOIN [dbo].[Department] AS [D]
+ON [D].[departmentId] = [T].[departmentId]
+
+LEFT JOIN [dbo].[Department] AS [tD]
+ON [tD].[departmentId] = [T].[transferredDepartmentId]
+
+LEFT JOIN [dbo].[Product] AS [Pr]
+ON [Pr].[productId] = [T].[productId]
 
 WHERE [npsScore] IS NOT NULL
 

@@ -95,7 +95,7 @@ function ($scope, $uibModalInstance, CallBack, Notification, ticket, users, stat
   
   $scope.ticket = angular.copy(ticket);
   $scope.users = users;
-  
+
   $scope.statuses = statuses;
   $scope.promoteReasons = reasonsToPromote;
   $scope.detractReasons = reasonsToDetract;
@@ -111,7 +111,8 @@ function ($scope, $uibModalInstance, CallBack, Notification, ticket, users, stat
     
     var callBackObj = _.assign({}, $scope.ticket.callBack, {
       ticketId: $scope.ticket.ticketId,
-      userId: $scope.ticket.callBack.userId
+      userId: $scope.ticket.callBack.userId,
+      npsId: $scope.ticket.nps.npsId,
     });
     
     CallBack.set(callBackObj.callBackId, callBackObj)

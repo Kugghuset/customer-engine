@@ -504,7 +504,7 @@ exports.findNps = function (top, page, filter, value, options) {
       ? true
       : /^false$/i.test(opts.isClosed) ? false : undefined;
 
-    var query = sql.fromFile('./sql/ticket.findNpsFiltered.sql');
+    var query = sql.fromFile('./sql/ticket.findCallBack.sql');
 
     var params = {
       top: {
@@ -534,25 +534,25 @@ exports.findNps = function (top, page, filter, value, options) {
     };
 
     var definitions = {
-      userId: '[U2].[userId] = @userId',
-      customerId: '[A].[customerId] = @customerId',
+      userId: '[callBackUserId] = @userId',
+      customerId: '[customerId] = @customerId',
       /**
        * FIX THIS FOR NULL VALUES
        */
       isClosed: " ( \
         SELECT CASE \
-          WHEN @isClosed = 1 AND [CB].[isClosed] = @isClosed THEN 1 \
-          WHEN @isClosed = 0 AND ([CB].[isClosed] = @isClosed OR [CB].[isCLosed] IS NULL) THEN 1\
+          WHEN @isClosed = 1 AND [callBackIsClosed] = @isClosed THEN 1 \
+          WHEN @isClosed = 0 AND ([callBackIsClosed] = @isClosed OR [callBackIsClosed] IS NULL) THEN 1\
           ELSE 0 \
-          END \
+        END \
         ) = 1\
       ",
       groupingCountry: " \
         ( \
         SELECT CASE \
-          WHEN [NPS].[npsTel] LIKE '+45%' THEN 'DK' \
-          WHEN [NPS].[npsTel] LIKE '+47%' THEN 'NO' \
-          WHEN [NPS].[npsTel] LIKE '+358%' THEN 'FI' \
+          WHEN [tel] LIKE '45%' THEN 'DK' \
+          WHEN [tel] LIKE '47%' THEN 'NO' \
+          WHEN [tel] LIKE '358%' THEN 'FI' \
           ELSE 'SE' \
         END \
         ) = @groupingCountry \

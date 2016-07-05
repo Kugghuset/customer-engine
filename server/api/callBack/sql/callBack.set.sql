@@ -7,7 +7,7 @@ BEGIN
   
   INSERT INTO [dbo].[CallBack] (
       [ticketId]
-      [npsId]
+    , [npsId]
     , [userId]
     , [callBackDate]
     , [callBackStatus]
@@ -23,7 +23,7 @@ BEGIN
   )
   VALUES (
       @ticketId
-      @npsId
+    , @npsId
     , @userId
     , @callBackDate
     , CASE

@@ -22,6 +22,7 @@ SELECT
   , [SCa].[subcategoryName] AS [callCategory2]
   , [DCa].[descriptorName] AS [callCagetory3]
   , [T].[summary] AS [ticketSummary]
+  , [NPS].[npsId] AS [npsId]
   , [NPS].[npsDate] AS [npsDate]
   , [NPS].[npsScore] AS [npsScore]
   , [NPS].[npsComment] AS [npsComment]

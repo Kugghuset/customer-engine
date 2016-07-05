@@ -24,7 +24,7 @@ var __connection = {
  * Array of columns of which to be used when bulk importing
  * to the NPSSurveyResult table
  *
- * @type {Array}
+ * @type {{ name: String, type: Object, nullable: Boolean, default: null }[]}}
  */
 var __columns = [
   { name: 'npsDate', type: mssql.DateTime2, nullable: true, default: null },

@@ -6,112 +6,112 @@
   "bundle": "typings/tsd.d.ts",
   "installed": {
     "bcryptjs/bcryptjs.d.ts": {
-      "commit": "f481e77dfca5a146db1b4f5f20f15929b30c8729"
+      "commit": "42335c83eda05c7d7c007788629aa58d3b008fca"
     },
     "chalk/chalk.d.ts": {
-      "commit": "f481e77dfca5a146db1b4f5f20f15929b30c8729"
+      "commit": "42335c83eda05c7d7c007788629aa58d3b008fca"
     },
     "body-parser/body-parser.d.ts": {
-      "commit": "f481e77dfca5a146db1b4f5f20f15929b30c8729"
+      "commit": "42335c83eda05c7d7c007788629aa58d3b008fca"
     },
     "serve-static/serve-static.d.ts": {
-      "commit": "f481e77dfca5a146db1b4f5f20f15929b30c8729"
+      "commit": "42335c83eda05c7d7c007788629aa58d3b008fca"
     },
     "gulp-minify-css/gulp-minify-css.d.ts": {
-      "commit": "f481e77dfca5a146db1b4f5f20f15929b30c8729"
+      "commit": "42335c83eda05c7d7c007788629aa58d3b008fca"
     },
     "clean-css/clean-css.d.ts": {
-      "commit": "f481e77dfca5a146db1b4f5f20f15929b30c8729"
+      "commit": "42335c83eda05c7d7c007788629aa58d3b008fca"
     },
     "mime/mime.d.ts": {
-      "commit": "f481e77dfca5a146db1b4f5f20f15929b30c8729"
+      "commit": "42335c83eda05c7d7c007788629aa58d3b008fca"
     },
     "orchestrator/orchestrator.d.ts": {
-      "commit": "f481e77dfca5a146db1b4f5f20f15929b30c8729"
+      "commit": "42335c83eda05c7d7c007788629aa58d3b008fca"
     },
     "gulp-ng-annotate/gulp-ng-annotate.d.ts": {
-      "commit": "f481e77dfca5a146db1b4f5f20f15929b30c8729"
+      "commit": "42335c83eda05c7d7c007788629aa58d3b008fca"
     },
     "gulp-rename/gulp-rename.d.ts": {
-      "commit": "f481e77dfca5a146db1b4f5f20f15929b30c8729"
+      "commit": "42335c83eda05c7d7c007788629aa58d3b008fca"
     },
     "express/express.d.ts": {
-      "commit": "f481e77dfca5a146db1b4f5f20f15929b30c8729"
+      "commit": "42335c83eda05c7d7c007788629aa58d3b008fca"
     },
     "gulp-uglify/gulp-uglify.d.ts": {
-      "commit": "f481e77dfca5a146db1b4f5f20f15929b30c8729"
+      "commit": "42335c83eda05c7d7c007788629aa58d3b008fca"
     },
     "jsonwebtoken/jsonwebtoken.d.ts": {
-      "commit": "f481e77dfca5a146db1b4f5f20f15929b30c8729"
+      "commit": "42335c83eda05c7d7c007788629aa58d3b008fca"
     },
     "gulp-sourcemaps/gulp-sourcemaps.d.ts": {
-      "commit": "f481e77dfca5a146db1b4f5f20f15929b30c8729"
+      "commit": "42335c83eda05c7d7c007788629aa58d3b008fca"
     },
     "source-map/source-map.d.ts": {
-      "commit": "f481e77dfca5a146db1b4f5f20f15929b30c8729"
+      "commit": "42335c83eda05c7d7c007788629aa58d3b008fca"
     },
     "bluebird/bluebird.d.ts": {
-      "commit": "f481e77dfca5a146db1b4f5f20f15929b30c8729"
+      "commit": "42335c83eda05c7d7c007788629aa58d3b008fca"
     },
     "node/node.d.ts": {
-      "commit": "f481e77dfca5a146db1b4f5f20f15929b30c8729"
+      "commit": "42335c83eda05c7d7c007788629aa58d3b008fca"
     },
     "node-sass/node-sass.d.ts": {
-      "commit": "f481e77dfca5a146db1b4f5f20f15929b30c8729"
+      "commit": "42335c83eda05c7d7c007788629aa58d3b008fca"
     },
     "morgan/morgan.d.ts": {
-      "commit": "f481e77dfca5a146db1b4f5f20f15929b30c8729"
+      "commit": "42335c83eda05c7d7c007788629aa58d3b008fca"
     },
     "uglify-js/uglify-js.d.ts": {
-      "commit": "f481e77dfca5a146db1b4f5f20f15929b30c8729"
+      "commit": "42335c83eda05c7d7c007788629aa58d3b008fca"
     },
     "form-data/form-data.d.ts": {
-      "commit": "f481e77dfca5a146db1b4f5f20f15929b30c8729"
+      "commit": "42335c83eda05c7d7c007788629aa58d3b008fca"
     },
     "q/Q.d.ts": {
-      "commit": "f481e77dfca5a146db1b4f5f20f15929b30c8729"
+      "commit": "42335c83eda05c7d7c007788629aa58d3b008fca"
     },
     "request/request.d.ts": {
-      "commit": "f481e77dfca5a146db1b4f5f20f15929b30c8729"
+      "commit": "42335c83eda05c7d7c007788629aa58d3b008fca"
     },
     "gulp/gulp.d.ts": {
-      "commit": "f481e77dfca5a146db1b4f5f20f15929b30c8729"
+      "commit": "42335c83eda05c7d7c007788629aa58d3b008fca"
     },
     "later/later.d.ts": {
-      "commit": "f481e77dfca5a146db1b4f5f20f15929b30c8729"
+      "commit": "42335c83eda05c7d7c007788629aa58d3b008fca"
     },
     "gulp-concat/gulp-concat.d.ts": {
-      "commit": "f481e77dfca5a146db1b4f5f20f15929b30c8729"
+      "commit": "42335c83eda05c7d7c007788629aa58d3b008fca"
     },
     "xlsx/xlsx.d.ts": {
-      "commit": "f481e77dfca5a146db1b4f5f20f15929b30c8729"
+      "commit": "42335c83eda05c7d7c007788629aa58d3b008fca"
     },
     "gulp-sass/gulp-sass.d.ts": {
-      "commit": "f481e77dfca5a146db1b4f5f20f15929b30c8729"
+      "commit": "42335c83eda05c7d7c007788629aa58d3b008fca"
     },
     "express-unless/express-unless.d.ts": {
-      "commit": "f481e77dfca5a146db1b4f5f20f15929b30c8729"
+      "commit": "42335c83eda05c7d7c007788629aa58d3b008fca"
     },
     "express-jwt/express-jwt.d.ts": {
-      "commit": "f481e77dfca5a146db1b4f5f20f15929b30c8729"
+      "commit": "42335c83eda05c7d7c007788629aa58d3b008fca"
     },
     "winston/winston.d.ts": {
-      "commit": "f481e77dfca5a146db1b4f5f20f15929b30c8729"
+      "commit": "42335c83eda05c7d7c007788629aa58d3b008fca"
     },
     "shelljs/shelljs.d.ts": {
-      "commit": "f481e77dfca5a146db1b4f5f20f15929b30c8729"
+      "commit": "42335c83eda05c7d7c007788629aa58d3b008fca"
     },
     "lodash/lodash.d.ts": {
-      "commit": "f481e77dfca5a146db1b4f5f20f15929b30c8729"
+      "commit": "42335c83eda05c7d7c007788629aa58d3b008fca"
     },
     "multer/multer.d.ts": {
-      "commit": "f481e77dfca5a146db1b4f5f20f15929b30c8729"
+      "commit": "42335c83eda05c7d7c007788629aa58d3b008fca"
     },
     "express-serve-static-core/express-serve-static-core.d.ts": {
-      "commit": "f481e77dfca5a146db1b4f5f20f15929b30c8729"
+      "commit": "42335c83eda05c7d7c007788629aa58d3b008fca"
     },
     "mssql/mssql.d.ts": {
-      "commit": "f481e77dfca5a146db1b4f5f20f15929b30c8729"
+      "commit": "42335c83eda05c7d7c007788629aa58d3b008fca"
     }
   }
 }

@@ -5,18 +5,29 @@ var Promise = require('bluebird');
 var sql = require('seriate');
 var Ticket = require('../ticket/ticket.db');
 
-var util = require('../../utils/utils');
+var utils = require('../../utils/utils');
 
 function initialize() {
   return sql.execute({
     query: sql.fromFile('./sql/callBack.initialize.sql')
   })
   .then(function (result) {
-    util.log('CallBack table all set up.');
+    utils.log('CallBack table all set up.');
+
+    return migrateData();
+  })
+  .then(function (result) {
+    utils.log('CallBack table migrated');
   })
   .catch(function (err) {
-    util.log('Couldn\'t set up CallBack table.');
-    util.log(err);
+    utils.log('Couldn\'t set up CallBack table.');
+    utils.log(err);
+  });
+}
+
+function migrateData() {
+  return sql.execute({
+    query: sql.fromFile('./sql/callBack.migrate.sql'),
   });
 }
 
@@ -42,6 +53,10 @@ exports.set = function (id, callBackObj) {
         ticketId: {
           type: sql.BIGINT,
           val: callBackObj.ticketId
+        },
+        npsId: {
+          type: sql.BIGINT,
+          val: callBackObj.npsId
         },
         userId: {
           type: sql.BIGINT,
@@ -96,10 +111,10 @@ exports.set = function (id, callBackObj) {
       }
     })
     .then(function (tickets) {
-      resolve(util.objectify(_.first(tickets)));
+      resolve(utils.objectify(_.first(tickets)));
     })
     .catch(function (err) {
-      util.log(err);
+      utils.log(err);
       reject(err);
     });
   });

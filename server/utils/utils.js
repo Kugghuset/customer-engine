@@ -344,7 +344,7 @@ function cellsyntSMS(message) {
 function viewExists(name) {
   return new Promise(function (resolve, reject) {
     sql.execute({
-      query: sql.fromFile('./sql/utils.viewExists.sql'),
+      query: 'SELECT * FROM sys.views WHERE OBJECT_ID = OBJECT_ID(@name)',
       params: {
         name: {
           type: sql.VarChar(255),
@@ -365,6 +365,9 @@ function isAbsolutePath(_path) {
   return path.resolve(_path) === path.normalize(_path).replace(/(.+)([\/|\\])$/, '$1');
 }
 
+/**
+ * @param {{ name: String, query: String, filepath: String, basedir: String }} options
+ */
 function initializeView(options) {
   return new Promise(function (resolve, reject) {
     var name = options.name;
@@ -413,4 +416,6 @@ module.exports = {
   log: log,
   print: print,
   cellsyntSMS: cellsyntSMS,
+  initializeView: initializeView,
+  viewExists: viewExists,
 };

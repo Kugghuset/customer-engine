@@ -5,6 +5,7 @@ Gets all callBack items
 SELECT 
     [callBackId]
   , [ticketId]
+  , 
   , [userId]
   , [callBackDate]
   , [callBackStatus]
@@ -13,6 +14,6 @@ SELECT
   , [reasonToDetract1]
   , [reasonToDetract2]
   , [callBackFollowUpAction]
-  , [callBackComments]
+  , [callBackComment]
   , [isClosed]
 FROM [dbo].[CallBack]

@@ -7,6 +7,7 @@ BEGIN
   CREATE TABLE [dbo].[CallBack] (
       [callBackId] bigint IDENTITY(1, 1) PRIMARY KEY NOT NULL
     , [ticketId] bigint NULL
+    , [npsId] bigint NULL
     , [userId] bigint NULL
     , [agentName] varchar(255) NULL -- Doesn't have to be a user
     , [callBackDate] datetime2 NULL
@@ -63,4 +64,12 @@ ELSE
   BEGIN
     ALTER TABLE [dbo].[CallBack]
     ADD [dateClosed] datetime2 NULL
+  END
+
+  IF NOT EXISTS(SELECT * FROM sys.columns
+                WHERE Name = N'npsId'
+                AND Object_ID = Object_ID(N'CallBack'))
+  BEGIN
+    ALTER TABLE [dbo].[CallBack]
+    ADD [npsId] bigint NULL
   END

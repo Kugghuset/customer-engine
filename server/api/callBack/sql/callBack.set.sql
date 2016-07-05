@@ -7,6 +7,7 @@ BEGIN
   
   INSERT INTO [dbo].[CallBack] (
       [ticketId]
+      [npsId]
     , [userId]
     , [callBackDate]
     , [callBackStatus]
@@ -22,6 +23,7 @@ BEGIN
   )
   VALUES (
       @ticketId
+      @npsId
     , @userId
     , @callBackDate
     , CASE
@@ -45,6 +47,7 @@ END
 ELSE
   UPDATE [dbo].[CallBack]
   SET   [ticketId] = @ticketId
+      , [npsId] = @npsId
       , [userId] = @userId
       , [callBackDate] = @callBackDate
       , [callBackStatus] = CASE

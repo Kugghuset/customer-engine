@@ -30,7 +30,7 @@ FROM (
   MERGE [dbo].[NPSSurveyResult] AS [Target]
   USING (
     SELECT
-        CAST([npsDate] AS Date)  AS [npsDate]
+        CAST([npsDate] AS Date) AS [npsDate]
       , [npsTel] AS [npsTel]
       , MAX([npsScore]) AS [npsScore]
       , MIN([ticketId]) AS [ticketId]

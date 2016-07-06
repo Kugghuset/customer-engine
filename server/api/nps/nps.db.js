@@ -9,7 +9,7 @@ var iconv = require('iconv-lite');
 var chalk = require('chalk');
 var os = require('os');
 
-var util = require('./../../utils/utils');
+var utils = require('./../../utils/utils');
 var deprecated = require('./nps.db.deprecated');
 var npsBulkImport = require('./nps.bulkImport');
 
@@ -23,15 +23,31 @@ function initialize() {
       query: sql.fromFile('./sql/nps.initialize.sql')
     })
     .then(function (result) {
-      util.log('NPS table all set up.');
-      resolve(result);
+      utils.log('NPS table all set up.');
+
+      return initView();
+    })
+    .then(function (data) {
+      resolve(data);
     })
     .catch(function (err) {
-      util.log('Couldn\'t set up NPS table.');
-      util.log(err);
+      utils.log('Couldn\'t set up NPS table.');
+      utils.log(err);
       reject(err);
     });
   });
+}
+
+function initView() {
+  return utils.initializeView({
+    name: 'vi_CallBackView',
+    query: sql.fromFile('./sql/nps.vi_CallBackView.sql'),
+  })
+  .then(function (data) {
+    utils.log('vi_CallBackView is all set up.');
+    
+    return Promise.resolve();
+  }); 
 }
 
 exports.getAll = function () {
@@ -134,13 +150,13 @@ function bulkImport(basePath, files, readFiles) {
 
   // Return early if there are no files
   if (!files || !files.length) {
-    util.log('No NPS score files found, no bulk import.');
+    utils.log('No NPS score files found, no bulk import.');
     return new Promise(function (resolve) { resolve(); });
   }
 
   // We're all set here
   if (readFiles.length === files.length) {
-    util.log('Bulk import of NPS data finished.');
+    utils.log('Bulk import of NPS data finished.');
     return new Promise(function (resolve) { resolve(readFiles); });
   }
 
@@ -187,8 +203,8 @@ function bulkImport(basePath, files, readFiles) {
   })
   .catch(function (err) {
 
-    util.log(currentFile);
-    util.log(err);
+    utils.log(currentFile);
+    utils.log(err);
 
     // Assumme the file simply shouldn't be imported, continue recursively
     return bulkImport(basePath, files, readFiles.concat([currentFile]));

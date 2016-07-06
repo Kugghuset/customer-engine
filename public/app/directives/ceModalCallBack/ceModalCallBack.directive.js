@@ -95,7 +95,7 @@ function ($scope, $uibModalInstance, CallBack, Notification, ticket, users, stat
   
   $scope.ticket = angular.copy(ticket);
   $scope.users = users;
-  
+
   $scope.statuses = statuses;
   $scope.promoteReasons = reasonsToPromote;
   $scope.detractReasons = reasonsToDetract;
@@ -111,7 +111,8 @@ function ($scope, $uibModalInstance, CallBack, Notification, ticket, users, stat
     
     var callBackObj = _.assign({}, $scope.ticket.callBack, {
       ticketId: $scope.ticket.ticketId,
-      userId: $scope.ticket.callBack.userId
+      userId: $scope.ticket.callBack.userId,
+      npsId: $scope.ticket.nps.npsId,
     });
     
     CallBack.set(callBackObj.callBackId, callBackObj)
@@ -255,6 +256,25 @@ function ($scope, $uibModalInstance, CallBack, Notification, ticket, users, stat
       $scope.setUser(agentName);
     }
     
+  });
+
+  $scope.$watch('ticket.callBack.postCallBackNpscScore', function (num, oldNum) {
+    if (typeof num === 'undefined') {
+      return;
+    }
+    
+    if (typeof num !== 'number') {
+      $scope.ticket.callBack.postCallBackNpscScore = undefined;
+      return;
+    }
+
+    if (num < 0) {
+      $scope.ticket.callBack.postCallBackNpscScore = 0;
+    } else if (num > 10) {
+      $scope.ticket.callBack.postCallBackNpscScore = 10;
+    }
+
+    console.log()
   });
   
 }]);

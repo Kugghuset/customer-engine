@@ -14,10 +14,10 @@
   <tbody>
     <tr ng-hide="shouldHide(ticket)" ng-repeat="ticket in tickets | alphaSort:getSort()" ng-click="openModal(ticket)">
       <td colspan="1">{{ ticket.groupingCountry }}</td>
-      <td colspan="1">{{ ticket.ticketId }}</td>
+      <td colspan="1">{{ ticket.ticketId || '-' }}</td>
       <td colspan="3" style="min-width: 130px;">{{ ticket.nps.npsDate | date:'yyyy-MM-dd' }}</td>
-      <td colspan="4">{{ ticket.user.name }}</td>
-      <td colspan="4">{{ ticket.customer.orgName }}</td>
+      <td colspan="4">{{ ticket.user.name || '-' }}</td>
+      <td colspan="4">{{ ticket.customer.orgName || 'Phone number: +' + ticket.person.tel }}</td>
       <td colspan="1">{{ isFinite(ticket.nps.npsScore) ? 'No score' : ticket.nps.npsScore }}</td>
       <td colspan="4"><i ng-show="ticket.callBack.user.userId" class="glyphicon glyphicon-user"></i> {{ ticket.callBack.agentName || ticket.callBack.user.name || ticket.callBack.user.email || '-' }}</span></td>
       <td colspan="2">{{ ticket.callBack.callBackStatus || 'Not called' }}</td>

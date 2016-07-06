@@ -5,7 +5,6 @@ var NPS = require('./nps.db');
 var controller = require('./nps.controller');
 var moment = require('moment');
 
-
 var router = express.Router();
 
 var _date = new Date();

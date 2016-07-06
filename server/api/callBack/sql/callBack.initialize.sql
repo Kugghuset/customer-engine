@@ -7,6 +7,7 @@ BEGIN
   CREATE TABLE [dbo].[CallBack] (
       [callBackId] bigint IDENTITY(1, 1) PRIMARY KEY NOT NULL
     , [ticketId] bigint NULL
+    , [npsId] bigint NULL
     , [userId] bigint NULL
     , [agentName] varchar(255) NULL -- Doesn't have to be a user
     , [callBackDate] datetime2 NULL
@@ -17,6 +18,7 @@ BEGIN
     , [reasonToDetract2] varchar(255) NULL
     , [callBackFollowUpAction] varchar(MAX) NULL
     , [callBackComment] varchar(MAX) NULL
+    , [postCallBackNpscScore] tinyint NULL
     , [isClosed] bit NULL DEFAULT 0
     , [dateClosed] datetime2 NULL
     , [dateCreated] datetime2 DEFAULT GETUTCDATE() NULL
@@ -63,4 +65,20 @@ ELSE
   BEGIN
     ALTER TABLE [dbo].[CallBack]
     ADD [dateClosed] datetime2 NULL
+  END
+
+  IF NOT EXISTS(SELECT * FROM sys.columns
+                WHERE Name = N'npsId'
+                AND Object_ID = Object_ID(N'CallBack'))
+  BEGIN
+    ALTER TABLE [dbo].[CallBack]
+    ADD [npsId] bigint NULL
+  END
+
+  IF NOT EXISTS(SELECT * FROM sys.columns
+                WHERE Name = N'postCallBackNpscScore'
+                AND Object_ID = Object_ID(N'CallBack'))
+  BEGIN
+    ALTER TABLE [dbo].[CallBack]
+    ADD [postCallBackNpscScore] tinyint NULL
   END

@@ -5,6 +5,7 @@ var Promise = require('bluebird');
 var chalk = require('chalk');
 var DataObjectParser = require('dataobject-parser')
 var request = require('request');
+var sql = require('seriate');
 
 var config = require('./../config/config');
 var logger = require('./logger.util');
@@ -333,6 +334,72 @@ function cellsyntSMS(message) {
   });
 }
 
+
+/**
+ * Returns a promise of whether the view called *name* exists or not.
+ *
+ * @param {String} name Name of the view to check existance of
+ * @return {Promise} -> {Boolean}
+ */
+function viewExists(name) {
+  return new Promise(function (resolve, reject) {
+    sql.execute({
+      query: 'SELECT * FROM sys.views WHERE OBJECT_ID = OBJECT_ID(@name)',
+      params: {
+        name: {
+          type: sql.VarChar(255),
+          val: name,
+        },
+      },
+    })
+    .then(function (res) { return resolve(!!res.length); })
+    .catch(reject);
+  });
+}
+
+/**
+ * @param {String} _path Path to check whethet it's absolute or relative
+ * @return {Boolean}
+ */
+function isAbsolutePath(_path) {
+  return path.resolve(_path) === path.normalize(_path).replace(/(.+)([\/|\\])$/, '$1');
+}
+
+/**
+ * @param {{ name: String, query: String, filepath: String, basedir: String }} options
+ */
+function initializeView(options) {
+  return new Promise(function (resolve, reject) {
+    var name = options.name;
+    var query = options.query;
+    var filepath = options.filepath;
+    var basedir = options.basedir;
+
+    if (_.isEmpty(query) && !_.isEmpty(filepath)) {
+      query = isAbsolutePath(createPath)
+        ? fs.readFileSync(filepath, { encoding: 'utf8' })
+        : fs.readdirSync(path.resolve(basedir, filepath), { encoding: 'utf8' });
+    }
+
+    viewExists(name)
+    .then(function (doesExist) {
+      if (doesExist && /CREATE VIEW/i.test(query)) {
+        query = query.replace(/CREATE VIEW/i, 'ALTER VIEW');
+      } else if (!doesExist && /ALTER VIEW/i.test(query)) {
+        query = query.replace(/ALTER VIEW/i, 'CREATE VIEW');
+      } else if (!/CREATE VIEW|ALTER VIEW/i.test(query)) {
+        query = '${doesExist} AS ${query}'
+          .replace('${doesExist}', doesExist ? 'ALTER VIEW ' : 'CREATE VIEW')
+          .replace('${query}', query);
+      }
+
+      return sql.execute({ query: query });
+    })
+    .then(resolve)
+    .catch(reject);
+  });
+}
+
 module.exports = {
   objectify: objectify,
   handleError: handleError,
@@ -349,4 +416,6 @@ module.exports = {
   log: log,
   print: print,
   cellsyntSMS: cellsyntSMS,
+  initializeView: initializeView,
+  viewExists: viewExists,
 };

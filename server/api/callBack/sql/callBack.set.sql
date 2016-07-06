@@ -7,6 +7,7 @@ BEGIN
   
   INSERT INTO [dbo].[CallBack] (
       [ticketId]
+    , [npsId]
     , [userId]
     , [callBackDate]
     , [callBackStatus]
@@ -17,11 +18,13 @@ BEGIN
     , [reasonToDetract2]
     , [callBackFollowUpAction]
     , [callBackComment]
+    , [postCallBackNpscScore]
     , [isClosed]
     , [dateClosed]
   )
   VALUES (
       @ticketId
+    , @npsId
     , @userId
     , @callBackDate
     , CASE
@@ -35,6 +38,7 @@ BEGIN
     , @reasonToDetract2
     , @callBackFollowUpAction
     , @callBackComment
+    , @postCallBackNpscScore
     , @isClosed
     , @dateClosed
   )
@@ -45,6 +49,7 @@ END
 ELSE
   UPDATE [dbo].[CallBack]
   SET   [ticketId] = @ticketId
+      , [npsId] = @npsId
       , [userId] = @userId
       , [callBackDate] = @callBackDate
       , [callBackStatus] = CASE
@@ -58,6 +63,7 @@ ELSE
       , [reasonToDetract2] = @reasonToDetract2
       , [callBackFollowUpAction] = @callBackFollowUpAction
       , [callBackComment] = @callBackComment
+      , [postCallBackNpscScore] = @postCallBackNpscScore
       , [isClosed] = @isClosed
       , [dateClosed] = @dateClosed
       , [dateUpdated] = GETUTCDATE()

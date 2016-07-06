@@ -4,72 +4,72 @@
 
   <form novalidate>
 
-    <div>
-      <label>Ticket nunmber</label>
-      <span class="fill-by-label">{{ ticket.ticketId }}</span>
+    <div class="pane-row">
+      <label>Ticket number</label>
+      <span class="fill-by-label">{{ ticket.ticketId || 'Data missing' }}</span>
     </div>
 
-    <div>
+    <div class="pane-row" ng-show="ticket.customer.orgName">
       <label>Customer name</label>
       <span class="fill-by-label">{{ ticket.customer.orgName }}</span>
     </div>
 
-    <div>
+    <div class="pane-row" ng-show="ticket.customer.orgNr">
       <label>Org. Number</label>
       <span class="fill-by-label">{{ ticket.customer.orgNr }}</span>
     </div>
 
-    <div>
+    <div class="pane-row">
       <label>Mobile number</label>
       <span class="fill-by-label">{{ (ticket.person.tel || ticket.nps.npsTel) | phoneNumber:ticket.country.short }}</span>
     </div>
 
-    <div>
+    <div class="pane-row">
       <label>Call category 1</label>
-      <span class="fill-by-label">{{ ticket.category.categoryName || 'No category chosen' }}</span>
+      <span class="fill-by-label">{{ ticket.category.categoryName || 'Category missing' }}</span>
     </div>
 
-    <div ng-show="ticket.subcategory.subcategoryName">
+    <div class="pane-row" ng-show="ticket.subcategory.subcategoryName">
       <label>Call category 2</label>
       <span class="fill-by-label">{{ ticket.subcategory.subcategoryName }}</span>
     </div>
 
-    <div ng-show="!!ticket.descriptor.descriptorName">
+    <div class="pane-row" ng-show="!!ticket.descriptor.descriptorName">
       <label>Call category 3</label>
       <span class="fill-by-label">{{ ticket.descriptor.descriptorName }}</span>
     </div>
 
-    <div>
+    <div class="pane-row" ng-show="ticket.summary">
       <label class="text-top">Initial summary</label>
       <span class="fill-by-label"><div ng-repeat="line in splitComments(ticket.summary) track by $index">{{ line }}</div></span>
     </div>
 
-    <div>
+    <div class="pane-row">
       <label>Date for SMS send out</label>
       <span class="fill-by-label">{{ ticket.nps.npsDate | date:'yyyy-MM-dd' }}</span>
     </div>
 
-    <div>
+    <div class="pane-row">
       <label>NPS score</label>
       <span class="fill-by-label">{{ isFinite(ticket.nps.npsScore) ? 'No score' : ticket.nps.npsScore }}</span>
     </div>
 
-    <div ng-show="!!ticket.nps.npsComment">
+    <div class="pane-row" ng-show="!!ticket.nps.npsComment">
       <label class="text-top">NPS comment</label>
       <span class="fill-by-label"><div ng-repeat="line in splitComments(ticket.nps.npsComment) track by $index">{{ line }}</div></span>
     </div>
 
-    <div ng-show="!!ticket.nps.npsComment">
+    <div class="pane-row" ng-show="!!ticket.nps.npsFollowUp">
       <label class="text-top">NPS follow up</label>
       <span class="fill-by-label"><div ng-repeat="line in splitComments(ticket.nps.npsFollowUp) track by $index">{{ line }}</div></span>
     </div>
 
-    <div>
+    <div class="pane-row" ng-show="ticket.user.name">
       <label>Agent on ticket</label>
       <span class="fill-by-label">{{ ticket.user.name }}</span>
     </div>
 
-    <div>
+    <div class="pane-row">
       <label>Assigned agent for call back</label>
 
       <span class="fill-by-label">
@@ -100,7 +100,7 @@
 
     </div>
 
-    <div>
+    <div class="pane-row">
       <label>Status</label>
 
       <span class="fill-by-label">
@@ -119,7 +119,7 @@
 
     </div>
 
-    <div>
+    <div class="pane-row">
       <label>Reason to promote 1</label>
 
       <span class="fill-by-label">
@@ -141,7 +141,7 @@
 
     </div>
 
-    <div>
+    <div class="pane-row">
       <label>Reason to promote 2</label>
 
       <span class="fill-by-label">
@@ -162,7 +162,7 @@
       </span>
     </div>
 
-    <div>
+    <div class="pane-row">
       <label>Reason to detract 1</label>
 
       <span class="fill-by-label">
@@ -183,7 +183,7 @@
       </span>
     </div>
 
-    <div>
+    <div class="pane-row">
       <label>Reason to detract 2</label>
 
       <span class="fill-by-label">
@@ -204,7 +204,7 @@
       </span>
     </div>
 
-    <div>
+    <div class="pane-row">
       <label class="text-top">Potential follow up action</label>
 
       <span class="fill-by-label">
@@ -212,7 +212,7 @@
       </span>
     </div>
 
-    <div>
+    <div class="pane-row">
       <label class="text-top">Short call back description</label>
 
       <span class="fill-by-label">
@@ -220,7 +220,7 @@
       </span>
     </div>
 
-    <div>
+    <div class="pane-row">
       <label class="checkbox-label">
         <input type="checkbox" ng-model="ticket.callBack.isClosed" ng-click="manualClose = ticket.callBack.isClosed">
         <i class="offset-left" ></i> Call back is completed

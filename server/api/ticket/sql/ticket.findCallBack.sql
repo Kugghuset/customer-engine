@@ -22,6 +22,7 @@ SELECT
   , [callBackUserId] AS [callBack.user.userId]
   , [callBackUserName] AS [callBack.user.name]
   , [callBackStatus] AS [callBack.callBackStatus]
+  , [callBackPostCallBackNpscScore] AS [callBack.postCallBackNpscScore]
   , [callBackAgentName] AS [callBack.agentName]
   , [callBackReasonToPromote1] AS [callBack.reasonToPromote1]
   , [callBackReasonToPromote2] AS [callBack.reasonToPromote2]

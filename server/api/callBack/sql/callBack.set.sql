@@ -18,6 +18,7 @@ BEGIN
     , [reasonToDetract2]
     , [callBackFollowUpAction]
     , [callBackComment]
+    , [postCallBackNpscScore]
     , [isClosed]
     , [dateClosed]
   )
@@ -37,6 +38,7 @@ BEGIN
     , @reasonToDetract2
     , @callBackFollowUpAction
     , @callBackComment
+    , @postCallBackNpscScore
     , @isClosed
     , @dateClosed
   )
@@ -61,6 +63,7 @@ ELSE
       , [reasonToDetract2] = @reasonToDetract2
       , [callBackFollowUpAction] = @callBackFollowUpAction
       , [callBackComment] = @callBackComment
+      , [postCallBackNpscScore] = @postCallBackNpscScore
       , [isClosed] = @isClosed
       , [dateClosed] = @dateClosed
       , [dateUpdated] = GETUTCDATE()

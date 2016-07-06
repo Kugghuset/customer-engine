@@ -31,6 +31,7 @@ SELECT
   , [Ua].[userId] AS [callBackUserId]
   , [Ua].[name] AS [callBackUserName]
   , [CB].[callBackStatus] AS [callBackStatus]
+  , [CB].[postCallBackNpscScore] AS [callBackPostCallBackNpscScore]
   , [CB].[agentName] AS [callBackAgentName]
   , [CB].[reasonToPromote1] AS [callBackReasonToPromote1]
   , [CB].[reasonToPromote2] AS [callBackReasonToPromote2]
@@ -46,7 +47,7 @@ LEFT JOIN [dbo].[Ticket] AS [T]
 ON [T].[ticketId] = [NPS].[ticketId]
 
 LEFT JOIN [CallBack] AS [CB]
-ON [CB].[ticketId] = [NPS].[ticketId]
+ON [CB].[npsId] = [NPS].[npsId]
 
 LEFT JOIN [dbo].[Person] AS [P]
 ON [P].[personId] = [T].[personId]

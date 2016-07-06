@@ -18,6 +18,7 @@ BEGIN
     , [reasonToDetract2] varchar(255) NULL
     , [callBackFollowUpAction] varchar(MAX) NULL
     , [callBackComment] varchar(MAX) NULL
+    , [postCallBackNpscScore] tinyint NULL
     , [isClosed] bit NULL DEFAULT 0
     , [dateClosed] datetime2 NULL
     , [dateCreated] datetime2 DEFAULT GETUTCDATE() NULL
@@ -72,4 +73,12 @@ ELSE
   BEGIN
     ALTER TABLE [dbo].[CallBack]
     ADD [npsId] bigint NULL
+  END
+
+  IF NOT EXISTS(SELECT * FROM sys.columns
+                WHERE Name = N'postCallBackNpscScore'
+                AND Object_ID = Object_ID(N'CallBack'))
+  BEGIN
+    ALTER TABLE [dbo].[CallBack]
+    ADD [postCallBackNpscScore] tinyint NULL
   END

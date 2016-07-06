@@ -15,5 +15,6 @@ SELECT
   , [reasonToDetract2]
   , [callBackFollowUpAction]
   , [callBackComment]
+  , [postCallBackNpscScore]
   , [isClosed]
 FROM [dbo].[CallBack]

@@ -43,6 +43,16 @@ exports.set = function (id, callBackObj) {
     var query = sql.fromFile('./sql/callBack.set.sql')
       .concat(Ticket.rawSqlFile('ticket.findNpsById.sql'));
 
+    if (_.isNumber(callBackObj.postCallBackNpscScore)) {
+      if (callBackObj.postCallBackNpscScore < 0) {
+        callBackObj.postCallBackNpscScore = 0;
+      } else if (callBackObj.postCallBackNpscScore > 10) {
+        callBackObj.postCallBackNpscScore = 10;
+      }
+    }
+
+    utils.print(callBackObj, 10);
+
     sql.execute({
       query: query,
       params: {
@@ -75,6 +85,10 @@ exports.set = function (id, callBackObj) {
         callBackStatus: {
           type: sql.VARCHAR(255),
           val: callBackObj.callBackStatus
+        },
+        postCallBackNpscScore: {
+          type: sql.TINYINT,
+          val: callBackObj.postCallBackNpscScore
         },
         reasonToPromote1: {
           type: sql.VARCHAR(255),

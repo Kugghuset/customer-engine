@@ -257,6 +257,25 @@ function ($scope, $uibModalInstance, CallBack, Notification, ticket, users, stat
     }
     
   });
+
+  $scope.$watch('ticket.callBack.postCallBackNpscScore', function (num, oldNum) {
+    if (typeof num === 'undefined') {
+      return;
+    }
+    
+    if (typeof num !== 'number') {
+      $scope.ticket.callBack.postCallBackNpscScore = undefined;
+      return;
+    }
+
+    if (num < 0) {
+      $scope.ticket.callBack.postCallBackNpscScore = 0;
+    } else if (num > 10) {
+      $scope.ticket.callBack.postCallBackNpscScore = 10;
+    }
+
+    console.log()
+  });
   
 }]);
 

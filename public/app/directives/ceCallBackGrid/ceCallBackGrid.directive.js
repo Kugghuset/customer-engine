@@ -40,7 +40,7 @@ angular.module('ticketyApp')
       scope.getSort = function () {
         return getStatusOfPage()
           ? ['callBack.dateClosed', 'ticketId']
-          : ['ticketDate', 'ticketId'];
+          : ['nps.npsDate', 'nps.npsScore'];
           
       };
       

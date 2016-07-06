@@ -13,6 +13,7 @@ SELECT
   , [callCagetory3] AS [descriptor.descriptorName]
   , [ticketSummary] AS [summary]
   , [npsId] AS [nps.npsId]
+  , [tel] AS [nps.npsTel]
   , [npsScore] AS [nps.npsScore]
   , [npsDate] AS [nps.npsDate]
   , [npsComment] AS [nps.npsComment]
@@ -32,11 +33,15 @@ SELECT
   , [callBackIsClosed] AS [callBack.isClosed]
 FROM [dbo].[vi_CallBackView]
 WHERE 1=1
-  AND [ticketId] IS NOT NULL
+  -- AND [ticketId] IS NOT NULL
   {filter}
+
+ORDER BY [npsDate] DESC
+  
+OFFSET @offset ROWS FETCH NEXT @top ROWS ONLY
 
 SELECT COUNT(*)
 FROM [dbo].[vi_CallBackView]
 WHERE 1=1
-  AND [ticketId] IS NOT NULL
+  -- AND [ticketId] IS NOT NULL
   {filter}

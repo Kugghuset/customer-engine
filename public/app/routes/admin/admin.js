@@ -46,8 +46,6 @@ angular.module('ticketyApp')
 
   $scope.updateFilters = function (options) {
 
-
-
     var opts = CallBack.setOptions({
       userId: _.get(options, 'user.userId'),
       groupingCountry: _.get(options, 'country.shortcode'),
@@ -64,26 +62,25 @@ angular.module('ticketyApp')
   }
 
   $scope.matched = function (item, itemName, options) {
+    if (!options) { options =  {}; }
+    if (_.isUndefined(itemName)) { itemName = ''; }
 
-        if (!options) { options =  {}; }
-        if (_.isUndefined(itemName)) { itemName = ''; }
+    if (_.isString(item)) { return item; } // Early
 
-        if (_.isString(item)) { return item; } // Early
-
-        return _.chain(item)
-          .filter(function (v, key) { return _.isBoolean(v) ? false : (key != itemName + 'Id') || !!~_.indexOf(options.skip, key); })
-          .map(function (value) { return value; })
-          .filter() // Remove empty posts
-          .value()
-          .join(', ');
-      }
+    return _.chain(item)
+      .filter(function (v, key) { return _.isBoolean(v) ? false : (key != itemName + 'Id') || !!~_.indexOf(options.skip, key); })
+      .map(function (value) { return value; })
+      .filter() // Remove empty posts
+      .value()
+      .join(', ');
+  }
 
   $scope.countries = [
     { name: 'Sweden', shortcode: 'SE' },
     { name: 'Denmark', shortcode: 'DK' },
     { name: 'Norway', shortcode: 'NO' },
     { name: 'Finland', shortcode: 'FI' },
-  ]
+  ];
 
   $scope.$watch(function () {
     return $state.current;

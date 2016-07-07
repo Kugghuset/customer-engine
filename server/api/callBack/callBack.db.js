@@ -41,7 +41,7 @@ exports.set = function (id, callBackObj) {
   return new Promise(function (resolve, reject) {
 
     var query = sql.fromFile('./sql/callBack.set.sql')
-      .concat(Ticket.rawSqlFile('ticket.findNpsById.sql'));
+      .concat(Ticket.rawSqlFile('ticket.findCallBackByNpsId.sql'));
 
     if (_.isNumber(callBackObj.postCallBackNpscScore)) {
       if (callBackObj.postCallBackNpscScore < 0) {

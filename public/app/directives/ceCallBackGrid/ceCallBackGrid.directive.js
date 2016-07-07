@@ -98,8 +98,6 @@ angular.module('ticketyApp')
           userId: _.get(ticket, 'callBack.user.userId'),
         });
         
-
-        
         // Save to DB
         CallBack.set(_callBackId, _callBack)
         .then(function (data) {

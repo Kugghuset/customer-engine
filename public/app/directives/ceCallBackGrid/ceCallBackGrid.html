@@ -17,9 +17,21 @@
       <td colspan="1">{{ ticket.ticketId || '-' }}</td>
       <td colspan="3" style="min-width: 130px;">{{ ticket.nps.npsDate | date:'yyyy-MM-dd' }}</td>
       <td colspan="4">{{ ticket.user.name || '-' }}</td>
-      <td colspan="4">{{ ticket.customer.orgName || 'Phone number: +' + ticket.person.tel }}</td>
+      <td colspan="4">{{ ticket.customer.orgName || 'Mobile number: +' + ticket.person.tel }}</td>
       <td colspan="1">{{ isFinite(ticket.nps.npsScore) ? 'No score' : ticket.nps.npsScore }}</td>
-      <td colspan="4"><i ng-show="ticket.callBack.user.userId" class="glyphicon glyphicon-user"></i> {{ ticket.callBack.agentName || ticket.callBack.user.name || ticket.callBack.user.email || '-' }}</span></td>
+      <td colspan="4" ng-click="$event.stopPropagation()">
+        <!--<i ng-show="ticket.callBack.user.userId" class="glyphicon glyphicon-user"></i> {{ ticket.callBack.agentName || ticket.callBack.user.name || ticket.callBack.user.email || '-' }}</span>-->
+        <input
+          style="width: calc(100% - 45px);"
+          type="text"
+          ng-model="ticket.callBack._agentName"
+          uib-typeahead="user as (user.name || user.email) for user in users | filter:$viewValue | limitTo:12"
+          typeahead-on-select="setUser(ticket, $item)"
+          title="Search the agents."
+          ng-change="setCallBack(ticket, ticket.callBack.agentName)"
+          placeholder="Assign an agent">
+          <button ng-click="saveCallBack(ticket)" class="pane-button-inline">OK</button>
+      </td>
       <td colspan="2">{{ ticket.callBack.callBackStatus || 'Not called' }}</td>
     </tr>
   </tbody>

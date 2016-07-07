@@ -51,8 +51,6 @@ exports.set = function (id, callBackObj) {
       }
     }
 
-    utils.print(callBackObj, 10);
-
     sql.execute({
       query: query,
       params: {

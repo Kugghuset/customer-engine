@@ -157,6 +157,14 @@
   font-size: $font-size-xl;
 }
 
+.pane-button-inline {
+  @extend .pane-button;
+  display: inline-block;
+  min-width: auto;
+  // Super ugly hack
+  padding-top: 9px;
+}
+
 .pane-table {
   width: 100%;
   font-size: $font-size-m;

@@ -55,7 +55,7 @@ function ($uibModal, $timeout, Auth, CallBack, Notification) {
         modalInstance.result.then(function (_ticket) {
           $timeout(function () {
             ticket = ghettoMerge(ticket, _ticket, '$$hashKey')
-            Notification.success('Ticket number :id saved.'.replace(':id', ticket.ticketId))
+            Notification.success('Call back saved.');
             scope.modalIsOpen = false;
           });
         })
@@ -262,7 +262,7 @@ function ($scope, $uibModalInstance, CallBack, Notification, ticket, users, stat
     if (typeof num === 'undefined') {
       return;
     }
-    
+
     if (typeof num !== 'number') {
       $scope.ticket.callBack.postCallBackNpscScore = undefined;
       return;

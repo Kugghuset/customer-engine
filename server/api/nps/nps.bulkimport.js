@@ -207,11 +207,11 @@ function singleImport(filename) {
     }
 
     // Get the collection
-    var _collection = _.chain(_file.split(/\r\n/))
+    var _collection = _.chain(_file.split(config.nps.rowDelimiter))
       // Slice out the header row
       .thru(function (rows) { return rows.slice(1); })
       // Split all rows by tabs
-      .map(function (row) { return row.split('\t'); })
+      .map(function (row) { return row.split(config.nps.columnDelimiter); })
       .filter(_.some)
       .value();
 
@@ -298,7 +298,7 @@ function bulkImport(basePath, files, readFiles) {
 
     // Assumme the file simply shouldn't be imported, continue recursively
     return bulkImport(basePath, files, readFiles.concat([currentFile]));
-  })
+  });
 }
 
 module.exports = {

@@ -69,9 +69,9 @@
       <span class="fill-by-label"><div ng-repeat="line in splitComments(ticket.nps.npsComment) track by $index">{{ line }}</div></span>
     </div>
 
-    <div class="pane-row" ng-show="!!ticket.nps.npsFollowUp">
+    <div class="pane-row" ng-show="!!ticket.nps.followUpComment">
       <label class="text-top">NPS follow up</label>
-      <span class="fill-by-label"><div ng-repeat="line in splitComments(ticket.nps.npsFollowUp) track by $index">{{ line }}</div></span>
+      <span class="fill-by-label"><div ng-repeat="line in splitComments(ticket.nps.followUpComment) track by $index">{{ line }}</div></span>
     </div>
 
     <div class="pane-row" ng-show="ticket.user.name">

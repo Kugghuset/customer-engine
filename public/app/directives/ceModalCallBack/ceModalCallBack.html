@@ -54,16 +54,6 @@
       <span class="fill-by-label">{{ isFinite(ticket.nps.npsScore) ? 'No score' : ticket.nps.npsScore }}</span>
     </div>
 
-    <div class="pane-row">
-      <label>Post call NPS score</label>
-      <span class="fill-by-label">
-        <input type="number"
-          ng-model="ticket.callBack.postCallBackNpscScore"
-          title="Post call back NPS score"
-          placeholder="Post call back NPS score">
-      </span>
-    </div>
-
     <div class="pane-row" ng-show="!!ticket.nps.npsComment">
       <label class="text-top">NPS comment</label>
       <span class="fill-by-label"><div ng-repeat="line in splitComments(ticket.nps.npsComment) track by $index">{{ line }}</div></span>
@@ -227,6 +217,16 @@
 
       <span class="fill-by-label">
         <textarea ng-model="ticket.callBack.callBackComment" class="animated-textarea" msd-elastic="\n" cols="30" rows="3" placeholder="Potential follow up action."></textarea>
+      </span>
+    </div>
+
+    <div class="pane-row">
+      <label>Optional post call back NPS score – if customer changes his/her mind</label>
+      <span class="fill-by-label">
+        <input type="number"
+          ng-model="ticket.callBack.postCallBackNpscScore"
+          title="Post call back NPS score"
+          placeholder="Post call back NPS score">
       </span>
     </div>
 

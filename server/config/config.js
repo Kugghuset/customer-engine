@@ -77,7 +77,9 @@ module.exports = {
   nps: {
     sendSms: getBool([process.env.NPS_SEND_SMS, userConfig.nps.sendSms, false]),
     serviceId: process.env.NPS_SERVICE_ID || userConfig.nps.serviceId || '',
-    password: process.env.NPS_PASSWORD || userConfig.nps.password ||''
+    password: process.env.NPS_PASSWORD || userConfig.nps.password ||'',
+    rowDelimiter: process.env.NPS_ROW_DELIMITER || '|\r\n|',
+    columnDelimiter: process.env.NPS_COLUMN_DELIMITER || '\t',
   },
   secrets: {
     session: process.env.APP_SECRET || userConfig.appSecret || 'sssshhharedSecret'

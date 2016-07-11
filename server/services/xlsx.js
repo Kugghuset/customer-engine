@@ -71,7 +71,9 @@ function readXlsFile(_path, options) {
   var sheetName = _workbook.SheetNames[0];
 
   // Convert the .xls file to string
-  var _output = XLSX.utils.sheet_to_csv(_workbook.Sheets[sheetName], { FS: _options.delimiter, RS: '\r\n' });
+  var _output = XLSX.utils.sheet_to_csv(_workbook.Sheets[sheetName], { FS: _options.delimiter, RS: config.nps.rowDelimiter });
+
+  util.print(_output.split(config.nps.rowDelimiter).map(function (row) { return row.split('\t'); }), 10);
 
   // Create the output name
   var _outputName = path.resolve(_outputFolder, _options.name + _options.ext);

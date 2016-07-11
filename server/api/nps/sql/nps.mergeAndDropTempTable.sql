@@ -112,24 +112,30 @@ FROM (
  * Insert the callback answers with a score of 7 or 8
  ****************************/
 INSERT INTO [dbo].[CallBack] (
-    [ticketId]
+    [npsId]
   , [callBackStatus]
   , [isClosed]
   , [dateClosed]
 )
 SELECT
-    [ticketId]
+    [npsId]
   , 'No call back needed'
   , 1
   , GETUTCDATE()
 FROM (
-  SELECT [ticketId]
-  FROM [dbo].[{tablename}]
-  WHERE [npsScore] IN (7, 8)
-    AND [ticketId] IS NOT NULL
-    AND [ticketId] NOT IN (
-      SELECT [ticketId]
+  SELECT [_NPS].[npsId] AS [npsId]
+  FROM [dbo].[NPSSurveyResult] AS [_temp_]
+
+  LEFT JOIN [dbo].[NPSSurveyResult] AS [_NPS]
+  ON [_NPS].[npsTel] = [_temp_].[npsTel]
+    AND [_NPS].[npsDate] = [_temp_].[npsDate]
+
+  WHERE 1=1
+    AND [_temp_].[npsScore] IN (7, 8)
+    AND [_NPS].[npsId] NOT IN (
+      SELECT [npsId]
       FROM [dbo].[CallBack]
+      WHERE [npsId] IS NOT NULL
     )
 ) AS [_data_]
 

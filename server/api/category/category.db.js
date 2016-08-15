@@ -25,6 +25,10 @@ function popInitialize() {
   })
   .then(function (result) {
     util.log('Category table all set up.');
+
+    return sql.execute({
+      query: sql.fromFile('./sql/pop2.category.insert.sql'),
+    });
   })
   .catch(function (err) {
     util.log('Couldn\'t set up Category table.');

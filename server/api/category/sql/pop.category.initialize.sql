@@ -5,9 +5,9 @@ Creates the Category table and populates it with data
 IF (OBJECT_ID('Category', 'U') IS NULL)
 BEGIN
   CREATE TABLE [dbo].[Category] (
-    [categoryId] bigint IDENTITY(1, 1) PRIMARY  KEY NOT NULL,
-    [categoryName] varchar(256) NULL,
-    [disabled] bit null
+      [categoryId] bigint IDENTITY(1, 1) PRIMARY  KEY NOT NULL
+    , [categoryName] varchar(256) NULL
+    , [disabled] bit null
   )
 END
 
@@ -21,22 +21,4 @@ BEGIN
   DROP TABLE [dbo].[Category]
 END
 
-IF (OBJECT_ID('Category', 'U') IS NULL)
-BEGIN
-  CREATE TABLE [dbo].[Category] (
-    [categoryId] bigint IDENTITY(1, 1) PRIMARY  KEY NOT NULL,
-    [categoryName] varchar(256) NULL,
-    [disabled] bit null
-  )
-  
-  INSERT INTO [dbo].[Category] (
-    [categoryName]
-  )
-  VALUES
-    ('E-handel'),
-    ('Faktura'),
-    ('Inlösen'),
-    ('Information'),
-    ('Beställning'),
-    ('Terminal')
-END
+

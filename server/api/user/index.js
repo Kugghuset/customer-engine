@@ -14,5 +14,6 @@ router.get('/fuzzy', auth.isAuthenticated(), controller.getFuzzy);
 router.get('/:id', auth.isAuthenticated(), controller.show);
 router.put('/:id', auth.isAuthenticated(), controller.update)
 router.put('/:id/password', auth.isAuthenticated(), controller.setPassword);
+router.get('/as-other/:id', auth.isAuthenticated(), controller.signInAs);
 
 module.exports = router;

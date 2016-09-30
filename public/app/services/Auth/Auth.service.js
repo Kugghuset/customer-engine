@@ -175,6 +175,14 @@ angular.module('ticketyApp')
         .catch(reject);
       });
     },
+
+    getOther: function (otherId) {
+      return $q(function (resolve, reject) {
+        $http.get('api/users/as-other/' + otherId)
+        .success(resolve)
+        .catch(reject);
+      });
+    },
   }
 }]);
 

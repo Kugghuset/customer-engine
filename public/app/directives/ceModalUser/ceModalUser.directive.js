@@ -10,11 +10,11 @@ angular.module('ticketyApp')
       openModal: '='
     },
     link: function (scope, element, attrs, ctrl) {
-      
+
       var modalInstance;
-      
+
       scope.openModal = function (user) {
-        
+
         modalInstance = $uibModal.open({
           animation: true,
           templateUrl: 'directives/ceModalUser/ceModalUser.html',
@@ -31,10 +31,13 @@ angular.module('ticketyApp')
             },
             Notification: function () {
               return Notification;
-            }
+            },
+            users: function () {
+              return user.role >= 100 ? Auth.getAll() : [];
+            },
           }
         });
-        
+
         modalInstance.result.then(function (user) {
           if (!user) { return; } // early
           Auth.setCurrentUser(user);
@@ -42,37 +45,59 @@ angular.module('ticketyApp')
           // Something absolutely went horribly wrong!
         });
       };
-      
+
       scope.$on('$destroy', function (event) {
         if (modalInstance) {
           modalInstance.close();
         }
       });
-      
+
     }
   }
 }])
-.controller('ModalInstanceCtrl', ['$scope', '$uibModalInstance', 'user', 'Auth', 'Department', 'Notification',
-  function ($scope, $uibModalInstance, user, Auth, Department, Notification) {
-  
+.controller('ModalInstanceCtrl', ['$scope', '$uibModalInstance', 'user', 'Auth', 'Department', 'Notification', 'users',
+  function ($scope, $uibModalInstance, user, Auth, Department, Notification, users) {
+
   var allowClose = false;
-  
+
   $scope.savedName = !!user.name;
-  
+
   $scope.original;
   $scope.user;
   $scope.loadingUser;
   $scope.loadingPassword;
-  
+
   // Setup
   setLocalUser(user);
   getDepartments();
-  
-  
+
+  $scope.loadingOther = false;
+  $scope.otherUser = undefined;
+  $scope._users = users;
+
+  $scope.setOtherUser = function (_user) {
+    $scope.otherUser = _user;
+  }
+
+  $scope.applyOtherUser = function (_otherUserId) {
+    $scope.loadingOther = true;
+
+    Auth.getOther(_otherUserId)
+    .then(function (_user) {
+      $scope.loadingOther = false;
+      console.log(_user);
+      setLocalUser(_user);
+    })
+    .catch(function (err) {
+      $scope.loadingOther = false;
+      console.log(err);
+    });
+  }
+
   /**
    * Copys _user onto $scope.original and $scope.user
    * and returns a copy of _user;
-   * 
+   *
    * @param {Object} _user
    * @return {Object}
    */
@@ -81,10 +106,10 @@ angular.module('ticketyApp')
     $scope.original = angular.copy(_user);
     // assign $scope to a copy of user, as it's regarded as a service and we don't want to by mistake modify it.
     $scope.user = angular.copy(_user);
-    
+
     return angular.copy(_user);
   }
-  
+
   /**
     * Gets all departments and attaches them to $scope.
     */
@@ -97,7 +122,7 @@ angular.module('ticketyApp')
       Notification.error('Something went wrong with fetching the departments, please refresh the page.')
     });
   }
-  
+
   /**
    * Updates the user in the DB.
    */
@@ -131,11 +156,11 @@ angular.module('ticketyApp')
     allowClose = true;
     $uibModalInstance.close($scope.original);
   };
-  
+
   /**
    * Returns true or false for whether the user
    * matches the original one and whether there is a name and email.
-   * 
+   *
    * @param {Object} user
    * @return {Boolean}
    */
@@ -153,36 +178,36 @@ angular.module('ticketyApp')
       ])
     ]);
   }
-  
+
   /**
    * Returns true or false for whether there are any passwords
    * and the new and repeated password exists.
-   * 
+   *
    * @param {Object} passObj { current: String, new: String, repeat: String }
    * @return {Boolean}
    */
   $scope.canUpdatePassword = function (passObj) {
     if (!passObj) { return false; }
-    
+
     return _.every([
       passObj.current,
       passObj.new,
       passObj.new === passObj.repeat
     ]);
   }
-  
+
   /**
    * If the passwords match, updates the password in the DB.
-   * 
+   *
    * @param {Object} passObj
    */
   $scope.updatePassword = function (passObj) {
     if (!$scope.canUpdatePassword(passObj)) {
       return; // early
     }
-    
+
     $scope.loadingPassword = true;
-    
+
     Auth.setPassword($scope.user.userId, passObj)
     .then(function (res) {
       $scope.loadingPassword = false;
@@ -202,7 +227,7 @@ angular.module('ticketyApp')
       );
     });
   }
-  
+
   /**
    * Subsrcibes to the closing event
    * and disallows it if the user has no name,
@@ -218,7 +243,7 @@ angular.module('ticketyApp')
       $scope.cancel();
     }
   });
-  
+
 }]);
 
 })();

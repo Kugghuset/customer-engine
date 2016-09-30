@@ -197,3 +197,28 @@ exports.getFuzzy = function (req, res) {
     utils.handleError(res, err);
   });
 }
+
+/**
+ * ROUTE: GET '/api/users/as-other/:id'
+ */
+exports.signInAs = function (req, res) {
+  var _currentUser = req.user;
+  var _otherUserId = req.params.id;
+
+  if (!(_currentUser.role >= 100) || !_otherUserId) {
+    return res.status(200).json(_currentUser);
+  }
+
+  User.findById(_otherUserId)
+  .then(function (_otherUser) {
+
+    req.user = _otherUser;
+
+    auth.setTokenCookie(req, res, _currentUser);
+
+    res.status(200).json(_.omit(_otherUser, ['password']));
+  })
+  .catch(function (err) {
+    utils.handleError(res, err);
+  });
+}

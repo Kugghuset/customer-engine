@@ -6,9 +6,9 @@
     <p>Hi there, agent!</p>
     <p>As it's the first time logging in, we'd love to get to know you.</p>
     <p>What's your name, and what department do you belong to?</p>
-    
+
     <br>
-    
+
   </div>
 
   <form novalidate>
@@ -43,7 +43,7 @@
     </div>
 
     <br>
-    
+
     <div ng-show="user.role === 10">
       <label for="">Role</label>
       <span><i class="glyphicon glyphicon-star-empty"></i> Admin</span>
@@ -54,61 +54,96 @@
     </div>
 
     <div class="float-container">
-      
+
       <button ng-click="ok()" ng-disabled="!canUpdateUser(user)" class="pane-button glyph-container green pull-right offset-right">
         Save
         <span ng-show="loadingUser" class="welcome-spinner"><i class="glyphicon glyphicon-refresh"></i></span>
       </button>
-      
+
     </div>
 
   </form>
-  
+
   <section ng-show="savedName">
-      
+
     <hr>
-    
+
     <h2>Change password</h2>
-    
+
     <form novalidate>
-      
+
       <div class="">
         <label>Current password</label>
         <input type="password" ng-model="password.current" placeholder="Current password">
       </div>
-    
+
       <div class="">
         <label>New password</label>
         <input type="password" ng-model="password.new" placeholder="New password">
       </div>
-      
+
       <div class="">
         <label>Repeat password</label>
         <input type="password" ng-model="password.repeat" placeholder="Repeat new password">
       </div>
-    
+
       <div class="float-container">
-        
+
         <button ng-click="updatePassword(password)" ng-disabled="!canUpdatePassword(password)" class="pane-button glyph-container green pull-right offset-right">
           Change password
           <span ng-show="loadingPassword" class="welcome-spinner"><i class="glyphicon glyphicon-refresh"></i></span>
         </button>
-        
+
         <!--<button ng-click="cancel()" class="pane-button red pull-right offset-right">Cancel</button>-->
-        
+
       </div>
-      
+
     </form>
-  
-    <hr>
-  
-    <div class="float-container">
-      
-      <button ng-click="cancel()" class="pane-button red pull-right offset-right">Close</button>
-      
-    </div>
-    
+
   </section>
-  
+
+  <hr ng-if="user.role >= 100">
+
+  <form novalidate ng-if="user.role >= 100">
+
+    <h1>Sign in as other user</h1>
+
+    <div class="">
+
+      <label for="">Other user</label>
+
+      <span uib-dropdown uib-keyboard-nav>
+        <button id="simple-btn-keyboard-nav" type="button" class="pane-button" uib-dropdown-toggle>
+          {{ otherUser.name || 'Choose other user' }} <span class="caret"></span>
+      </button>
+      <ul class="uib-dropdown-menu pane-dropdown" role="menu" aria-labelledby="simple-btn-keyboard-nav">
+        <li role="menuitem"><a href="" ng-click="otherUser.department = undefind">Choose other user</a></li>
+        <li class="divider"></li>
+        <li role="menuitem" ng-repeat="_user in _users">
+          <a href="" ng-click="setOtherUser(_user)">{{ _user.name }}</a>
+        </li>
+      </ul>
+      </span>
+
+    </div>
+
+    <div class="float-container">
+      <button ng-click="applyOtherUser(otherUser.userId)" ng-disabled="!otherUser.userId" ng-class="{ 'is-loading': loadingOther }" class="pane-button glyph-container green pull-right offset-right">
+        Sign in
+        <span ng-show="loadingOther" class="welcome-spinner"><i class="glyphicon glyphicon-refresh"></i></span>
+      </button>
+    </div>
+
+
+  </form>
+
+  <hr>
+
+  <div class="float-container">
+
+    <button ng-click="cancel()" class="pane-button red pull-right offset-right">Close</button>
+
+  </div>
+
 
 </div>

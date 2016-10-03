@@ -75,6 +75,31 @@ angular.module('ticketyApp')
   $scope.otherUser = undefined;
   $scope._users = users;
 
+  $scope.loadingActualUser = false;
+
+  $scope.hasLongToken = function () {
+    return Auth.getIsLongToken();
+  }
+
+  $scope.getActualUser = function () {
+    $scope.loadingActualUser = true;
+    Auth.getActualUser()
+    .then(function (_user) {
+      $scope.loadingActualUser = false;
+      Notification.success('Logged in as actual user.');
+
+      setLocalUser(_user);
+      Auth.setCurrentUser(_user);
+    })
+    .catch(function (err) {
+      $scope.loadingActualUser = false;
+
+      Notification.error('Failed to log in as actual user.');
+
+      console.log(err);
+    });
+  }
+
   $scope.setOtherUser = function (_user) {
     $scope.otherUser = _user;
   }
@@ -85,11 +110,16 @@ angular.module('ticketyApp')
     Auth.getOther(_otherUserId)
     .then(function (_user) {
       $scope.loadingOther = false;
-      console.log(_user);
+      Notification.success('Logged in as other user.');
+
       setLocalUser(_user);
+      Auth.setCurrentUser(_user);
     })
     .catch(function (err) {
       $scope.loadingOther = false;
+
+      Notification.error('Failed to log in as other user.');
+
       console.log(err);
     });
   }

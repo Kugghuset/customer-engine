@@ -102,6 +102,19 @@
 
   </section>
 
+  <hr ng-if="hasLongToken()">
+
+  <div ng-if="hasLongToken()" class="float-container">
+
+    <h1>Sign in as actual user</h1>
+
+    <button ng-click="getActualUser()" ng-class="{ 'is-loading': loadingActualUser }" class="pane-button glyph-container green pull-right offset-right">
+      Load actual user
+      <span ng-show="loadingActualUser" class="welcome-spinner"><i class="glyphicon glyphicon-refresh"></i></span>
+    </button>
+
+  </div>
+
   <hr ng-if="user.role >= 100">
 
   <form novalidate ng-if="user.role >= 100">
@@ -133,7 +146,6 @@
         <span ng-show="loadingOther" class="welcome-spinner"><i class="glyphicon glyphicon-refresh"></i></span>
       </button>
     </div>
-
 
   </form>
 

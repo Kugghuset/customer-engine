@@ -222,3 +222,30 @@ exports.signInAs = function (req, res) {
     utils.handleError(res, err);
   });
 }
+
+/**
+ * ROUTE: GET '/api/users/as-actual'
+ */
+exports.signInAsActual = function (req, res) {
+  var _decoded = auth.decodeToken(req);
+
+  // Don't do anything if there's no decoded value or there's no _actualUserId_
+  if (!(_decoded && _decoded.actualUserId)) {
+    return res.status(200).json(_.omit(req.user, ['password']));
+  }
+
+  var actualUserId = _decoded.actualUserId;
+
+  User.findById(actualUserId)
+  .then(function (user) {
+
+    req.user = user;
+
+    auth.setTokenCookie(req, res);
+
+    res.status(200).json(_.omit(user, ['password']));
+  })
+  .catch(function (err) {
+    utils.handleError(res, err);
+  });
+}

@@ -67,6 +67,10 @@ angular.module('ticketyApp')
       return !!$cookies.get('token')
     },
 
+    getIsLongToken: function () {
+      return !!$cookies.get('token') && $cookies.get('token').length >= 172;
+    },
+
     /**
      * Gets the local user.
      *
@@ -172,13 +176,21 @@ angular.module('ticketyApp')
 
         $http.get('api/users/fuzzy?fuzz=' + _fuzzy)
         .success(resolve)
-        .catch(reject);
+        .error(reject);
       });
     },
 
     getOther: function (otherId) {
       return $q(function (resolve, reject) {
         $http.get('api/users/as-other/' + otherId)
+        .success(resolve)
+        .catch(reject);
+      });
+    },
+
+    getActualUser: function () {
+      return $q(function (resolve, reject) {
+        $http.get('api/users/as-actual')
         .success(resolve)
         .catch(reject);
       });

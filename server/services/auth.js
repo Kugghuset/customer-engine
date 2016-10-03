@@ -64,10 +64,15 @@ exports.bearsToken = function (req, res, next) {
  * Decodes the token.
  *
  * @param {Object} req - express req object
- * @return {String} token
+ * @return {{ userId: Number, actualUserId: Number }} token
  */
 exports.decodeToken = function (req) {
   var token = (req && req.headers) ? req.headers.authorization : req;
+
+  if (typeof token === 'string') {
+    return jwt.decode(token.replace(/^Bearer( ?)/i, ''), config.secrets.session);
+  }
+
   return jwt.decode(token, config.secrets.session);
 }
 

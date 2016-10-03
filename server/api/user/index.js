@@ -11,6 +11,7 @@ router.put('/', controller.login);
 router.get('/', controller.get)
 router.get('/me', auth.isAuthenticated(), controller.me);
 router.get('/fuzzy', auth.isAuthenticated(), controller.getFuzzy);
+router.get('/as-actual', auth.isAuthenticated(), controller.signInAsActual);
 router.get('/:id', auth.isAuthenticated(), controller.show);
 router.put('/:id', auth.isAuthenticated(), controller.update)
 router.put('/:id/password', auth.isAuthenticated(), controller.setPassword);

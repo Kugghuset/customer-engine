@@ -295,7 +295,27 @@ angular.module('ticketyApp')
         .error(reject);
 
       });
-    }
+    },
+
+    /**
+     * @param {Number} userId
+     * @param {{ top: Number, page: Number, order: String }} [options]
+     * @return {Promise<{ tickets: {}[], statusInfo: {} }>}
+     */
+    getDashboard: function (userId, options) {
+      return $q(function (resolve, reject) {
+        // Create the URL
+        var _url = [
+          ['/api/tickets/dashboard', userId].join('/'),
+          _.map(options, function (val, key) { return [encodeURIComponent(key), encodeURIComponent(val)].join('=') }).join('&'),
+        ].join('?');
+
+        $http.get(_url)
+        .success(resolve)
+        .error(reject);
+
+      });
+    },
 
   }
 

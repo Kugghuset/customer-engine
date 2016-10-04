@@ -7,6 +7,11 @@ var moment = require('moment');
 
 var utils = require('../../utils/utils');
 
+/**
+ * TODO:
+ * - Create custom db call for dashboard
+ */
+
 function initialize() {
   return sql.execute({
     query: sql.fromFile('./sql/ticket.initialize.sql')
@@ -54,6 +59,11 @@ function ensureHasProps(ticket, user) {
  */
 function findBy(paramName, other, top, offset, multiple) {
   if (!other) { other = ''; }
+
+  /**
+   * TODO:
+   * - Speed this up tremendously
+   */
 
   var query = sql.fromFile('./sql/ticket.findBy.sql')
     .replace(utils.literalRegExp('{ where_clause }', 'gi'), '[{paramName}] = @{paramName}')
@@ -410,6 +420,10 @@ exports.paginate = function (userId, top, page) {
 
     var offset = (page - 1) * top;
 
+    console.log('\n\n\n')
+    console.log(findBy('userId', undefined, top, offset))
+    console.log('\n\n\n')
+
     sql.execute({
       query: findBy('userId', undefined, top, offset),
       params: {
@@ -614,6 +628,53 @@ exports.ticketParams = ticketParams;
  * @return {Object} (Ticket)
  */
 exports.ensureHasProps = ensureHasProps;
+
+/**
+ * @param {Number} userId
+ * @param {{ page: Number, top: Number, order: String }} options
+ * @return {Promise<{}[]>}
+ */
+exports.findDashboard = function (userId, options) {
+  /** @type {{ page: Number, top: Number, userId: Number, order: String }} */
+  var _options = _.assign({}, { page: 1, top: 20, order: 'DESC' }, options);
+
+  var _page = _options.page < 1 ? 1 : _options.page;
+  var _top = _options.top >= 1 ? _options.top : 20;
+  var _offset = (_page - 1) * _top;
+
+  var _sortOrder = /^(asc|desc)$/i.test(_options.order) ? _options.order : 'DESC';
+
+  var _queryParams = {
+    offset: {
+      type: sql.BIGINT,
+      val: _offset,
+    },
+    top: {
+      type: sql.BIGINT,
+      val: _top,
+    },
+    userId: {
+      type: sql.BIGINT,
+      val: userId,
+    },
+  };
+
+  return sql.execute({
+    query: sql.fromFile('./sql/ticket.findDashboard.sql')
+      .replace(/\{\{(\s*)sort_order(\s*)\}\}/ig, _sortOrder),
+    params: _queryParams,
+    multiple: true,
+  })
+  .then(function (data) {
+    return Promise.resolve({
+      tickets: utils.objectify(data[0]),
+      statusInfo: utils.objectify(data[1]),
+      totalCount: data[2][0].totalCount,
+    });
+  })
+  .catch(Promise.reject)
+
+}
 
 // Initialize the table
 initialize();

@@ -51,13 +51,19 @@ angular.module('ticketyApp')
       };
     }
 
-    $q.all([
-      Ticket.getByUserId(userId, 20, pageNum),
-      Ticket.getStatusTickets(userId)
-    ])
+    Ticket.getDashboard(userId, { top: 20, page: pageNum, order: 'desc' })
     .then(function (res) {
-      $scope.tickets = res[0];
-      $scope.statusTickets = res[1];
+      $scope.tickets = res.tickets;
+
+      // Get the status info
+      $scope.statusInfo = {
+        statuses: _.reduce(
+          res.statusInfo,
+          function (obj, current, i) { return _.assign({}, obj, _.set({}, current.status, current.statusCount)); },
+          {}
+        ),
+        totalCount: res.totalCount,
+      }
 
       $scope.isLoading = false;
 
@@ -77,6 +83,12 @@ angular.module('ticketyApp')
     $scope.user = Auth.getCurrentUser();
 
     if (userId && oldUserId !== userId) {
+      $scope.tickets = [];
+      $scope.statusInfo = {
+        statuses: {},
+        totalCount: 0,
+      };
+
       getTickets(userId);
     }
   });

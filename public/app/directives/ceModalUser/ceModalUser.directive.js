@@ -2,7 +2,7 @@
 'use strict'
 
 angular.module('ticketyApp')
-.directive('ceModalUser', ['$uibModal', 'Auth', 'Department', 'Notification', function ($uibModal, Auth, Department, Notification) {
+.directive('ceModalUser', ['$uibModal', '$q', 'Auth', 'Department', 'Notification', function ($uibModal, $q, Auth, Department, Notification) {
   return {
     template: '<div></div>',
     restrict : 'EA',
@@ -20,6 +20,9 @@ angular.module('ticketyApp')
           templateUrl: 'directives/ceModalUser/ceModalUser.html',
           controller: 'ModalInstanceCtrl',
           resolve: {
+            $q: function () {
+              return $q;
+            },
             user: function () {
               return user;
             },
@@ -55,8 +58,8 @@ angular.module('ticketyApp')
     }
   }
 }])
-.controller('ModalInstanceCtrl', ['$scope', '$uibModalInstance', 'user', 'Auth', 'Department', 'Notification', 'users',
-  function ($scope, $uibModalInstance, user, Auth, Department, Notification, users) {
+.controller('ModalInstanceCtrl', ['$scope', '$uibModalInstance', '$q', 'user', 'Auth', 'Department', 'Notification', 'users',
+  function ($scope, $uibModalInstance, $q, user, Auth, Department, Notification, users) {
 
   var allowClose = false;
 
@@ -83,13 +86,19 @@ angular.module('ticketyApp')
 
   $scope.getActualUser = function () {
     $scope.loadingActualUser = true;
-    Auth.getActualUser()
-    .then(function (_user) {
+    $q.all([
+      Auth.getActualUser(),
+      Auth.getAll(),
+    ])
+    .then(function (res) {
+      var _user = res[0];
       $scope.loadingActualUser = false;
       Notification.success('Logged in as actual user.');
 
       setLocalUser(_user);
       Auth.setCurrentUser(_user);
+
+      $scope._users = res[1];
     })
     .catch(function (err) {
       $scope.loadingActualUser = false;

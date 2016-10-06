@@ -10,6 +10,7 @@ var router = express.Router();
 router.post('/', auth.isAuthenticated(), controller.create);
 router.put('/', auth.isAuthenticated(), controller.createOrUpdate);
 router.put('/status/', auth.isAuthenticated(), controller.updateStatus);
+router.get('/dashboard/:userId', auth.isAuthenticated(), controller.findDashboard)
 router.get('/:id', auth.isAuthenticated(), controller.findById);
 router.delete('/:id', auth.isAuthenticated(), controller.remove);
 router.get('/customer/:id', auth.isAuthenticated(), controller.findByCustomerId);

@@ -17,7 +17,7 @@ exports.isAuthenticated = function (req, res, next) {
     if (req.query && req.query.hasOwnProperty('acces_token')) {
       req.headers.Authorization = 'Bearer ' + req.query.access_token
     }
-    
+
     return validateJwt(req, res, next);
   }).use(function (req, res, next) {
     // Find user
@@ -43,11 +43,11 @@ exports.bearsToken = function (req, res, next) {
     if (req.query && req.query.hasOwnProperty('acces_token')) {
       req.headers.authorization = 'Bearer ' + req.query.access_token
     }
-    
+
     try {
       return validateJwt(req, res, next);
     } catch (error) {
-      
+
     }
   }).use(function (req, res, next) {
     // Find user
@@ -62,18 +62,23 @@ exports.bearsToken = function (req, res, next) {
 
 /**
  * Decodes the token.
- * 
+ *
  * @param {Object} req - express req object
- * @return {String} token
+ * @return {{ userId: Number, actualUserId: Number }} token
  */
 exports.decodeToken = function (req) {
   var token = (req && req.headers) ? req.headers.authorization : req;
+
+  if (typeof token === 'string') {
+    return jwt.decode(token.replace(/^Bearer( ?)/i, ''), config.secrets.session);
+  }
+
   return jwt.decode(token, config.secrets.session);
 }
 
 /**
  * Returns a jwt token signed by the app secret
- * 
+ *
  * @param {Object} options
  * @return {Object} jwt token
  */
@@ -84,13 +89,18 @@ exports.signToken = function (options) {
 /**
  * @param {Object} req - express req object
  * @param {Object} res - express res object
+ * @param {{ userId: Number }} [currentUser] - actual user which is logged in
  */
-exports.setTokenCookie = function (req, res) {
+exports.setTokenCookie = function (req, res, currentUser) {
   if (!req.user) {
     return res.status(404).json({mesasge: 'Something went wrong, please try again.'});
   }
-  
-  var token = this.signToken({ userId: req.user.userId });
-  
-  res.cookie('token', token);
+
+  var _tokenData = typeof currentUser === 'undefined'
+    ? { userId: req.user.userId }
+    : { userId: req.user.userId, actualUserId: currentUser.userId };
+
+  var _token = this.signToken(_tokenData);
+
+  res.cookie('token', _token);
 }

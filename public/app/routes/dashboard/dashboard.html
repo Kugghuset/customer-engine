@@ -1,24 +1,24 @@
 <section class="grid">
-  
+
   <a href="" ui-sref="main.dashboard">
     <img src="assets/img/logo.png" class="logo" alt="Bambora logo">
   </a>
-  
+
   <aside class="pane vertical-fill fixed-left">
-    
-    <ce-dash-pane user="auth.getCurrentUser()" is-loading="isLoading" tickets="tickets" status-tickets="statusTickets" is-readonly="isReadonly" filter="tickFilter"></ce-dash-pane>
-    
+
+    <ce-dash-pane user="auth.getCurrentUser()" is-loading="isLoading" tickets="tickets" status-info="statusInfo" is-readonly="isReadonly" filter="tickFilter"></ce-dash-pane>
+
   </aside>
-  
-  <ce-card-area child-class="vertical-fill fixed-right" child-ng-class="{'paginated': statusTickets.length > 20}">
-    
-    <ce-paginator state="state" ticket-count="statusTickets.length"></ce-paginator>
-    
+
+  <ce-card-area child-class="vertical-fill fixed-right" child-ng-class="{'paginated': statusInfo.totalCount > 20}">
+
+    <ce-paginator state="state" ticket-count="statusInfo.totalCount"></ce-paginator>
+
     <ce-card-area-header title="My tickets" collection="tickets" ></ce-card-area-header>
-    
+
     <ce-ticket-card class="col-card" ticket="ticket" ng-show="showTicket(ticket, tickFilter)" ng-repeat="ticket in tickets | alphaSort:['ticketDate','ticketId']:true"></ce-ticket-card>
-    
+
     <ce-loading is-loading="isLoading || ticketsLoading"></ce-loading>
-    
+
   </ce-card-area>
 </section>

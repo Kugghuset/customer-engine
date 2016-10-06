@@ -159,3 +159,16 @@ exports.findNps = function (req, res) {
   })
 
 }
+
+/**
+ * Route: GET '/api/tickets/dashboard/:userId?top,page,order'
+ */
+exports.findDashboard = function (req, res) {
+  Ticket.findDashboard(req.params.userId, req.query)
+  .then(function (data) {
+    res.status(200).json(data);
+  })
+  .catch(function (err) {
+    utils.handleError(res, err);
+  });
+}

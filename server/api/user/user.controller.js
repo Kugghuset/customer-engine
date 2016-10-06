@@ -197,3 +197,55 @@ exports.getFuzzy = function (req, res) {
     utils.handleError(res, err);
   });
 }
+
+/**
+ * ROUTE: GET '/api/users/as-other/:id'
+ */
+exports.signInAs = function (req, res) {
+  var _currentUser = req.user;
+  var _otherUserId = req.params.id;
+
+  if (!(_currentUser.role >= 100) || !_otherUserId) {
+    return res.status(200).json(_currentUser);
+  }
+
+  User.findById(_otherUserId)
+  .then(function (_otherUser) {
+
+    req.user = _otherUser;
+
+    auth.setTokenCookie(req, res, _currentUser);
+
+    res.status(200).json(_.omit(_otherUser, ['password']));
+  })
+  .catch(function (err) {
+    utils.handleError(res, err);
+  });
+}
+
+/**
+ * ROUTE: GET '/api/users/as-actual'
+ */
+exports.signInAsActual = function (req, res) {
+  var _decoded = auth.decodeToken(req);
+
+  // Don't do anything if there's no decoded value or there's no _actualUserId_
+  if (!(_decoded && _decoded.actualUserId)) {
+    return res.status(200).json(_.omit(req.user, ['password']));
+  }
+
+  var actualUserId = _decoded.actualUserId;
+
+  User.findById(actualUserId)
+  .then(function (user) {
+
+    req.user = user;
+
+    auth.setTokenCookie(req, res);
+
+    res.status(200).json(_.omit(user, ['password']));
+  })
+  .catch(function (err) {
+    utils.handleError(res, err);
+  });
+}

@@ -110,25 +110,6 @@ angular.module('ticketyApp')
   }
 
   /**
-   * Gets tickets updated the last five seconds by the current user.
-   */
-  function getUpdates() {
-
-    Ticket.getFresh(Auth.getCurrentUser().userId)
-    .then(function (tickets) {
-
-      // Nothing new here
-      if (!tickets.length) { return; }
-
-      $scope.tickets = Ticket.merge($scope.tickets, tickets);
-    })
-    ['catch'](function (err) {
-      console.log(err);
-    });
-
-  }
-
-  /**
    * Returns either true or false for whether the ticket should be shown.
    *
    * @param {Object} ticket
@@ -164,11 +145,6 @@ angular.module('ticketyApp')
       setup();
     }
   }, 2000);
-
-  // Wait four seconds and setup again to fetch very recent updates.
-  $timeout(function () {
-    getUpdates();
-  }, 4000);
 
   $scope.$watch('state.currentPage', function (currentPage, prevPage) {
     // return early if they are the same

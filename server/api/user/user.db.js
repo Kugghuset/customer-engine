@@ -83,34 +83,47 @@ exports.create = function (_user) {
       reject(new Error('Password is required'));
     }
 
-    return sql.execute({
-      query: sql.fromFile('./sql/user.insert.sql'),
-      params: {
-        email: {
-          type: sql.VARCHAR(256),
-          val: _user.email ? _user.email.toLowerCase() : _user.email
-        },
-        password: {
-          type: sql.VARCHAR(256),
-          val: bcrypt.hashSync(_user.password, bcrypt.genSaltSync(10)) //Hash user submitted password
-        },
-        name: {
-          type: sql.VARCHAR(256),
-          val: _user.name
-        },
-        departmentId: {
-          type: sql.BIGINT,
-          val: _user.department ? _user.department.departmentId : _user.departmentId
+    // Generate the password hash
+    bcrypt.hash(_user.password, 10, function (err, hashedPassword) {
+      if (err) { return reject(err); }
+
+      return sql.execute({
+        query: sql.fromFile('./sql/user.insert.sql'),
+        params: {
+          email: {
+            type: sql.VARCHAR(256),
+            val: _user.email ? _user.email.toLowerCase() : _user.email
+          },
+          password: {
+            type: sql.VARCHAR(256),
+            val: hashedPassword,
+          },
+          name: {
+            type: sql.VARCHAR(256),
+            val: _user.name
+          },
+          departmentId: {
+            type: sql.BIGINT,
+            val: _user.department ? _user.department.departmentId : _user.departmentId
+          }
         }
-      }
-    })
-    .then(function (user) {
-      resolve(user[0] || user);
-    })
-    .catch(reject);
+      })
+      .then(function (user) {
+        resolve(user[0] || user);
+      })
+      .catch(reject);
+
+    });
   });
 }
 
+/**
+ * Authenticates the user using email and password.
+ *
+ * @param {String} email User email address
+ * @param {String} password Raw password
+ * @return {Promise<{}>}
+ */
 exports.auth = function(email, password) {
   return new Promise(function (resolve, reject) {
     sql.execute({
@@ -125,22 +138,27 @@ exports.auth = function(email, password) {
       .then(function (users) {
 
         // Get first item and create objects by dot notation
-        var first = util.objectify(_.first(users));
+        var _user = util.objectify(_.first(users));
 
         if (!users || !users.length) {
           // No users matching the email address.
           return resolve(undefined);
-        } else if (!password && !first.password) {
+        } else if (!password && !_user.password) {
           // No passwords at all - none input and none stored, so it's fine! (for now)
-          return resolve(first);
+          return resolve(_user);
+        } else if (!_user) {
+          return reject(password ? new Error('Incorrect password') : new Error('Password is required'));;
         }
 
-        if (first && bcrypt.compareSync(password, first.password)) {
-          resolve(first);
-        } else {
-          // If there is no password, that's the problem, otherwise the actual pass is the issue.
-          reject(password ? new Error('Incorrect password') : new Error('Password is required'));
-        }
+        bcrypt.compare(password, _user.password, function (err, isCorrect) {
+          if (err) { return reject(err); }
+
+          if (isCorrect) {
+            resolve(_user);
+          } else {
+            reject(password ? new Error('Incorrect password') : new Error('Password is required'));
+          }
+        });
       })
       .catch(reject);
   });
@@ -225,24 +243,35 @@ exports.setPassword = function (userId, currentPass, password) {
         }
 
         // Check the passwords
-        if (!bcrypt.compareSync(currentPass, user.password)) {
-          // The provided password doesn't match the stored one
-          return reject(new Error('Password doesn\'t match current password.'));
-        }
-
-        // Everything went well, resolve the query object.
-        resolve({
-          query: sql.fromFile('./sql/user.setPassword.sql'),
-          params: {
-            password: {
-              type: sql.VARCHAR(256),
-              val: bcrypt.hashSync(password, bcrypt.genSaltSync(10)) //Hash user submitted password
-            },
-            userId: {
-              type: sql.BIGINT,
-              val: userId
-            }
+        bcrypt.compare(currentPass, user.password, function (err, isCorrect) {
+          // Check for errors
+          if (err) { return reject(err); }
+          if (!isCorrect) {
+            // The provided password doesn't match the stored one
+            return reject(new Error('Password doesn\'t match current password.'));
           }
+
+          // Hash the password
+          bcrypt.hash(password, 10, function (err, hashedPassword) {
+            // Handle possible error
+            if (err) { return reject(err); }
+
+            // Everything went well, resolve the query object.
+            resolve({
+              query: sql.fromFile('./sql/user.setPassword.sql'),
+              params: {
+                password: {
+                  type: sql.VARCHAR(256),
+                  val: hashedPassword
+                },
+                userId: {
+                  type: sql.BIGINT,
+                  val: userId
+                },
+              },
+            });
+          });
+
         });
       });
     })

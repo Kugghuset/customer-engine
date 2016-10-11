@@ -5,9 +5,9 @@
   <form novalidate>
 
     <div class="pane-row">
-      
+
       <label class="font-size-ms">Org. number</label>
-      
+
       <span class="fill-by-label">
         <input type="text"
           ng-class="{'padded-right': orgNrLoadingLocations}"
@@ -16,7 +16,7 @@
           uib-typeahead="cust as cust.orgNr for cust in getCustomer($viewValue, 'orgNr')"
           typeahead-loading="orgNrLoadingLocations"
           typeahead-on-select="onSelected($item, $model, $label)"
-          typeahead-wait-ms="200"
+          typeahead-wait-ms="800"
           class="pane-dropdown">
         <i ng-show="orgNrLoadingLocations" class="glyphicon glyphicon-refresh" title="Looking for customers matching the org. number"></i>
       </span>
@@ -24,9 +24,9 @@
     </div>
 
     <div class="pane-row">
-      
+
       <label class="font-size-ms">Customer number</label>
-      
+
       <span class="fill-by-label">
         <input type="text"
           ng-class="{'padded-right': customerNumberLoadingLocations}"
@@ -35,16 +35,16 @@
           uib-typeahead="cust as cust.customerNumber for cust in getCustomer($viewValue, 'customerNumber')"
           typeahead-loading="customerNumberLoadingLocations"
           typeahead-on-select="onSelected($item, $model, $label)"
-          typeahead-wait-ms="200"
+          typeahead-wait-ms="800"
           class="pane-dropdown">
         <i ng-show="customerNumberLoadingLocations" class="glyphicon glyphicon-refresh" title="Looking for customers matching the customer number"></i>
       </span>
 
     </div>
-    
+
     <div class="pane-row">
       <label class="font-size-ms">Customer name</label>
-        
+
       <span class="fill-by-label">
         <input type="text"
           ng-class="{'padded-right': orgNameLoadingLocations}"
@@ -53,19 +53,19 @@
           uib-typeahead="cust as cust.orgName for cust in getCustomer($viewValue, 'orgName')"
           typeahead-loading="orgNameLoadingLocations"
           typeahead-on-select="onSelected($item, $model, $label)"
-          typeahead-wait-ms="200"
+          typeahead-wait-ms="800"
           class="pane-dropdown">
         <i ng-show="orgNameLoadingLocations" class="glyphicon glyphicon-refresh" title="Looking for customers matching the customer name"></i>
       </span>
 
     </div>
-    
+
     <br>
 
     <div ng-show="isNew(customer)">
-      
+
       <i class="glyphicon glyphicon-exclamation-sign"></i> A new customer tagged as created in Tickety will be added to the customer database.
-      
+
     </div>
 
     <div class="float-container">

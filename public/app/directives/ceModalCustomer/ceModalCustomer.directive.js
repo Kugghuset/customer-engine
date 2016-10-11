@@ -12,36 +12,45 @@ angular.module('ticketyApp')
       modalIsOpen: '='
     },
     link: function (scope, element, attrs, ctrl) {
-      
+
       var modalInstance;
-      
+
       scope.openModal = function (customer) {
-        
+
         if (scope.modalIsOpen) {
           // Only one instance can be open.
           return;
         }
-        
+
         $timeout(function () {
           scope.modalIsOpen = true;
         });
-        
+
         customer = customer || {};
-        
+
         if (!_.every([
           !!customer.orgName,
           !!customer.orgNr,
           !!customer.customerNumber
         ])) {
-          
-          if (!/[a-ö]/i.test(customer && customer.orgName)) {
+
+          var _query = customer && customer.orgName
+            ? customer.orgName
+            : customer;
+
+          if (/^#/.test(_query)) {
             customer = _.assign({}, customer, {
-              orgNr: customer.orgName,
-              orgName: ''
+              customerNumber: _query.replace(/^#/, ''),
+              orgName: '',
+            });
+          } else if (/^!/.test(_query) || !/[a-ö]/i.test(_query)) {
+            customer = _.assign({}, customer, {
+              orgNr: _query.replace(/^!/, ''),
+              orgName: '',
             });
           }
         }
-        
+
          modalInstance = $uibModal.open({
           animation: true,
           templateUrl: 'directives/ceModalCustomer/ceModalCustomer.html',
@@ -58,7 +67,7 @@ angular.module('ticketyApp')
             }
           }
         });
-        
+
         modalInstance.result.then(function (customer) {
           $timeout(function () {
             scope.customer = customer;
@@ -71,7 +80,7 @@ angular.module('ticketyApp')
           });
         });
       };
-      
+
       scope.$on('$destroy', function (event) {
         if(modalInstance) {
           modalInstance.close();
@@ -81,14 +90,14 @@ angular.module('ticketyApp')
 }}])
 .controller('CustomerModalInstanceCtrl', ['$scope', '$uibModalInstance', 'currentCustomer', 'Customer', 'Department', 'Notification',
   function ($scope, $uibModalInstance, currentCustomer, Customer, Department, Notification) {
-  
+
   var existingCustomer = undefined;
   $scope.customer = currentCustomer;
-  
+
   /**
    * Compares the similarities of *source* and *target*
    * and returns a boolean value for whether they are similar or not.
-   * 
+   *
    * @param {Object} source
    * @param {Object} target
    * @return {Boolean}
@@ -98,22 +107,22 @@ angular.module('ticketyApp')
       // Either one or both are falsy, I.E. aren't similar enough.
       return false;
     }
-    
+
     return _.every([
       source.orgNr === target.orgNr,
       source.orgName === target.orgName,
       source.customerNumber === target.customerNumber,
     ]);
   }
-  
+
   /**
    * If $scope.customer has a customerId, clean all other values
    * to allow for creating new customers.
-   * 
+   *
    * @param {String} colName
    */
   function cleanOther(colName) {
-    
+
     // If an existing customer already is chosen but there's been an edit to it,
     // empty the other fields.
     if (!!$scope.customer && !!$scope.customer.customerId) {
@@ -124,57 +133,57 @@ angular.module('ticketyApp')
         .value();
     }
   }
-  
+
   /**
    * Fuzzy searches the customer database.
-   * 
+   *
    * @param {String} query
    * @param {String} colName
    * @return {Promise} -> {Array}
    */
   $scope.getCustomer = function (query, colName) {
-    
+
     // Clean if not saved customer
     cleanOther(colName);
-    
+
     // Actually get customers
     return Customer.getFuzzyBy(query, colName);
   }
-  
+
   /**
    * @param {Object} customer
    * @return {Boolean}
    */
   $scope.allowSubmit = function (customer) {
-    
+
     // No customer :(
     if (!customer) { return false; }
-    
+
     return _.every([
       !!customer,
       !!customer.orgName,
       (!!customer.orgNr || !!customer.customerNumber)
     ]);
   }
-  
+
   $scope.onSelected = function ($item, $model, $label) {
     // When an existing customer is found, copy it to $scope.customer
     $scope.customer = angular.copy($item);
-    
+
     existingCustomer = $item;
   }
-  
+
   $scope.isNew = function (customer) {
     // No customer means "It's new", same if it lacks customerId
     return !customer || (customer && !customer.customerId);
   }
-  
+
   $scope.ok = function () {
-    
+
     if (!$scope.allowSubmit($scope.customer)) {
       return; // Early
     }
-    
+
     if (!$scope.isNew($scope.customer)) {
       // Existing customer, close and return it!
       $uibModalInstance.close($scope.customer);
@@ -194,7 +203,7 @@ angular.module('ticketyApp')
   $scope.cancel = function () {
     $uibModalInstance.dismiss('cancel');
   };
-  
+
 }]);
 
 })();

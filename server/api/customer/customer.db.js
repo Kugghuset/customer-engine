@@ -38,6 +38,12 @@ function intialize() {
  * @return {Promise} -> {Array} (Customer)
  */
 exports.getFuzzy = function (query) {
+  if (/^#/.test(query)) {
+    return this.getFuzzyBy(query.replace(/^#/, ''), 'customerNumber');
+  } else if (/^!/.test(query)) {
+    return this.getFuzzyBy(query.replace(/^!/, ''), 'orgNr');
+  }
+
   return sql.execute({
     query: sql.fromFile('./sql/customer.getFuzzy.sql'),
     params: {

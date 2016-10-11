@@ -58,8 +58,18 @@ exports.getFuzzy = function (query) {
  */
 exports.getFuzzyBy = function (query, colName) {
   return new Promise(function (resolve, reject) {
+
+    // Get the where statement
+    var _whereStatement = /^orgName$/i.test(colName)
+      ? "[orgName] LIKE '%' + @query + '%';"
+      : "[" + colName + "] = @query";
+
+    var _query = sql.fromFile('./sql/customer.getFuzzyBy.sql')
+      .replace(util.literalRegExp('{ colName }', 'gi'), colName)
+      .replace(util.literalRegExp('{ where_statement }', 'gi'), _whereStatement);
+
     return sql.execute({
-      query: sql.fromFile('./sql/customer.getFuzzyBy.sql').replace(util.literalRegExp('{ colName }', 'gi'), colName),
+      query: _query,
       params: {
         query: {
           type: sql.VARCHAR(256),

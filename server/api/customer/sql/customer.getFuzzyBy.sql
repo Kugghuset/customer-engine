@@ -8,5 +8,5 @@ IF EXISTS(SELECT * FROM sys.columns
 BEGIN
   SELECT TOP 50 [customerId], [customerNumber], [orgNr], [orgName], [isLocal], [isMerged]
   FROM [dbo].[Customer]
-  WHERE [{ colName }] LIKE '%' + @query + '%';
+  WHERE { where_statement }
 END

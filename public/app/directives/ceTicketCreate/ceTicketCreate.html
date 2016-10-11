@@ -55,7 +55,14 @@
         typeahead-on-select="setCustomer($item)">
       <i ng-show="loadingCustomers" class="glyphicon glyphicon-refresh" title="Looking for matching customers"></i>
       <i ng-show="noResults && ticket.customer" class="glyphicon glyphicon-exclamation-sign" title="No results found"></i>
+
     </span>
+
+    <br>
+
+    <div><em>Pro tip: To search for Customer Number, start with </em><strong>#</strong></div>
+
+    <div><em>Pro tip: To search for Org. Number, start with </em><strong>#</strong></div>
 
     <br>
 
@@ -64,7 +71,6 @@
       <button ng-click="openModal(ticket.customer)" class="pane-button pull-right">Create/select customer</button>
 
     </div>
-
 
   </div>
 
